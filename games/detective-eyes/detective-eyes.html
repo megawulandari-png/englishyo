@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detective Eyes — An Interactive English Investigation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#182430;
+  --board-2:#0f1922;
+  --board-line:#2a3a49;
+  --paper:#f2e8d2;
+  --paper-2:#e8d9b8;
+  --paper-shadow:#c9b98d;
+  --ink:#241c14;
+  --ink-soft:#5b4d3a;
+  --red:#a8362b;
+  --red-dark:#7d2620;
+  --teal:#2e6f5e;
+  --teal-dark:#1f4d41;
+  --amber:#b8862c;
+  --amber-dark:#8a641f;
+  --gold:#d9a441;
+  --slate:#51606e;
+  --slate-dark:#33424d;
+  --radius:10px;
+  --font-display:'Special Elite', monospace;
+  --font-body:'Public Sans', sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse at 20% 10%, #1e2c3a 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 80%, #1a2733 0%, transparent 50%),
+    var(--board);
+  color:var(--ink);
+  font-family:var(--font-body);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:var(--font-body);cursor:pointer;}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* ---------- App shell ---------- */
+#app-root{
+  max-width:1280px;
+  margin:0 auto;
+  padding:18px 18px 60px;
+}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;
+  padding:14px 20px;
+  background:var(--board-2);
+  border:1px solid var(--board-line);
+  border-radius:14px;
+  margin-bottom:18px;
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand .glass{font-size:28px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.4));}
+.brand h1{
+  font-family:var(--font-display);
+  color:var(--paper);
+  font-size:20px;letter-spacing:.5px;margin:0;
+}
+.brand small{display:block;color:#9fb0bd;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+.case-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.case-tab{
+  border:1px solid var(--board-line);
+  background:#132029;
+  color:#8ea0ae;
+  border-radius:20px;
+  padding:6px 13px;
+  font-size:12px;font-weight:700;letter-spacing:.3px;
+  transition:all .2s ease;
+  white-space:nowrap;
+}
+.case-tab.done{background:var(--teal-dark);color:#dff2ec;border-color:var(--teal);}
+.case-tab.current{background:var(--gold);color:#2a1f08;border-color:var(--gold);}
+.case-tab.bonus{border-style:dashed;}
+.hq-stats{display:flex;gap:16px;align-items:center;}
+.stat{display:flex;flex-direction:column;align-items:center;color:#cfd9e0;font-size:11px;}
+.stat b{font-family:var(--font-display);color:var(--paper);font-size:17px;}
+.teacher-btn{
+  background:transparent;border:1px solid var(--board-line);color:#8ea0ae;
+  border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.4px;
+}
+.teacher-btn:hover{color:var(--paper);border-color:#9fb0bd;}
+
+.layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start;}
+@media (max-width:920px){.layout{grid-template-columns:1fr;} .board-panel{position:static;}}
+
+.stage{
+  background:linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  border-radius:16px;
+  box-shadow:0 18px 40px rgba(0,0,0,.35), inset 0 0 0 1px rgba(0,0,0,.06);
+  padding:32px 34px;
+  min-height:520px;
+  position:relative;
+  animation:paperIn .35s ease;
+}
+@keyframes paperIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.stage::before{
+  content:"";position:absolute;top:0;left:34px;right:34px;height:3px;
+  background:repeating-linear-gradient(90deg, var(--paper-shadow) 0 14px, transparent 14px 22px);
+  opacity:.5;
+}
+.mission-tag{
+  display:inline-block;font-family:var(--font-display);font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--red-dark);background:rgba(168,54,43,.1);
+  border:1px solid rgba(168,54,43,.35);padding:4px 10px;border-radius:20px;margin-bottom:14px;
+}
+.stage h2{font-family:var(--font-display);font-size:26px;margin:0 0 6px;color:var(--ink);}
+.stage .lede{color:var(--ink-soft);font-size:14.5px;line-height:1.6;margin:0 0 22px;max-width:70ch;}
+.progress-track{display:flex;gap:6px;margin-bottom:20px;}
+.progress-step{flex:1;height:6px;border-radius:4px;background:rgba(0,0,0,.12);}
+.progress-step.active{background:var(--amber);}
+.progress-step.filled{background:var(--teal);}
+
+/* Compass: NOTICE -> QUESTION -> INVESTIGATE -> EVALUATE -> DECIDE */
+.compass{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+.compass span{
+  font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  padding:5px 10px;border-radius:6px;background:rgba(36,28,20,.06);color:var(--ink-soft);
+}
+.compass span.now{background:var(--ink);color:var(--paper);}
+
+/* Buttons */
+.btn{
+  border:none;border-radius:8px;padding:11px 20px;font-weight:700;font-size:14px;
+  letter-spacing:.3px;transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--ink);color:var(--paper);}
+.btn-primary:hover{box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid rgba(36,28,20,.25);}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink);}
+.btn-red{background:var(--red);color:#fff5ee;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;flex-wrap:wrap;}
+
+/* Documents / evidence source cards */
+.doc{
+  background:#fffdf7;border:1px solid rgba(36,28,20,.15);border-radius:8px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.08);
+  position:relative;
+}
+.doc .doc-kind{
+  font-size:10.5px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:#8a7a5c;
+  display:flex;align-items:center;gap:6px;margin-bottom:6px;
+}
+.doc h4{margin:0 0 8px;font-size:15px;color:var(--ink);}
+.doc p{margin:0 0 8px;font-size:14px;line-height:1.6;color:#332a1e;}
+.doc footer{font-size:11.5px;color:#8a7a5c;font-style:italic;}
+.doc.gossip{background:#fff7f2;}
+.doc.official{border-left:4px solid var(--teal);}
+.doc.social{border-left:4px solid var(--red);}
+.doc.anon{border-left:4px solid #9a8a6a;}
+.doc.data{border-left:4px solid var(--amber);}
+
+/* Sentence tagging (Case 1) */
+.sentence{
+  display:block;width:100%;text-align:left;background:#fffdf7;
+  border:1px solid rgba(36,28,20,.15);border-radius:8px;padding:12px 14px;margin-bottom:10px;
+  font-size:14.5px;line-height:1.6;color:#332a1e;
+}
+.sentence .tagbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.tagbtn{
+  border:1.5px solid rgba(36,28,20,.3);background:transparent;border-radius:6px;
+  padding:5px 12px;font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--ink-soft);
+}
+.tagbtn.fact.picked{background:var(--teal);border-color:var(--teal);color:#eafaf4;}
+.tagbtn.claim.picked{background:var(--amber);border-color:var(--amber);color:#2a1f08;}
+.sentence.tagged{opacity:.85;}
+.sentence .verdict-chip{
+  display:none;margin-top:8px;font-size:12.5px;padding:8px 10px;border-radius:6px;line-height:1.5;
+}
+.sentence .verdict-chip.show{display:block;}
+.verdict-chip.fact{background:rgba(46,111,94,.12);color:var(--teal-dark);}
+.verdict-chip.claim{background:rgba(184,134,44,.14);color:var(--amber-dark);}
+.tagbtn.onlyone.picked{background:var(--slate);border-color:var(--slate);color:#eef2f5;}
+.verdict-chip.onlyone{background:rgba(81,96,110,.14);color:var(--slate-dark);}
+.image-frame{background:#e9e2cd;border:1px solid rgba(36,28,20,.15);border-radius:10px;padding:16px;margin-bottom:16px;text-align:center;}
+.image-frame svg{max-width:260px;width:100%;height:auto;}
+.image-frame .cap{font-size:12px;color:var(--ink-soft);margin-top:10px;font-style:italic;}
+.clue-card{margin-bottom:12px;}
+.clue-trigger{width:100%;display:flex;align-items:center;gap:10px;text-align:left;}
+.clue-reveal{margin-top:10px;}
+.support-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.bonus-label{display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate-dark);background:rgba(81,96,110,.12);border:1px solid rgba(81,96,110,.35);padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.badge-group-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:#a99a7d;margin:10px 0 4px;}
+
+/* Choice grids */
+.choice-grid{display:grid;gap:10px;margin-bottom:18px;}
+.choice-grid.two-col{grid-template-columns:repeat(2,1fr);}
+@media (max-width:560px){.choice-grid.two-col{grid-template-columns:1fr;}}
+.choice{
+  text-align:left;background:#fffdf7;border:1.5px solid rgba(36,28,20,.18);border-radius:8px;
+  padding:13px 16px;font-size:14.5px;color:#332a1e;line-height:1.5;
+}
+.choice:hover{border-color:var(--ink);}
+.choice.selected{border-color:var(--ink);background:#fbf3e2;box-shadow:inset 0 0 0 1px var(--ink);}
+.choice.correct{border-color:var(--teal);background:rgba(46,111,94,.12);}
+.choice.incorrect{border-color:var(--red);background:rgba(168,54,43,.09);}
+
+.feedback-box{
+  border-radius:8px;padding:14px 16px;margin:14px 0;font-size:14px;line-height:1.6;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.feedback-box.good{background:rgba(46,111,94,.14);color:var(--teal-dark);}
+.feedback-box.notyet{background:rgba(168,54,43,.1);color:var(--red-dark);}
+.feedback-box.info{background:rgba(36,28,20,.06);color:var(--ink-soft);}
+.feedback-box .fi{font-size:20px;line-height:1;}
+
+/* Trust meter (Case 3) */
+.trust-dial{display:flex;gap:8px;margin:10px 0 12px;}
+.trust-opt{flex:1;border-radius:8px;padding:10px 6px;text-align:center;font-size:12.5px;font-weight:800;
+  border:1.5px solid rgba(36,28,20,.2);color:var(--ink-soft);letter-spacing:.3px;}
+.trust-opt.high{}
+.trust-opt.picked.high{background:var(--teal);border-color:var(--teal);color:#eafaf4;}
+.trust-opt.picked.medium{background:var(--amber);border-color:var(--amber);color:#2a1f08;}
+.trust-opt.picked.low{background:var(--red);border-color:var(--red);color:#fff2ee;}
+.reason-chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 4px;}
+.chip{
+  border:1.5px solid rgba(36,28,20,.25);border-radius:20px;padding:6px 12px;font-size:12px;
+  background:transparent;color:var(--ink-soft);
+}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.source-card{margin-bottom:20px;}
+.source-card .verdict-chip{display:block;margin-top:10px;}
+
+/* Text input */
+textarea, input[type=text]{
+  width:100%;font-family:var(--font-body);font-size:14.5px;padding:11px 13px;border-radius:8px;
+  border:1.5px solid rgba(36,28,20,.25);background:#fffdf7;color:var(--ink);
+}
+textarea{min-height:70px;resize:vertical;}
+label.field-label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--ink-soft);font-weight:800;margin-bottom:6px;}
+
+/* Home / Briefing */
+.hero-badge{
+  width:78px;height:78px;border-radius:50%;background:var(--ink);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+.home-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:center;}
+@media (max-width:760px){.home-grid{grid-template-columns:1fr;}}
+.rumor-card{
+  background:#fff;border:2px dashed var(--red);border-radius:10px;padding:18px 20px;
+  font-family:var(--font-display);font-size:15px;line-height:1.7;color:var(--red-dark);
+  transform:rotate(-1.2deg);box-shadow:0 10px 24px rgba(0,0,0,.18);
+}
+.stamp{
+  display:inline-block;border:3px solid var(--red);color:var(--red);font-family:var(--font-display);
+  padding:6px 14px;border-radius:6px;transform:rotate(-6deg);font-size:14px;letter-spacing:2px;
+  opacity:0;animation:stampIn .5s ease .15s forwards;
+}
+@keyframes stampIn{0%{opacity:0;transform:scale(2.2) rotate(-6deg);}70%{opacity:1;}100%{opacity:1;transform:scale(1) rotate(-6deg);}}
+
+/* Evidence board sidebar */
+.board-panel{
+  background:linear-gradient(160deg,#3a2a1c,#2b1f15);
+  border-radius:16px;border:1px solid #52402c;
+  padding:18px;position:sticky;top:18px;
+  box-shadow:0 18px 34px rgba(0,0,0,.4);
+}
+.board-panel h3{
+  font-family:var(--font-display);color:var(--gold);font-size:15px;margin:0 0 4px;
+  display:flex;align-items:center;gap:8px;
+}
+.board-sub{color:#d8c9a9;font-size:11px;margin-bottom:14px;opacity:.8;}
+.pin-card{
+  background:#fdf6e3;border-radius:6px;padding:10px 12px;margin-bottom:12px;position:relative;
+  box-shadow:0 6px 12px rgba(0,0,0,.35);font-size:12.5px;color:#3a2f20;line-height:1.45;
+  animation:pinDrop .35s ease;
+}
+@keyframes pinDrop{from{opacity:0;transform:translateY(-10px) rotate(0deg);}to{opacity:1;transform:translateY(0) rotate(var(--r,0deg));}}
+.pin-card:nth-child(odd){transform:rotate(-2deg);}
+.pin-card:nth-child(even){transform:rotate(1.5deg);}
+.pin-card .pin-dot{
+  position:absolute;top:-6px;left:14px;width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #e3413a, #8a1c17);box-shadow:0 2px 3px rgba(0,0,0,.5);
+}
+.pin-card b{display:block;font-size:11.5px;color:#7d2620;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px;}
+.board-empty{color:#a99a7d;font-size:12.5px;font-style:italic;padding:10px 4px;}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.badge-pill{
+  display:flex;align-items:center;gap:5px;background:#20160e;border:1px solid #55432c;color:#e9dcc0;
+  border-radius:20px;padding:5px 10px;font-size:11px;
+}
+.badge-pill .ic{font-size:14px;}
+.badge-locked{opacity:.35;}
+.divider-line{height:1px;background:#4a3a28;margin:16px 0;}
+
+/* Notes */
+.notes-toggle{margin-top:14px;}
+.notes-area{margin-top:10px;}
+
+/* Teacher dashboard modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(10,14,18,.72);display:flex;align-items:center;justify-content:center;
+  padding:20px;z-index:50;
+}
+.modal{
+  background:var(--paper);border-radius:14px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;
+  padding:26px 28px;box-shadow:0 30px 60px rgba(0,0,0,.5);
+}
+.modal h3{font-family:var(--font-display);margin-top:0;}
+.modal table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+.modal td, .modal th{padding:8px 6px;border-bottom:1px solid rgba(36,28,20,.15);text-align:left;vertical-align:top;}
+.modal th{color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.close-x{float:right;background:none;border:none;font-size:20px;color:var(--ink-soft);}
+
+/* Case closed screen */
+.closed-hero{text-align:center;padding:10px 0 20px;}
+.closed-hero .big-stamp{font-family:var(--font-display);font-size:44px;color:var(--red);
+  border:5px solid var(--red);display:inline-block;padding:8px 26px;border-radius:10px;
+  transform:rotate(-4deg);margin-bottom:16px;}
+.verdict-banner{
+  background:var(--ink);color:var(--paper);border-radius:10px;padding:16px 20px;margin:18px 0;
+  font-family:var(--font-display);font-size:16px;text-align:center;letter-spacing:.4px;
+}
+.reflection-q{background:#fffdf7;border-radius:8px;padding:14px 16px;margin-bottom:12px;
+  border:1px solid rgba(36,28,20,.15);}
+.reflection-q p{margin:0 0 8px;font-weight:700;font-size:13.5px;color:var(--ink);}
+
+@media (max-width:600px){
+  #app-root{padding:10px 10px 40px;}
+  .stage{padding:20px 16px;border-radius:12px;}
+  .stage h2{font-size:21px;}
+  .stage .lede{font-size:13.5px;}
+  .topbar{padding:10px 12px;border-radius:12px;gap:10px;}
+  .brand h1{font-size:16px;}
+  .brand .glass{font-size:22px;}
+  .brand small{font-size:9.5px;}
+  .case-tabs{display:none;}
+  .hq-stats{gap:10px;width:100%;justify-content:space-between;}
+  .stat{font-size:10px;}
+  .stat b{font-size:15px;}
+  .teacher-btn{padding:6px 9px;font-size:10px;white-space:nowrap;}
+  .compass{gap:5px;}
+  .compass span{font-size:9.5px;padding:4px 7px;}
+  .doc{padding:13px 14px;}
+  .doc h4{font-size:14px;}
+  .doc p{font-size:13.5px;}
+  .choice{padding:11px 13px;font-size:13.5px;}
+  .mission-tag{font-size:10px;padding:4px 9px;}
+  .bonus-label{font-size:9px;padding:2px 6px;margin-left:0;display:inline-block;margin-top:4px;}
+  .board-panel{padding:14px;}
+  .closed-hero .big-stamp{font-size:30px;padding:6px 16px;}
+  .verdict-banner{font-size:14px;padding:14px 16px;}
+  .rumor-card{font-size:13px;padding:14px 16px;}
+  .hero-badge{width:64px;height:64px;font-size:30px;}
+}
+@media (max-width:430px){
+  .nav-row{flex-direction:column-reverse;align-items:stretch;gap:10px;}
+  .nav-row .btn{width:100%;text-align:center;}
+  .trust-dial{flex-direction:column;}
+  .tagbar .tagbtn{flex:1 1 auto;}
+  .support-row .chip{flex:1 1 auto;text-align:center;}
+  .hq-stats{gap:8px;}
+  .stat{min-width:0;}
+}
+</style>
+</head>
+<body>
+<div id="app-root">
+  <header class="topbar">
+    <div class="brand">
+      <span class="glass">🔎</span>
+      <div>
+        <h1>DETECTIVE EYES</h1>
+        <small>Case File: The Green School</small>
+      </div>
+    </div>
+    <div class="case-tabs" id="case-tabs"></div>
+    <div class="hq-stats">
+      <div class="stat"><b id="stat-clues">0</b>Clues</div>
+      <div class="stat"><b id="stat-badges">0</b>Badges</div>
+      <button class="teacher-btn" id="teacher-btn">👩‍🏫 Teacher View</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="stage" id="stage" tabindex="-1"></main>
+    <aside class="board-panel" id="board-panel">
+      <h3>🗂️ Evidence Board</h3>
+      <div class="board-sub">Clues pin here as you investigate.</div>
+      <div id="pinned-list"></div>
+      <div class="divider-line"></div>
+      <h3 style="font-size:13px;">⭐ Detective Badges</h3>
+      <div class="badge-row" id="badge-row"></div>
+    </aside>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+/* ============================= DATA ============================= */
+
+const SENTENCES = [
+  {id:'s1', text:"A post was shared in the SMP Merdeka Student Group.", type:'FACT',
+   explain:"This describes something that happened and can be checked — a post existing is verifiable."},
+  {id:'s2', text:"Starting next Monday, plastic bottles will be completely banned from school.", type:'CLAIM',
+   explain:"This is what the post says will happen — no official source has confirmed it yet."},
+  {id:'s3', text:"Any student who brings a plastic bottle will be punished.", type:'CLAIM',
+   explain:"A strong, specific claim with no source or proof behind it."},
+  {id:'s4', text:"The whole school hates this new rule.", type:'CLAIM',
+   explain:"An opinion about everyone's feelings — impossible to verify and likely exaggerated."},
+  {id:'s5', text:"The post was shared by an account called @smpmerdeka_gossip.", type:'FACT',
+   explain:"A checkable detail about who posted it — this helps us judge the source later."},
+  {id:'s6', text:"No teacher or school account has confirmed the news.", type:'FACT',
+   explain:"An observable fact about what is (not) happening — useful for your investigation."}
+];
+
+const EVIDENCE_DOCS = {
+  announcement:{
+    kind:'official', label:'🏫 Official School Announcement',
+    title:'SMP Merdeka Green Program Update',
+    body:"Starting Monday, 5 October, Grade 7 students will join a two-week 'Bring Your Own Bottle' pilot. During the pilot, Grade 7 students are asked to bring reusable bottles instead of single-use plastic ones. Other grades are not affected yet. We will review the results before making any further decision.",
+    footer:"— Ms. Ratna, Vice Principal for Student Affairs"
+  },
+  news:{
+    kind:'official', label:'📰 School News Website',
+    title:'"SMP Merdeka Launches Green Pilot for Grade 7"',
+    body:"\"This is a small trial. We want to see how it works before deciding for the whole school,\" said Mr. Wibowo, Principal, in an interview published today. The pilot focuses on one grade level and will run for two weeks.",
+    footer:"Published on the official school news page, with the principal's name and role."
+  },
+  data:{
+    kind:'data', label:'📊 Eco-Club Waste Log',
+    title:'Plastic Bottles Collected in the Canteen (per week)',
+    body:"Week 1: 220 bottles · Week 2: 210 bottles · Week 3 (pilot planning announced): 205 bottles. The Eco-Club recorded a small, gradual decrease — not a sudden drop to zero.",
+    footer:"Collected by the Grade 8 Eco-Club, supervised by Mr. Hartono."
+  },
+  gossip:{
+    kind:'social', label:'📱 Social Media Post',
+    title:'@smpmerdeka_gossip',
+    body:"OMG!! Starting next Monday plastic bottles are COMPLETELY BANNED at school!! If you bring one you'll get in big trouble. Everyone is so mad about this 😡",
+    footer:"Posted 2 days ago · account bio: \"just for fun, not official 😜\""
+  },
+  anon:{
+    kind:'anon', label:'💬 Anonymous Comment',
+    title:'Reply to the gossip post',
+    body:"i heard from my friend's cousin that its NOT just grade 7, its the WHOLE school!! banned completely starting monday for real!!",
+    footer:"Posted by an unnamed account, no source given"
+  }
+};
+
+const CASE2_OPTIONS = [
+  {id:'a', text:"Because the whole school demanded a complete ban.", correct:false},
+  {id:'b', text:"To test a small reusable-bottle habit with Grade 7 before deciding anything further.", correct:true},
+  {id:'c', text:"Because the government ordered a nationwide ban on plastic bottles.", correct:false},
+  {id:'d', text:"Because plastic bottles are now illegal in Indonesia.", correct:false}
+];
+const CASE2_EVIDENCE_CHOICES = [
+  {id:'announcement', label:"The official announcement: \"Grade 7 students will join a two-week... pilot.\"", correct:true},
+  {id:'news', label:"The principal's quote: \"This is a small trial... before deciding for the whole school.\"", correct:true},
+  {id:'gossip', label:"The gossip post: \"plastic bottles are COMPLETELY BANNED\"", correct:false},
+  {id:'anon', label:"The anonymous comment: \"its the WHOLE school!!\"", correct:false}
+];
+
+const SOURCES = [
+  {id:'announcement', trust:'high',
+   reasonsGood:['Author is named and identifiable','Comes from an official school channel','Gives specific, checkable details'],
+   reasonsBad:['Anonymous author','No evidence given']},
+  {id:'news', trust:'high',
+   reasonsGood:['Author is named and identifiable','Quotes a real, identifiable person','Can be checked on the school website'],
+   reasonsBad:['Exaggerated claim','Anonymous author']},
+  {id:'data', trust:'medium',
+   reasonsGood:['Based on recorded data, not opinion','The group who collected it is named'],
+   reasonsBad:['Numbers alone don\'t explain "why"','Small sample, only the canteen']},
+  {id:'gossip', trust:'low',
+   reasonsGood:['Shared quickly, easy to find'],
+   reasonsBad:['No evidence given','Uses exaggerated, emotional language','Bio admits it\'s "not official"']},
+  {id:'anon', trust:'low',
+   reasonsGood:[],
+   reasonsBad:['Anonymous author','Based on hearsay ("a friend\'s cousin")','No evidence given','Contradicts two official sources']}
+];
+const REASON_CHIP_OPTIONS = ['Author is named and identifiable','Anonymous author','Comes from an official school channel',
+  'Gives specific, checkable details','No evidence given','Uses exaggerated, emotional language',
+  'Quotes a real, identifiable person','Based on recorded data, not opinion','Based on hearsay ("a friend\'s cousin")',
+  'Can be checked on the school website','Contradicts two official sources','Small sample, only the canteen',
+  'Bio admits it\'s "not official"','Numbers alone don\'t explain "why"','Shared quickly, easy to find'];
+
+const CASES = ['home','briefing','case1','case2','case3','case4','case5','case6','closed'];
+const CASE_LABELS = {home:'Home',briefing:'Briefing',case1:'Case 01',case2:'Case 02',case3:'Case 03',case4:'Case 04',case5:'Case 05',case6:'Case 06',closed:'Closed'};
+const BONUS_CASES = ['case5','case6'];
+
+/* ---- CASE 05 data: The Photo Doesn't Lie... Or Does It? ---- */
+const CASE5 = {
+  claim:"SMP Merdeka's new trash cans are already overflowing after just one day — the Green Pilot is failing!",
+  account:'@rumor_hunter99',
+  posted:'Posted today, 7:45 AM · shared 340 times',
+  clues:[
+    {id:'date', icon:'📅', title:'Check the Date', reveal:"The photo's file date shows it was actually taken 3 months ago — before the Green Pilot even started.", correct:'contradict'},
+    {id:'location', icon:'📍', title:'Check the Location', reveal:"A small sign in the background reads \"SMP Cendekia Canteen\" — that's a different school, not SMP Merdeka.", correct:'contradict'},
+    {id:'caption', icon:'🖊️', title:'Check the Caption', reveal:"The caption never says when or where the photo was taken — it just assumes readers will believe it shows SMP Merdeka today.", correct:'contradict'},
+    {id:'source', icon:'👤', title:'Check the Source', reveal:"@rumor_hunter99 has no connection to SMP Merdeka and has reposted old photos with new captions before.", correct:'contradict'}
+  ]
+};
+
+/* ---- CASE 06 data: Two Stories, One Event ---- */
+const CASE6_DOCS = {
+  newsletter:{kind:'official', label:'📰 School Newsletter', title:'"Library Blackout During Study Hall"',
+    body:"On Tuesday, the library lights went out for about 10 minutes during study hall. It happened because of a citywide power cut affecting several blocks near school. Students continued reading using their phone flashlights until the power returned.",
+    footer:'Published by the SMP Merdeka Newsletter Team'},
+  council:{kind:'social', label:'📱 Student Council Instagram', title:'@merdeka.osis',
+    body:"Our library went dark on Tuesday afternoon! Some students felt scared for a moment, but everyone stayed calm and used their phones for light. Teachers told us it was because of maintenance work in the electrical room.",
+    footer:'Posted the same day, with photos from students'}
+};
+const CASE6_STATEMENTS = [
+  {id:'st1', text:'The library lights went out on Tuesday.', bucket:'agree'},
+  {id:'st2', text:'Students used their phone flashlights for light.', bucket:'agree'},
+  {id:'st3', text:'The blackout happened because of a citywide power cut.', bucket:'differ'},
+  {id:'st4', text:'The blackout happened because of maintenance work.', bucket:'differ'},
+  {id:'st5', text:'The blackout lasted about 10 minutes.', bucket:'only_one'},
+  {id:'st6', text:'Some students felt scared for a moment.', bucket:'only_one'}
+];
+const BUCKET_META = {
+  agree:{label:'BOTH AGREE', tagclass:'fact', chipclass:'agree'},
+  differ:{label:'SOURCES DIFFER', tagclass:'claim', chipclass:'differ'},
+  only_one:{label:'ONLY ONE SOURCE SAYS THIS', tagclass:'onlyone', chipclass:'onlyone'}
+};
+
+/* ============================= STATE ============================= */
+let state = {
+  screen:'home',
+  case1:{tags:{}, verdict:null, verdictLocked:false},
+  case2:{answer:null, evidence:null, submitted:false},
+  case3:{sources:{}, activeIndex:0},
+  case4:{verdict:null, evidence:'', trustedSource:null, why:''},
+  case5:{clues:{}, verdict:null, verdictLocked:false},
+  case6:{tags:{}, know:'', dontknow:'', checknext:'', submitted:false},
+  board:[],           // pinned evidence: {key, title, note}
+  badges:[],          // earned badge ids
+  notesOpen:false
+};
+SOURCES.forEach(s=>state.case3.sources[s.id]={trust:null,reasons:[],locked:false});
+
+const BADGES = [
+  {id:'sharp_eyes', icon:'🔎', name:'Sharp Eyes', desc:'Correctly separated facts from claims.', group:'core'},
+  {id:'evidence_hunter', icon:'🧩', name:'Evidence Hunter', desc:'Matched the right evidence to an answer.', group:'core'},
+  {id:'source_checker', icon:'🧠', name:'Source Checker', desc:'Evaluated every source with real reasons.', group:'core'},
+  {id:'fair_judge', icon:'⚖️', name:'Fair Judge', desc:'Avoided jumping to a conclusion too early.', group:'core'},
+  {id:'master_detective', icon:'🏆', name:'Master Detective', desc:'Solved the core mystery with a full, evidence-based report.', group:'core'},
+  {id:'picture_detective', icon:'📷', name:'Picture Detective', desc:'Checked a photo\'s date, location, and source before trusting it.', group:'bonus'},
+  {id:'perspective_detective', icon:'🔀', name:'Perspective Detective', desc:'Compared two accounts of the same event fairly.', group:'bonus'},
+  {id:'case_legend', icon:'🎖️', name:'Case Legend', desc:'Completed every investigation, core and bonus.', group:'bonus'}
+];
+
+function pin(key, title, note){
+  if(state.board.find(b=>b.key===key)) return;
+  state.board.push({key,title,note});
+  renderBoard();
+}
+function earnBadge(id){
+  if(!state.badges.includes(id)) state.badges.push(id);
+  renderBoard();
+}
+function go(screen){ state.screen = screen; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ============================= RENDER: SHELL ============================= */
+function renderTabs(){
+  const order = CASES;
+  const el = document.getElementById('case-tabs');
+  el.innerHTML = order.map(k=>{
+    let cls='case-tab';
+    if(BONUS_CASES.includes(k)) cls+=' bonus';
+    const curIdx = order.indexOf(state.screen);
+    const idx = order.indexOf(k);
+    if(k===state.screen) cls+=' current';
+    else if(idx < curIdx) cls+=' done';
+    return `<span class="${cls}">${CASE_LABELS[k]}${BONUS_CASES.includes(k)?' ★':''}</span>`;
+  }).join('');
+}
+function renderBoard(){
+  document.getElementById('stat-clues').textContent = state.board.length;
+  document.getElementById('stat-badges').textContent = state.badges.length;
+  const list = document.getElementById('pinned-list');
+  if(state.board.length===0){
+    list.innerHTML = `<div class="board-empty">No clues pinned yet. Start investigating!</div>`;
+  } else {
+    list.innerHTML = state.board.map(b=>`
+      <div class="pin-card"><span class="pin-dot"></span><b>${b.title}</b>${b.note}</div>
+    `).join('');
+  }
+  const br = document.getElementById('badge-row');
+  function pill(b){
+    const earned = state.badges.includes(b.id);
+    return `<span class="badge-pill ${earned?'':'badge-locked'}" title="${b.desc}"><span class="ic">${b.icon}</span>${b.name}</span>`;
+  }
+  br.innerHTML = `
+    <div class="badge-group-label">Core Case Badges</div>
+    <div class="badge-row" style="margin-top:0;">${BADGES.filter(b=>b.group==='core').map(pill).join('')}</div>
+    <div class="badge-group-label">Bonus Case Badges</div>
+    <div class="badge-row" style="margin-top:0;">${BADGES.filter(b=>b.group==='bonus').map(pill).join('')}</div>
+  `;
+}
+
+function compass(activeWord){
+  const words = ['NOTICE','QUESTION','INVESTIGATE','EVALUATE','DECIDE'];
+  return `<div class="compass">${words.map(w=>`<span class="${w===activeWord?'now':''}">${w}</span>`).join('<span style="opacity:.3">→</span>')}</div>`;
+}
+function progressTrack(caseIdx, stepsFilled, totalSteps){
+  let html = '<div class="progress-track">';
+  for(let i=0;i<totalSteps;i++){
+    let cls='progress-step';
+    if(i<stepsFilled) cls+=' filled';
+    else if(i===stepsFilled) cls+=' active';
+    html+=`<div class="${cls}"></div>`;
+  }
+  html+='</div>';
+  return html;
+}
+
+/* ============================= SCREEN: HOME ============================= */
+function screenHome(){
+  return `
+  <span class="mission-tag">New Case</span>
+  <h2>🔎 Welcome, Detective.</h2>
+  <p class="lede">Something strange is going around SMP Merdeka. Your job: put on your Detective Eyes, read carefully, gather real evidence, and decide what's actually true — in English.</p>
+  <div class="home-grid">
+    <div>
+      <div class="rumor-card">
+        "SMP Merdeka has completely banned plastic bottles starting next Monday."
+      </div>
+      <p class="lede" style="margin-top:16px;">Is this TRUE? Is it FALSE? Or is there just NOT ENOUGH EVIDENCE — yet? You will find out across four cases: reading the news, finding evidence, checking sources, and writing your final report.</p>
+    </div>
+    <div style="text-align:center;">
+      <div class="hero-badge">🕵️</div>
+      <p style="color:var(--ink-soft);font-size:13px;">4 Core Cases + 2 Bonus Cases · Evidence Board · Detective Badges</p>
+    </div>
+  </div>
+  <div class="nav-row">
+    <span></span>
+    <button class="btn btn-primary" id="start-btn">Start the Investigation →</button>
+  </div>`;
+}
+
+/* ============================= SCREEN: BRIEFING ============================= */
+function screenBriefing(){
+  return `
+  <span class="mission-tag">Detective Briefing</span>
+  <h2>Your Mission</h2>
+  <p class="lede">A rumor is spreading fast at SMP Merdeka. Some students believe it. Some don't. Nobody has checked it properly — until now.</p>
+  ${compass('NOTICE')}
+  <div class="doc gossip social">
+    <div class="doc-kind">📱 What Students Are Saying</div>
+    <p>"Plastic bottles are COMPLETELY BANNED starting next Monday! If you bring one, you'll be punished!"</p>
+    <footer>— overheard around school, shared many times</footer>
+  </div>
+  <p class="lede">A good detective doesn't guess. A good detective <b>investigates</b>. You will move through four core cases, then two bonus investigations:</p>
+  <div class="choice-grid two-col">
+    <div class="choice"><b>Case 01</b><br>Is This News Real? — Facts vs. Claims</div>
+    <div class="choice"><b>Case 02</b><br>Find the Evidence — Answer, Evidence, Reason</div>
+    <div class="choice"><b>Case 03</b><br>Who Can We Trust? — Rating Sources</div>
+    <div class="choice"><b>Case 04</b><br>Final Report — Your Verdict</div>
+    <div class="choice"><b>Case 05<span class="bonus-label">Bonus</span></b><br>The Photo Doesn't Lie... Or Does It? — Reading Images</div>
+    <div class="choice"><b>Case 06<span class="bonus-label">Bonus</span></b><br>Two Stories, One Event — Comparing Accounts</div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="next-btn">Open Case 01 →</button>
+  </div>`;
+}
+
+/* ============================= SCREEN: CASE 1 ============================= */
+function screenCase1(){
+  const tagged = Object.keys(state.case1.tags).length;
+  const total = SENTENCES.length;
+  const allTagged = tagged===total;
+  return `
+  <span class="mission-tag">Case 01 · Is This News Real?</span>
+  <h2>Read Closely. Tag Each Sentence.</h2>
+  <p class="lede">Below is the post that started the rumor. Tap each sentence and decide: is it a <b>FACT</b> (something that can be checked) or a <b>CLAIM</b> (something someone says, but hasn't been proven)?</p>
+  ${compass('NOTICE')}
+  ${progressTrack(1, tagged, total)}
+  <div id="sentence-list">
+    ${SENTENCES.map(s=>{
+      const picked = state.case1.tags[s.id];
+      return `
+      <div class="sentence ${picked?'tagged':''}" data-id="${s.id}">
+        <div>${s.text}</div>
+        <div class="tagbar">
+          <button class="tagbtn fact ${picked==='FACT'?'picked':''}" data-tag="FACT" data-id="${s.id}">FACT</button>
+          <button class="tagbtn claim ${picked==='CLAIM'?'picked':''}" data-tag="CLAIM" data-id="${s.id}">CLAIM</button>
+        </div>
+        <div class="verdict-chip ${picked?'show':''} ${picked==='FACT'?'fact':'claim'}">
+          ${picked ? (picked===s.type ? '🔎 Good detective work! ' : '🧐 Not quite — ') + s.explain : ''}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  ${allTagged ? `
+    <div class="divider-line"></div>
+    <h3 style="font-family:var(--font-display);font-size:16px;">Preliminary Verdict</h3>
+    <p class="lede">Based on what you've read so far — is the rumor true?</p>
+    <div class="choice-grid" id="c1-verdict-grid">
+      ${['TRUE','FALSE','NOT ENOUGH EVIDENCE'].map(v=>`
+        <button class="choice ${state.case1.verdict===v?'selected':''}" data-verdict="${v}">${v}</button>
+      `).join('')}
+    </div>
+    ${state.case1.verdictLocked ? `
+      <div class="feedback-box info"><span class="fi">🧭</span>
+      <div>Good instinct — but hold that thought! Right now you only have the <b>rumor itself</b>, no outside evidence. That's exactly why real detectives don't stop at Case 01. Head to Case 02 to find real evidence.</div></div>
+    ` : ''}
+  ` : ''}
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="next-btn" ${state.case1.verdictLocked ? '' : 'disabled'}>Open Case 02 →</button>
+  </div>`;
+}
+
+function handleCase1Tag(id, tag){
+  state.case1.tags[id] = tag;
+  const s = SENTENCES.find(x=>x.id===id);
+  pin('c1-'+id, s.type==='FACT' ? '🟢 Fact noted' : '🟡 Claim noted', s.text.slice(0,60)+(s.text.length>60?'…':''));
+  render();
+}
+function handleCase1Verdict(v){
+  state.case1.verdict = v;
+  state.case1.verdictLocked = true;
+  if(v==='NOT ENOUGH EVIDENCE') earnBadge('fair_judge');
+  const correctTags = SENTENCES.filter(s=>state.case1.tags[s.id]===s.type).length;
+  if(correctTags===SENTENCES.length) earnBadge('sharp_eyes');
+  render();
+}
+
+/* ============================= SCREEN: CASE 2 ============================= */
+function screenCase2(){
+  const step = !state.case2.answer ? 0 : (!state.case2.submitted ? 1 : 2);
+  return `
+  <span class="mission-tag">Case 02 · Find the Evidence</span>
+  <h2>Read the Documents. Then Prove It.</h2>
+  <p class="lede">Here's what the school itself has published. Read carefully, then answer the question below — and back up your answer with real evidence.</p>
+  ${compass('INVESTIGATE')}
+  ${progressTrack(2, step, 3)}
+  ${renderDoc('announcement')}
+  ${renderDoc('news')}
+  ${renderDoc('data')}
+  <div class="divider-line"></div>
+  <h3 style="font-family:var(--font-display);font-size:16px;">Why did the school introduce the Green Pilot program?</h3>
+  <div class="choice-grid" id="c2-answer-grid">
+    ${CASE2_OPTIONS.map(o=>`
+      <button class="choice ${state.case2.answer===o.id?'selected':''}" data-opt="${o.id}">${o.text}</button>
+    `).join('')}
+  </div>
+  ${state.case2.answer ? `
+    <div class="divider-line"></div>
+    <h3 style="font-family:var(--font-display);font-size:16px;">Show Your Evidence</h3>
+    <p class="lede">Which document actually supports your answer?</p>
+    <div class="choice-grid" id="c2-evidence-grid">
+      ${CASE2_EVIDENCE_CHOICES.map(o=>`
+        <button class="choice ${state.case2.evidence===o.id?'selected':''}" data-ev="${o.id}">${o.label}</button>
+      `).join('')}
+    </div>
+  ` : ''}
+  ${state.case2.submitted ? renderCase2Feedback() : ''}
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    ${!state.case2.submitted ? `<button class="btn btn-primary" id="c2-submit" ${(state.case2.answer && state.case2.evidence)?'':'disabled'}>Submit Reasoning</button>` : `<button class="btn btn-primary" id="next-btn">Open Case 03 →</button>`}
+  </div>`;
+}
+function renderDoc(key){
+  const d = EVIDENCE_DOCS[key];
+  return `<div class="doc ${d.kind}">
+    <div class="doc-kind">${d.label}</div>
+    <h4>${d.title}</h4>
+    <p>${d.body}</p>
+    <footer>${d.footer}</footer>
+  </div>`;
+}
+function renderCase2Feedback(){
+  const ansCorrect = CASE2_OPTIONS.find(o=>o.id===state.case2.answer).correct;
+  const evCorrect = CASE2_EVIDENCE_CHOICES.find(o=>o.id===state.case2.evidence).correct;
+  if(ansCorrect && evCorrect){
+    return `<div class="feedback-box good"><span class="fi">🔎</span><div><b>GOOD DETECTIVE WORK!</b> Your answer is supported by the school's own announcement and the principal's quote — official, named, and checkable sources.</div></div>`;
+  }
+  if(!ansCorrect){
+    return `<div class="feedback-box notyet"><span class="fi">🧐</span><div><b>NOT YET.</b> That answer isn't supported anywhere in the official documents. Re-read the announcement and news article — what do they actually say about the plan?</div></div>`;
+  }
+  return `<div class="feedback-box notyet"><span class="fi">🧐</span><div><b>NOT YET.</b> Good answer choice — but that evidence doesn't directly support it. The gossip post and anonymous comment are the claims you're investigating, not proof.</div></div>`;
+}
+function handleCase2Submit(){
+  state.case2.submitted = true;
+  const ansCorrect = CASE2_OPTIONS.find(o=>o.id===state.case2.answer).correct;
+  const evCorrect = CASE2_EVIDENCE_CHOICES.find(o=>o.id===state.case2.evidence).correct;
+  if(ansCorrect && evCorrect){
+    earnBadge('evidence_hunter');
+    pin('c2-evidence','🧩 Evidence matched','Grade 7 pilot confirmed by official sources');
+  } else {
+    pin('c2-evidence','🧩 Evidence reviewed','Compared official docs vs. rumor');
+  }
+  render();
+}
+
+/* ============================= SCREEN: CASE 3 ============================= */
+function screenCase3(){
+  const doneCount = Object.values(state.case3.sources).filter(s=>s.locked).length;
+  const total = SOURCES.length;
+  return `
+  <span class="mission-tag">Case 03 · Who Can We Trust?</span>
+  <h2>Rate Each Source. Explain Why.</h2>
+  <p class="lede">Don't assume — check. For each source, decide how much you'd trust it, then pick the real reasons behind your rating. (Hint: even social media isn't automatically wrong, and data isn't automatically right.)</p>
+  ${compass('EVALUATE')}
+  ${progressTrack(3, doneCount, total)}
+  ${SOURCES.map(s=>renderSourceCard(s.id)).join('')}
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="next-btn" ${doneCount===total?'':'disabled'}>Open Case 04 →</button>
+  </div>`;
+}
+function renderSourceCard(id){
+  const d = EVIDENCE_DOCS[id];
+  const sState = state.case3.sources[id];
+  const answerKey = SOURCES.find(s=>s.id===id);
+  return `
+  <div class="doc source-card ${d.kind}">
+    <div class="doc-kind">${d.label}</div>
+    <h4>${d.title}</h4>
+    <p>${d.body}</p>
+    <footer>${d.footer}</footer>
+    <label class="field-label" style="margin-top:12px;">How much do you trust this source?</label>
+    <div class="trust-dial" data-source="${id}">
+      ${['low','medium','high'].map(lvl=>`
+        <button class="trust-opt ${lvl} ${sState.trust===lvl?'picked':''}" data-trust="${lvl}" data-source="${id}">
+          ${lvl==='high'?'🟢 HIGH':(lvl==='medium'?'🟡 MEDIUM':'🔴 LOW')}
+        </button>`).join('')}
+    </div>
+    ${sState.trust ? `
+      <label class="field-label">Why? (pick all that apply)</label>
+      <div class="reason-chips" data-source="${id}">
+        ${REASON_CHIP_OPTIONS.map(r=>`
+          <button class="chip ${sState.reasons.includes(r)?'on':''}" data-reason="${r}" data-source="${id}">${r}</button>
+        `).join('')}
+      </div>
+      ${!sState.locked ? `<button class="btn btn-ghost" style="margin-top:8px;" data-locksrc="${id}" ${sState.reasons.length? '' : 'disabled'}>Confirm Rating</button>` : ''}
+    ` : ''}
+    ${sState.locked ? `
+      <div class="verdict-chip show ${sState.trust===answerKey.trust ? 'fact':'claim'}">
+        ${sState.trust===answerKey.trust ? '🔎 GOOD READ — ' : '🧐 WORTH A SECOND LOOK — '}
+        A careful detective would rate this <b>${answerKey.trust.toUpperCase()} TRUST</b>, mainly because: ${[...answerKey.reasonsGood, ...answerKey.reasonsBad].slice(0,2).join('; ') || 'no strong evidence and no named author.'}
+      </div>
+    ` : ''}
+  </div>`;
+}
+function handleTrustPick(source, level){
+  state.case3.sources[source].trust = level;
+  render();
+}
+function handleReasonToggle(source, reason){
+  const arr = state.case3.sources[source].reasons;
+  const i = arr.indexOf(reason);
+  if(i>-1) arr.splice(i,1); else arr.push(reason);
+  render();
+}
+function handleLockSource(source){
+  state.case3.sources[source].locked = true;
+  pin('c3-'+source, '🧠 Source checked: '+EVIDENCE_DOCS[source].label.replace(/^\S+\s/,''), 'Rated '+state.case3.sources[source].trust.toUpperCase()+' trust');
+  const all = Object.values(state.case3.sources).every(s=>s.locked);
+  if(all) earnBadge('source_checker');
+  render();
+}
+
+/* ============================= SCREEN: CASE 4 ============================= */
+function screenCase4(){
+  const c4 = state.case4;
+  const readyToClose = c4.verdict && c4.evidence.trim().length>4 && c4.trustedSource && c4.why.trim().length>4;
+  return `
+  <span class="mission-tag">Case 04 · Final Report</span>
+  <h2>Write Your Detective Report</h2>
+  <p class="lede">You've read the rumor, found evidence, and checked your sources. Now it's time to decide.</p>
+  ${compass('DECIDE')}
+  <label class="field-label">Final Verdict — is the original claim true?</label>
+  <div class="choice-grid" style="margin-bottom:20px;">
+    ${['TRUE','FALSE','NOT ENOUGH EVIDENCE'].map(v=>`
+      <button class="choice ${c4.verdict===v?'selected':''}" data-c4verdict="${v}">${v}</button>
+    `).join('')}
+  </div>
+  <label class="field-label">My Evidence — what did you find that supports your verdict?</label>
+  <textarea id="c4-evidence" placeholder="e.g. The official announcement says only Grade 7 joins a two-week pilot, not a full ban.">${c4.evidence}</textarea>
+  <label class="field-label" style="margin-top:16px;">The Source I Trust Most</label>
+  <div class="choice-grid two-col" style="margin-bottom:6px;">
+    ${SOURCES.map(s=>`
+      <button class="choice ${c4.trustedSource===s.id?'selected':''}" data-c4src="${s.id}" style="font-size:13px;">${EVIDENCE_DOCS[s.id].label}</button>
+    `).join('')}
+  </div>
+  <label class="field-label" style="margin-top:16px;">Why? Complete your conclusion:</label>
+  <p style="font-size:14px;color:var(--ink-soft);margin:0 0 6px;">"I think this information is <b>${c4.verdict||'___'}</b> because ___"</p>
+  <textarea id="c4-why" placeholder="Finish your sentence here...">${c4.why}</textarea>
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="close-case-btn" ${readyToClose?'':'disabled'}>File Report — Case 05 →</button>
+  </div>`;
+}
+
+/* ============================= SCREEN: CASE 5 ============================= */
+function screenCase5(){
+  const c5 = state.case5;
+  const cluesRevealed = Object.values(c5.clues).filter(e=>e && e.answer).length;
+  const total = CASE5.clues.length;
+  const allDone = cluesRevealed===total;
+  return `
+  <span class="mission-tag">Case 05 · The Photo Doesn't Lie... Or Does It?<span class="bonus-label">Bonus Case</span></span>
+  <h2>A New Photo Is Going Around.</h2>
+  <p class="lede">A picture is spreading online with a caption that makes a big claim. Your job: check the image against the claim before you believe it.</p>
+  ${compass('NOTICE')}
+  ${progressTrack(5, cluesRevealed, total)}
+  <div class="image-frame">
+    <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="212" height="152" rx="8" fill="#dfd6b8" stroke="#b8a878" stroke-width="2"/>
+      <rect x="70" y="60" width="80" height="80" rx="6" fill="#8a7a5c"/>
+      <rect x="78" y="50" width="64" height="14" rx="4" fill="#6b5d43"/>
+      <circle cx="95" cy="95" r="10" fill="#e8d9b8"/>
+      <circle cx="120" cy="105" r="9" fill="#c9b98d"/>
+      <circle cx="108" cy="85" r="8" fill="#e8d9b8"/>
+      <rect x="60" y="140" width="100" height="8" rx="4" fill="#b8a878"/>
+      <text x="110" y="30" font-family="monospace" font-size="10" fill="#7d2620" text-anchor="middle">📷 shared photo</text>
+    </svg>
+    <div class="cap">Illustration: a trash bin with a few bottles on top.</div>
+  </div>
+  <div class="doc social">
+    <div class="doc-kind">📱 The Caption</div>
+    <h4>${CASE5.account}</h4>
+    <p>"${CASE5.claim}"</p>
+    <footer>${CASE5.posted}</footer>
+  </div>
+  <div class="divider-line"></div>
+  <h3 style="font-family:var(--font-display);font-size:16px;">🔎 Inspect the Clues</h3>
+  <p class="lede">Tap each clue to investigate it. Then decide: does it <b>SUPPORT</b> or <b>CONTRADICT</b> the caption's claim?</p>
+  ${CASE5.clues.map(c=>{
+    const entry = c5.clues[c.id];              // undefined | {revealed:true, answer:null|'support'|'contradict'}
+    return `
+    <div class="doc clue-card">
+      <button class="choice clue-trigger" data-clue-reveal="${c.id}" ${entry?'disabled':''}>${c.icon} ${c.title} ${entry?'— investigated':'— tap to investigate'}</button>
+      ${entry ? `
+        <div class="clue-reveal">
+          <p style="font-size:14px;color:#332a1e;">${c.reveal}</p>
+          ${!entry.answer ? `
+            <label class="field-label">Does this clue SUPPORT or CONTRADICT the caption's claim?</label>
+            <div class="support-row">
+              <button class="chip" data-clue-answer="${c.id}" data-answer="support">SUPPORTS the claim</button>
+              <button class="chip" data-clue-answer="${c.id}" data-answer="contradict">CONTRADICTS the claim</button>
+            </div>
+          ` : `
+            <div class="verdict-chip show ${entry.answer===c.correct ? 'fact':'claim'}">
+              ${entry.answer===c.correct ? '🔎 Right — ' : '🧐 Look again — '}
+              You marked this as ${entry.answer==='contradict'?'CONTRADICT':'SUPPORT'}. This clue actually ${c.correct==='contradict'?'goes against':'supports'} the caption's claim.
+            </div>
+          `}
+        </div>
+      ` : ''}
+    </div>`;
+  }).join('')}
+  ${allDone ? `
+    <div class="divider-line"></div>
+    <h3 style="font-family:var(--font-display);font-size:16px;">Verdict</h3>
+    <p class="lede">Does the photo actually support the claim that the Green Pilot is failing?</p>
+    <div class="choice-grid">
+      ${['TRUE','FALSE','NOT ENOUGH EVIDENCE'].map(v=>`
+        <button class="choice ${c5.verdict===v?'selected':''}" data-c5verdict="${v}">${v}</button>
+      `).join('')}
+    </div>
+    ${c5.verdictLocked ? `
+      <div class="feedback-box ${c5.verdict==='FALSE' ? 'good':'notyet'}"><span class="fi">${c5.verdict==='FALSE'?'🔎':'🧐'}</span>
+      <div>${c5.verdict==='FALSE'
+        ? '<b>GOOD DETECTIVE WORK!</b> The photo is old, from a different school, and posted by an unrelated account. It does not show the Green Pilot failing at all.'
+        : '<b>NOT YET.</b> Look at your clues again — the date, location, caption, and source all point away from the claim being true. A photo can look convincing and still not support the story attached to it.'}</div></div>
+    ` : ''}
+  ` : ''}
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="next-btn" ${c5.verdictLocked?'':'disabled'}>Open Case 06 →</button>
+  </div>`;
+}
+function handleCase5Reveal(id){
+  state.case5.clues[id] = {revealed:true, answer:null};
+  render();
+}
+function handleCase5Judge(id, answer){
+  state.case5.clues[id].answer = answer;
+  const c = CASE5.clues.find(x=>x.id===id);
+  pin('c5-'+id, '📷 '+c.title, c.reveal.slice(0,60)+'…');
+  render();
+}
+function handleCase5Verdict(v){
+  state.case5.verdict = v;
+  state.case5.verdictLocked = true;
+  const correctClues = CASE5.clues.filter(c=>state.case5.clues[c.id] && state.case5.clues[c.id].answer===c.correct).length;
+  if(v==='FALSE' && correctClues>=3) earnBadge('picture_detective');
+  render();
+}
+
+/* ============================= SCREEN: CASE 6 ============================= */
+function screenCase6(){
+  const c6 = state.case6;
+  const tagged = Object.keys(c6.tags).length;
+  const total = CASE6_STATEMENTS.length;
+  const allTagged = tagged===total;
+  const readyToFile = c6.know.trim().length>4 && c6.dontknow.trim().length>4 && c6.checknext.trim().length>4;
+  return `
+  <span class="mission-tag">Case 06 · Two Stories, One Event<span class="bonus-label">Bonus Case</span></span>
+  <h2>Two Accounts. One Event. Compare Them.</h2>
+  <p class="lede">Two school sources both describe the same event — a library blackout. They don't say exactly the same thing. That doesn't automatically mean one of them is lying.</p>
+  ${compass('INVESTIGATE')}
+  ${renderDoc6('newsletter')}
+  ${renderDoc6('council')}
+  <div class="divider-line"></div>
+  <h3 style="font-family:var(--font-display);font-size:16px;">Sort What Each Source Says</h3>
+  <p class="lede">For each statement, decide: do both sources agree, do they differ, or does only one source mention it?</p>
+  ${progressTrack(6, tagged, total)}
+  ${CASE6_STATEMENTS.map(s=>{
+    const picked = c6.tags[s.id];
+    return `
+    <div class="sentence ${picked?'tagged':''}" data-id="${s.id}">
+      <div>${s.text}</div>
+      <div class="tagbar">
+        <button class="tagbtn fact ${picked==='agree'?'picked':''}" data-c6tag="agree" data-id="${s.id}">BOTH AGREE</button>
+        <button class="tagbtn claim ${picked==='differ'?'picked':''}" data-c6tag="differ" data-id="${s.id}">DIFFERS</button>
+        <button class="tagbtn onlyone ${picked==='only_one'?'picked':''}" data-c6tag="only_one" data-id="${s.id}">ONLY ONE SAYS THIS</button>
+      </div>
+      <div class="verdict-chip ${picked?'show':''} ${picked?BUCKET_META[picked].tagclass:''}">
+        ${picked ? (picked===s.bucket ? "🔎 Good detective work! That's " : '🧐 Not quite — this is actually ') + BUCKET_META[s.bucket].label + '.' : ''}
+      </div>
+    </div>`;
+  }).join('')}
+  ${allTagged ? `
+    <div class="divider-line"></div>
+    <h3 style="font-family:var(--font-display);font-size:16px;">Detective Summary</h3>
+    <label class="field-label">What do we know?</label>
+    <textarea id="c6-know" placeholder="e.g. We know the library lights went out on Tuesday...">${c6.know}</textarea>
+    <label class="field-label" style="margin-top:14px;">What do we NOT know?</label>
+    <textarea id="c6-dontknow" placeholder="e.g. We don't know for sure why the blackout happened...">${c6.dontknow}</textarea>
+    <label class="field-label" style="margin-top:14px;">What should we check next?</label>
+    <textarea id="c6-checknext" placeholder="e.g. We could ask a teacher what caused the blackout...">${c6.checknext}</textarea>
+  ` : ''}
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="back-btn">← Back</button>
+    <button class="btn btn-primary" id="c6-file-btn" ${(allTagged && readyToFile)?'':'disabled'}>File Case 06 →</button>
+  </div>`;
+}
+function renderDoc6(key){
+  const d = CASE6_DOCS[key];
+  return `<div class="doc ${d.kind}">
+    <div class="doc-kind">${d.label}</div>
+    <h4>${d.title}</h4>
+    <p>${d.body}</p>
+    <footer>${d.footer}</footer>
+  </div>`;
+}
+function handleCase6Tag(id, bucket){
+  state.case6.tags[id] = bucket;
+  const s = CASE6_STATEMENTS.find(x=>x.id===id);
+  pin('c6-'+id, '🔀 '+BUCKET_META[s.bucket].label, s.text);
+  const allTagged = Object.keys(state.case6.tags).length===CASE6_STATEMENTS.length;
+  if(allTagged){
+    const allCorrect = CASE6_STATEMENTS.every(st=>state.case6.tags[st.id]===st.bucket);
+    if(allCorrect) earnBadge('perspective_detective');
+  }
+  render();
+}
+function handleCase6File(){
+  state.case6.submitted = true;
+  pin('c6-summary','🗒️ Case 06 filed','Compared two accounts of the library blackout');
+  go('closed');
+}
+
+/* ============================= SCREEN: CLOSED ============================= */
+function screenClosed(){
+  earnBadge('case_legend');
+  const c4 = state.case4;
+  return `
+  <div class="closed-hero">
+    <div class="big-stamp">CASE CLOSED</div>
+    <h2>🎉 Nice work, Detective.</h2>
+    <p class="lede" style="margin:0 auto;">You didn't guess — you investigated. Here's your final report.</p>
+  </div>
+  <div class="verdict-banner">FINAL VERDICT: ${c4.verdict}</div>
+  <div class="doc official">
+    <div class="doc-kind">🧾 Detective Report Summary</div>
+    <p><b>Evidence:</b> ${escapeHtml(c4.evidence)}</p>
+    <p><b>Most trusted source:</b> ${EVIDENCE_DOCS[c4.trustedSource].label} — ${EVIDENCE_DOCS[c4.trustedSource].title}</p>
+    <p><b>Conclusion:</b> "I think this information is ${c4.verdict} because ${escapeHtml(c4.why)}"</p>
+  </div>
+  <div class="divider-line"></div>
+  <h3 style="font-family:var(--font-display);font-size:16px;">🎁 Bonus Investigations</h3>
+  <div class="doc data">
+    <div class="doc-kind">📷 Case 05 — The Photo Doesn't Lie... Or Does It?</div>
+    <p>Your verdict: <b>${state.case5.verdict||'—'}</b>. A photo can be real and still be misused — the date, location, caption, and source all matter before you trust what it claims to show.</p>
+  </div>
+  <div class="doc data">
+    <div class="doc-kind">🔀 Case 06 — Two Stories, One Event</div>
+    <p><b>We know:</b> ${escapeHtml(state.case6.know)}</p>
+    <p><b>We don't know:</b> ${escapeHtml(state.case6.dontknow)}</p>
+    <p><b>We should check:</b> ${escapeHtml(state.case6.checknext)}</p>
+  </div>
+  <div class="divider-line"></div>
+  <h3 style="font-family:var(--font-display);font-size:16px;">🕵️ Detective Reflection</h3>
+  <div class="reflection-q"><p>What did you learn about checking information?</p><textarea id="ref1" placeholder="Write a short answer..."></textarea></div>
+  <div class="reflection-q"><p>What makes a source trustworthy?</p><textarea id="ref2" placeholder="Write a short answer..."></textarea></div>
+  <div class="reflection-q"><p>Why is evidence important before making a conclusion?</p><textarea id="ref3" placeholder="Write a short answer..."></textarea></div>
+  <div class="nav-row">
+    <button class="btn btn-ghost" id="restart-btn">↺ Start a New Case</button>
+    <span></span>
+  </div>`;
+}
+function escapeHtml(s){ const d=document.createElement('div'); d.innerText=s||''; return d.innerHTML; }
+
+/* ============================= TEACHER DASHBOARD ============================= */
+function openTeacherModal(){
+  const root = document.getElementById('modal-root');
+  const c1correct = SENTENCES.filter(s=>state.case1.tags[s.id]===s.type).length;
+  const c2ok = state.case2.submitted ? (CASE2_OPTIONS.find(o=>o.id===state.case2.answer)?.correct && CASE2_EVIDENCE_CHOICES.find(o=>o.id===state.case2.evidence)?.correct) : null;
+  const c3done = Object.values(state.case3.sources).filter(s=>s.locked).length;
+  root.innerHTML = `
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <button class="close-x" id="close-modal">✕</button>
+      <h3>👩‍🏫 Teacher Dashboard</h3>
+      <p style="font-size:13px;color:var(--ink-soft);">A quick view of this student's reasoning trail — not just a score.</p>
+      <table>
+        <tr><th>Case</th><th>Status</th><th>Detail</th></tr>
+        <tr><td>Case 01</td><td>${Object.keys(state.case1.tags).length}/${SENTENCES.length} tagged</td><td>${c1correct}/${SENTENCES.length} correct · Preliminary verdict: ${state.case1.verdict||'—'}</td></tr>
+        <tr><td>Case 02</td><td>${state.case2.submitted?'Completed':'In progress'}</td><td>Answer: ${state.case2.answer||'—'} · Evidence: ${state.case2.evidence||'—'} · ${c2ok===null?'':(c2ok?'Correct reasoning':'Needs review')}</td></tr>
+        <tr><td>Case 03</td><td>${c3done}/${SOURCES.length} sources rated</td><td>${SOURCES.map(s=>`${s.id}:${state.case3.sources[s.id].trust||'—'}`).join(', ')}</td></tr>
+        <tr><td>Case 04</td><td>${state.case4.verdict?'Filed':'Not yet'}</td><td>Verdict: ${state.case4.verdict||'—'}</td></tr>
+        <tr><td>Case 05 <span style="font-size:10px;color:#8a7a5c;">(bonus)</span></td><td>${Object.values(state.case5.clues).filter(e=>e&&e.answer).length}/${CASE5.clues.length} clues judged</td><td>Verdict: ${state.case5.verdict||'—'}</td></tr>
+        <tr><td>Case 06 <span style="font-size:10px;color:#8a7a5c;">(bonus)</span></td><td>${Object.keys(state.case6.tags).length}/${CASE6_STATEMENTS.length} statements sorted</td><td>${state.case6.submitted?'Reflection filed':'In progress'}</td></tr>
+        <tr><td>Badges</td><td>${state.badges.length}/${BADGES.length}</td><td>${state.badges.map(b=>BADGES.find(x=>x.id===b).name).join(', ')||'None yet'}</td></tr>
+      </table>
+      <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;">Use this to spot learning difficulties — e.g. a student who rates every source the same trust level, or who never revises a preliminary verdict, may need support distinguishing evidence quality.</p>
+    </div>
+  </div>`;
+  document.getElementById('close-modal').onclick = ()=>root.innerHTML='';
+  document.getElementById('modal-overlay').onclick = (e)=>{ if(e.target.id==='modal-overlay') root.innerHTML=''; };
+}
+
+/* ============================= MASTER RENDER + EVENTS ============================= */
+function render(){
+  renderTabs();
+  renderBoard();
+  const stage = document.getElementById('stage');
+  let html = '';
+  switch(state.screen){
+    case 'home': html = screenHome(); break;
+    case 'briefing': html = screenBriefing(); break;
+    case 'case1': html = screenCase1(); break;
+    case 'case2': html = screenCase2(); break;
+    case 'case3': html = screenCase3(); break;
+    case 'case4': html = screenCase4(); break;
+    case 'case5': html = screenCase5(); break;
+    case 'case6': html = screenCase6(); break;
+    case 'closed': html = screenClosed(); break;
+  }
+  stage.innerHTML = html;
+  bindEvents();
+}
+
+function bindEvents(){
+  const q = sel=>document.getElementById(sel);
+  if(q('start-btn')) q('start-btn').onclick = ()=>go('briefing');
+  if(q('back-btn')) q('back-btn').onclick = ()=>{
+    const i = CASES.indexOf(state.screen);
+    go(CASES[Math.max(0,i-1)]);
+  };
+  if(q('next-btn')) q('next-btn').onclick = ()=>{
+    const i = CASES.indexOf(state.screen);
+    go(CASES[Math.min(CASES.length-1,i+1)]);
+  };
+  if(q('restart-btn')) q('restart-btn').onclick = ()=>{
+    if(confirm('Start a brand-new investigation? This will clear your current progress.')){
+      state = {screen:'home',case1:{tags:{},verdict:null,verdictLocked:false},case2:{answer:null,evidence:null,submitted:false},
+        case3:{sources:{},activeIndex:0},case4:{verdict:null,evidence:'',trustedSource:null,why:''},
+        case5:{clues:{},verdict:null,verdictLocked:false},case6:{tags:{},know:'',dontknow:'',checknext:'',submitted:false},
+        board:[],badges:[],notesOpen:false};
+      SOURCES.forEach(s=>state.case3.sources[s.id]={trust:null,reasons:[],locked:false});
+      render();
+    }
+  };
+
+  // Case 1
+  document.querySelectorAll('.tagbtn').forEach(btn=>{
+    btn.onclick = ()=> handleCase1Tag(btn.dataset.id, btn.dataset.tag);
+  });
+  document.querySelectorAll('#c1-verdict-grid .choice').forEach(btn=>{
+    btn.onclick = ()=> handleCase1Verdict(btn.dataset.verdict);
+  });
+
+  // Case 2
+  document.querySelectorAll('#c2-answer-grid .choice').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case2.submitted) return; state.case2.answer = btn.dataset.opt; render(); };
+  });
+  document.querySelectorAll('#c2-evidence-grid .choice').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case2.submitted) return; state.case2.evidence = btn.dataset.ev; render(); };
+  });
+  if(q('c2-submit')) q('c2-submit').onclick = handleCase2Submit;
+
+  // Case 3
+  document.querySelectorAll('.trust-opt').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case3.sources[btn.dataset.source].locked) return; handleTrustPick(btn.dataset.source, btn.dataset.trust); };
+  });
+  document.querySelectorAll('.chip[data-reason]').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case3.sources[btn.dataset.source].locked) return; handleReasonToggle(btn.dataset.source, btn.dataset.reason); };
+  });
+  document.querySelectorAll('[data-locksrc]').forEach(btn=>{
+    btn.onclick = ()=> handleLockSource(btn.dataset.locksrc);
+  });
+
+  // Case 4
+  document.querySelectorAll('[data-c4verdict]').forEach(btn=>{
+    btn.onclick = ()=>{ state.case4.verdict = btn.dataset.c4verdict; render(); };
+  });
+  document.querySelectorAll('[data-c4src]').forEach(btn=>{
+    btn.onclick = ()=>{ state.case4.trustedSource = btn.dataset.c4src; render(); };
+  });
+  if(q('c4-evidence')) q('c4-evidence').oninput = (e)=>{ state.case4.evidence = e.target.value; document.getElementById('close-case-btn').disabled = !(state.case4.verdict && state.case4.evidence.trim().length>4 && state.case4.trustedSource && state.case4.why.trim().length>4); };
+  if(q('c4-why')) q('c4-why').oninput = (e)=>{ state.case4.why = e.target.value; document.getElementById('close-case-btn').disabled = !(state.case4.verdict && state.case4.evidence.trim().length>4 && state.case4.trustedSource && state.case4.why.trim().length>4); };
+  if(q('close-case-btn')) q('close-case-btn').onclick = ()=>{
+    pin('c4-report','📋 Final report filed', 'Verdict: '+state.case4.verdict);
+    earnBadge('master_detective');
+    go('case5');
+  };
+
+  // Case 5
+  document.querySelectorAll('[data-clue-reveal]').forEach(btn=>{
+    btn.onclick = ()=> handleCase5Reveal(btn.dataset.clueReveal);
+  });
+  document.querySelectorAll('[data-clue-answer]').forEach(btn=>{
+    btn.onclick = ()=> handleCase5Judge(btn.dataset.clueAnswer, btn.dataset.answer);
+  });
+  document.querySelectorAll('[data-c5verdict]').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case5.verdictLocked) return; handleCase5Verdict(btn.dataset.c5verdict); };
+  });
+
+  // Case 6
+  document.querySelectorAll('[data-c6tag]').forEach(btn=>{
+    btn.onclick = ()=>{ if(state.case6.tags[btn.dataset.id]) return; handleCase6Tag(btn.dataset.id, btn.dataset.c6tag); };
+  });
+  if(q('c6-know')) q('c6-know').oninput = (e)=>{ state.case6.know = e.target.value; refreshC6FileButton(); };
+  if(q('c6-dontknow')) q('c6-dontknow').oninput = (e)=>{ state.case6.dontknow = e.target.value; refreshC6FileButton(); };
+  if(q('c6-checknext')) q('c6-checknext').oninput = (e)=>{ state.case6.checknext = e.target.value; refreshC6FileButton(); };
+  if(q('c6-file-btn')) q('c6-file-btn').onclick = handleCase6File;
+}
+function refreshC6FileButton(){
+  const c6 = state.case6;
+  const allTagged = Object.keys(c6.tags).length===CASE6_STATEMENTS.length;
+  const readyToFile = c6.know.trim().length>4 && c6.dontknow.trim().length>4 && c6.checknext.trim().length>4;
+  const btn = document.getElementById('c6-file-btn');
+  if(btn) btn.disabled = !(allTagged && readyToFile);
+}
+
+document.getElementById('teacher-btn').onclick = openTeacherModal;
+
+render();
+</script>
+</body>
+</html>

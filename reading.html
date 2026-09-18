@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Reading YO! Read. Imagine. Enjoy." />
+    <title>Reading YO! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ===== Reading YO! page-specific styles (kept separate from styles.css) ===== */
+      .reading-hero { padding: clamp(34px, 6vw, 64px) 0 clamp(18px, 3vw, 30px); text-align: center; }
+      .reading-hero .badge { display: inline-block; margin-bottom: 16px; padding: 7px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.8rem; transform: rotate(-4deg); }
+      .reading-hero h1 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
+      .reading-hero h1 .accent { color: var(--pink); }
+      .reading-hero p { max-width: 48ch; margin: 0 auto; color: #2a3d68; font-size: clamp(1rem, 1.6vw, 1.25rem); font-weight: 800; }
+
+      /* Shared section heading style, reused across the page's sections */
+      .section-heading { max-width: 62ch; margin: 0 auto clamp(20px, 2.4vw, 34px); text-align: center; }
+      .section-heading h2 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.02em; }
+      .section-heading p { margin: 0; color: #3a4d78; font-size: clamp(0.9rem, 1.1vw, 1.05rem); font-weight: 700; }
+
+      /* Choose your level */
+      .level-section { padding: clamp(10px, 2vw, 20px) 0 clamp(50px, 6vw, 80px); }
+      .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.4vw, 22px); }
+      .level-card { position: relative; display: flex; overflow: hidden; width: 100%; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 4px; min-height: clamp(140px, 12vw, 170px); padding: clamp(18px, 1.8vw, 24px); border: 0; border-radius: clamp(18px, 1.8vw, 26px); box-shadow: 0 10px 24px rgba(0, 53, 110, 0.12); text-align: left; font: inherit; appearance: none; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+      .level-card:hover, .level-card:focus-visible { box-shadow: 0 16px 32px rgba(0, 53, 110, 0.18); transform: translateY(-3px); }
+      .level-card.is-active { outline: 3px solid var(--navy); outline-offset: 2px; }
+      .level-card .level-code { position: absolute; top: clamp(14px, 1.6vw, 20px); left: clamp(18px, 1.8vw, 24px); color: var(--navy); font-family: var(--display); font-size: clamp(1.7rem, 2.6vw, 2.3rem); font-weight: 800; opacity: 0.85; }
+      .level-card h3 { margin: 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.05rem, 1.3vw, 1.3rem); font-weight: 800; }
+      .level-card p { margin: 0; color: #3a4d78; font-size: 0.85rem; font-weight: 700; }
+      .level-card--yellow { background: var(--card-yellow); }
+      .level-card--blue { background: var(--card-blue); }
+      .level-card--pink { background: var(--card-pink); }
+      .level-card--green { background: var(--card-green); }
+
+      /* Reading library (dynamic, JS-rendered per level) */
+      .library-section { padding-bottom: clamp(50px, 6vw, 80px); }
+      .library-topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
+      .back-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 0; border-radius: 999px; background: #fff; box-shadow: 0 4px 12px rgba(0, 53, 110, 0.1); color: var(--navy); font-family: var(--display); font-size: 0.82rem; font-weight: 800; cursor: pointer; }
+      .back-link:hover { box-shadow: 0 6px 16px rgba(0, 53, 110, 0.16); }
+      .story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(14px, 1.6vw, 22px); }
+      .story-card { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: clamp(18px, 1.8vw, 24px); border-radius: clamp(16px, 1.6vw, 24px); background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); }
+      .story-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--card-blue); color: var(--navy); font-family: var(--display); font-size: 0.72rem; font-weight: 800; }
+      .story-card h3 { margin: 4px 0 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.05rem, 1.2vw, 1.2rem); font-weight: 800; }
+      .story-card p { margin: 0; color: #3a4d78; font-size: 0.86rem; font-weight: 700; }
+      .story-link { display: inline-block; margin-top: 6px; border: 0; background: none; padding: 0; color: var(--pink); font-family: var(--display); font-size: 0.9rem; font-weight: 800; cursor: pointer; }
+      .library-empty { max-width: 46ch; margin: 0 auto; padding: clamp(22px, 2.4vw, 30px); border-radius: 20px; background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.08); color: #3a4d78; font-size: 0.95rem; font-weight: 700; text-align: center; }
+
+      /* Story Reader (dynamic, JS-rendered) */
+      .reader-section { padding-bottom: clamp(60px, 7vw, 100px); }
+      .reader-frame { overflow: hidden; border-radius: clamp(18px, 1.8vw, 28px); background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); }
+      .reader-body { padding: clamp(20px, 2.4vw, 36px); }
+      .reader-header { margin-bottom: clamp(16px, 2vw, 26px); text-align: center; }
+      .reader-illustration { display: block; width: 100%; max-width: 220px; margin: 0 auto clamp(14px, 1.8vw, 18px); border-radius: 18px; box-shadow: 0 8px 18px rgba(0, 53, 110, 0.14); }
+      .reader-header h3 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 800; }
+      .reader-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+      .reader-meta span { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--card-pink); color: var(--navy); font-size: 0.75rem; font-weight: 800; }
+      .reader-audio-wrap { max-width: 360px; margin: clamp(14px, 1.8vw, 20px) auto 0; }
+      .reader-audio-wrap audio { display: block; width: 100%; height: 38px; }
+      .reader-story-text { max-width: 62ch; margin: clamp(20px, 2.4vw, 30px) auto; padding: clamp(16px, 1.8vw, 22px); border-radius: 16px; background: var(--paper); color: #3a4d78; font-size: 0.95rem; font-weight: 600; line-height: 1.7; }
+      .reader-story-text p { margin: 0 0 12px; }
+      .reader-story-text p:last-child { margin-bottom: 0; }
+      .words-to-know { max-width: 62ch; margin: 0 auto clamp(20px, 2.4vw, 30px); padding: clamp(16px, 1.8vw, 22px); border-radius: 16px; background: var(--card-green); }
+      .words-to-know h4 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: 1rem; font-weight: 800; }
+      .words-to-know ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+      .words-to-know li { color: #2a3d68; font-size: 0.9rem; font-weight: 700; }
+      .words-to-know li b { color: var(--navy); }
+      .reader-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+
+      .is-hidden { display: none !important; }
+
+      @media (max-width: 900px) {
+        .level-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 480px) {
+        .level-grid { grid-template-columns: 1fr; gap: 12px; }
+        .level-card { min-height: 120px; padding: 16px; }
+        .story-grid { grid-template-columns: 1fr; }
+        .reader-illustration { max-width: 170px; }
+        .reader-audio-wrap { max-width: 100%; }
+      }
+
+      /* Contributors Section */
+      .contributors-section { padding: clamp(50px, 6vw, 80px) 0; background: rgba(218, 234, 255, 0.4); border-radius: 20px; margin-bottom: clamp(30px, 4vw, 50px); }
+      .contributors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: clamp(16px, 2vw, 24px); margin-top: clamp(24px, 3vw, 32px); }
+      .contributor-card { padding: clamp(20px, 2.4vw, 28px); border-radius: clamp(16px, 1.6vw, 22px); background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); text-align: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+      .contributor-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0, 53, 110, 0.15); }
+      .contributor-card h3 { margin: 0 0 6px; color: var(--navy); font-family: var(--display); font-size: clamp(1.1rem, 1.4vw, 1.3rem); font-weight: 800; }
+      .contributor-role { margin: 0; color: #3a4d78; font-size: clamp(0.85rem, 1vw, 0.95rem); font-weight: 700; }
+      @media (max-width: 480px) {
+        .contributors-grid { grid-template-columns: 1fr; }
+      }
+
+      /* Developer Modal Styles */
+      .developer-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .developer-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        max-width: 400px;
+        width: 90%;
+        position: relative;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      }
+      @keyframes slideIn {
+        from {
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #999;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+      }
+      .modal-close:hover {
+        color: #333;
+      }
+      .modal-card h2 {
+        margin: 0 0 16px 0;
+        color: #0D3E5C;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .modal-card .dev-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0D3E5C;
+        margin: 12px 0 4px 0;
+      }
+      .modal-card .dev-role {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 16px 0;
+      }
+      .modal-card .dev-description {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+      }
+      body.modal-open {
+        overflow: hidden;
+      }
+
+
+      /* Search Input Styling */
+      .search-input-wrapper {
+        position: relative;
+        margin: 20px 0 16px;
+        display: flex;
+        align-items: center;
+      }
+      .search-icon {
+        position: absolute;
+        left: 16px;
+        font-size: 1.2rem;
+        color: var(--navy);
+        pointer-events: none;
+      }
+      #site-search {
+        width: 100%;
+        padding: 14px 16px 14px 42px;
+        border: 2px solid #e0e8f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--navy);
+        background: white;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      #site-search:focus {
+        outline: none;
+        border-color: var(--yellow);
+        box-shadow: 0 0 0 3px rgba(255, 206, 86, 0.1);
+      }
+      #site-search::placeholder {
+        color: #999;
+        font-weight: 600;
+      }
+
+      /* Search Results */
+      .search-results {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 12px;
+      }
+      .search-result-item {
+        padding: 14px 16px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        background: #f5f9ff;
+        border-left: 4px solid var(--yellow);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .search-result-item:hover {
+        background: #e8f1ff;
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(0, 53, 110, 0.1);
+      }
+      .search-result-title {
+        margin: 0 0 4px;
+        color: var(--navy);
+        font-family: var(--display);
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+      .search-result-category {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: var(--yellow);
+        color: var(--navy);
+        font-size: 0.7rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .search-result-description {
+        margin: 0;
+        color: #3a4d78;
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .search-no-results {
+        padding: 24px 16px;
+        text-align: center;
+        color: #999;
+        font-weight: 600;
+      }
+      .search-results-header {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a href="index.html#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a class="active" href="reading.html"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="index.html#listening"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="index.html#developers" class="dev-link"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- HERO -->
+      <section class="reading-hero" aria-labelledby="reading-title">
+        <div class="wide-shell">
+          <span class="badge">Reading Library</span>
+          <h1 id="reading-title">READING <span class="accent">YO!</span></h1>
+          <p>Read. Imagine. Enjoy.</p>
+        </div>
+      </section>
+
+      <!-- CHOOSE YOUR LEVEL -->
+      <section class="level-section" id="levels" aria-labelledby="level-title">
+        <div class="wide-shell">
+          <div class="section-heading">
+            <h2 id="level-title">Choose Your Level</h2>
+            <p>Pick the level that fits you best and start reading.</p>
+          </div>
+          <div class="level-grid" id="level-grid">
+            <button type="button" class="level-card level-card--yellow" data-level="A1">
+              <span class="level-code" aria-hidden="true">A1</span>
+              <h3>Beginner</h3>
+              <p>First steps into English stories.</p>
+            </button>
+            <button type="button" class="level-card level-card--blue" data-level="A2">
+              <span class="level-code" aria-hidden="true">A2</span>
+              <h3>Elementary</h3>
+              <p>Simple stories for growing readers.</p>
+            </button>
+            <button type="button" class="level-card level-card--pink" data-level="B1">
+              <span class="level-code" aria-hidden="true">B1</span>
+              <h3>Intermediate</h3>
+              <p>Longer stories with richer language.</p>
+            </button>
+            <button type="button" class="level-card level-card--green" data-level="B2">
+              <span class="level-code" aria-hidden="true">B2</span>
+              <h3>Upper Intermediate</h3>
+              <p>Challenge yourself with confident reading.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SELECTED LEVEL LIBRARY (rendered by JavaScript) -->
+      <section class="library-section is-hidden" id="library" aria-labelledby="library-title">
+        <div class="wide-shell">
+          <div class="library-topbar">
+            <button type="button" class="back-link" id="back-to-levels-from-library">← Back to Levels</button>
+          </div>
+          <div class="section-heading">
+            <h2 id="library-title">Reading Library</h2>
+            <p id="library-subtitle"></p>
+          </div>
+          <div class="story-grid" id="story-grid"></div>
+        </div>
+      </section>
+
+      <!-- STORY READER (rendered by JavaScript) -->
+      <section class="reader-section is-hidden" id="reader" aria-labelledby="reader-title">
+        <div class="wide-shell">
+          <div class="library-topbar">
+            <button type="button" class="back-link" id="back-to-library">← Back to <span id="back-to-library-label">Level</span> Reading</button>
+            <button type="button" class="back-link" id="back-to-levels-from-reader">← Back to Levels</button>
+          </div>
+          <h2 id="reader-title" class="sr-only">Story Reader</h2>
+          <div class="reader-frame">
+            <div class="reader-body" id="reader-body"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTRIBUTORS SECTION -->
+      <section class="contributors-section" aria-labelledby="contributors-title">
+        <div class="wide-shell">
+          <div class="section-heading">
+            <h2 id="contributors-title">Meet the Contributors</h2>
+            <p>English teachers who help make English Yo! grow.</p>
+          </div>
+          <!-- READING YO! CONTRIBUTORS - EDIT HERE -->
+          <div class="contributors-grid">
+            <div class="contributor-card">
+              <h3>Eka Oktarini</h3>
+              <p class="contributor-role">English Teacher</p>
+            </div>
+            <div class="contributor-card">
+              <h3>Mega Ayu Wulandari</h3>
+              <p class="contributor-role">English Teacher · Educator · Creator of English Yo!</p>
+            </div>
+          </div>
+          <!-- END CONTRIBUTORS -->
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="index.html#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="reading.html">Reading YO!</a><a href="index.html#listening">Listening YO!</a><a href="index.html#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+    <div class=”search-panel” data-search-panel hidden>
+      <div class=”search-dialog” role=”dialog” aria-modal=”true” aria-labelledby=”search-title”>
+        <button class=”close-search” type=”button” aria-label=”Close search” data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id=”search-title”>What do you want to learn?</h2>
+        <form action=”index.html#featured-activities”><label class=”sr-only” for=”site-search”>Search activities</label><input id=”site-search” type=”search” placeholder=”Try “animals” or “stories”” /><button type=”submit”>SEARCH →</button></form>
+      </div>
+    </div>
+
+    <!-- Developer Modal Popup -->
+    <div class=”developer-modal” id=”developer-modal”>
+      <div class=”modal-card”>
+        <button class=”modal-close” aria-label=”Close developer modal”>×</button>
+        <h2>About the Developer</h2>
+        <p class=”dev-name”>Mega Ayu Wulandari</p>
+        <p class=”dev-role”>English Teacher · Educator · Creator of English Yo!</p>
+        <p class=”dev-description”>English Yo! is a learning space designed to help students learn, play, read, and listen to English in a fun and accessible way.</p>
+      </div>
+    </div>
+
+    <script src=”script.js”></script>
+    <script>
+      // Developer Modal Functionality
+      const devModal = document.getElementById('developer-modal');
+      const devLink = document.querySelector('.dev-link');
+      const closeBtn = document.querySelector('.modal-close');
+
+      // Open modal when Developers link is clicked
+      devLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        devModal.classList.add('is-open');
+        document.body.classList.add('modal-open');
+      });
+
+      // Close modal when X button is clicked
+      closeBtn.addEventListener('click', () => {
+        devModal.classList.remove('is-open');
+        document.body.classList.remove('modal-open');
+      });
+
+      // Close modal when clicking outside the card
+      devModal.addEventListener('click', (e) => {
+        if (e.target === devModal) {
+          devModal.classList.remove('is-open');
+          document.body.classList.remove('modal-open');
+        }
+      });
+
+      // Close modal when Escape key is pressed
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && devModal.classList.contains('is-open')) {
+          devModal.classList.remove('is-open');
+          document.body.classList.remove('modal-open');
+        }
+      });
+    </script>
+    <script>
+      // ===== Reading YO! data & single-page logic =====
+      // Stories are stored as plain JS data objects so new levels/stories can be
+      // added later without creating additional HTML files.
+      const levelNames = {
+        A1: "Beginner",
+        A2: "Elementary",
+        B1: "Intermediate",
+        B2: "Upper Intermediate"
+      };
+
+      const stories = {
+        A1: [
+          {
+            id: "a-piece-of-sky",
+            title: "A Piece of Sky",
+            level: "A1",
+            type: "Short Story",
+            description: "A simple story about animals, panic, and checking the facts.",
+            image: "assets/a-piece-of-sky.png",
+            audio: "assets/a-piece-of-sky.mp3",
+            text: [
+              "One morning, Chickee the little chicken was walking in the yard.",
+              "Suddenly \u2014 plop! \u2014 something hit her head.",
+              "\u201cOh no!\u201d Chickee cried. \u201cThe sky is falling!\u201d",
+              "She ran to tell the duck.",
+              "\u201cThe sky is falling! Run!\u201d",
+              "Then the duck told the cat, and the cat told the goat.",
+              "Soon, all the animals were running and shouting, \u201cThe sky is falling!\u201d",
+              "Just then, the wise owl flew down.",
+              "\u201cStop!\u201d said the owl. \u201cShow me what hit you.\u201d",
+              "Chickee looked down. It was just a leaf.",
+              "Everyone stopped. They felt silly.",
+              "The owl smiled and said,",
+              "\u201cBefore you panic, check the facts.\u201d"
+            ],
+            words: [
+              { word: "yard", meaning: "halaman" },
+              { word: "suddenly", meaning: "tiba-tiba" },
+              { word: "hit", meaning: "mengenai" },
+              { word: "cry", meaning: "berteriak / menangis" },
+              { word: "run", meaning: "berlari" },
+              { word: "shout", meaning: "berteriak" },
+              { word: "wise", meaning: "bijaksana" },
+              { word: "leaf", meaning: "daun" },
+              { word: "panic", meaning: "panik" },
+              { word: "facts", meaning: "fakta" }
+            ]
+          }
+        ],
+        A2: [
+          {
+            id: "the-silent-bird",
+            title: "The Silent Bird",
+            level: "A2",
+            type: "Short Story",
+            description: "A short story about friendship, listening, and kindness.",
+            image: "assets/the-silent-bird.png",
+            audio: "assets/the-silent-bird.mp3",
+            text: [
+              "In a big forest, there lived a little bird who couldn\u2019t sing.",
+              "Every morning, all the other birds sang beautiful songs. The little bird stayed quiet.",
+              "He tried, but no sound came out.",
+              "Some birds laughed at him.",
+              "\u201cYou\u2019re not a real bird if you can\u2019t sing!\u201d they said.",
+              "But one day, a young bird was sad and didn\u2019t want to sing anymore.",
+              "The little bird sat beside him quietly. He listened. He didn\u2019t speak. He just stayed.",
+              "Slowly, the sad bird smiled.",
+              "\u201cYou helped me,\u201d he said.",
+              "\u201cYou didn\u2019t sing, but you were there.\u201d",
+              "From that day on, the little bird still didn\u2019t sing.",
+              "But he became the forest\u2019s best friend \u2014 because he listened with all his heart."
+            ],
+            words: [
+              { word: "forest", meaning: "hutan" },
+              { word: "quiet", meaning: "diam / tenang" },
+              { word: "laugh", meaning: "menertawakan" },
+              { word: "sad", meaning: "sedih" },
+              { word: "listen", meaning: "mendengarkan" },
+              { word: "heart", meaning: "hati" }
+            ]
+          }
+        ],
+B1: [
+    {
+        id: "the-tortoises-path",
+        title: "The Tortoise's Path",
+        level: "B1",
+        type: "Short Story",
+        description: "A story about patience, courage, and finishing your journey.",
+        image: "assets/the-tortoises-path.png",
+        audio: "assets/the-tortoises-path.mp3",
+        text: [
+            "In a big green forest, the animals held a race to reach the mountain top.",
+            "The birds flew. The deer ran. The monkeys climbed.",
+            "But one old tortoise joined too.",
+            "The other animals laughed.",
+            "“You will never make it,” said the fox.",
+            "“You are too slow,” said the rabbit.",
+            "The tortoise smiled and said nothing.",
+            "He just walked — step by step — every day.",
+            "While the others fought, rested, or gave up, the tortoise kept going.",
+            "He watched the sunrise, listened to the wind, and moved forward.",
+            "After many days, the tortoise finally reached the top.",
+            "No one else was there.",
+            "But he was not sad.",
+            "He looked at the forest below and whispered,",
+            "“I didn’t win the race, but I finished my journey.”"
+        ],
+        words: [
+            { word: "tortoise", meaning: "kura-kura darat" },
+            { word: "race", meaning: "perlombaan" },
+            { word: "reach", meaning: "mencapai" },
+            { word: "mountain top", meaning: "puncak gunung" },
+            { word: "joined", meaning: "ikut / bergabung" },
+            { word: "slow", meaning: "lambat" },
+            { word: "step by step", meaning: "selangkah demi selangkah" },
+            { word: "give up", meaning: "menyerah" },
+            { word: "move forward", meaning: "terus maju" },
+            { word: "journey", meaning: "perjalanan" }
+        ]
+    }
+],
+        B2: [{
+    id: "the-day-i-accidentally-became-a-school-hero",
+    title: "The Day I Accidentally Became a School Hero",
+    level: "B2",
+    type: "Short Story",
+    description: "A funny story about a student, a cat, and an unexpected adventure.",
+    image: "assets/the-day-i-accidentally-became-a-school-hero.png",
+    audio: "assets/the-day-i-accidentally-became-a-school-hero.mp3",
+    text: [
+        "Last Monday started like any ordinary school day. I arrived at school five minutes before the bell, carrying my backpack, a half-eaten sandwich, and absolutely no motivation.",
+        "I was walking toward my classroom when I noticed something strange. A small orange cat was sitting on the school roof, looking down at everyone as if it owned the entire building.",
+        "“Is that Mr. Whiskers?” my friend Dito asked.",
+        "Nobody knew where the cat had come from, but everyone agreed that it looked suspiciously confident.",
+        "During the first lesson, we suddenly heard a loud MEOW! from outside. Our teacher stopped explaining the lesson and looked at the window. The cat was still on the roof, but now it was walking dangerously close to the edge.",
+        "Without thinking, I jumped up.",
+        "“I’ll save it!” I shouted.",
+        "Unfortunately, I forgot one important detail: I was terrified of heights.",
+        "I climbed the stairs to the roof, followed by three curious classmates. When I finally reached the cat, it immediately ran away. I chased it across the roof while shouting, “Come back! I am trying to help you!”",
+        "Suddenly, I stepped on a wet patch and slipped.",
+        "Instead of falling, however, I landed perfectly on a large pile of old mattresses that had been placed there for a school event.",
+        "Everyone screamed. Then they started laughing.",
+        "The cat calmly walked over, sat beside me, and began licking its paw.",
+        "The principal later called me “a brave young hero.”",
+        "I smiled proudly.",
+        "Nobody needed to know that I had actually slipped while chasing a cat."
+    ],
+    words: [
+        { word: "ordinary", meaning: "biasa" },
+        { word: "motivation", meaning: "motivasi" },
+        { word: "strange", meaning: "aneh" },
+        { word: "suspiciously", meaning: "dengan mencurigakan" },
+        { word: "dangerously", meaning: "dengan berbahaya" },
+        { word: "terrified", meaning: "sangat takut" },
+        { word: "heights", meaning: "tempat yang tinggi / ketinggian" },
+        { word: "curious", meaning: "penasaran" },
+        { word: "slipped", meaning: "tergelincir" },
+        { word: "mattresses", meaning: "kasur" },
+        { word: "proudly", meaning: "dengan bangga" }
+    ]
+}]
+      };
+
+      let currentLevel = null;
+
+      const levelsSection = document.getElementById("levels");
+      const librarySection = document.getElementById("library");
+      const readerSection = document.getElementById("reader");
+      const librarySubtitle = document.getElementById("library-subtitle");
+      const storyGrid = document.getElementById("story-grid");
+      const readerBody = document.getElementById("reader-body");
+      const backToLibraryLabel = document.getElementById("back-to-library-label");
+
+      function scrollToSection(section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function renderLibrary(level) {
+        currentLevel = level;
+        document.querySelectorAll(".level-card").forEach(function (card) {
+          card.classList.toggle("is-active", card.dataset.level === level);
+        });
+
+        librarySubtitle.textContent = level + " \u2014 " + levelNames[level] + " Library";
+        storyGrid.innerHTML = "";
+
+        const levelStories = stories[level] || [];
+
+        if (levelStories.length === 0) {
+          storyGrid.innerHTML = "";
+          const empty = document.createElement("div");
+          empty.className = "library-empty";
+          empty.textContent = "Stories for this level are coming soon!";
+          storyGrid.appendChild(empty);
+        } else {
+          levelStories.forEach(function (story, index) {
+            const card = document.createElement("article");
+            card.className = "story-card";
+            card.innerHTML =
+              '<span class="story-tag">' + story.level + '</span>' +
+              "<h3>" + story.title + "</h3>" +
+              "<p>" + story.description + "</p>" +
+              '<button type="button" class="story-link" data-index="' + index + '">Read \u2192</button>';
+            storyGrid.appendChild(card);
+          });
+
+          storyGrid.querySelectorAll(".story-link").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              openStory(level, Number(btn.dataset.index));
+            });
+          });
+        }
+
+        readerSection.classList.add("is-hidden");
+        librarySection.classList.remove("is-hidden");
+        scrollToSection(librarySection);
+      }
+
+      function openStory(level, index) {
+        const story = stories[level][index];
+        if (!story) return;
+
+        backToLibraryLabel.textContent = level;
+
+        const paragraphs = story.text.map(function (line) {
+          return "<p>" + line + "</p>";
+        }).join("");
+
+        const words = story.words.map(function (item) {
+          return "<li><b>" + item.word + "</b> \u2014 " + item.meaning + "</li>";
+        }).join("");
+
+        readerBody.innerHTML =
+          '<div class="reader-header">' +
+            '<img class="reader-illustration" src="' + story.image + '" alt="Illustration for ' + story.title + '" />' +
+            "<h3>" + story.title + "</h3>" +
+            '<div class="reader-meta"><span>Level: ' + story.level + '</span><span>' + story.type + '</span></div>' +
+            '<div class="reader-audio-wrap">' +
+              '<audio controls preload="none" src="' + story.audio + '">' +
+                "Your browser does not support the audio element." +
+              "</audio>" +
+            "</div>" +
+          "</div>" +
+          '<div class="reader-story-text">' + paragraphs + "</div>" +
+          '<div class="words-to-know">' +
+            "<h4>Words to Know</h4>" +
+            "<ul>" + words + "</ul>" +
+          "</div>";
+
+        librarySection.classList.add("is-hidden");
+        readerSection.classList.remove("is-hidden");
+        scrollToSection(readerSection);
+      }
+
+      document.querySelectorAll(".level-card").forEach(function (card) {
+        card.addEventListener("click", function () {
+          renderLibrary(card.dataset.level);
+        });
+      });
+
+      document.getElementById("back-to-levels-from-library").addEventListener("click", function () {
+        librarySection.classList.add("is-hidden");
+        readerSection.classList.add("is-hidden");
+        document.querySelectorAll(".level-card").forEach(function (card) {
+          card.classList.remove("is-active");
+        });
+        currentLevel = null;
+        scrollToSection(levelsSection);
+      });
+
+      document.getElementById("back-to-levels-from-reader").addEventListener("click", function () {
+        librarySection.classList.add("is-hidden");
+        readerSection.classList.add("is-hidden");
+        document.querySelectorAll(".level-card").forEach(function (card) {
+          card.classList.remove("is-active");
+        });
+        currentLevel = null;
+        scrollToSection(levelsSection);
+      });
+
+      document.getElementById("back-to-library").addEventListener("click", function () {
+        if (currentLevel) {
+          renderLibrary(currentLevel);
+        }
+      });
+    </script>
+  </body>
+</html>

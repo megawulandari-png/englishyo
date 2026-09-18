@@ -1,0 +1,454 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Learning YO! Prepositions in English: learn in, on, under, next to, between, behind, and in front of with fun, interactive practice." />
+    <title>Prepositions in English — Learning YO! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* =====================================================================
+         Prepositions in English — LESSON PAGE STYLES
+         Scoped entirely under ".prep-lesson" so it never touches the shared
+         site styles. This file is meant to be a reusable TEMPLATE for the
+         next lessons (Descriptive Text, Narrative Text, Recount Text,
+         Procedure Text, Report Text, etc.) — to reuse it, duplicate this
+         file, swap the "prep-" class prefix for a new one (e.g. "desc-"),
+         and replace the content inside each section + the quiz data at
+         the bottom of the page script.
+         ===================================================================== */
+
+      .prep-lesson { --prep-correct: #1fa774; --prep-correct-bg: #e3f8ef; --prep-wrong: #ef4444; --prep-wrong-bg: #fdecec; }
+
+      /* ---------- Shared bits reused across every section ---------- */
+      .prep-lesson section { padding: clamp(34px, 5vw, 60px) 0; }
+      .prep-lesson h2 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
+      .prep-lead { max-width: 56ch; margin: 0 0 clamp(20px, 2.6vw, 30px); color: #2a3d68; font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 700; }
+      .prep-mark { padding: 1px 8px; border-radius: 8px; background: var(--yellow); color: var(--navy); font-weight: 900; }
+
+      .prep-tint-yellow { background: var(--card-yellow); }
+      .prep-tint-blue { background: var(--card-blue); }
+      .prep-tint-pink { background: var(--card-pink); }
+      .prep-tint-green { background: var(--card-green); }
+
+      /* ---------- 1. Hero ---------- */
+      .prep-hero { padding: clamp(34px, 6vw, 64px) 0 clamp(20px, 3vw, 32px); text-align: center; }
+      .prep-kicker { display: inline-block; margin-bottom: 16px; padding: 7px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.8rem; transform: rotate(-4deg); }
+      .prep-hero h1 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+      .prep-subhead { max-width: 44ch; margin: 0 auto clamp(22px, 3vw, 30px); color: #2a3d68; font-size: clamp(1rem, 1.6vw, 1.25rem); font-weight: 800; }
+
+      /* ---------- 2. What are prepositions ---------- */
+      .prep-examples { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(12px, 1.6vw, 20px); }
+      .prep-example-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 20px; box-shadow: 0 10px 24px rgba(0, 53, 110, 0.1); }
+      .prep-example-emoji { flex: 0 0 auto; font-size: clamp(2rem, 3vw, 2.5rem); line-height: 1; }
+      .prep-example-card p { margin: 0; color: var(--navy); font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 800; }
+
+      /* ---------- 3. Learn the prepositions ---------- */
+      .prep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: clamp(14px, 1.6vw, 20px); }
+      .prep-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 18px 24px; border-radius: clamp(18px, 1.8vw, 26px); box-shadow: 0 10px 24px rgba(0, 53, 110, 0.12); text-align: center; }
+      .prep-badge { padding: 6px 18px; border-radius: 999px; background: var(--navy); color: #fff; font-family: var(--display); font-weight: 800; font-size: 0.9rem; letter-spacing: 0.03em; }
+      .prep-stage { display: flex; align-items: center; justify-content: center; width: 100%; height: 110px; border-radius: 16px; background: rgba(255, 255, 255, 0.65); }
+      .prep-stage .emoji-lg { font-size: 2.6rem; line-height: 1; }
+      .prep-stage .emoji-sm { font-size: 1.7rem; line-height: 1; }
+      .stage-col { flex-direction: column; gap: 2px; }
+      .stage-col-reverse { flex-direction: column-reverse; gap: 2px; }
+      .stage-row { flex-direction: row; gap: 14px; }
+      .stage-row-3 { flex-direction: row; gap: 8px; }
+      .stage-overlap { position: relative; }
+      .stage-overlap .emoji-lg { position: relative; z-index: 2; }
+      .stage-overlap .emoji-sm { position: absolute; z-index: 1; opacity: 0.9; }
+      .stage-overlap.behind .emoji-sm { top: 14px; left: 34%; }
+      .stage-overlap.behind .emoji-lg { margin-left: 14px; }
+      .stage-overlap.front .emoji-sm { bottom: 12px; right: 30%; z-index: 1; }
+      .stage-overlap.front .emoji-lg { z-index: 2; margin-right: 10px; }
+      .prep-card p { margin: 0; color: var(--navy); font-size: 0.95rem; font-weight: 800; }
+
+      /* ---------- 4 & 5. Quiz (shared by Practice + Mini Challenge) ---------- */
+      .prep-quiz-progress { margin-bottom: 10px; color: #3a4d78; font-family: var(--display); font-size: 0.85rem; font-weight: 800; }
+      .prep-quiz-card { padding: clamp(20px, 2.4vw, 30px); border-radius: clamp(20px, 2vw, 28px); background: #fff; box-shadow: 0 12px 28px rgba(0, 53, 110, 0.14); }
+      .prep-quiz-stage { display: flex; align-items: center; justify-content: center; width: 100%; height: 120px; margin-bottom: 16px; border-radius: 16px; background: var(--card-blue); }
+      .prep-quiz-question { margin: 0 0 16px; color: var(--navy); font-family: var(--display); font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 800; }
+      .prep-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      @media (min-width: 520px) { .prep-options { grid-template-columns: 1fr 1fr; } }
+      .prep-option { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 12px 18px; border: 2px solid #d6e8fb; border-radius: 16px; background: #f7fcff; color: var(--navy); font-size: 1rem; font-weight: 800; text-align: left; transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease; }
+      .prep-option .opt-letter { flex: 0 0 auto; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 0.78rem; }
+      .prep-option:hover:not([disabled]) { border-color: var(--navy); transform: translateY(-1px); }
+      .prep-option:active:not([disabled]) { transform: translateY(0); }
+      .prep-option[disabled] { cursor: default; }
+      .prep-option.is-correct { border-color: var(--prep-correct); background: var(--prep-correct-bg); }
+      .prep-option.is-wrong { border-color: var(--prep-wrong); background: var(--prep-wrong-bg); }
+      .prep-feedback { display: flex; align-items: center; gap: 8px; min-height: 28px; margin-top: 16px; font-family: var(--display); font-size: 1rem; font-weight: 800; }
+      .prep-feedback.correct { color: var(--prep-correct); }
+      .prep-feedback.wrong { color: var(--prep-wrong); }
+      .prep-next-btn { display: none; align-items: center; gap: 8px; margin-top: 18px; padding: 12px 26px; border: 0; border-radius: 999px; background: var(--navy); color: #fff; font-family: var(--display); font-size: 0.95rem; font-weight: 800; }
+      .prep-next-btn:hover { background: #0a3aa0; }
+      .prep-next-btn.show { display: inline-flex; }
+
+      .prep-results { display: none; padding: clamp(24px, 3vw, 36px); border-radius: clamp(20px, 2vw, 28px); background: var(--card-yellow); text-align: center; }
+      .prep-results.show { display: block; }
+      .prep-results .score { margin: 0 0 6px; color: var(--navy); font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 800; }
+      .prep-results p { margin: 0; color: #2a3d68; font-weight: 800; }
+      .prep-results .prep-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px; }
+      .prep-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 52px; padding: 12px 26px; border: 0; border-radius: 999px; font-family: var(--display); font-size: 0.95rem; font-weight: 800; }
+      .prep-btn-primary { background: var(--pink); color: #fff; box-shadow: 0 10px 22px rgba(255, 62, 121, 0.32); }
+      .prep-btn-primary:hover { transform: translateY(-2px); }
+      .prep-btn-ghost { background: #fff; color: var(--navy); border: 2px solid #d6e8fb; }
+      .prep-btn-ghost:hover { border-color: var(--navy); }
+
+      @media (max-width: 480px) {
+        .prep-grid { grid-template-columns: 1fr; }
+        .prep-examples { grid-template-columns: 1fr; }
+        .prep-example-card { padding: 16px; }
+        .prep-quiz-card { padding: 18px; }
+        
+        .prep-stage img {
+        max-height: 150px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+    }
+      }
+      /* Practice image size */
+.prep-quiz-stage img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .prep-quiz-stage img {
+    max-height: 150px;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a href="index.html#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a class="active" href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a href="index.html#reading"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="index.html#listening"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="index.html#developers"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <div class="prep-lesson">
+
+        <!-- 1. HERO -->
+        <section class="prep-hero" aria-labelledby="prep-title">
+          <div class="wide-shell">
+            <span class="prep-kicker">Learning YO! · Grammar</span>
+            <h1 id="prep-title">Prepositions in English</h1>
+            <p class="prep-subhead">Where is it? Let's find out! 🔎</p>
+<a class="hero-cta" href="learning.html">Back to Learning YO! <span aria-hidden="true">←</span></a>
+          </div>
+        </section>
+
+        <!-- 2. WHAT ARE PREPOSITIONS? -->
+        <section id="prep-intro" aria-labelledby="prep-intro-title">
+          <div class="wide-shell">
+            <h2 id="prep-intro-title">💡 What Are Prepositions?</h2>
+            <p class="prep-lead">Prepositions are words that tell us where something or someone is.</p>
+            <div class="prep-examples">
+              <div class="prep-example-card prep-tint-yellow">
+                <span class="prep-example-emoji" aria-hidden="true">📖</span>
+                <p>The book is <mark class="prep-mark">ON</mark> the table.</p>
+              </div>
+              <div class="prep-example-card prep-tint-blue">
+                <span class="prep-example-emoji" aria-hidden="true">🐱</span>
+                <p>The cat is <mark class="prep-mark">UNDER</mark> the chair.</p>
+              </div>
+              <div class="prep-example-card prep-tint-pink">
+                <span class="prep-example-emoji" aria-hidden="true">✏️</span>
+                <p>The pencil is <mark class="prep-mark">IN</mark> the box.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. LEARN THE PREPOSITIONS -->
+        <section id="prep-learn" aria-labelledby="prep-learn-title">
+          <div class="wide-shell">
+            <h2 id="prep-learn-title">📍 Learn the Prepositions</h2>
+            <p class="prep-lead">Seven little words that say a lot about where things are.</p>
+            <div class="prep-grid">
+              <div class="prep-card prep-tint-yellow">
+                <span class="prep-badge">IN</span>
+<div class="prep-stage" aria-hidden="true">
+    <img src="assets/prep-in.png" alt="Cat inside a box">
+</div>
+                <p>The pencil is IN the box.</p>
+              </div>
+              <div class="prep-card prep-tint-blue">
+                <span class="prep-badge">ON</span>
+<div class="prep-stage" aria-hidden="true">
+    <img src="assets/prep-on.png" alt="Cat sitting on a table">
+</div>
+                <p>The book is ON the table.</p>
+              </div>
+              <div class="prep-card prep-tint-pink">
+                <span class="prep-badge">UNDER</span>
+<div class="prep-stage" aria-hidden="true">
+    <img src="assets/prep-under.png" alt="Cat under a chair">
+</div>
+                <p>The cat is UNDER the chair.</p>
+              </div>
+<div class="prep-card prep-tint-green">
+    <span class="prep-badge">NEXT TO</span>
+    <div class="prep-stage" aria-hidden="true">
+        <img src="assets/prep-next-to.png" alt="Cat next to a door">
+    </div>
+    <p>The cat is NEXT TO the bag.</p>
+</div>
+<div class="prep-card prep-tint-yellow">
+    <span class="prep-badge">BETWEEN</span>
+    <div class="prep-stage" aria-hidden="true">
+        <img src="assets/prep-between.png" alt="Cat between two boxes">
+    </div>
+    <p>The cat is BETWEEN the boxes.</p>
+</div>
+<div class="prep-card prep-tint-blue">
+    <span class="prep-badge">BEHIND</span>
+    <div class="prep-stage" aria-hidden="true">
+        <img src="assets/prep-behind.png" alt="Cat behind a tree">
+    </div>
+    <p>The cat is BEHIND the plant.</p>
+</div>
+              <div class="prep-card prep-tint-pink">
+                <span class="prep-badge">IN FRONT OF</span>
+<div class="prep-stage" aria-hidden="true">
+    <img src="assets/prep-in-front-of.png" alt="Cat in front of a house">
+</div>
+                <p>The cat is IN FRONT OF the house.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. LET'S PRACTICE! -->
+        <section id="prep-practice" aria-labelledby="prep-practice-title">
+          <div class="wide-shell">
+            <h2 id="prep-practice-title">🎯 Let's Practice!</h2>
+            <p class="prep-lead">Look at the picture and choose the correct answer.</p>
+            <div id="practiceQuiz" class="prep-quiz" data-quiz="practice"></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="index.html#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="index.html#reading">Reading YO!</a><a href="index.html#listening">Listening YO!</a><a href="index.html#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+    <div class="search-panel" data-search-panel hidden>
+      <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <button class="close-search" type="button" aria-label="Close search" data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id="search-title">What do you want to learn?</h2>
+        <form action="index.html#featured-activities"><label class="sr-only" for="site-search">Search activities</label><input id="site-search" type="search" placeholder="Try “animals” or “stories”" /><button type="submit">SEARCH →</button></form>
+      </div>
+    </div>
+    <script src="script.js"></script>
+
+    <script>
+      /* =====================================================================
+         Prepositions in English — LESSON SCRIPT
+         Only touches elements inside ".prep-lesson". To reuse this for a
+         future lesson, copy this block and edit the two data arrays below
+         (PRACTICE_QUESTIONS / CHALLENGE_QUESTIONS) plus the scene markup.
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+
+        /* ---------- "Let's Learn!" smooth-scroll button ---------- */
+        var scrollBtn = document.querySelector("[data-scroll-to]");
+        if (scrollBtn) {
+          scrollBtn.addEventListener("click", function () {
+            var target = document.querySelector(scrollBtn.getAttribute("data-scroll-to"));
+            if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        }
+
+        /* ---------- Question data ---------- */
+       var PRACTICE_QUESTIONS = [
+        {
+        image: "assets/practice-on.png",
+        prompt: "Where is the bird?",
+        options: ["Under the backpack", "On the backpack", "Behind the backpack", "Next to the backpack"],
+        correct: 1
+    },
+    {
+        image: "assets/practice-under.png",
+        prompt: "Where is the bird?",
+        options: ["On the table", "In the box", "Under the table", "Next to the table"],
+        correct: 2
+    },
+    {
+        image: "assets/practice-between.png",
+        prompt: "Where is the bird?",
+        options: ["Behind the chairs", "Between the chairs", "On the chair", "Under the chair"],
+        correct: 1
+    },
+    {
+        image: "assets/practice-behind.png",
+        prompt: "Where is the cat?",
+        options: ["In front of the tree", "Under the tree", "Behind the tree", "Next to the tree"],
+        correct: 2
+    },
+    {
+        image: "assets/practice-in.png",
+        prompt: "Where is the bird?",
+        options: ["On the box", "Behind the box", "In the box", "Under the box"],
+        correct: 2
+    }
+];
+
+        var CHALLENGE_QUESTIONS = [
+          { emoji: "⚽ 📦 📦", prompt: "The ball is ___ the two boxes.", options: ["Behind", "Between", "Under", "In front of"], correct: 1 },
+          { emoji: "🐶 🌳", prompt: "The dog is sleeping ___ the big tree.", options: ["Between", "Under", "In", "Next to"], correct: 1 },
+          { emoji: "👩‍🏫 🖍️", prompt: "The teacher is standing ___ the whiteboard, ready to start the lesson.", options: ["Behind", "Under", "In front of", "Between"], correct: 2 }
+        ];
+
+        buildQuiz({
+          container: document.getElementById("practiceQuiz"),
+          questions: PRACTICE_QUESTIONS,
+          lettered: false,
+          showScene: true,
+          resultTitle: function (score, total) { return "Score: " + score + " / " + total; },
+          resultNote: function (score, total) {
+            if (score === total) return "Amazing! You got every question right! 🌟";
+            if (score >= total - 1) return "Great work — almost perfect!";
+            return "Nice try! Scroll back up any time to review.";
+          }
+        });
+
+        buildQuiz({
+          container: document.getElementById("challengeQuiz"),
+          questions: CHALLENGE_QUESTIONS,
+          lettered: true,
+          showScene: false,
+          isChallenge: true
+        });
+
+        /* ---------- Quiz engine (shared by Practice + Mini Challenge) ---------- */
+        function buildQuiz(config) {
+          var container = config.container;
+          if (!container) return;
+          var state = { index: 0, score: 0, answered: false };
+
+          render();
+
+          function render() {
+            if (state.index >= config.questions.length) {
+              renderResults();
+              return;
+            }
+            var q = config.questions[state.index];
+            state.answered = false;
+
+            var html = "";
+            html += '<p class="prep-quiz-progress">Question ' + (state.index + 1) + " of " + config.questions.length + "</p>";
+            html += '<div class="prep-quiz-card">';
+if (config.showScene) {
+    html += '<div class="prep-quiz-stage"><div class="prep-stage" aria-hidden="true">';
+    html += '<img src="' + q.image + '" alt="">';
+    html += "</div></div>";
+} else if (q.emoji) {
+              html += '<div class="prep-quiz-stage" aria-hidden="true"><span class="emoji-lg">' + q.emoji + "</span></div>";
+            }
+            html += '<p class="prep-quiz-question">' + q.prompt + "</p>";
+            html += '<div class="prep-options" role="group" aria-label="Answer choices">';
+            q.options.forEach(function (opt, i) {
+              var letter = config.lettered ? '<span class="opt-letter" aria-hidden="true">' + "ABCD"[i] + "</span>" : "";
+              html += '<button type="button" class="prep-option" data-index="' + i + '">' + letter + "<span>" + opt + "</span></button>";
+            });
+            html += "</div>";
+            html += '<p class="prep-feedback" aria-live="polite"></p>';
+            html += '<button type="button" class="prep-next-btn">' + (state.index === config.questions.length - 1 ? "See results" : "Next question") + " →</button>";
+            html += "</div>";
+
+            container.innerHTML = html;
+
+            var optionButtons = container.querySelectorAll(".prep-option");
+            var feedbackEl = container.querySelector(".prep-feedback");
+            var nextBtn = container.querySelector(".prep-next-btn");
+
+            optionButtons.forEach(function (btn) {
+              btn.addEventListener("click", function () {
+                if (state.answered) return;
+                state.answered = true;
+                var chosen = parseInt(btn.getAttribute("data-index"), 10);
+                var isCorrect = chosen === q.correct;
+                if (isCorrect) state.score++;
+
+                optionButtons.forEach(function (b) {
+                  b.setAttribute("disabled", "true");
+                  var i = parseInt(b.getAttribute("data-index"), 10);
+                  if (i === q.correct) b.classList.add("is-correct");
+                  else if (i === chosen) b.classList.add("is-wrong");
+                });
+
+                feedbackEl.textContent = isCorrect ? "✅ Correct! Well done!" : "❌ Not quite — the correct answer is highlighted above.";
+                feedbackEl.className = "prep-feedback " + (isCorrect ? "correct" : "wrong");
+                nextBtn.classList.add("show");
+                nextBtn.focus();
+              });
+            });
+
+            nextBtn.addEventListener("click", function () {
+              state.index++;
+              render();
+            });
+          }
+
+          function renderResults() {
+            var html = '<div class="prep-results show">';
+            if (config.isChallenge) {
+              html += "<p style=\"font-size:2.4rem;margin:0 0 8px;\" aria-hidden=\"true\">🎉</p>";
+              html += '<p class="score">Great Job!</p>';
+              html += "<p>You completed the Prepositions Challenge! (" + state.score + " / " + config.questions.length + " correct)</p>";
+              html += '<div class="prep-result-actions">';
+              html += '<button type="button" class="prep-btn prep-btn-primary" data-action="retry">Try Again</button>';
+              html += '<a class="prep-btn prep-btn-ghost" href="learning.html">Back to Learning YO!</a>';
+              html += "</div>";
+            } else {
+              html += '<p class="score">' + config.resultTitle(state.score, config.questions.length) + "</p>";
+              html += "<p>" + config.resultNote(state.score, config.questions.length) + "</p>";
+            }
+            html += "</div>";
+            container.innerHTML = html;
+
+            var retryBtn = container.querySelector('[data-action="retry"]');
+            if (retryBtn) {
+              retryBtn.addEventListener("click", function () {
+                state.index = 0;
+                state.score = 0;
+                render();
+              });
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

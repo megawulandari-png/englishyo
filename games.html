@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Play Games YO! Choose your challenge, play, learn, and grow with Emberfall and Word Tug of War." />
+    <title>Play Games YO! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .games-hero {
+        padding: clamp(38px, 6vw, 68px) 0 clamp(10px, 2vw, 18px);
+        text-align: center;
+      }
+      .games-hero .badge {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 8px 22px;
+        border-radius: 999px;
+        background: var(--yellow);
+        color: var(--navy);
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: 0.85rem;
+        transform: rotate(-4deg);
+      }
+      .games-hero h1 {
+        margin: 0 0 10px;
+        color: var(--navy);
+        font-family: var(--display);
+        font-size: clamp(2.1rem, 5vw, 3.4rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+      }
+      .games-hero h1 .accent {
+        color: var(--pink);
+      }
+      .games-hero p {
+        max-width: 46ch;
+        margin: 0 auto;
+        color: #3a4d78;
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
+        font-weight: 800;
+      }
+
+      .games-grid-section {
+        padding: clamp(18px, 3vw, 34px) 0 clamp(50px, 6vw, 90px);
+      }
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(18px, 2.4vw, 34px);
+      }
+      .game-card {
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
+        border-radius: clamp(20px, 2vw, 30px);
+        background: #fff;
+        box-shadow: 0 14px 34px rgba(0, 53, 110, 0.14);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .game-card:hover {
+        box-shadow: 0 20px 44px rgba(0, 53, 110, 0.22);
+        transform: translateY(-4px);
+      }
+      .game-card:hover .game-card__image img {
+        transform: scale(1.04);
+      }
+      .game-card__image {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        background: #dceeff;
+      }
+      .game-card__image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+      }
+      .game-card__tag {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        padding: 7px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--navy);
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: 0.72rem;
+        letter-spacing: 0.01em;
+        box-shadow: 0 4px 10px rgba(0, 53, 110, 0.18);
+      }
+      .game-card__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 10px;
+        padding: clamp(20px, 2.2vw, 28px) clamp(20px, 2.2vw, 28px) clamp(24px, 2.4vw, 30px);
+      }
+      .game-card__body h2 {
+        margin: 0;
+        color: var(--navy);
+        font-family: var(--display);
+        font-size: clamp(1.35rem, 2vw, 1.7rem);
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+      .game-card__body p {
+        margin: 0;
+        flex: 1;
+        color: #3a4d78;
+        font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+        font-weight: 700;
+        line-height: 1.5;
+      }
+      .game-card__play {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 6px;
+        padding: 15px 20px;
+        border-radius: 999px;
+        background: var(--pink);
+        box-shadow: 0 12px 22px rgba(255, 62, 121, 0.32);
+        color: #fff;
+        font-family: var(--display);
+        font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+        font-weight: 700;
+        text-align: center;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .game-card__play:hover {
+        box-shadow: 0 16px 28px rgba(255, 62, 121, 0.4);
+        transform: translateY(-2px);
+      }
+      .game-card--emberfall .game-card__tag {
+        color: #7a3a00;
+      }
+      .game-card--wordtug .game-card__tag {
+        color: #0a3aa0;
+      }
+      .game-card--detective .game-card__tag {
+        color: #8a641f;
+      }
+      .game-card--scrabble .game-card__tag {
+        color: #0a4d3a;
+      }
+
+      @media (max-width: 760px) {
+        .games-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      /* Developer Modal */
+      .developer-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; }
+      .developer-modal.is-open { display: flex; }
+      .modal-card { position: relative; background: #fff; border-radius: clamp(18px, 2vw, 28px); padding: clamp(32px, 4vw, 48px); max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0, 53, 110, 0.2); animation: slideIn 0.3s ease-out; }
+      @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      .modal-close { position: absolute; top: clamp(16px, 1.6vw, 20px); right: clamp(16px, 1.6vw, 20px); border: 0; background: transparent; color: var(--navy); font-size: 1.5rem; cursor: pointer; padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
+      .modal-close:hover { color: var(--pink); }
+      .modal-title { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 800; }
+      .modal-name { margin: 0 0 4px; color: var(--navy); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.3rem); font-weight: 800; }
+      .modal-role { margin: 0 0 16px; color: #3a4d78; font-size: clamp(0.85rem, 1vw, 0.95rem); font-weight: 700; }
+      .modal-description { margin: 0; color: #2a3d68; font-size: clamp(0.9rem, 1.1vw, 1rem); font-weight: 600; line-height: 1.6; }
+      @media (max-width: 480px) {
+        .modal-card { padding: 28px 24px; }
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a href="index.html#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a class="active" href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a href="index.html#learning"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a href="index.html#reading"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="index.html#listening"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="index.html#developers" class="dev-link"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="games-hero" aria-labelledby="games-hero-title">
+        <span class="badge">🎮 Play Games YO!</span>
+        <h1 id="games-hero-title">PLAY GAMES <span class="accent">YO!</span></h1>
+        <p>Choose your challenge. Play. Learn. Grow.</p>
+      </section>
+
+      <section class="games-grid-section" aria-label="Available games">
+        <div class="wide-shell games-grid">
+          <article class="game-card game-card--emberfall">
+            <a class="game-card__image" href="games/emberfall/emberfall.html" aria-label="Play Emberfall">
+              <img src="assets/games/emberfall-card.png" alt="Emberfall — Kip the lantern sprite stands beside a glowing beacon in the Mosswood Trail" loading="lazy" />
+              <span class="game-card__tag">Adventure • English Learning</span>
+            </a>
+            <div class="game-card__body">
+              <h2>EMBERFALL</h2>
+              <p>An English-learning adventure game.</p>
+              <p>A2 Level - Simple Present Tense in Fun Way.</p>
+              <a class="game-card__play" href="games/emberfall/emberfall.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card game-card--wordtug">
+            <a class="game-card__image" href="games/word-tug/word-tug.html" aria-label="Play Word Tug of War">
+              <img src="assets/games/word-tug-card.png" alt="Word Tug of War — Kobo the fox and Rex the panda pulling the rope in the ENGLISH YO! arena" loading="lazy" />
+              <span class="game-card__tag">Grammar • Sentence Building</span>
+            </a>
+            <div class="game-card__body">
+              <h2>WORD TUG OF WAR</h2>
+              <p>Build correct English sentences and pull your way to victory.</p>
+              <p>A2-B1 Level - Arranging Tenses in Fun Way.</p>
+              <a class="game-card__play" href="games/word-tug/word-tug.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+ <article class="game-card game-card--detective">
+    <a class="game-card__image"
+       href="games/detective-eyes/detective-eyes.html"
+       aria-label="Play Detective Eyes">
+
+        <img
+            src="assets/detective-eyes.png"
+            alt="Detective Eyes"
+        >
+
+        <span class="game-card__tag">
+            Critical Thinking · Investigation
+        </span>
+    </a>
+
+    <div class="game-card__body">
+        <h2>DETECTIVE EYES</h2>
+
+        <p>
+            Investigate rumors, evaluate sources, and write evidence-based conclusions.
+        </p>
+
+        <p>
+            A2-B1 Level · Critical Thinking &amp; Reading Comprehension.
+        </p>
+
+        <a
+            class="game-card__play"
+            href="games/detective-eyes/detective-eyes.html"
+        >
+            PLAY NOW <span aria-hidden="true">→</span>
+        </a>
+    </div>
+</article>
+
+          <article class="game-card game-card--scrabble">
+            <a class="game-card__image" href="games/scrabble-yo/index.html" aria-label="Play Scrabble YO!">
+              <img src="assets/games/scrabble-yo-card.png" alt="Scrabble YO! — Kobo the fox and Rex the panda beside the SCRABBLE YO! logo" loading="lazy" />
+              <span class="game-card__tag">Vocabulary • Word Building</span>
+            </a>
+            <div class="game-card__body">
+              <h2>SCRABBLE YO!</h2>
+              <p>Build real English words on the board and learn what every word means.</p>
+              <p>A1-B2 Level - 123,000+ Words - 1-4 Players.</p>
+              <a class="game-card__play" href="games/scrabble-yo/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="index.html#home">Home</a><a href="games.html">Play Games YO!</a><a href="index.html#learning">Learning YO!</a><a href="index.html#reading">Reading YO!</a><a href="index.html#listening">Listening YO!</a><a href="index.html#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+        <div class="search-panel" data-search-panel hidden>
+      <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <button class="close-search" type="button" aria-label="Close search" data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id="search-title">What do you want to learn?</h2>
+        <form onsubmit="return false;">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." />
+          </div>
+        </form>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+    <!-- DEVELOPER MODAL -->
+    <div class="developer-modal" id="developerModal">
+      <div class="modal-card">
+        <button class="modal-close" type="button" aria-label="Close modal" id="modalCloseBtn">×</button>
+        <h2 class="modal-title">About the Developer</h2>
+        <h3 class="modal-name">Mega Ayu Wulandari</h3>
+        <p class="modal-role">English Teacher · Educator · Creator of English Yo!</p>
+        <p class="modal-description">English Yo! is a learning space designed to help students learn, play, read, and listen to English in a fun and accessible way.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // Developer Modal Handler
+      (function() {
+        const modal = document.getElementById('developerModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const devLink = document.querySelector('a[href="#developers"]');
+        
+        if (!modal || !devLink) return;
+        
+        // Open modal when Developers link is clicked
+        devLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          modal.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modal functions
+        function closeModal() {
+          modal.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+        
+        // Close on X button
+        modalCloseBtn.addEventListener('click', closeModal);
+        
+        // Close on clicking outside modal
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+          }
+        });
+      })();
+    </script>
+
+  </body>
+</html>

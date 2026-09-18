@@ -1,0 +1,3263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Learning YO! Learn English, one step at a time." />
+    <title>Learning YO! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ===== Learning YO! page-specific styles (kept separate from styles.css) ===== */
+      .learning-hero { padding: clamp(34px, 6vw, 64px) 0 clamp(18px, 3vw, 30px); text-align: center; }
+      .learning-hero .badge { display: inline-block; margin-bottom: 16px; padding: 7px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.8rem; transform: rotate(-4deg); }
+      .learning-hero h1 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; }
+      .learning-hero h1 .accent { color: var(--pink); }
+      .learning-hero p { max-width: 48ch; margin: 0 auto; color: #2a3d68; font-size: clamp(1rem, 1.6vw, 1.25rem); font-weight: 800; }
+
+      .topics-section { padding-bottom: clamp(50px, 6vw, 90px); }
+      .topics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: clamp(14px, 1.6vw, 22px); }
+
+      /* Learning YO! search bar — searches topic titles AND full lesson text */
+      .learning-search { position: relative; display: flex; align-items: center; max-width: 560px; margin: 0 auto clamp(10px, 1.4vw, 14px); padding: 4px 18px; border-radius: 999px; background: #fff; box-shadow: 0 8px 22px rgba(0, 53, 110, 0.12); border: 2px solid transparent; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+      .learning-search:focus-within { border-color: var(--pink); box-shadow: 0 10px 26px rgba(255, 62, 121, 0.18); }
+      .learning-search-icon { flex: 0 0 auto; margin-right: 10px; font-size: 1.1rem; line-height: 1; }
+      .learning-search-input { flex: 1 1 auto; min-width: 0; padding: 12px 4px; border: 0; background: transparent; color: var(--navy); font-family: var(--body); font-size: 0.98rem; font-weight: 700; }
+      .learning-search-input::placeholder { color: #8ba0c9; font-weight: 600; }
+      .learning-search-input:focus { outline: none; }
+      .learning-search-input::-webkit-search-cancel-button { display: none; }
+      .learning-search-clear { flex: 0 0 auto; display: inline-grid; place-items: center; width: 26px; height: 26px; margin-left: 6px; border: 0; border-radius: 50%; background: var(--card-pink); color: var(--navy); font-size: 0.8rem; font-weight: 800; cursor: pointer; }
+      .learning-search-clear:hover { background: var(--pink); color: #fff; }
+      .learning-search-status { max-width: 560px; margin: 0 auto clamp(20px, 2.6vw, 30px); color: #3a4d78; font-family: var(--display); font-size: 0.82rem; font-weight: 800; text-align: center; min-height: 1.2em; }
+      .topic-card.is-search-hidden { display: none !important; }
+
+      @media (max-width: 480px) {
+        .learning-search { padding: 2px 14px; }
+        .learning-search-input { padding: 11px 2px; font-size: 0.92rem; }
+      }
+.pronoun-hero .pronoun-kicker {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--navy);
+  font-family: var(--display);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+      .topic-card { position: relative; display: flex; overflow: hidden; flex-direction: column; align-items: flex-start; gap: 8px; padding: 20px 20px 52px; border-radius: clamp(16px, 1.6vw, 24px); box-shadow: 0 10px 24px rgba(0, 53, 110, 0.12); transition: transform 0.18s ease, box-shadow 0.18s ease; }
+      .topic-card:hover, .topic-card:focus-visible { box-shadow: 0 16px 32px rgba(0, 53, 110, 0.18); transform: translateY(-3px); }
+      .topic-icon { font-size: clamp(1.7rem, 2.2vw, 2.2rem); line-height: 1; }
+      .topic-card h3 { margin: 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.02rem, 1.2vw, 1.2rem); font-weight: 800; }
+      .topic-card p { margin: 0; color: #3a4d78; font-size: 0.86rem; font-weight: 700; }
+      .topic-cta { position: absolute; right: 20px; bottom: 18px; color: var(--navy); font-family: var(--display); font-size: 0.85rem; font-weight: 800; }
+
+      .topic-card--yellow { background: var(--card-yellow); }
+      .topic-card--blue { background: var(--card-blue); }
+      .topic-card--pink { background: var(--card-pink); }
+      .topic-card--green { background: var(--card-green); }
+
+      .topic-card { border: 0; text-align: left; font: inherit; cursor: pointer; appearance: none; width: 100%; }
+
+      @media (max-width: 480px) {
+        .topics-grid { grid-template-columns: 1fr; gap: 12px; }
+        .topic-card { padding: 16px 16px 46px; }
+      }
+/* Subject & Object Pronouns card */
+.pronoun-topic-card {
+  background: #eee7ff !important;
+  font-family: var(--display) !important;
+  text-align: left;
+}
+
+.pronoun-topic-card .pronoun-card-image {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin: -4px auto 8px;
+}
+
+.pronoun-topic-card .topic-title {
+  display: block;
+  color: var(--navy);
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.pronoun-topic-card .topic-subtitle {
+  display: block;
+  margin-top: 8px;
+  color: #344b78;
+  font-family: var(--body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.pronoun-topic-card .topic-learn {
+  display: block;
+  margin-top: 12px;
+  color: var(--navy);
+  font-family: var(--display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-align: right;
+}
+      /* ===== Single-page topic/lesson toggle (Learning YO! architecture) ===== */
+      .is-hidden { display: none !important; }
+      .prep-back-top { display: flex; justify-content: center; padding: clamp(18px, 2.4vw, 28px) 0 0; }
+      .back-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 0; border-radius: 999px; background: #fff; box-shadow: 0 4px 12px rgba(0, 53, 110, 0.1); color: var(--navy); font-family: var(--display); font-size: 0.82rem; font-weight: 800; cursor: pointer; }
+      .back-link:hover { box-shadow: 0 6px 16px rgba(0, 53, 110, 0.16); }
+
+      /* Descriptive Text — one small addition reusing the shared .prep-lesson visual language */
+      .desc-word-row { max-width: 62ch; margin: 0; padding: 14px 20px; border-radius: 16px; background: var(--card-yellow); color: var(--navy); font-family: var(--display); font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 800; text-align: center; letter-spacing: 0.01em; }
+      .desc-passage-title { margin: 0 0 6px; color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 1rem; }
+      .desc-passage { margin: 0 0 16px; padding: 14px 16px; border-radius: 14px; background: var(--paper); color: #2a3d68; font-size: 0.92rem; font-weight: 600; line-height: 1.6; text-align: left; }
+      .desc-passage p { margin: 0 0 8px; }
+      .desc-passage p:last-child { margin-bottom: 0; }
+
+      /* =====================================================================
+         Descriptive Text — REDESIGN (scoped entirely under ".desc-lesson",
+         an extra class added only to the Descriptive Text wrapper. Because
+         Prepositions never carries ".desc-lesson", none of these rules can
+         ever affect the Prepositions lesson, even though both lessons share
+         the base ".prep-lesson" classes below.
+         ===================================================================== */
+
+      /* Tighter overall rhythm for Descriptive Text only (less empty space) */
+      .desc-lesson section { padding: clamp(18px, 3vw, 34px) 0; }
+      .desc-lesson .prep-hero { padding: clamp(18px, 3.4vw, 28px) 0 clamp(10px, 1.6vw, 16px); }
+      .desc-lesson .prep-lead { margin-bottom: clamp(14px, 1.8vw, 20px); }
+      .desc-lesson .prep-grid { gap: clamp(10px, 1.2vw, 16px); }
+      .desc-lesson .prep-card { padding: 16px 16px 18px; }
+
+      /* Problem 1 — definition paragraph should use the available width,
+         not the shared 56ch cap that .prep-lead uses everywhere else. */
+      .prep-lead.desc-lead-wide { max-width: 78ch; }
+
+      /* Problem 2 — the three intro examples redesigned as proper cards.
+         ".desc-example-card" is an ADDITIONAL class layered on top of the
+         shared ".prep-example-card", so Prepositions' own example cards
+         (which never carry this class) are completely unaffected. */
+      .desc-lesson .prep-examples { gap: clamp(12px, 1.6vw, 20px); align-items: stretch; }
+      .desc-lesson .prep-example-card.desc-example-card { flex-direction: column; align-items: flex-start; gap: 10px; padding: clamp(18px, 2vw, 22px) clamp(18px, 2vw, 20px) 20px; }
+      .desc-example-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+      .desc-example-icon { font-size: clamp(1.8rem, 2.4vw, 2.2rem); line-height: 1; }
+      .desc-example-tag { padding: 4px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.7); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.66rem; letter-spacing: 0.05em; }
+      .desc-example-title { margin: 0; color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 1rem; }
+      .desc-example-text { margin: 0; color: #2a3d68; font-size: 0.9rem; font-weight: 600; line-height: 1.5; }
+
+      /* Problem 3 — model text becomes the visual centerpiece: it should
+         use the lesson's available width instead of a narrow ch-based cap. */
+      .desc-model-card { width: 100%; max-width: 1000px; margin: 0 auto clamp(14px, 1.8vw, 18px); padding: clamp(22px, 3vw, 34px) clamp(22px, 3vw, 40px); border-radius: clamp(18px, 2vw, 26px); background: #fff; box-shadow: 0 14px 32px rgba(0, 53, 110, 0.16); border-left: 6px solid var(--pink); text-align: left; }
+      .desc-model-title { margin: 0 0 12px; color: var(--navy); font-family: var(--display); font-weight: 800; font-size: clamp(1.1rem, 1.8vw, 1.4rem); letter-spacing: 0.02em; }
+      .desc-model-body { max-width: 74ch; }
+      .desc-model-body p { margin: 0 0 12px; color: #2a3d68; font-size: 0.96rem; font-weight: 600; line-height: 1.75; }
+      .desc-model-body p:last-child { margin-bottom: 0; }
+      .desc-model-body ol { margin: 0 0 12px; padding-left: 1.35em; }
+      .desc-model-body ol li { margin-bottom: 8px; color: #2a3d68; font-size: 0.96rem; font-weight: 600; line-height: 1.65; }
+      .desc-model-body ol li:last-child { margin-bottom: 0; }
+      .desc-model-body .materials-line { display: inline-block; margin: 0 0 14px; padding: 8px 14px; border-radius: 12px; background: var(--card-yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.88rem; }
+
+      /* Problem 4 — visual connector tying the model text to the breakdown */
+      .desc-structure-link { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0 auto clamp(14px, 1.8vw, 18px); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.85rem; text-align: center; }
+      .desc-structure-link .arrow { color: #93a9d6; font-size: 1.1rem; line-height: 1; }
+
+      .desc-model-breakdown { width: 100%; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.6vw, 18px); }
+      .desc-breakdown-card { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: clamp(16px, 1.8vw, 22px); box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); text-align: left; }
+      .desc-breakdown-card p { margin: 0; color: var(--navy); font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+      .desc-breakdown-note { color: #3a4d78 !important; font-weight: 600 !important; font-size: 0.82rem !important; }
+      .desc-breakdown-id { background: var(--card-green); }
+      .desc-breakdown-desc { background: var(--card-yellow); }
+
+      /* Describing Words — chips */
+      .desc-chip-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; }
+      .desc-chip { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 999px; background: var(--card-yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(0, 53, 110, 0.08); }
+
+      @media (max-width: 480px) {
+        .desc-model-breakdown { grid-template-columns: 1fr; }
+        .desc-model-card { padding: 18px; }
+        .desc-breakdown-card { padding: 14px; }
+        .desc-chip { padding: 7px 14px; font-size: 0.8rem; }
+      }
+
+
+      /* =====================================================================
+         Subject & Object Pronouns — LESSON STYLES
+         ===================================================================== */
+      .pronoun-lesson { color:#2a3d68; }
+      .pronoun-lesson section { padding:clamp(24px,3vw,40px) 0; }
+      .pronoun-hero { padding:clamp(28px,4vw,48px) 0 !important; background:linear-gradient(135deg,var(--card-blue),#f4f9ff); text-align:center; }
+      .pronoun-kicker { display:inline-block; margin-bottom:8px; color:var(--pink); font-family:var(--display); font-size:.78rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+      .pronoun-hero h1 { margin:0 0 8px; color:var(--navy); font-family:var(--display); font-size:clamp(2rem,4vw,3.4rem); font-weight:800; line-height:1.05; }
+      .pronoun-hero p { margin:0; font-size:clamp(1rem,1.5vw,1.25rem); font-weight:800; }
+      .pronoun-lesson h2 { margin:0 0 12px; color:var(--navy); font-family:var(--display); font-size:clamp(1.45rem,2.2vw,2rem); line-height:1.1; }
+      .pronoun-lead,.pronoun-copy { line-height:1.55; }
+      .pronoun-lead { max-width:72ch; margin:0 0 8px; }
+      .pronoun-copy { margin:0 0 16px; }
+      .pronoun-tint-yellow { background:var(--card-yellow); }
+      .pronoun-tint-blue { background:var(--card-blue); }
+      .pronoun-tint-pink { background:var(--card-pink); }
+      .pronoun-tint-green { background:var(--card-green); }
+      .pronoun-example { padding:clamp(16px,2vw,22px); border-radius:20px; box-shadow:0 8px 20px rgba(0,53,110,.08); text-align:center; }
+      .pronoun-example p { margin:6px 0; font-weight:700; line-height:1.55; }
+      .pronoun-arrow { color:var(--pink); font-size:1.4rem; font-weight:900; }
+      .pronoun-table-wrap { overflow-x:auto; border-radius:18px; box-shadow:0 8px 20px rgba(0,53,110,.08); }
+      .pronoun-table { width:100%; border-collapse:collapse; background:#fff; }
+      .pronoun-table th { padding:12px 14px; background:var(--navy); color:#fff; font-family:var(--display); text-align:left; }
+      .pronoun-table td { padding:11px 14px; border-bottom:1px solid #e5eef8; font-weight:650; line-height:1.45; }
+      .pronoun-table tr:last-child td { border-bottom:0; }
+      .pronoun-table td:first-child,.pronoun-table td:nth-child(2) { color:var(--navy); font-family:var(--display); font-weight:900; }
+      .pronoun-remember { display:flex; flex-direction:column; gap:5px; margin-top:16px; padding:16px 18px; border-radius:18px; box-shadow:0 7px 18px rgba(0,53,110,.07); }
+      .pronoun-remember > span { color:var(--navy); font-family:var(--display); font-weight:900; }
+      .pronoun-remember p { margin:4px 0 0; line-height:1.55; }
+      .pronoun-compare { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+      .pronoun-compare-card { padding:18px; border-radius:18px; box-shadow:0 7px 18px rgba(0,53,110,.07); text-align:center; }
+      .pronoun-compare-card p { margin:5px 0; font-weight:700; line-height:1.5; }
+      .pronoun-compare-card span { display:block; margin:7px 0; }
+      .pronoun-trick { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+      .pronoun-trick div { display:flex; flex-direction:column; align-items:center; gap:5px; padding:18px; border-radius:18px; background:var(--paper); box-shadow:0 7px 18px rgba(0,53,110,.07); text-align:center; }
+      .pronoun-trick span { color:#3a4d78; font-size:.78rem; font-weight:900; }
+      .pronoun-trick strong { color:var(--pink); font-family:var(--display); font-size:1.1rem; }
+      .pronoun-quiz { margin-top:14px; }
+      .pronoun-quiz-card { padding:clamp(18px,2.5vw,28px); border-radius:22px; background:#fff; box-shadow:0 8px 22px rgba(0,53,110,.1); }
+      .pronoun-progress { margin:0 0 10px; color:#65789f; font-family:var(--display); font-size:.8rem; font-weight:800; text-align:center; }
+      .pronoun-question { margin:0 0 18px; color:var(--navy); font-family:var(--display); font-size:clamp(1rem,1.6vw,1.2rem); font-weight:800; line-height:1.45; text-align:center; }
+      .pronoun-options { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+      .pronoun-option { min-height:48px; padding:10px 14px; border:2px solid #d7e7f7; border-radius:14px; background:#fff; color:var(--navy); font-family:var(--display); font-size:.95rem; font-weight:800; cursor:pointer; }
+      .pronoun-option:hover { border-color:var(--navy); transform:translateY(-1px); }
+      .pronoun-option.correct { border-color:#1fa774; background:#e3f8ef; }
+      .pronoun-option.wrong { border-color:#ef4444; background:#fdecec; }
+      .pronoun-feedback { min-height:28px; margin:14px 0 0; font-family:var(--display); font-weight:800; text-align:center; }
+      .pronoun-feedback.correct { color:#1fa774; }
+      .pronoun-feedback.wrong { color:#ef4444; }
+      .pronoun-next { display:none; margin:14px auto 0; padding:10px 22px; border:0; border-radius:999px; background:var(--navy); color:#fff; font-family:var(--display); font-weight:800; cursor:pointer; }
+      .pronoun-next.show { display:block; }
+      .pronoun-results { padding:24px; border-radius:22px; background:var(--card-yellow); text-align:center; }
+      .pronoun-results strong { display:block; color:var(--navy); font-family:var(--display); font-size:1.5rem; }
+      .pronoun-results p { margin:6px 0 0; font-weight:700; }
+      @media (max-width:700px) { .pronoun-compare,.pronoun-trick { grid-template-columns:1fr; } }
+      @media (max-width:480px) {
+        .pronoun-lesson section { padding:20px 0; }
+        .pronoun-hero { padding:24px 0 !important; }
+        .pronoun-hero h1 { font-size:1.9rem; }
+        .pronoun-table th,.pronoun-table td { padding:10px 9px; font-size:.86rem; }
+        .pronoun-options { grid-template-columns:1fr; }
+      }
+
+      /* =====================================================================
+         Prepositions in English — LESSON STYLES (moved verbatim from
+         prepositions.html, still scoped entirely under ".prep-lesson" so it
+         never touches the shared site styles or the topic library above).
+         ===================================================================== */
+
+      .prep-lesson { --prep-correct: #1fa774; --prep-correct-bg: #e3f8ef; --prep-wrong: #ef4444; --prep-wrong-bg: #fdecec; }
+
+      /* ---------- Shared bits reused across every section ---------- */
+      .prep-lesson section { padding: clamp(34px, 5vw, 60px) 0; }
+      .prep-lesson h2 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
+      .prep-lead { max-width: 56ch; margin: 0 0 clamp(20px, 2.6vw, 30px); color: #2a3d68; font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 700; }
+      .prep-mark { padding: 1px 8px; border-radius: 8px; background: var(--yellow); color: var(--navy); font-weight: 900; }
+
+      .prep-tint-yellow { background: var(--card-yellow); }
+      .prep-tint-blue { background: var(--card-blue); }
+      .prep-tint-pink { background: var(--card-pink); }
+      .prep-tint-green { background: var(--card-green); }
+
+      /* ---------- 1. Hero ---------- */
+      .prep-hero { padding: clamp(34px, 6vw, 64px) 0 clamp(20px, 3vw, 32px); text-align: center; }
+      .prep-kicker { display: inline-block; margin-bottom: 16px; padding: 7px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.8rem; transform: rotate(-4deg); }
+      .prep-hero h1 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+      .prep-subhead { max-width: 44ch; margin: 0 auto clamp(22px, 3vw, 30px); color: #2a3d68; font-size: clamp(1rem, 1.6vw, 1.25rem); font-weight: 800; }
+
+      /* ---------- 2. What are prepositions ---------- */
+      .prep-examples { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(12px, 1.6vw, 20px); }
+      .prep-example-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 20px; box-shadow: 0 10px 24px rgba(0, 53, 110, 0.1); }
+      .prep-example-emoji { flex: 0 0 auto; font-size: clamp(2rem, 3vw, 2.5rem); line-height: 1; }
+      .prep-example-card p { margin: 0; color: var(--navy); font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 800; }
+
+      /* ---------- 3. Learn the prepositions ---------- */
+      .prep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: clamp(14px, 1.6vw, 20px); }
+      .prep-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 18px 24px; border-radius: clamp(18px, 1.8vw, 26px); box-shadow: 0 10px 24px rgba(0, 53, 110, 0.12); text-align: center; }
+      .prep-badge { padding: 6px 18px; border-radius: 999px; background: var(--navy); color: #fff; font-family: var(--display); font-weight: 800; font-size: 0.9rem; letter-spacing: 0.03em; }
+      .prep-stage { display: flex; align-items: center; justify-content: center; width: 100%; height: 110px; border-radius: 16px; background: rgba(255, 255, 255, 0.65); }
+      .prep-stage .emoji-lg { font-size: 2.6rem; line-height: 1; }
+      .prep-stage .emoji-sm { font-size: 1.7rem; line-height: 1; }
+      .stage-col { flex-direction: column; gap: 2px; }
+      .stage-col-reverse { flex-direction: column-reverse; gap: 2px; }
+      .stage-row { flex-direction: row; gap: 14px; }
+      .stage-row-3 { flex-direction: row; gap: 8px; }
+      .stage-overlap { position: relative; }
+      .stage-overlap .emoji-lg { position: relative; z-index: 2; }
+      .stage-overlap .emoji-sm { position: absolute; z-index: 1; opacity: 0.9; }
+      .stage-overlap.behind .emoji-sm { top: 14px; left: 34%; }
+      .stage-overlap.behind .emoji-lg { margin-left: 14px; }
+      .stage-overlap.front .emoji-sm { bottom: 12px; right: 30%; z-index: 1; }
+      .stage-overlap.front .emoji-lg { z-index: 2; margin-right: 10px; }
+      .prep-card p { margin: 0; color: var(--navy); font-size: 0.95rem; font-weight: 800; }
+
+      /* ---------- 4 & 5. Quiz (shared by Practice + Mini Challenge) ---------- */
+      .prep-quiz-progress { margin-bottom: 10px; color: #3a4d78; font-family: var(--display); font-size: 0.85rem; font-weight: 800; }
+      .prep-quiz-card { padding: clamp(20px, 2.4vw, 30px); border-radius: clamp(20px, 2vw, 28px); background: #fff; box-shadow: 0 12px 28px rgba(0, 53, 110, 0.14); }
+      .prep-quiz-stage { display: flex; align-items: center; justify-content: center; width: 100%; height: 120px; margin-bottom: 16px; border-radius: 16px; background: var(--card-blue); }
+      .prep-quiz-question { margin: 0 0 16px; color: var(--navy); font-family: var(--display); font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 800; }
+      .prep-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      @media (min-width: 520px) { .prep-options { grid-template-columns: 1fr 1fr; } }
+      .prep-option { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 12px 18px; border: 2px solid #d6e8fb; border-radius: 16px; background: #f7fcff; color: var(--navy); font-size: 1rem; font-weight: 800; text-align: left; transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease; }
+      .prep-option .opt-letter { flex: 0 0 auto; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 0.78rem; }
+      .prep-option:hover:not([disabled]) { border-color: var(--navy); transform: translateY(-1px); }
+      .prep-option:active:not([disabled]) { transform: translateY(0); }
+      .prep-option[disabled] { cursor: default; }
+      .prep-option.is-correct { border-color: var(--prep-correct); background: var(--prep-correct-bg); }
+      .prep-option.is-wrong { border-color: var(--prep-wrong); background: var(--prep-wrong-bg); }
+      .prep-feedback { display: flex; align-items: center; gap: 8px; min-height: 28px; margin-top: 16px; font-family: var(--display); font-size: 1rem; font-weight: 800; }
+      .prep-feedback.correct { color: var(--prep-correct); }
+      .prep-feedback.wrong { color: var(--prep-wrong); }
+      .prep-next-btn { display: none; align-items: center; gap: 8px; margin-top: 18px; padding: 12px 26px; border: 0; border-radius: 999px; background: var(--navy); color: #fff; font-family: var(--display); font-size: 0.95rem; font-weight: 800; }
+      .prep-next-btn:hover { background: #0a3aa0; }
+      .prep-next-btn.show { display: inline-flex; }
+
+      .prep-results { display: none; padding: clamp(24px, 3vw, 36px); border-radius: clamp(20px, 2vw, 28px); background: var(--card-yellow); text-align: center; }
+      .prep-results.show { display: block; }
+      .prep-results .score { margin: 0 0 6px; color: var(--navy); font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 800; }
+      .prep-results p { margin: 0; color: #2a3d68; font-weight: 800; }
+      .prep-results .prep-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px; }
+      .prep-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 52px; padding: 12px 26px; border: 0; border-radius: 999px; font-family: var(--display); font-size: 0.95rem; font-weight: 800; }
+      .prep-btn-primary { background: var(--pink); color: #fff; box-shadow: 0 10px 22px rgba(255, 62, 121, 0.32); }
+      .prep-btn-primary:hover { transform: translateY(-2px); }
+      .prep-btn-ghost { background: #fff; color: var(--navy); border: 2px solid #d6e8fb; }
+      .prep-btn-ghost:hover { border-color: var(--navy); }
+
+      @media (max-width: 480px) {
+        .prep-grid { grid-template-columns: 1fr; }
+        .prep-examples { grid-template-columns: 1fr; }
+        .prep-example-card { padding: 16px; }
+        .prep-quiz-card { padding: 18px; }
+
+        .prep-stage img {
+        max-height: 150px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+    }
+      }
+      /* Practice image size */
+.prep-quiz-stage img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .prep-quiz-stage img {
+    max-height: 150px;
+  }
+}
+      /* Developer Modal Styles */
+      .developer-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .developer-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        max-width: 400px;
+        width: 90%;
+        position: relative;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      }
+      @keyframes slideIn {
+        from {
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #999;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+      }
+      .modal-close:hover {
+        color: #333;
+      }
+      .modal-card h2 {
+        margin: 0 0 16px 0;
+        color: #0D3E5C;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .modal-card .dev-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0D3E5C;
+        margin: 12px 0 4px 0;
+      }
+      .modal-card .dev-role {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 16px 0;
+      }
+      .modal-card .dev-description {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+      }
+      body.modal-open {
+        overflow: hidden;
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a href="index.html#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a class="active" href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a href="index.html#reading"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="index.html#listening"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="index.html#developers" class="dev-link"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <div id="library-view">
+      <section class="learning-hero" aria-labelledby="learning-title">
+        <div class="wide-shell">
+          <span class="badge">Learning Library</span>
+          <h1 id="learning-title">LEARNING <span class="accent">YO!</span></h1>
+          <p>Learn English, one step at a time!</p>
+        </div>
+      </section>
+
+      <section class="topics-section" aria-labelledby="topics-title">
+        <h2 id="topics-title" class="sr-only">Learning topics</h2>
+        <div class="wide-shell">
+          <div class="learning-search">
+            <span class="learning-search-icon" aria-hidden="true">🔍</span>
+            <label for="learningSearchInput" class="sr-only">Search lessons by topic or word</label>
+            <input type="search" id="learningSearchInput" class="learning-search-input" placeholder="Search a topic or word — try &quot;orientation&quot;, &quot;passive&quot;, &quot;eraser&quot;..." autocomplete="off" />
+            <button type="button" id="learningSearchClear" class="learning-search-clear" aria-label="Clear search" hidden>✕</button>
+          </div>
+          <p id="learningSearchStatus" class="learning-search-status" aria-live="polite"></p>
+        </div>
+        <div class="wide-shell topics-grid">
+<button type="button" class="topic-card pronoun-topic-card" data-topic="pronouns">
+  <img
+    class="pronoun-card-image"
+    src="assets/pronouns-subject-object.png"
+    alt="Subject and Object Pronouns"
+  >
+  <span class="topic-title">Subject &amp; Object Pronouns</span>
+  <span class="topic-subtitle">Who does it? Who receives it? 👀</span>
+  <span class="topic-learn">Learn →</span>
+</button>
+<button type="button" class="topic-card topic-card--yellow prepositions-topic-card" data-topic="prepositions">
+  <img
+    class="prepositions-card-image"
+    src="assets/prepositions-icon.png"
+    alt="Prepositions in English"
+  >
+  <h3>Prepositions in English</h3>
+  <p>Learn how to use in, on, at, and more with confidence.</p>
+  <span class="topic-cta" aria-hidden="true">Learn →</span>
+</button>
+<button type="button" class="topic-card topic-card--blue descriptive-topic-card" data-topic="descriptive">
+  <img
+    class="descriptive-card-image"
+    src="assets/descriptive-text-icon.png"
+    alt="Descriptive Text"
+  >
+  <h3>Descriptive Text</h3>
+  <p>Describe people, places, and things vividly.</p>
+  <span class="topic-cta" aria-hidden="true">Learn →</span>
+</button>
+
+          <button type="button" class="topic-card topic-card--pink" data-topic="narrative">
+ <img class="topic-card-image" src="assets/narrative-text.png" alt="Narrative Text">
+            <h3>Narrative Text</h3>
+            <p>Tell stories with a clear beginning, middle, and end.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--green" data-topic="recount">
+<img class="topic-card-image" src="assets/recount-text.png" alt="Recount Text">
+            <h3>Recount Text</h3>
+            <p>Retell past events and experiences clearly.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--yellow" data-topic="procedure">
+<img class="topic-card-image" src="assets/procedure-text.png" alt="Procedure Text">
+            <h3>Procedure Text</h3>
+            <p>Write and follow clear step-by-step instructions.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--blue" data-topic="report">
+<img class="topic-card-image" src="assets/report-text.png" alt="Report Text">
+            <h3>Report Text</h3>
+            <p>Explain facts about people, animals, or things.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--pink" data-topic="simple-present">
+<img class="topic-card-image" src="assets/simple-present.png" alt="Simple Present Tense">
+            <h3>Simple Present Tense</h3>
+            <p>Talk about routines, facts, and habits.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--green" data-topic="simple-past">
+<img class="topic-card-image" src="assets/simple-past.png" alt="Simple Past Tense">
+            <h3>Simple Past Tense</h3>
+            <p>Talk about things that already happened.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--yellow" data-topic="passive">
+<img class="topic-card-image" src="assets/passive-voice.png" alt="Passive Voice">
+            <h3>Passive Voice</h3>
+            <p>Focus on the action, not just who does it.</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+          <button type="button" class="topic-card topic-card--blue" data-topic="vocabulary">
+<img class="topic-card-image" src="assets/vocabulary.png" alt="School Supplies">
+            <h3>Vocabulary</h3>
+            <p>Learn 10 essential school supplies in English!</p>
+            <span class="topic-cta" aria-hidden="true">Learn →</span>
+          </button>
+        </div>
+      </section>
+      </div>
+
+
+      <!-- =====================================================================
+           Subject & Object Pronouns — LESSON
+           ===================================================================== -->
+      <section id="pronouns-view" class="is-hidden" aria-labelledby="pronouns-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="pronoun-lesson">
+          <section class="pronoun-hero">
+            <div class="wide-shell">
+              <span class="pronoun-kicker">LEARNING YO! · GRAMMAR</span>
+              <h1 id="pronouns-title">Subject &amp; Object Pronouns</h1>
+              <p>Who does it? Who receives it? 👀</p>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>💡 What Are Pronouns?</h2>
+              <p class="pronoun-lead"><strong>Pronouns are words we use instead of nouns.</strong></p>
+              <p class="pronoun-copy">Instead of repeating a name or thing, we can use a pronoun.</p>
+              <div class="pronoun-example pronoun-tint-yellow">
+                <p><strong>Milo</strong> is cute. <strong>Milo</strong> likes fish.</p>
+                <div class="pronoun-arrow">↓</div>
+                <p><strong>Milo</strong> is cute. <strong>He</strong> likes fish.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>👤 Subject Pronouns</h2>
+              <p class="pronoun-lead"><strong>Subject pronouns</strong> tell us <strong>who or what does the action.</strong></p>
+              <div class="pronoun-table-wrap">
+                <table class="pronoun-table">
+                  <thead><tr><th>Subject</th><th>Example</th></tr></thead>
+                  <tbody>
+                    <tr><td>I</td><td><strong>I</strong> like cats.</td></tr>
+                    <tr><td>You</td><td><strong>You</strong> are kind.</td></tr>
+                    <tr><td>He</td><td><strong>He</strong> plays football.</td></tr>
+                    <tr><td>She</td><td><strong>She</strong> reads books.</td></tr>
+                    <tr><td>It</td><td><strong>It</strong> is cute.</td></tr>
+                    <tr><td>We</td><td><strong>We</strong> study English.</td></tr>
+                    <tr><td>They</td><td><strong>They</strong> are happy.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pronoun-remember pronoun-tint-blue">
+                <span>⭐ Remember!</span>
+                <strong>Subject + Verb</strong>
+                <p><strong>She</strong> likes music.<br /><strong>They</strong> play football.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>🎯 Object Pronouns</h2>
+              <p class="pronoun-lead"><strong>Object pronouns</strong> tell us <strong>who or what receives the action.</strong></p>
+              <div class="pronoun-table-wrap">
+                <table class="pronoun-table">
+                  <thead><tr><th>Subject</th><th>Object</th><th>Example</th></tr></thead>
+                  <tbody>
+                    <tr><td>I</td><td>me</td><td>She helps <strong>me</strong>.</td></tr>
+                    <tr><td>You</td><td>you</td><td>I like <strong>you</strong>.</td></tr>
+                    <tr><td>He</td><td>him</td><td>I know <strong>him</strong>.</td></tr>
+                    <tr><td>She</td><td>her</td><td>We help <strong>her</strong>.</td></tr>
+                    <tr><td>It</td><td>it</td><td>I feed <strong>it</strong>.</td></tr>
+                    <tr><td>We</td><td>us</td><td>They invite <strong>us</strong>.</td></tr>
+                    <tr><td>They</td><td>them</td><td>I see <strong>them</strong>.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pronoun-remember pronoun-tint-pink">
+                <span>⭐ Remember!</span>
+                <strong>Subject → does the action</strong>
+                <strong>Object → receives the action</strong>
+                <p><strong>She</strong> helps <strong>me</strong>.<br />👤 does it → <strong>She</strong><br />❤️ receives it → <strong>me</strong></p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>🔄 Let's Compare!</h2>
+              <div class="pronoun-compare">
+                <div class="pronoun-compare-card pronoun-tint-yellow"><p>Rina likes Milo.</p><span>➡️</span><p><strong>She</strong> likes <strong>him</strong>.</p></div>
+                <div class="pronoun-compare-card pronoun-tint-blue"><p>My friends help me.</p><span>➡️</span><p><strong>They</strong> help <strong>me</strong>.</p></div>
+                <div class="pronoun-compare-card pronoun-tint-green"><p>I feed my cat.</p><span>➡️</span><p><strong>I</strong> feed <strong>it</strong>.</p></div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>🧠 Easy Trick</h2>
+              <div class="pronoun-trick">
+                <div><span>WHO DOES THE ACTION?</span><strong>→ SUBJECT</strong></div>
+                <div><span>WHO RECEIVES THE ACTION?</span><strong>→ OBJECT</strong></div>
+              </div>
+              <div class="pronoun-example pronoun-tint-yellow">
+                <p><strong>They</strong> love <strong>her</strong>.</p>
+                <p>Who loves? → <strong>They</strong></p>
+                <p>Who receives the love? → <strong>her</strong></p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="wide-shell">
+              <h2>🎯 Let's Practice!</h2>
+              <p class="pronoun-lead">Choose the correct answer.</p>
+              <div id="pronounPracticeQuiz" class="pronoun-quiz"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Prepositions in English — LESSON (moved verbatim from prepositions.html
+           into learning.html so it opens in place, single-page). Content,
+           wording, illustrations, and quiz logic are preserved exactly.
+           ===================================================================== -->
+      <section id="prepositions-view" class="is-hidden" aria-labelledby="prep-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- 1. HERO -->
+          <section class="prep-hero" aria-labelledby="prep-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Grammar</span>
+              <h1 id="prep-title">Prepositions in English</h1>
+              <p class="prep-subhead">Where is it? Let's find out! 🔎</p>
+            </div>
+          </section>
+
+          <!-- 2. WHAT ARE PREPOSITIONS? -->
+          <section id="prep-intro" aria-labelledby="prep-intro-title">
+            <div class="wide-shell">
+              <h2 id="prep-intro-title">💡 What Are Prepositions?</h2>
+              <p class="prep-lead">Prepositions are words that tell us where something or someone is.</p>
+              <div class="prep-examples">
+                <div class="prep-example-card prep-tint-yellow">
+                  <span class="prep-example-emoji" aria-hidden="true">📖</span>
+                  <p>The book is <mark class="prep-mark">ON</mark> the table.</p>
+                </div>
+                <div class="prep-example-card prep-tint-blue">
+                  <span class="prep-example-emoji" aria-hidden="true">🐱</span>
+                  <p>The cat is <mark class="prep-mark">UNDER</mark> the chair.</p>
+                </div>
+                <div class="prep-example-card prep-tint-pink">
+                  <span class="prep-example-emoji" aria-hidden="true">✏️</span>
+                  <p>The pencil is <mark class="prep-mark">IN</mark> the box.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. LEARN THE PREPOSITIONS -->
+          <section id="prep-learn" aria-labelledby="prep-learn-title">
+            <div class="wide-shell">
+              <h2 id="prep-learn-title">📍 Learn the Prepositions</h2>
+              <p class="prep-lead">Seven little words that say a lot about where things are.</p>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">IN</span>
+                  <div class="prep-stage" aria-hidden="true">
+                      <img src="assets/prep-in.png" alt="Cat inside a box">
+                  </div>
+                  <p>The pencil is IN the box.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">ON</span>
+                  <div class="prep-stage" aria-hidden="true">
+                      <img src="assets/prep-on.png" alt="Cat sitting on a table">
+                  </div>
+                  <p>The book is ON the table.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">UNDER</span>
+                  <div class="prep-stage" aria-hidden="true">
+                      <img src="assets/prep-under.png" alt="Cat under a chair">
+                  </div>
+                  <p>The cat is UNDER the chair.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                    <span class="prep-badge">NEXT TO</span>
+                    <div class="prep-stage" aria-hidden="true">
+                        <img src="assets/prep-next-to.png" alt="Cat next to a door">
+                    </div>
+                    <p>The cat is NEXT TO the bag.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                    <span class="prep-badge">BETWEEN</span>
+                    <div class="prep-stage" aria-hidden="true">
+                        <img src="assets/prep-between.png" alt="Cat between two boxes">
+                    </div>
+                    <p>The cat is BETWEEN the boxes.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                    <span class="prep-badge">BEHIND</span>
+                    <div class="prep-stage" aria-hidden="true">
+                        <img src="assets/prep-behind.png" alt="Cat behind a tree">
+                    </div>
+                    <p>The cat is BEHIND the plant.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">IN FRONT OF</span>
+                  <div class="prep-stage" aria-hidden="true">
+                      <img src="assets/prep-in-front-of.png" alt="Cat in front of a house">
+                  </div>
+                  <p>The cat is IN FRONT OF the house.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. LET'S PRACTICE! -->
+          <section id="prep-practice" aria-labelledby="prep-practice-title">
+            <div class="wide-shell">
+              <h2 id="prep-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Look at the picture and choose the correct answer.</p>
+              <div id="practiceQuiz" class="prep-quiz" data-quiz="practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Descriptive Text — LESSON (new topic, added alongside Prepositions
+           using the same single-page pattern; reuses the shared .prep-lesson
+           visual styles for consistency, does not touch the Prepositions
+           section above in any way).
+           ===================================================================== -->
+      <section id="descriptive-view" class="is-hidden" aria-labelledby="desc-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson desc-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="desc-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Writing</span>
+              <h1 id="desc-title">Descriptive Text</h1>
+              <p class="prep-subhead">Let&rsquo;s describe it! 🔎</p>
+ <a class="desc-back-link" href="learning.html" data-back-to-learning>
+</a>
+
+            </div>
+          </section>
+
+          <!-- SECTION 1 — WHAT IS A DESCRIPTIVE TEXT? -->
+          <section id="desc-intro" aria-labelledby="desc-intro-title">
+            <div class="wide-shell">
+              <h2 id="desc-intro-title">💡 What Is a Descriptive Text?</h2>
+              <p class="prep-lead desc-lead-wide">A descriptive text describes a specific or particular person, animal, place, or thing. It tells us what someone or something is like.</p>
+              <div class="prep-examples">
+                <div class="prep-example-card prep-tint-yellow desc-example-card">
+                  <div class="desc-example-header">
+                    <span class="desc-example-icon" aria-hidden="true">👧</span>
+                    <span class="desc-example-tag">PERSON</span>
+                  </div>
+                  <p class="desc-example-title">My Best Friend, Rina</p>
+                  <p class="desc-example-text">Rina is kind and friendly. She has long black hair.</p>
+                </div>
+                <div class="prep-example-card prep-tint-blue desc-example-card">
+                  <div class="desc-example-header">
+                    <span class="desc-example-icon" aria-hidden="true">🐱</span>
+                    <span class="desc-example-tag">ANIMAL</span>
+                  </div>
+                  <p class="desc-example-title">My Lovely Cat, Milo</p>
+                  <p class="desc-example-text">Milo is small and cute. It has soft white fur.</p>
+                </div>
+                <div class="prep-example-card prep-tint-pink desc-example-card">
+                  <div class="desc-example-header">
+                    <span class="desc-example-icon" aria-hidden="true">🏫</span>
+                    <span class="desc-example-tag">PLACE</span>
+                  </div>
+                  <p class="desc-example-title">My School</p>
+                  <p class="desc-example-text">My school is big and clean. It has a large garden.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 2 — READ A DESCRIPTIVE TEXT (complete model text) -->
+          <section id="desc-model" aria-labelledby="desc-model-title">
+            <div class="wide-shell">
+              <h2 id="desc-model-title">📖 Read a Descriptive Text</h2>
+              <p class="prep-lead">Let&rsquo;s see how a descriptive text works!</p>
+
+              <div class="desc-model-card">
+                <p class="desc-model-title">Milo, My Lovely Cat</p>
+                <div class="desc-model-body">
+                  <p>Milo is my lovely cat. He is a domestic cat that lives with me and my family. He is my favorite pet because he is cute, friendly, and fun to be with.</p>
+                  <p>Milo has soft white and orange fur. He has round eyes, a small pink nose, and a long tail. His body is small, but his legs are strong. He also wears a small bell around his neck.</p>
+                  <p>Milo has some funny habits. He likes sleeping on the sofa in the afternoon. He also enjoys playing with a small ball and running around the house. Sometimes, he follows me from one room to another.</p>
+                  <p>Milo is a friendly and playful cat. He is usually calm, but he can be very active when he plays. He is also quite curious and likes exploring new places. I love Milo because his cute and friendly personality always makes me happy.</p>
+                </div>
+              </div>
+
+              <p class="desc-structure-link"><span class="arrow" aria-hidden="true">↓</span>🔎 Let&rsquo;s see the structure<span class="arrow" aria-hidden="true">↓</span></p>
+
+              <div class="desc-model-breakdown">
+                <div class="desc-breakdown-card desc-breakdown-id">
+                  <span class="prep-badge">IDENTIFICATION</span>
+                  <p>&ldquo;Milo is my lovely cat.&rdquo;</p>
+                  <p class="desc-breakdown-note">Introduces the subject.</p>
+                </div>
+                <div class="desc-breakdown-card desc-breakdown-desc">
+                  <span class="prep-badge">DESCRIPTION</span>
+                  <p>&ldquo;Milo has soft white and orange fur. He has round eyes, a small pink nose, and a long tail.&rdquo;</p>
+                  <p class="desc-breakdown-note">Tells us what the subject is like.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 3 — THE STRUCTURE -->
+          <section id="desc-structure" aria-labelledby="desc-structure-title">
+            <div class="wide-shell">
+              <h2 id="desc-structure-title">🧩 The Structure</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">1. IDENTIFICATION</span>
+                  <p>Who or what are we describing?</p>
+                  <p>&ldquo;This is my lovely cat, Milo.&rdquo;</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">2. DESCRIPTION</span>
+                  <p>What is Milo like?</p>
+                  <p>&ldquo;Milo is small and cute.<br />It has soft white fur.&rdquo;</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4 — DESCRIBING WORDS -->
+          <section id="desc-words" aria-labelledby="desc-words-title">
+            <div class="wide-shell">
+              <h2 id="desc-words-title">✨ Describing Words</h2>
+              <p class="prep-lead">We often use adjectives to describe people, animals, places, and things.</p>
+              <div class="desc-chip-row">
+                <span class="desc-chip">beautiful</span>
+                <span class="desc-chip">cute</span>
+                <span class="desc-chip">friendly</span>
+                <span class="desc-chip">kind</span>
+                <span class="desc-chip">big</span>
+                <span class="desc-chip">small</span>
+                <span class="desc-chip">clean</span>
+                <span class="desc-chip">tall</span>
+              </div>
+              <p class="prep-lead" style="margin-top: clamp(16px, 2vw, 22px);">👀 Look!</p>
+              <div class="prep-examples">
+                <div class="prep-example-card prep-tint-blue">
+                  <span class="prep-example-emoji" aria-hidden="true">🐱</span>
+                  <p>a cute cat</p>
+                </div>
+                <div class="prep-example-card prep-tint-pink">
+                  <span class="prep-example-emoji" aria-hidden="true">👧</span>
+                  <p>a friendly girl</p>
+                </div>
+                <div class="prep-example-card prep-tint-yellow">
+                  <span class="prep-example-emoji" aria-hidden="true">🏫</span>
+                  <p>a big school</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4 — LANGUAGE FEATURES -->
+          <section id="desc-features" aria-labelledby="desc-features-title">
+            <div class="wide-shell">
+              <h2 id="desc-features-title">🧱 Language Features</h2>
+              <p class="prep-lead">Descriptive texts usually use:</p>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Simple Present Tense</span>
+                  <p>&ldquo;Milo is cute.<br />It has soft fur.&rdquo;</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Adjectives</span>
+                  <p>&ldquo;Milo is small and cute.&rdquo;</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 5 — REMEMBER -->
+          <section id="desc-remember" aria-labelledby="desc-remember-title">
+            <div class="wide-shell">
+              <h2 id="desc-remember-title" class="sr-only">Remember</h2>
+              <div class="prep-results show">
+                <p class="score">🔑 Remember!</p>
+                <p>A descriptive text describes a specific subject.</p>
+                <p>IDENTIFICATION + DESCRIPTION</p>
+                <p>&ldquo;My Lovely Cat, Milo&rdquo;<br />Milo is small and cute. It has soft white fur.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="desc-practice" aria-labelledby="desc-practice-title">
+            <div class="wide-shell">
+              <h2 id="desc-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Read the text and choose the correct answer.</p>
+              <div id="descriptivePracticeQuiz" class="prep-quiz" data-quiz="descriptive-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Narrative Text — LESSON (new topic, added using the same
+           single-page pattern as Prepositions/Descriptive Text. Reuses the
+           shared .prep-lesson / .desc-model-card visual language so the
+           style stays consistent with the rest of Learning YO!).
+           Content source: English_Text_Types_Narrative_Recount_Procedure.docx
+           ===================================================================== -->
+      <section id="narrative-view" class="is-hidden" aria-labelledby="narrative-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="narrative-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Reading &amp; Writing</span>
+              <h1 id="narrative-title">Narrative Text</h1>
+              <p class="prep-subhead">Once upon a time... let&rsquo;s tell a story! 📖</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="narrative-explain" aria-labelledby="narrative-explain-title">
+            <div class="wide-shell">
+              <h2 id="narrative-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">A narrative text tells a series of fictional or imaginary events in chronological order. It usually opens by introducing the characters and setting, then a problem (a complication) arises that the characters must deal with, and it closes with a resolution. Common examples include fairy tales, fables, legends, and folk tales.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE -->
+          <section id="narrative-purpose" aria-labelledby="narrative-purpose-title">
+            <div class="wide-shell">
+              <h2 id="narrative-purpose-title" class="sr-only">Purpose of the Text</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose of the Text</p>
+                <p>To amuse or entertain readers with a story that deals with a series of related problematic events which lead to a crisis or turning point, and finally find a resolution.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- GENERIC STRUCTURE -->
+          <section id="narrative-structure" aria-labelledby="narrative-structure-title">
+            <div class="wide-shell">
+              <h2 id="narrative-structure-title">🧩 Generic Structure</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">1. ORIENTATION</span>
+                  <p>Introduces characters, time, and place.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">2. COMPLICATION</span>
+                  <p>A problem or conflict arises.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">3. RESOLUTION</span>
+                  <p>The problem is solved.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">4. CODA (optional)</span>
+                  <p>A moral or closing message.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="narrative-example" aria-labelledby="narrative-example-title">
+            <div class="wide-shell">
+              <h2 id="narrative-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">THE CLEVER MOUSE DEER</p>
+                <div class="desc-model-body">
+                  <p>Once upon a time, a mouse deer lived happily near a river in the jungle. One day, a hungry crocodile blocked his path and wanted to eat him.</p>
+                  <p>Suddenly, the mouse deer had an idea. &ldquo;Wait,&rdquo; he said calmly, &ldquo;the king asked me to count how many crocodiles live in this river. Please call your friends to line up across the water.&rdquo;</p>
+                  <p>The crocodile believed him and gathered his friends in a row. The mouse deer then hopped from one crocodile&rsquo;s back to another until he safely reached the other side.</p>
+                  <p>In the end, the mouse deer escaped, and the crocodiles realized they had been tricked.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="narrative-tips" aria-labelledby="narrative-tips-title">
+            <div class="wide-shell">
+              <h2 id="narrative-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Simple Past Tense</span>
+                  <p>lived, blocked, had, escaped — almost every verb is in the past form.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Time Connectives</span>
+                  <p>once upon a time, suddenly, then, in the end, finally.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">Specific Characters</span>
+                  <p>a particular character (a mouse deer, a princess), not a general group.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Action Verbs</span>
+                  <p>many action verbs are used to move the plot forward.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="narrative-practice" aria-labelledby="narrative-practice-title">
+            <div class="wide-shell">
+              <h2 id="narrative-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="narrativePracticeQuiz" class="prep-quiz" data-quiz="narrative-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Recount Text — LESSON (new topic, same single-page pattern).
+           Content source: English_Text_Types_Narrative_Recount_Procedure.docx
+           ===================================================================== -->
+      <section id="recount-view" class="is-hidden" aria-labelledby="recount-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="recount-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Reading &amp; Writing</span>
+              <h1 id="recount-title">Recount Text</h1>
+              <p class="prep-subhead">Let&rsquo;s retell what really happened! 🗓️</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="recount-explain" aria-labelledby="recount-explain-title">
+            <div class="wide-shell">
+              <h2 id="recount-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">A recount text retells a real experience or event from the past in chronological order, much like a diary entry. Unlike narrative text, a recount does not need a conflict — its focus is simply to report what actually happened, in the order it happened. Common examples include holiday recounts, activity reports, diary entries, and short biographies.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE -->
+          <section id="recount-purpose" aria-labelledby="recount-purpose-title">
+            <div class="wide-shell">
+              <h2 id="recount-purpose-title" class="sr-only">Purpose of the Text</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose of the Text</p>
+                <p>To retell events for the purpose of informing or entertaining the reader, by presenting events in the order in which they happened (chronological order).</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- GENERIC STRUCTURE -->
+          <section id="recount-structure" aria-labelledby="recount-structure-title">
+            <div class="wide-shell">
+              <h2 id="recount-structure-title">🧩 Generic Structure</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">1. ORIENTATION</span>
+                  <p>Who, when, and where the event took place.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">2. EVENTS</span>
+                  <p>A series of events in chronological order.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">3. REORIENTATION</span>
+                  <p>A closing remark or personal comment.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="recount-example" aria-labelledby="recount-example-title">
+            <div class="wide-shell">
+              <h2 id="recount-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">MY TRIP TO BOROBUDUR</p>
+                <div class="desc-model-body">
+                  <p>Last month, my family and I visited Borobudur Temple in Magelang. We left home early in the morning so we could see the sunrise.</p>
+                  <p>When we arrived, we climbed to the top level of the temple. The view of the misty hills was amazing. After that, we walked around and took a lot of photos near the stupas.</p>
+                  <p>At noon, we had lunch at a small restaurant nearby before heading home.</p>
+                  <p>Overall, it was a memorable trip, and I hope I can visit Borobudur again someday.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="recount-tips" aria-labelledby="recount-tips-title">
+            <div class="wide-shell">
+              <h2 id="recount-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Simple Past Tense</span>
+                  <p>visited, climbed, walked, had — used to tell events that already happened.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Time Connectives</span>
+                  <p>last month, after that, at noon, finally, overall.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">Personal Pronouns</span>
+                  <p>often uses I, we, my family because it is a personal experience.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">No Required Conflict</span>
+                  <p>unlike narrative text, a problem is not required.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="recount-practice" aria-labelledby="recount-practice-title">
+            <div class="wide-shell">
+              <h2 id="recount-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="recountPracticeQuiz" class="prep-quiz" data-quiz="recount-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Procedure Text — LESSON (new topic, same single-page pattern).
+           Content source: English_Text_Types_Narrative_Recount_Procedure.docx
+           ===================================================================== -->
+      <section id="procedure-view" class="is-hidden" aria-labelledby="procedure-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="procedure-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Reading &amp; Writing</span>
+              <h1 id="procedure-title">Procedure Text</h1>
+              <p class="prep-subhead">Let&rsquo;s follow the steps! 📋</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="procedure-explain" aria-labelledby="procedure-explain-title">
+            <div class="wide-shell">
+              <h2 id="procedure-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">A procedure text contains the steps needed to make, operate, or do something. It is arranged in sequence so that readers can follow the instructions accurately and achieve the intended result. Common examples include recipes, instruction manuals, game rules, and tutorials.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE -->
+          <section id="procedure-purpose" aria-labelledby="procedure-purpose-title">
+            <div class="wide-shell">
+              <h2 id="procedure-purpose-title" class="sr-only">Purpose of the Text</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose of the Text</p>
+                <p>To help readers do or make something completely, step by step, by describing how something is accomplished through a sequence of actions or steps.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- GENERIC STRUCTURE -->
+          <section id="procedure-structure" aria-labelledby="procedure-structure-title">
+            <div class="wide-shell">
+              <h2 id="procedure-structure-title">🧩 Generic Structure</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">1. GOAL</span>
+                  <p>The purpose — what will be made or done.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">2. MATERIALS</span>
+                  <p>The ingredients or tools needed (if any).</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">3. STEPS</span>
+                  <p>The sequence of actions in order.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="procedure-example" aria-labelledby="procedure-example-title">
+            <div class="wide-shell">
+              <h2 id="procedure-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">HOW TO MAKE A CUP OF TEA</p>
+                <div class="desc-model-body">
+                  <span class="materials-line">Materials: a teabag, hot water, a cup, sugar (optional)</span>
+                  <ol>
+                    <li>First, boil some water until it is hot.</li>
+                    <li>Next, put a teabag into a cup.</li>
+                    <li>Then, pour the hot water into the cup.</li>
+                    <li>After that, let it steep for about three minutes.</li>
+                    <li>Add sugar if you like it sweet.</li>
+                    <li>Finally, stir well and your tea is ready to drink.</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="procedure-tips" aria-labelledby="procedure-tips-title">
+            <div class="wide-shell">
+              <h2 id="procedure-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Imperative Sentences</span>
+                  <p>commands without a subject: boil, put, pour, stir.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Sequence Connectives</span>
+                  <p>first, next, then, after that, finally.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">Action Verbs First</span>
+                  <p>almost every step begins with an action verb.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Simple Present Tense</span>
+                  <p>used for general instructions, not the past tense.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="procedure-practice" aria-labelledby="procedure-practice-title">
+            <div class="wide-shell">
+              <h2 id="procedure-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="procedurePracticeQuiz" class="prep-quiz" data-quiz="procedure-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Report Text — LESSON (new topic, same single-page pattern as
+           Narrative/Recount/Procedure). Reuses the shared .prep-lesson /
+           .desc-model-card visual language and the shared quiz engine.
+           Content source: English_Report_Tenses_Passive_Vocabulary.docx
+           ===================================================================== -->
+      <section id="report-view" class="is-hidden" aria-labelledby="report-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="report-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Reading &amp; Writing</span>
+              <h1 id="report-title">Report Text</h1>
+              <p class="prep-subhead">Let&rsquo;s explore the facts! 🔬</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="report-explain" aria-labelledby="report-explain-title">
+            <div class="wide-shell">
+              <h2 id="report-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">A report text presents factual information about a whole class of things — such as a type of animal, plant, place, or phenomenon — based on observation and analysis. Unlike a descriptive text, which focuses on one particular thing, a report text describes general and permanent features shared by the whole group. Common examples include information reports on animals, plants, technology, and natural phenomena.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE -->
+          <section id="report-purpose" aria-labelledby="report-purpose-title">
+            <div class="wide-shell">
+              <h2 id="report-purpose-title" class="sr-only">Purpose of the Text</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose of the Text</p>
+                <p>To present information about something as it is, generally, after observing and analyzing it systematically.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- GENERIC STRUCTURE -->
+          <section id="report-structure" aria-labelledby="report-structure-title">
+            <div class="wide-shell">
+              <h2 id="report-structure-title">🧩 Generic Structure</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">1. GENERAL CLASSIFICATION</span>
+                  <p>Introduces and classifies the subject — what it is or belongs to.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">2. DESCRIPTION</span>
+                  <p>Describes qualities, parts, behavior, or characteristics of the subject.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="report-example" aria-labelledby="report-example-title">
+            <div class="wide-shell">
+              <h2 id="report-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">SEA TURTLES</p>
+                <div class="desc-model-body">
+                  <p>Sea turtles are large marine reptiles that live in oceans around the world. They have existed for more than 100 million years.</p>
+                  <p>Sea turtles have a hard shell that protects their body, and their front legs are shaped like flippers, which help them swim long distances. Unlike most reptiles, sea turtles cannot pull their head and legs into their shell.</p>
+                  <p>Most sea turtles eat jellyfish, seaweed, and small fish. They usually live in warm, tropical waters, and female sea turtles return to the beach where they were born to lay their eggs.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="report-tips" aria-labelledby="report-tips-title">
+            <div class="wide-shell">
+              <h2 id="report-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Simple Present Tense</span>
+                  <p>are, have, eat, live — describes general facts, not one-time events.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">General Nouns</span>
+                  <p>&lsquo;sea turtles&rsquo;, not &lsquo;a sea turtle&rsquo; or &lsquo;my turtle&rsquo; — refers to the whole group.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">No Personal Opinions</span>
+                  <p>written objectively, without &lsquo;I think&rsquo; or &lsquo;I like&rsquo;.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Relating &amp; Action Verbs</span>
+                  <p>be-verbs (are, have) for classification; action verbs (eat, swim) for behavior.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="report-practice" aria-labelledby="report-practice-title">
+            <div class="wide-shell">
+              <h2 id="report-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="reportPracticeQuiz" class="prep-quiz" data-quiz="report-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Simple Present Tense — LESSON (new topic, same single-page pattern).
+           Content source: English_Report_Tenses_Passive_Vocabulary.docx
+           ===================================================================== -->
+      <section id="simple-present-view" class="is-hidden" aria-labelledby="simple-present-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="simple-present-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Grammar</span>
+              <h1 id="simple-present-title">Simple Present Tense</h1>
+              <p class="prep-subhead">Facts, habits, and routines! ☀️</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="simple-present-explain" aria-labelledby="simple-present-explain-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">Simple present tense is a grammatical form used to talk about facts, habits, routines, and things that are generally true. It describes actions that happen regularly or situations that do not change over time.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE / FUNCTION -->
+          <section id="simple-present-purpose" aria-labelledby="simple-present-purpose-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-purpose-title" class="sr-only">Purpose / Function</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose / Function</p>
+                <p>To state facts, habits, routines, and general truths that are not limited to a specific time.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- FORMULA -->
+          <section id="simple-present-formula" aria-labelledby="simple-present-formula-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-formula-title">🧩 Formula</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">POSITIVE</span>
+                  <p>S + V1 (+s/es for he/she/it)</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">NEGATIVE</span>
+                  <p>S + do/does + not + V1</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">INTERROGATIVE</span>
+                  <p>Do/Does + S + V1?</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="simple-present-example" aria-labelledby="simple-present-example-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">EVERYDAY ROUTINES</p>
+                <div class="desc-model-body">
+                  <p>I wake up at six every morning. My sister brushes her teeth and gets dressed quickly.</p>
+                  <p>We usually have breakfast together before school. My father drives us to school, but sometimes we walk.</p>
+                  <p>Water boils at 100 degrees Celsius. The sun rises in the east and sets in the west.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="simple-present-tips" aria-labelledby="simple-present-tips-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Add -s / -es</span>
+                  <p>for third person singular (he/she/it): goes, watches, studies.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Time Signals</span>
+                  <p>always, usually, often, every day, on Mondays.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">do / does</span>
+                  <p>used for negatives and questions: I don&rsquo;t like tea. Does she like tea?</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Facts, Not &lsquo;Now&rsquo;</span>
+                  <p>describes routines and general truths, not actions happening right now.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="simple-present-practice" aria-labelledby="simple-present-practice-title">
+            <div class="wide-shell">
+              <h2 id="simple-present-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="simplePresentPracticeQuiz" class="prep-quiz" data-quiz="simple-present-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Simple Past Tense — LESSON (new topic, same single-page pattern).
+           Content source: English_Report_Tenses_Passive_Vocabulary.docx
+           ===================================================================== -->
+      <section id="simple-past-view" class="is-hidden" aria-labelledby="simple-past-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="simple-past-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Grammar</span>
+              <h1 id="simple-past-title">Simple Past Tense</h1>
+              <p class="prep-subhead">Things that already happened! ⏳</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="simple-past-explain" aria-labelledby="simple-past-explain-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">Simple past tense is used to talk about actions or situations that started and finished at a specific time in the past. It describes completed actions, not ongoing ones.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE / FUNCTION -->
+          <section id="simple-past-purpose" aria-labelledby="simple-past-purpose-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-purpose-title" class="sr-only">Purpose / Function</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose / Function</p>
+                <p>To talk about actions, events, or situations that happened and were completed in the past.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- FORMULA -->
+          <section id="simple-past-formula" aria-labelledby="simple-past-formula-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-formula-title">🧩 Formula</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">POSITIVE</span>
+                  <p>S + V2 (regular: verb+ed; irregular: 2nd form)</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">NEGATIVE</span>
+                  <p>S + did not (didn&rsquo;t) + V1</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">INTERROGATIVE</span>
+                  <p>Did + S + V1?</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="simple-past-example" aria-labelledby="simple-past-example-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-example-title">📖 Example</h2>
+              <div class="desc-model-card">
+                <p class="desc-model-title">A DAY AT THE BEACH</p>
+                <div class="desc-model-body">
+                  <p>Last Saturday, my friends and I went to the beach. We arrived early in the morning and set up our umbrella near the shore.</p>
+                  <p>We swam in the sea and built a sandcastle together. Around noon, we ate lunch under the umbrella and rested for a while.</p>
+                  <p>We didn&rsquo;t leave until sunset because the view was so beautiful.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="simple-past-tips" aria-labelledby="simple-past-tips-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Regular Verbs</span>
+                  <p>add -ed: played, walked, watched.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Irregular Verbs</span>
+                  <p>change form: went, ate, saw, had.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">Time Signals</span>
+                  <p>yesterday, last week, &hellip; ago, in 2020.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Use did, Not doed</span>
+                  <p>negatives/questions use did + base verb: didn&rsquo;t go, Did you go?</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="simple-past-practice" aria-labelledby="simple-past-practice-title">
+            <div class="wide-shell">
+              <h2 id="simple-past-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="simplePastPracticeQuiz" class="prep-quiz" data-quiz="simple-past-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Passive Voice — LESSON (new topic, same single-page pattern).
+           Content source: English_Report_Tenses_Passive_Vocabulary.docx
+           ===================================================================== -->
+      <section id="passive-view" class="is-hidden" aria-labelledby="passive-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="passive-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Grammar</span>
+              <h1 id="passive-title">Passive Voice</h1>
+              <p class="prep-subhead">Focus on the action! 🔄</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="passive-explain" aria-labelledby="passive-explain-title">
+            <div class="wide-shell">
+              <h2 id="passive-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">Passive voice is a sentence structure used when the focus is on the action or the receiver of the action, rather than on who or what performs it. The subject of a passive sentence receives the action instead of doing it.</p>
+            </div>
+          </section>
+
+          <!-- PURPOSE / FUNCTION -->
+          <section id="passive-purpose" aria-labelledby="passive-purpose-title">
+            <div class="wide-shell">
+              <h2 id="passive-purpose-title" class="sr-only">Purpose / Function</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Purpose / Function</p>
+                <p>To emphasize the action or the object affected by it, especially when the doer is unknown, unimportant, or obvious.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- FORMULA -->
+          <section id="passive-formula" aria-labelledby="passive-formula-title">
+            <div class="wide-shell">
+              <h2 id="passive-formula-title">🧩 Formula</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">SIMPLE PRESENT PASSIVE</span>
+                  <p>S + am/is/are + V3 (+ by agent)</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">SIMPLE PAST PASSIVE</span>
+                  <p>S + was/were + V3 (+ by agent)</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">AGENT (OPTIONAL)</span>
+                  <p>&lsquo;by + doer&rsquo; — can be left out.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE -->
+          <section id="passive-example" aria-labelledby="passive-example-title">
+            <div class="wide-shell">
+              <h2 id="passive-example-title">📖 Example: Active vs Passive</h2>
+              <p class="prep-lead">Let&rsquo;s compare!</p>
+              <div class="pronoun-compare">
+                <div class="pronoun-compare-card pronoun-tint-yellow"><p>Workers built this bridge in 1990.</p><span>➡️</span><p>This bridge <strong>was built</strong> by workers in 1990.</p></div>
+                <div class="pronoun-compare-card pronoun-tint-blue"><p>The teacher checks our homework every day.</p><span>➡️</span><p>Our homework <strong>is checked</strong> by the teacher every day.</p></div>
+                <div class="pronoun-compare-card pronoun-tint-green"><p>Someone stole my bike last night.</p><span>➡️</span><p>My bike <strong>was stolen</strong> last night.</p></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="passive-tips" aria-labelledby="passive-tips-title">
+            <div class="wide-shell">
+              <h2 id="passive-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Match &lsquo;to be&rsquo; to the Tense</span>
+                  <p>is/am/are for present, was/were for past.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Verb Becomes V3</span>
+                  <p>the main verb changes to its past participle: written, built, checked, eaten.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">&lsquo;by + agent&rsquo; Is Optional</span>
+                  <p>can be dropped when unknown or unimportant: &lsquo;The letter was sent.&rsquo;</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">Common in Formal Writing</span>
+                  <p>frequently used in reports, news articles, and academic writing.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="passive-practice" aria-labelledby="passive-practice-title">
+            <div class="wide-shell">
+              <h2 id="passive-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="passivePracticeQuiz" class="prep-quiz" data-quiz="passive-practice"></div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           Vocabulary: School Supplies — LESSON (new topic, same single-page
+           pattern). Content source: English_Report_Tenses_Passive_Vocabulary.docx
+           Also hosts the shared "Total Score Summary" section for the five
+           new grammar/vocabulary lessons (Report, Simple Present, Simple
+           Past, Passive Voice, Vocabulary), updated live via JS as each
+           quiz is completed.
+           ===================================================================== -->
+      <section id="vocabulary-view" class="is-hidden" aria-labelledby="vocabulary-title">
+        <div class="prep-back-top">
+          <button type="button" class="back-link" data-back-to-learning>← Back to Learning</button>
+        </div>
+        <div class="prep-lesson">
+
+          <!-- HERO -->
+          <section class="prep-hero" aria-labelledby="vocabulary-title">
+            <div class="wide-shell">
+              <span class="prep-kicker">Learning YO! · Vocabulary</span>
+              <h1 id="vocabulary-title">Vocabulary: School Supplies</h1>
+              <p class="prep-subhead">Learn everyday classroom words! ✏️</p>
+            </div>
+          </section>
+
+          <!-- BRIEF EXPLANATION -->
+          <section id="vocabulary-explain" aria-labelledby="vocabulary-explain-title">
+            <div class="wide-shell">
+              <h2 id="vocabulary-explain-title">💡 Brief Explanation</h2>
+              <p class="prep-lead desc-lead-wide">This section introduces common school supplies vocabulary at A2 level. These are everyday objects students use in the classroom, useful for beginner to elementary learners building basic English vocabulary.</p>
+            </div>
+          </section>
+
+          <!-- LEARNING OBJECTIVE -->
+          <section id="vocabulary-objective" aria-labelledby="vocabulary-objective-title">
+            <div class="wide-shell">
+              <h2 id="vocabulary-objective-title" class="sr-only">Learning Objective</h2>
+              <div class="prep-results show">
+                <p class="score">🎯 Learning Objective</p>
+                <p>By the end of this section, you will be able to recognize, name, and use basic school supplies vocabulary in simple sentences.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- VOCABULARY CARDS -->
+          <section id="vocabulary-words" aria-labelledby="vocabulary-words-title">
+            <div class="wide-shell">
+              <h2 id="vocabulary-words-title">🎒 School Supplies</h2>
+              <p class="prep-lead">Ten words every student should know.</p>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">✏️ pencil</span>
+                  <p>I write with a pencil.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">🖊️ pen</span>
+                  <p>She has a blue pen.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">❎ eraser</span>
+                  <p>Can I borrow your eraser?</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">📏 ruler</span>
+                  <p>Use a ruler to draw a straight line.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">📓 notebook</span>
+                  <p>I keep my notes in a notebook.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">🎒 backpack</span>
+                  <p>He carries his books in a backpack.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">✂️ scissors</span>
+                  <p>We use scissors to cut paper.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">🧴 glue</span>
+                  <p>Put some glue on the paper.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">🖍️ crayon</span>
+                  <p>The children colored with crayons.</p>
+                </div>
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">🔧 sharpener</span>
+                  <p>I sharpen my pencil with a sharpener.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TIPS / LANGUAGE FOCUS -->
+          <section id="vocabulary-tips" aria-labelledby="vocabulary-tips-title">
+            <div class="wide-shell">
+              <h2 id="vocabulary-tips-title">🧱 Tips / Language Focus</h2>
+              <div class="prep-grid">
+                <div class="prep-card prep-tint-blue">
+                  <span class="prep-badge">Use &lsquo;a&rsquo; Before Consonant Sounds</span>
+                  <p>a pencil, a ruler, a backpack.</p>
+                </div>
+                <div class="prep-card prep-tint-pink">
+                  <span class="prep-badge">Use &lsquo;an&rsquo; Before Vowel Sounds</span>
+                  <p>an eraser.</p>
+                </div>
+                <div class="prep-card prep-tint-yellow">
+                  <span class="prep-badge">Plural Forms</span>
+                  <p>add -s for most words: pencils, erasers, notebooks.</p>
+                </div>
+                <div class="prep-card prep-tint-green">
+                  <span class="prep-badge">&lsquo;Scissors&rsquo; Is Always Plural</span>
+                  <p>we say &lsquo;a pair of scissors&rsquo;, not &lsquo;a scissor&rsquo;.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRACTICE -->
+          <section id="vocabulary-practice" aria-labelledby="vocabulary-practice-title">
+            <div class="wide-shell">
+              <h2 id="vocabulary-practice-title">🎯 Let's Practice!</h2>
+              <p class="prep-lead">Choose the best answer for each question.</p>
+              <div id="vocabularyPracticeQuiz" class="prep-quiz" data-quiz="vocabulary-practice"></div>
+            </div>
+          </section>
+
+          <!-- TOTAL SCORE SUMMARY (Report, Simple Present, Simple Past, Passive, Vocabulary) -->
+          <section id="total-score-summary" aria-labelledby="total-score-title">
+            <div class="wide-shell">
+              <h2 id="total-score-title">🏆 Total Score Summary</h2>
+              <p class="prep-lead">Complete all five practice quizzes above (Report Text, Simple Present Tense, Simple Past Tense, Passive Voice, and Vocabulary) to see your overall progress.</p>
+              <div class="prep-results show">
+                <p class="score" id="totalScoreDisplay">Total: — / 25</p>
+                <p id="totalScoreBreakdown">Report Text: — / 5<br />Simple Present Tense: — / 5<br />Simple Past Tense: — / 5<br />Passive Voice: — / 5<br />Vocabulary: — / 5</p>
+                <p style="margin-top: 12px;">21&ndash;25: Excellent &nbsp;&bull;&nbsp; 13&ndash;20: Good &nbsp;&bull;&nbsp; 0&ndash;12: Needs practice</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="index.html#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="index.html#reading">Reading YO!</a><a href="index.html#listening">Listening YO!</a><a href="index.html#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+        <div class="search-panel" data-search-panel hidden>
+      <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <button class="close-search" type="button" aria-label="Close search" data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id="search-title">What do you want to learn?</h2>
+        <form onsubmit="return false;">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." />
+          </div>
+        </form>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+
+    <script>
+      /* =====================================================================
+         Prepositions in English — LESSON SCRIPT (moved verbatim from
+         prepositions.html). Only touches elements inside ".prep-lesson".
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+
+        /* ---------- "Let's Learn!" smooth-scroll button ---------- */
+        var scrollBtn = document.querySelector("[data-scroll-to]");
+        if (scrollBtn) {
+          scrollBtn.addEventListener("click", function () {
+            var target = document.querySelector(scrollBtn.getAttribute("data-scroll-to"));
+            if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        }
+
+        /* ---------- Question data ---------- */
+       var PRACTICE_QUESTIONS = [
+        {
+        image: "assets/practice-on.png",
+        prompt: "Where is the bird?",
+        options: ["Under the backpack", "On the backpack", "Behind the backpack", "Next to the backpack"],
+        correct: 1
+    },
+    {
+        image: "assets/practice-under.png",
+        prompt: "Where is the bird?",
+        options: ["On the table", "In the box", "Under the table", "Next to the table"],
+        correct: 2
+    },
+    {
+        image: "assets/practice-between.png",
+        prompt: "Where is the bird?",
+        options: ["Behind the chairs", "Between the chairs", "On the chair", "Under the chair"],
+        correct: 1
+    },
+    {
+        image: "assets/practice-behind.png",
+        prompt: "Where is the cat?",
+        options: ["In front of the tree", "Under the tree", "Behind the tree", "Next to the tree"],
+        correct: 2
+    },
+    {
+        image: "assets/practice-in.png",
+        prompt: "Where is the bird?",
+        options: ["On the box", "Behind the box", "In the box", "Under the box"],
+        correct: 2
+    }
+];
+
+        var CHALLENGE_QUESTIONS = [
+          { emoji: "⚽ 📦 📦", prompt: "The ball is ___ the two boxes.", options: ["Behind", "Between", "Under", "In front of"], correct: 1 },
+          { emoji: "🐶 🌳", prompt: "The dog is sleeping ___ the big tree.", options: ["Between", "Under", "In", "Next to"], correct: 1 },
+          { emoji: "👩‍🏫 🖍️", prompt: "The teacher is standing ___ the whiteboard, ready to start the lesson.", options: ["Behind", "Under", "In front of", "Between"], correct: 2 }
+        ];
+
+        buildQuiz({
+          container: document.getElementById("practiceQuiz"),
+          questions: PRACTICE_QUESTIONS,
+          lettered: false,
+          showScene: true,
+          resultTitle: function (score, total) { return "Score: " + score + " / " + total; },
+          resultNote: function (score, total) {
+            if (score === total) return "Amazing! You got every question right! 🌟";
+            if (score >= total - 1) return "Great work — almost perfect!";
+            return "Nice try! Scroll back up any time to review.";
+          }
+        });
+
+        buildQuiz({
+          container: document.getElementById("challengeQuiz"),
+          questions: CHALLENGE_QUESTIONS,
+          lettered: true,
+          showScene: false,
+          isChallenge: true
+        });
+
+        /* ---------- Quiz engine (shared by Practice + Mini Challenge) ---------- */
+        function buildQuiz(config) {
+          var container = config.container;
+          if (!container) return;
+          var state = { index: 0, score: 0, answered: false };
+
+          render();
+
+          function render() {
+            if (state.index >= config.questions.length) {
+              renderResults();
+              return;
+            }
+            var q = config.questions[state.index];
+            state.answered = false;
+
+            var html = "";
+            html += '<p class="prep-quiz-progress">Question ' + (state.index + 1) + " of " + config.questions.length + "</p>";
+            html += '<div class="prep-quiz-card">';
+if (config.showScene) {
+    html += '<div class="prep-quiz-stage"><div class="prep-stage" aria-hidden="true">';
+    html += '<img src="' + q.image + '" alt="">';
+    html += "</div></div>";
+} else if (q.emoji) {
+              html += '<div class="prep-quiz-stage" aria-hidden="true"><span class="emoji-lg">' + q.emoji + "</span></div>";
+            }
+            html += '<p class="prep-quiz-question">' + q.prompt + "</p>";
+            html += '<div class="prep-options" role="group" aria-label="Answer choices">';
+            q.options.forEach(function (opt, i) {
+              var letter = config.lettered ? '<span class="opt-letter" aria-hidden="true">' + "ABCD"[i] + "</span>" : "";
+              html += '<button type="button" class="prep-option" data-index="' + i + '">' + letter + "<span>" + opt + "</span></button>";
+            });
+            html += "</div>";
+            html += '<p class="prep-feedback" aria-live="polite"></p>';
+            html += '<button type="button" class="prep-next-btn">' + (state.index === config.questions.length - 1 ? "See results" : "Next question") + " →</button>";
+            html += "</div>";
+
+            container.innerHTML = html;
+
+            var optionButtons = container.querySelectorAll(".prep-option");
+            var feedbackEl = container.querySelector(".prep-feedback");
+            var nextBtn = container.querySelector(".prep-next-btn");
+
+            optionButtons.forEach(function (btn) {
+              btn.addEventListener("click", function () {
+                if (state.answered) return;
+                state.answered = true;
+                var chosen = parseInt(btn.getAttribute("data-index"), 10);
+                var isCorrect = chosen === q.correct;
+                if (isCorrect) state.score++;
+
+                optionButtons.forEach(function (b) {
+                  b.setAttribute("disabled", "true");
+                  var i = parseInt(b.getAttribute("data-index"), 10);
+                  if (i === q.correct) b.classList.add("is-correct");
+                  else if (i === chosen) b.classList.add("is-wrong");
+                });
+
+                feedbackEl.textContent = isCorrect ? "✅ Correct! Well done!" : "❌ Not quite — the correct answer is highlighted above.";
+                feedbackEl.className = "prep-feedback " + (isCorrect ? "correct" : "wrong");
+                nextBtn.classList.add("show");
+                nextBtn.focus();
+              });
+            });
+
+            nextBtn.addEventListener("click", function () {
+              state.index++;
+              render();
+            });
+          }
+
+          function renderResults() {
+            var html = '<div class="prep-results show">';
+            if (config.isChallenge) {
+              html += "<p style=\"font-size:2.4rem;margin:0 0 8px;\" aria-hidden=\"true\">🎉</p>";
+              html += '<p class="score">Great Job!</p>';
+              html += "<p>You completed the Prepositions Challenge! (" + state.score + " / " + config.questions.length + " correct)</p>";
+              html += '<div class="prep-result-actions">';
+              html += '<button type="button" class="prep-btn prep-btn-primary" data-action="retry">Try Again</button>';
+              html += '<a class="prep-btn prep-btn-ghost" href="learning.html" data-back-to-learning>Back to Learning YO!</a>';
+              html += "</div>";
+            } else {
+              html += '<p class="score">' + config.resultTitle(state.score, config.questions.length) + "</p>";
+              html += "<p>" + config.resultNote(state.score, config.questions.length) + "</p>";
+            }
+            html += "</div>";
+            container.innerHTML = html;
+
+            var retryBtn = container.querySelector('[data-action="retry"]');
+            if (retryBtn) {
+              retryBtn.addEventListener("click", function () {
+                state.index = 0;
+                state.score = 0;
+                render();
+              });
+            }
+
+            var backLink = container.querySelector('[data-back-to-learning]');
+            if (backLink) {
+              backLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                showLibrary();
+              });
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+      /* =====================================================================
+         Learning YO! — TOPIC LIBRARY / LESSON TOGGLE
+         JS-driven single-page architecture: clicking a topic card hides the
+         library and shows that topic's lesson section in place, with no page
+         navigation. Add future lessons the same way — a hidden <section> plus
+         a topic-card button with a matching data-topic value.
+         ===================================================================== */
+      var libraryView = document.getElementById("library-view");
+      var prepositionsView = document.getElementById("prepositions-view");
+      var descriptiveView = document.getElementById("descriptive-view");
+      var narrativeView = document.getElementById("narrative-view");
+      var recountView = document.getElementById("recount-view");
+      var procedureView = document.getElementById("procedure-view");
+      var reportView = document.getElementById("report-view");
+      var simplePresentView = document.getElementById("simple-present-view");
+      var simplePastView = document.getElementById("simple-past-view");
+      var passiveView = document.getElementById("passive-view");
+      var vocabularyView = document.getElementById("vocabulary-view");
+      var lessonViews = [prepositionsView, descriptiveView, narrativeView, recountView, procedureView, reportView, simplePresentView, simplePastView, passiveView, vocabularyView];
+
+      function showLesson(view) {
+        libraryView.classList.add("is-hidden");
+        view.classList.remove("is-hidden");
+        view.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function showLibrary() {
+        lessonViews.forEach(function (view) {
+          if (view) view.classList.add("is-hidden");
+        });
+        libraryView.classList.remove("is-hidden");
+        libraryView.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      document.querySelectorAll('[data-topic="prepositions"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(prepositionsView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="descriptive"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(descriptiveView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="narrative"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(narrativeView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="recount"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(recountView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="procedure"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(procedureView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="report"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(reportView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="simple-present"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(simplePresentView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="simple-past"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(simplePastView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="passive"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(passiveView);
+        });
+      });
+
+      document.querySelectorAll('[data-topic="vocabulary"]').forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showLesson(vocabularyView);
+        });
+      });
+
+      document.querySelectorAll("[data-back-to-learning]").forEach(function (el) {
+        el.addEventListener("click", function (e) {
+          e.preventDefault();
+          showLibrary();
+        });
+      });
+    </script>
+
+    <script>
+      /* =====================================================================
+         Descriptive Text — PRACTICE QUIZ
+         A separate, self-contained quiz instance for the Descriptive Text
+         lesson. This does NOT reuse or modify the Prepositions quiz engine
+         above — it has its own data and its own render logic, so the
+         Prepositions practice remains completely untouched.
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+        var DESCRIPTIVE_QUESTIONS = [
+          {
+            title: "My Best Friend",
+            passage: [
+              "Rina is my best friend. She is thirteen years old. She is tall and friendly. She has long black hair and brown eyes.",
+              "Rina likes reading books and playing badminton. She is also helpful. She often helps me with my homework."
+            ],
+            prompt: "What is Rina like?",
+            options: [
+              "A. She is short and quiet.",
+              "B. She is tall and friendly.",
+              "C. She is young and lazy.",
+              "D. She is funny and strong."
+            ],
+            correct: 1
+          },
+          {
+            title: "My Lovely Cat",
+            passage: [
+              "Milo is my lovely cat. It is small and cute. It has soft white fur, blue eyes, and a long tail.",
+              "Milo likes eating fish and sleeping on my bed. It is very active in the morning. I love playing with Milo after school."
+            ],
+            prompt: "What does Milo have?",
+            options: [
+              "A. Black fur and brown eyes",
+              "B. White fur and blue eyes",
+              "C. Brown fur and green eyes",
+              "D. Long ears and black eyes"
+            ],
+            correct: 1
+          },
+          {
+            title: "My School",
+            passage: [
+              "My school is called SMP Harapan. It is big and clean. There are many classrooms and a large library.",
+              "My school also has a beautiful garden. There are many trees and flowers in the garden. I like studying and playing at my school."
+            ],
+            prompt: "What can we find in the school garden?",
+            options: [
+              "A. Books and computers",
+              "B. Tables and chairs",
+              "C. Trees and flowers",
+              "D. Bicycles and bags"
+            ],
+            correct: 2
+          },
+          {
+            title: "My Favorite Backpack",
+            passage: [
+              "My favorite backpack is blue. It is big and comfortable. It has three pockets and two strong straps.",
+              "I use my backpack every day. I put my books, pencils, and lunch box in it. It is very useful for school."
+            ],
+            prompt: "Why does the writer like the backpack?",
+            options: [
+              "A. It is small and old.",
+              "B. It is expensive and heavy.",
+              "C. It is big and comfortable.",
+              "D. It has many colorful pictures."
+            ],
+            correct: 2
+          },
+          {
+            title: "My Bedroom",
+            passage: [
+              "My bedroom is my favorite place at home. It is small but comfortable. The walls are light blue, and there is a big window.",
+              "There is a bed, a desk, and a bookshelf in my bedroom. I keep my books on the bookshelf. I usually read books and do my homework there."
+            ],
+            prompt: "Why does the writer like the bedroom?",
+            options: [
+              "A. It is large and colorful.",
+              "B. It is small but comfortable.",
+              "C. It has many windows.",
+              "D. It has a big television."
+            ],
+            correct: 1
+          }
+        ];
+
+        var container = document.getElementById("descriptivePracticeQuiz");
+        if (!container) return;
+
+        var state = { index: 0, score: 0, answered: false };
+
+        render();
+
+        function render() {
+          if (state.index >= DESCRIPTIVE_QUESTIONS.length) {
+            renderResults();
+            return;
+          }
+          var q = DESCRIPTIVE_QUESTIONS[state.index];
+          state.answered = false;
+
+          var passageHtml = q.passage.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+
+          var html = "";
+          html += '<p class="prep-quiz-progress">Question ' + (state.index + 1) + " of " + DESCRIPTIVE_QUESTIONS.length + "</p>";
+          html += '<div class="prep-quiz-card">';
+          html += '<p class="desc-passage-title">' + q.title + "</p>";
+          html += '<div class="desc-passage">' + passageHtml + "</div>";
+          html += '<p class="prep-quiz-question">' + q.prompt + "</p>";
+          html += '<div class="prep-options" role="group" aria-label="Answer choices">';
+          q.options.forEach(function (opt, i) {
+            html += '<button type="button" class="prep-option" data-index="' + i + '"><span>' + opt + "</span></button>";
+          });
+          html += "</div>";
+          html += '<p class="prep-feedback" aria-live="polite"></p>';
+          html += '<button type="button" class="prep-next-btn">' + (state.index === DESCRIPTIVE_QUESTIONS.length - 1 ? "See results" : "Next question") + " →</button>";
+          html += "</div>";
+
+          container.innerHTML = html;
+
+          var optionButtons = container.querySelectorAll(".prep-option");
+          var feedbackEl = container.querySelector(".prep-feedback");
+          var nextBtn = container.querySelector(".prep-next-btn");
+
+          optionButtons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              if (state.answered) return;
+              state.answered = true;
+              var chosen = parseInt(btn.getAttribute("data-index"), 10);
+              var isCorrect = chosen === q.correct;
+              if (isCorrect) state.score++;
+
+              optionButtons.forEach(function (b) {
+                b.setAttribute("disabled", "true");
+                var i = parseInt(b.getAttribute("data-index"), 10);
+                if (i === q.correct) b.classList.add("is-correct");
+                else if (i === chosen) b.classList.add("is-wrong");
+              });
+
+              feedbackEl.textContent = isCorrect ? "✅ Correct! Well done!" : "❌ Not quite — the correct answer is highlighted above.";
+              feedbackEl.className = "prep-feedback " + (isCorrect ? "correct" : "wrong");
+              nextBtn.classList.add("show");
+              nextBtn.focus();
+            });
+          });
+
+          nextBtn.addEventListener("click", function () {
+            state.index++;
+            render();
+          });
+        }
+
+        function renderResults() {
+          var total = DESCRIPTIVE_QUESTIONS.length;
+          var note = "Nice try! Scroll back up any time to review.";
+          if (state.score === total) note = "Amazing! You got every question right! 🌟";
+          else if (state.score >= total - 1) note = "Great work — almost perfect!";
+
+          var html = '<div class="prep-results show">';
+          html += '<p class="score">Score: ' + state.score + " / " + total + "</p>";
+          html += "<p>" + note + "</p>";
+          html += '<div class="prep-result-actions">';
+          html += '<button type="button" class="prep-btn prep-btn-primary" data-action="retry">Try Again</button>';
+          html += '<a class="prep-btn prep-btn-ghost" href="learning.html" data-back-to-learning>Back to Learning YO!</a>';
+          html += "</div>";
+          html += "</div>";
+          container.innerHTML = html;
+
+          var retryBtn = container.querySelector('[data-action="retry"]');
+          if (retryBtn) {
+            retryBtn.addEventListener("click", function () {
+              state.index = 0;
+              state.score = 0;
+              render();
+            });
+          }
+
+          var backLink = container.querySelector("[data-back-to-learning]");
+          if (backLink) {
+            backLink.addEventListener("click", function (e) {
+              e.preventDefault();
+              showLibrary();
+            });
+          }
+        }
+      });
+    </script>
+
+    <script>
+      /* =====================================================================
+         Narrative / Recount / Procedure Text — SHARED PRACTICE QUIZ ENGINE
+         One reusable quiz builder (instead of three separate copies) that
+         each of the three new lessons calls with its own question data.
+         Mirrors the visual language and behavior of the Prepositions /
+         Descriptive Text quizzes (.prep-quiz-card, .prep-option,
+         .prep-feedback, .prep-next-btn, .prep-results) and adds the exact
+         "Why" explanation from the source document to the feedback line.
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+
+        var NARRATIVE_QUESTIONS = [
+          {
+            prompt: "1. What is the main purpose of a narrative text?",
+            options: [
+              "To entertain readers with a fictional story",
+              "To inform readers about factual events",
+              "To instruct readers how to make something",
+              "To describe a place in detail"
+            ],
+            correct: 0,
+            explanation: "A narrative text is written to amuse or entertain readers with a fictional story that includes a conflict and a resolution."
+          },
+          {
+            prompt: "2. The part that introduces the characters, time, and place in a narrative text is called...",
+            options: ["Resolution", "Complication", "Orientation", "Reorientation"],
+            correct: 2,
+            explanation: "The Orientation is the opening part that introduces the characters, time, and setting of the story."
+          },
+          {
+            prompt: "3. Which sentence uses simple past tense, a key feature of narrative text?",
+            options: [
+              "She lives in a small village.",
+              "She lived in a small village.",
+              "She will live in a small village.",
+              "She is living in a small village."
+            ],
+            correct: 1,
+            explanation: "Narrative texts use simple past tense, shown by the second form of the verb, such as ‘lived.’"
+          },
+          {
+            prompt: "4. The part where a problem faced by the character appears is called...",
+            options: ["Orientation", "Coda", "Complication", "Ending"],
+            correct: 2,
+            explanation: "The Complication is where a conflict or problem begins to arise in the story."
+          },
+          {
+            prompt: "5. Which time connective commonly opens a narrative text?",
+            options: [
+              "First, boil the water",
+              "Once upon a time",
+              "According to the data",
+              "In conclusion"
+            ],
+            correct: 1,
+            explanation: "‘Once upon a time’ is a classic opening phrase typical of fairy tales and narrative texts."
+          }
+        ];
+
+        var RECOUNT_QUESTIONS = [
+          {
+            prompt: "1. What is the main purpose of a recount text?",
+            options: [
+              "To entertain with a fictional adventure",
+              "To retell real past events in order",
+              "To give step-by-step instructions",
+              "To argue a point of view"
+            ],
+            correct: 1,
+            explanation: "A recount text is written to retell real events in the order they happened."
+          },
+          {
+            prompt: "2. What is the correct generic structure of a recount text?",
+            options: [
+              "Goal - Materials - Steps",
+              "Orientation - Complication - Resolution",
+              "Orientation - Events - Reorientation",
+              "Identification - Description"
+            ],
+            correct: 2,
+            explanation: "A recount text is built from Orientation, Events, and Reorientation."
+          },
+          {
+            prompt: "3. Which sentence would most likely appear in a recount text?",
+            options: [
+              "Once there was a dragon who lived in a cave.",
+              "Boil the water for three minutes.",
+              "Last week, I visited my grandmother's house.",
+              "This animal usually eats leaves and fruit."
+            ],
+            correct: 2,
+            explanation: "A recount text retells the writer's real experience, such as a visit that actually happened."
+          },
+          {
+            prompt: "4. Does a recount text need a conflict, like a narrative text?",
+            options: [
+              "Yes, there must always be a conflict",
+              "No, a recount text does not need a conflict",
+              "Only if the story is sad",
+              "Only for holiday recounts"
+            ],
+            correct: 1,
+            explanation: "Unlike narrative text, a recount text focuses on retelling events without needing a conflict."
+          },
+          {
+            prompt: "5. Which pronouns most often appear in a personal recount text?",
+            options: ["They and them", "It and its", "I and we", "One and someone"],
+            correct: 2,
+            explanation: "Because it retells a personal experience, a recount text often uses ‘I’ and ‘we.’"
+          }
+        ];
+
+        var PROCEDURE_QUESTIONS = [
+          {
+            prompt: "1. What is the main purpose of a procedure text?",
+            options: [
+              "To entertain readers with a story",
+              "To help readers do or make something step by step",
+              "To retell a past holiday",
+              "To describe someone's appearance"
+            ],
+            correct: 1,
+            explanation: "A procedure text is written to guide readers to do or make something through a sequence of steps."
+          },
+          {
+            prompt: "2. The part that lists the ingredients or tools needed is called...",
+            options: ["Goal", "Materials", "Steps", "Orientation"],
+            correct: 1,
+            explanation: "Materials is the part that lists the ingredients or tools needed before the steps begin."
+          },
+          {
+            prompt: "3. Which is a correct example of an imperative sentence for a procedure text?",
+            options: [
+              "The water was boiled for tea.",
+              "Boil the water for three minutes.",
+              "She boils the water every morning.",
+              "The water will be boiled soon."
+            ],
+            correct: 1,
+            explanation: "An imperative sentence is a command without a subject, e.g. ‘Boil the water...’"
+          },
+          {
+            prompt: "4. Which tense is generally used in a procedure text?",
+            options: [
+              "Simple past tense",
+              "Simple present tense",
+              "Future tense",
+              "Past continuous tense"
+            ],
+            correct: 1,
+            explanation: "Procedure texts use the simple present tense for general instructions."
+          },
+          {
+            prompt: "5. What is the function of connectives like ‘first, next, then, finally’ in a procedure text?",
+            options: [
+              "To describe a location",
+              "To show the sequence of steps",
+              "To express an opinion",
+              "To compare two things"
+            ],
+            correct: 1,
+            explanation: "Sequence connectives such as ‘first, next, then, finally’ show the order of steps to follow."
+          }
+        ];
+
+        buildTextTypeQuiz("narrativePracticeQuiz", NARRATIVE_QUESTIONS);
+        buildTextTypeQuiz("recountPracticeQuiz", RECOUNT_QUESTIONS);
+        buildTextTypeQuiz("procedurePracticeQuiz", PROCEDURE_QUESTIONS);
+
+        function buildTextTypeQuiz(containerId, questions, onComplete) {
+          var container = document.getElementById(containerId);
+          if (!container) return;
+
+          var state = { index: 0, score: 0, answered: false };
+
+          render();
+
+          function render() {
+            if (state.index >= questions.length) {
+              renderResults();
+              return;
+            }
+            var q = questions[state.index];
+            state.answered = false;
+
+            var html = "";
+            html += '<p class="prep-quiz-progress">Question ' + (state.index + 1) + " of " + questions.length + "</p>";
+            html += '<div class="prep-quiz-card">';
+            html += '<p class="prep-quiz-question">' + q.prompt + "</p>";
+            html += '<div class="prep-options" role="group" aria-label="Answer choices">';
+            q.options.forEach(function (opt, i) {
+              var letter = '<span class="opt-letter" aria-hidden="true">' + "ABCD"[i] + "</span>";
+              html += '<button type="button" class="prep-option" data-index="' + i + '">' + letter + "<span>" + opt + "</span></button>";
+            });
+            html += "</div>";
+            html += '<p class="prep-feedback" aria-live="polite"></p>';
+            html += '<button type="button" class="prep-next-btn">' + (state.index === questions.length - 1 ? "See results" : "Next question") + " →</button>";
+            html += "</div>";
+
+            container.innerHTML = html;
+
+            var optionButtons = container.querySelectorAll(".prep-option");
+            var feedbackEl = container.querySelector(".prep-feedback");
+            var nextBtn = container.querySelector(".prep-next-btn");
+
+            optionButtons.forEach(function (btn) {
+              btn.addEventListener("click", function () {
+                if (state.answered) return;
+                state.answered = true;
+                var chosen = parseInt(btn.getAttribute("data-index"), 10);
+                var isCorrect = chosen === q.correct;
+                if (isCorrect) state.score++;
+
+                optionButtons.forEach(function (b) {
+                  b.setAttribute("disabled", "true");
+                  var i = parseInt(b.getAttribute("data-index"), 10);
+                  if (i === q.correct) b.classList.add("is-correct");
+                  else if (i === chosen) b.classList.add("is-wrong");
+                });
+
+                feedbackEl.textContent = (isCorrect ? "✅ Correct! " : "❌ Not quite. ") + q.explanation;
+                feedbackEl.className = "prep-feedback " + (isCorrect ? "correct" : "wrong");
+                nextBtn.classList.add("show");
+                nextBtn.focus();
+              });
+            });
+
+            nextBtn.addEventListener("click", function () {
+              state.index++;
+              render();
+            });
+          }
+
+          function renderResults() {
+            var total = questions.length;
+            var note;
+            if (state.score === total) note = "5/5 — Excellent! You clearly understand this text type.";
+            else if (state.score >= 3) note = "Good — review the tips above for the ones you missed.";
+            else note = "Needs practice — reread the explanation and example, then try again.";
+
+            var html = '<div class="prep-results show">';
+            html += '<p class="score">Score: ' + state.score + " / " + total + "</p>";
+            html += "<p>" + note + "</p>";
+            html += '<div class="prep-result-actions">';
+            html += '<button type="button" class="prep-btn prep-btn-primary" data-action="retry">Try Again</button>';
+            html += '<a class="prep-btn prep-btn-ghost" href="learning.html" data-back-to-learning>Back to Learning YO!</a>';
+            html += "</div>";
+            html += "</div>";
+            container.innerHTML = html;
+
+            var retryBtn = container.querySelector('[data-action="retry"]');
+            if (retryBtn) {
+              retryBtn.addEventListener("click", function () {
+                state.index = 0;
+                state.score = 0;
+                render();
+              });
+            }
+
+            var backLink = container.querySelector("[data-back-to-learning]");
+            if (backLink) {
+              backLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                showLibrary();
+              });
+            }
+
+            if (typeof onComplete === "function") {
+              onComplete(state.score, total);
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+      /* =====================================================================
+         Report Text / Simple Present / Simple Past / Passive Voice /
+         Vocabulary — SCHOOL SUPPLIES — five more lessons using the exact
+         same quiz interaction pattern as Narrative, Recount, and Procedure.
+         This script only READS elements inside "#report-view",
+         "#simple-present-view", "#simple-past-view", "#passive-view", and
+         "#vocabulary-view" (plus the Total Score Summary block inside the
+         Vocabulary lesson) — it never touches any earlier lesson.
+
+         Because the shared buildTextTypeQuiz() function defined in the
+         previous script block is scoped to that block's own
+         DOMContentLoaded closure, this block defines its own small copy of
+         the same quiz engine (identical markup classes and behavior:
+         .prep-quiz-card, .prep-option, .prep-feedback, .prep-next-btn,
+         .prep-results) rather than a second, different system, and adds an
+         onComplete callback so the Total Score Summary can update live as
+         each of the five quizzes finishes.
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+
+        var REPORT_QUESTIONS = [
+          {
+            prompt: "1. What is the main purpose of a report text?",
+            options: [
+              "To entertain readers with a fictional story",
+              "To present factual, general information about a class of things",
+              "To give step-by-step instructions",
+              "To retell a personal past experience"
+            ],
+            correct: 1,
+            explanation: "A report text presents general factual information about a whole class of things, based on observation and analysis."
+          },
+          {
+            prompt: "2. The part that introduces and classifies the subject is called...",
+            options: ["Description", "Orientation", "General Classification", "Resolution"],
+            correct: 2,
+            explanation: "General Classification introduces what the subject is or the group it belongs to."
+          },
+          {
+            prompt: "3. Which sentence is typical of a report text?",
+            options: [
+              "Once there was a turtle who lived alone.",
+              "Sea turtles live in oceans around the world.",
+              "I saw a turtle at the beach yesterday.",
+              "First, find a quiet spot near the water."
+            ],
+            correct: 1,
+            explanation: "Report texts use general statements about a whole class, written in simple present tense."
+          },
+          {
+            prompt: "4. Which tense is mainly used in report texts?",
+            options: ["Simple past tense", "Future tense", "Simple present tense", "Past continuous tense"],
+            correct: 2,
+            explanation: "Report texts describe general, timeless facts, so they use simple present tense."
+          },
+          {
+            prompt: "5. Which noun phrase would most likely appear in a report text?",
+            options: ["My pet turtle", "A turtle I saw", "Sea turtles", "The turtle in the story"],
+            correct: 2,
+            explanation: "Report texts use general nouns that refer to a whole class, such as ‘sea turtles’, not one specific individual."
+          }
+        ];
+
+        var SIMPLE_PRESENT_QUESTIONS = [
+          {
+            prompt: "1. Which sentence correctly uses simple present tense?",
+            options: [
+              "She go to school every day.",
+              "She goes to school every day.",
+              "She going to school every day.",
+              "She gone to school every day."
+            ],
+            correct: 1,
+            explanation: "Third person singular subjects (she) need -s/-es added to the verb: goes."
+          },
+          {
+            prompt: "2. Which time signal is commonly used with simple present tense?",
+            options: ["Yesterday", "Last week", "Every day", "Two days ago"],
+            correct: 2,
+            explanation: "‘Every day’ signals a routine, which matches simple present tense."
+          },
+          {
+            prompt: "3. Choose the correct question form.",
+            options: ["Does she likes tea?", "Do she like tea?", "Does she like tea?", "Is she like tea?"],
+            correct: 2,
+            explanation: "Questions with he/she/it use ‘Does’ + subject + base verb (V1): Does she like tea?"
+          },
+          {
+            prompt: "4. Which sentence expresses a general truth?",
+            options: [
+              "The sun rises in the east.",
+              "The sun rose in the east.",
+              "The sun is rising in the east.",
+              "The sun will rise in the east."
+            ],
+            correct: 0,
+            explanation: "General truths that never change are expressed with simple present tense."
+          },
+          {
+            prompt: "5. Choose the correct negative form.",
+            options: [
+              "I don't likes coffee.",
+              "I doesn't like coffee.",
+              "I don't like coffee.",
+              "I not like coffee."
+            ],
+            correct: 2,
+            explanation: "The negative form uses do/does + not + base verb: I don't like coffee."
+          }
+        ];
+
+        var SIMPLE_PAST_QUESTIONS = [
+          {
+            prompt: "1. Which sentence correctly uses simple past tense?",
+            options: [
+              "I go to the beach yesterday.",
+              "I went to the beach yesterday.",
+              "I gone to the beach yesterday.",
+              "I going to the beach yesterday."
+            ],
+            correct: 1,
+            explanation: "‘Went’ is the irregular past form of ‘go’, used for a completed past action."
+          },
+          {
+            prompt: "2. Which time signal is commonly used with simple past tense?",
+            options: ["Every day", "Usually", "Last week", "Now"],
+            correct: 2,
+            explanation: "‘Last week’ refers to a specific finished time in the past."
+          },
+          {
+            prompt: "3. Choose the correct negative form.",
+            options: [
+              "She didn't went home.",
+              "She didn't goes home.",
+              "She didn't go home.",
+              "She not went home."
+            ],
+            correct: 2,
+            explanation: "The negative form uses did + not + base verb (V1): She didn't go home."
+          },
+          {
+            prompt: "4. What is the past form of the verb ‘eat’?",
+            options: ["Eated", "Ate", "Eating", "Eats"],
+            correct: 1,
+            explanation: "‘Eat’ is an irregular verb; its simple past form is ‘ate’."
+          },
+          {
+            prompt: "5. Choose the correct question form.",
+            options: [
+              "Did you went to school?",
+              "Did you go to school?",
+              "Do you went to school?",
+              "Were you go to school?"
+            ],
+            correct: 1,
+            explanation: "Questions in simple past use Did + subject + base verb (V1): Did you go...?"
+          }
+        ];
+
+        var PASSIVE_QUESTIONS = [
+          {
+            prompt: "1. Choose the correct passive form of: ‘They clean the classroom every day.’",
+            options: [
+              "The classroom cleans every day.",
+              "The classroom is cleaned every day.",
+              "The classroom was cleaned every day.",
+              "The classroom cleaned every day."
+            ],
+            correct: 1,
+            explanation: "Present simple passive uses is/am/are + V3: is cleaned."
+          },
+          {
+            prompt: "2. Choose the correct passive form of: ‘Someone stole my phone yesterday.’",
+            options: [
+              "My phone is stolen yesterday.",
+              "My phone stole yesterday.",
+              "My phone was stolen yesterday.",
+              "My phone has stolen yesterday."
+            ],
+            correct: 2,
+            explanation: "Past simple passive uses was/were + V3: was stolen."
+          },
+          {
+            prompt: "3. What is the passive formula for simple present tense?",
+            options: [
+              "S + was/were + V3",
+              "S + am/is/are + V3",
+              "S + will + V3",
+              "S + has/have + V3"
+            ],
+            correct: 1,
+            explanation: "Simple present passive uses am/is/are + V3."
+          },
+          {
+            prompt: "4. In passive voice, the main verb is changed into...",
+            options: ["The base form (V1)", "The past form (V2)", "The past participle (V3)", "The -ing form"],
+            correct: 2,
+            explanation: "Passive sentences always use the past participle (V3) after the ‘to be’ verb."
+          },
+          {
+            prompt: "5. When can the ‘by + agent’ phrase be left out of a passive sentence?",
+            options: [
+              "Only in questions",
+              "When the doer is unknown or unimportant",
+              "Only in the past tense",
+              "It can never be left out"
+            ],
+            correct: 1,
+            explanation: "‘By + agent’ is optional and is often dropped when the doer is unknown, unimportant, or obvious."
+          }
+        ];
+
+        var VOCABULARY_QUESTIONS = [
+          {
+            prompt: "1. Which item do you use to erase pencil marks?",
+            options: ["Ruler", "Eraser", "Crayon", "Notebook"],
+            correct: 1,
+            explanation: "An eraser is used to remove pencil marks from paper."
+          },
+          {
+            prompt: "2. “I put my books in my ______ before going to school.”",
+            options: ["backpack", "scissors", "glue", "ruler"],
+            correct: 0,
+            explanation: "A backpack is used to carry books and school supplies."
+          },
+          {
+            prompt: "3. Which tool do you use to draw a straight line?",
+            options: ["Crayon", "Sharpener", "Ruler", "Pen"],
+            correct: 2,
+            explanation: "A ruler is a flat tool with markings used to draw straight lines and measure length."
+          },
+          {
+            prompt: "4. Which tool do you use to cut paper?",
+            options: ["Scissors", "Notebook", "Eraser", "Glue"],
+            correct: 0,
+            explanation: "Scissors are a tool with two blades used to cut paper."
+          },
+          {
+            prompt: "5. What do you use to write in ink?",
+            options: ["Pencil", "Crayon", "Pen", "Sharpener"],
+            correct: 2,
+            explanation: "A pen writes with ink, while a pencil writes with graphite."
+          }
+        ];
+
+        /* ---------- Total Score Summary (shared across these five quizzes) ---------- */
+        var TOTAL_SCORES = { report: null, simplePresent: null, simplePast: null, passive: null, vocabulary: null };
+
+        function updateTotalScoreSummary() {
+          var displayEl = document.getElementById("totalScoreDisplay");
+          var breakdownEl = document.getElementById("totalScoreBreakdown");
+          if (!displayEl || !breakdownEl) return;
+
+          var labels = [
+            ["report", "Report Text"],
+            ["simplePresent", "Simple Present Tense"],
+            ["simplePast", "Simple Past Tense"],
+            ["passive", "Passive Voice"],
+            ["vocabulary", "Vocabulary"]
+          ];
+
+          var sum = 0;
+          var completedCount = 0;
+          var lines = labels.map(function (pair) {
+            var key = pair[0];
+            var label = pair[1];
+            var val = TOTAL_SCORES[key];
+            if (val === null) {
+              return label + ": — / 5";
+            }
+            sum += val;
+            completedCount++;
+            return label + ": " + val + " / 5";
+          });
+
+          breakdownEl.innerHTML = lines.join("<br />");
+
+          if (completedCount === 0) {
+            displayEl.textContent = "Total: — / 25";
+          } else if (completedCount < labels.length) {
+            displayEl.textContent = "Total so far: " + sum + " / 25 (" + completedCount + " of 5 quizzes done)";
+          } else {
+            var verdict = sum >= 21 ? "Excellent!" : sum >= 13 ? "Good — review the tips for the ones you missed." : "Needs practice — reread the explanations and try again.";
+            displayEl.textContent = "Total: " + sum + " / 25 — " + verdict;
+          }
+        }
+
+        buildGrammarVocabQuiz("reportPracticeQuiz", REPORT_QUESTIONS, function (score) {
+          TOTAL_SCORES.report = score;
+          updateTotalScoreSummary();
+        });
+        buildGrammarVocabQuiz("simplePresentPracticeQuiz", SIMPLE_PRESENT_QUESTIONS, function (score) {
+          TOTAL_SCORES.simplePresent = score;
+          updateTotalScoreSummary();
+        });
+        buildGrammarVocabQuiz("simplePastPracticeQuiz", SIMPLE_PAST_QUESTIONS, function (score) {
+          TOTAL_SCORES.simplePast = score;
+          updateTotalScoreSummary();
+        });
+        buildGrammarVocabQuiz("passivePracticeQuiz", PASSIVE_QUESTIONS, function (score) {
+          TOTAL_SCORES.passive = score;
+          updateTotalScoreSummary();
+        });
+        buildGrammarVocabQuiz("vocabularyPracticeQuiz", VOCABULARY_QUESTIONS, function (score) {
+          TOTAL_SCORES.vocabulary = score;
+          updateTotalScoreSummary();
+        });
+
+        function buildGrammarVocabQuiz(containerId, questions, onComplete) {
+          var container = document.getElementById(containerId);
+          if (!container) return;
+
+          var state = { index: 0, score: 0, answered: false };
+
+          render();
+
+          function render() {
+            if (state.index >= questions.length) {
+              renderResults();
+              return;
+            }
+            var q = questions[state.index];
+            state.answered = false;
+
+            var html = "";
+            html += '<p class="prep-quiz-progress">Question ' + (state.index + 1) + " of " + questions.length + "</p>";
+            html += '<div class="prep-quiz-card">';
+            html += '<p class="prep-quiz-question">' + q.prompt + "</p>";
+            html += '<div class="prep-options" role="group" aria-label="Answer choices">';
+            q.options.forEach(function (opt, i) {
+              var letter = '<span class="opt-letter" aria-hidden="true">' + "ABCD"[i] + "</span>";
+              html += '<button type="button" class="prep-option" data-index="' + i + '">' + letter + "<span>" + opt + "</span></button>";
+            });
+            html += "</div>";
+            html += '<p class="prep-feedback" aria-live="polite"></p>';
+            html += '<button type="button" class="prep-next-btn">' + (state.index === questions.length - 1 ? "See results" : "Next question") + " →</button>";
+            html += "</div>";
+
+            container.innerHTML = html;
+
+            var optionButtons = container.querySelectorAll(".prep-option");
+            var feedbackEl = container.querySelector(".prep-feedback");
+            var nextBtn = container.querySelector(".prep-next-btn");
+
+            optionButtons.forEach(function (btn) {
+              btn.addEventListener("click", function () {
+                if (state.answered) return;
+                state.answered = true;
+                var chosen = parseInt(btn.getAttribute("data-index"), 10);
+                var isCorrect = chosen === q.correct;
+                if (isCorrect) state.score++;
+
+                optionButtons.forEach(function (b) {
+                  b.setAttribute("disabled", "true");
+                  var i = parseInt(b.getAttribute("data-index"), 10);
+                  if (i === q.correct) b.classList.add("is-correct");
+                  else if (i === chosen) b.classList.add("is-wrong");
+                });
+
+                feedbackEl.textContent = (isCorrect ? "✅ Correct! " : "❌ Not quite. ") + q.explanation;
+                feedbackEl.className = "prep-feedback " + (isCorrect ? "correct" : "wrong");
+                nextBtn.classList.add("show");
+                nextBtn.focus();
+              });
+            });
+
+            nextBtn.addEventListener("click", function () {
+              state.index++;
+              render();
+            });
+          }
+
+          function renderResults() {
+            var total = questions.length;
+            var note;
+            if (state.score === total) note = "5/5 Excellent!";
+            else if (state.score >= 3) note = "3–4/5 Good, review the tips above.";
+            else note = "0–2/5 Reread the explanation and example, then try again.";
+
+            var html = '<div class="prep-results show">';
+            html += '<p class="score">YOUR SCORE: ' + state.score + " / " + total + "</p>";
+            html += "<p>" + note + "</p>";
+            html += '<div class="prep-result-actions">';
+            html += '<button type="button" class="prep-btn prep-btn-primary" data-action="retry">Try Again</button>';
+            html += '<a class="prep-btn prep-btn-ghost" href="learning.html" data-back-to-learning>Back to Learning YO!</a>';
+            html += "</div>";
+            html += "</div>";
+            container.innerHTML = html;
+
+            var retryBtn = container.querySelector('[data-action="retry"]');
+            if (retryBtn) {
+              retryBtn.addEventListener("click", function () {
+                state.index = 0;
+                state.score = 0;
+                render();
+              });
+            }
+
+            var backLink = container.querySelector("[data-back-to-learning]");
+            if (backLink) {
+              backLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                showLibrary();
+              });
+            }
+
+            if (typeof onComplete === "function") {
+              onComplete(state.score, total);
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var library = document.getElementById("library-view");
+        var pronouns = document.getElementById("pronouns-view");
+        if (!library || !pronouns) return;
+
+        document.querySelectorAll('[data-topic="pronouns"]').forEach(function (card) {
+          card.addEventListener("click", function () {
+            library.classList.add("is-hidden");
+            pronouns.classList.remove("is-hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        });
+
+        pronouns.querySelectorAll("[data-back-to-learning]").forEach(function (button) {
+          button.addEventListener("click", function () {
+            pronouns.classList.add("is-hidden");
+            library.classList.remove("is-hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        });
+
+        var questions = [
+          { q:"Rina is my friend. ___ is very kind.", o:["Her","She","Him","Them"], c:1 },
+          { q:"I have a cat. I love ___ very much.", o:["he","she","it","they"], c:2 },
+          { q:"My brother helps ___ with my homework.", o:["I","me","they","she"], c:1 },
+          { q:"Dina and Sinta are my friends. I often play with ___.", o:["they","them","we","us"], c:1 },
+          { q:"My parents are teachers. ___ work at my school.", o:["Them","Us","They","Their"], c:2 }
+        ];
+        var quiz = document.getElementById("pronounPracticeQuiz");
+        if (!quiz) return;
+        var state = { i:0, score:0, answered:false };
+
+        function renderQuiz() {
+          if (state.i >= questions.length) {
+            quiz.innerHTML = '<div class="pronoun-results"><strong>Score: '+state.score+' / '+questions.length+'</strong><p>' +
+              (state.score === 5 ? 'Amazing! Perfect score! 🌟' : state.score >= 4 ? 'Great work! Almost perfect! 👏' : 'Nice try! Review the lesson and try again. 💪') +
+              '</p><button type="button" class="pronoun-next show" id="pronounRetry">Try Again</button></div>';
+            document.getElementById("pronounRetry").onclick=function(){state={i:0,score:0,answered:false};renderQuiz();};
+            return;
+          }
+          var q=questions[state.i];
+          state.answered=false;
+          quiz.innerHTML='<p class="pronoun-progress">Question '+(state.i+1)+' of '+questions.length+'</p><div class="pronoun-quiz-card"><p class="pronoun-question">'+q.q+'</p><div class="pronoun-options">'+
+            q.o.map(function(x,i){return '<button type="button" class="pronoun-option" data-answer="'+i+'">'+x+'</button>';}).join('')+
+            '</div><p class="pronoun-feedback" id="pronounFeedback" aria-live="polite"></p><button type="button" class="pronoun-next" id="pronounNext">Next →</button></div>';
+
+          quiz.querySelectorAll(".pronoun-option").forEach(function(btn){
+            btn.onclick=function(){
+              if(state.answered)return;
+              state.answered=true;
+              var chosen=Number(btn.dataset.answer);
+              quiz.querySelectorAll(".pronoun-option").forEach(function(b,i){
+                b.disabled=true;
+                if(i===q.c)b.classList.add("correct");
+              });
+              var fb=document.getElementById("pronounFeedback");
+              if(chosen===q.c){state.score++;fb.textContent="Correct! 🎉";fb.className="pronoun-feedback correct";}
+              else{btn.classList.add("wrong");fb.textContent="Not quite. The correct answer is "+q.o[q.c]+".";fb.className="pronoun-feedback wrong";}
+              document.getElementById("pronounNext").classList.add("show");
+            };
+          });
+          document.getElementById("pronounNext").onclick=function(){state.i++;renderQuiz();};
+        }
+        renderQuiz();
+      });
+    </script>
+
+    <script>
+      /* =====================================================================
+         Learning YO! — LIBRARY SEARCH
+         A single search bar above the topic cards. It matches on the card's
+         own title/subtitle AND on the full text content of that topic's
+         lesson view (headings, explanations, structure terms, examples,
+         tips, and quiz questions/options) — so searching "orientation"
+         finds Narrative and Recount, and searching "eraser" finds
+         Vocabulary, even though neither word appears on the card itself.
+         Read-only: it never touches quiz state, scores, or any lesson
+         markup — it only shows/hides the existing topic-card elements.
+         ===================================================================== */
+      document.addEventListener("DOMContentLoaded", function () {
+        var searchInput = document.getElementById("learningSearchInput");
+        var clearBtn = document.getElementById("learningSearchClear");
+        var statusEl = document.getElementById("learningSearchStatus");
+        var cards = Array.prototype.slice.call(document.querySelectorAll(".topics-grid .topic-card"));
+        if (!searchInput || !cards.length) return;
+
+        /* Build the searchable text index once. For a card whose data-topic
+           has a matching "#<topic>-view" lesson section, the index also
+           includes that section's full text content. */
+        var searchIndex = cards.map(function (card) {
+          var topic = card.getAttribute("data-topic");
+          var cardText = card.textContent || "";
+          var lessonText = "";
+          if (topic) {
+            var view = document.getElementById(topic + "-view");
+            if (view) lessonText = view.textContent || "";
+          }
+          return {
+            card: card,
+            hasLesson: !!topic,
+            haystack: (cardText + " " + lessonText).toLowerCase().replace(/\s+/g, " ")
+          };
+        });
+
+        function runSearch() {
+          var raw = searchInput.value;
+          var query = raw.trim().toLowerCase();
+          clearBtn.hidden = query.length === 0;
+
+          if (!query) {
+            searchIndex.forEach(function (entry) {
+              entry.card.classList.remove("is-search-hidden");
+            });
+            statusEl.textContent = "";
+            return;
+          }
+
+          var matchCount = 0;
+          searchIndex.forEach(function (entry) {
+            var match = entry.haystack.indexOf(query) !== -1;
+            entry.card.classList.toggle("is-search-hidden", !match);
+            if (match) matchCount++;
+          });
+
+          statusEl.textContent = matchCount === 0
+            ? "No lessons found for “" + raw.trim() + "”. Try another word, like a grammar term or something from an example."
+            : matchCount + (matchCount === 1 ? " lesson" : " lessons") + " found for “" + raw.trim() + "”.";
+        }
+
+        searchInput.addEventListener("input", runSearch);
+        searchInput.addEventListener("search", runSearch);
+
+        clearBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          runSearch();
+          searchInput.focus();
+        });
+      });
+    </script>
+</body>
+</html>

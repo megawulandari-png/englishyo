@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Learn. Play. Speak." />
+    <title>ENGLISH YO! — Learn. Play. Speak.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Developer Modal */
+      .developer-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; }
+      .developer-modal.is-open { display: flex; }
+      .modal-card { position: relative; background: #fff; border-radius: clamp(18px, 2vw, 28px); padding: clamp(32px, 4vw, 48px); max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0, 53, 110, 0.2); animation: slideIn 0.3s ease-out; }
+      @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      .modal-close { position: absolute; top: clamp(16px, 1.6vw, 20px); right: clamp(16px, 1.6vw, 20px); border: 0; background: transparent; color: var(--navy); font-size: 1.5rem; cursor: pointer; padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
+      .modal-close:hover { color: var(--pink); }
+      .modal-title { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 800; }
+      .modal-name { margin: 0 0 4px; color: var(--navy); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.3rem); font-weight: 800; }
+      .modal-role { margin: 0 0 16px; color: #3a4d78; font-size: clamp(0.85rem, 1vw, 0.95rem); font-weight: 700; }
+      .modal-description { margin: 0; color: #2a3d68; font-size: clamp(0.9rem, 1.1vw, 1rem); font-weight: 600; line-height: 1.6; }
+      @media (max-width: 480px) {
+        .modal-card { padding: 28px 24px; }
+      }
+
+      /* Search Input Styling */
+      .search-input-wrapper {
+        position: relative;
+        margin: 20px 0 16px;
+        display: flex;
+        align-items: center;
+      }
+      .search-icon {
+        position: absolute;
+        left: 16px;
+        font-size: 1.2rem;
+        color: var(--navy);
+        pointer-events: none;
+      }
+      #site-search {
+        width: 100%;
+        padding: 14px 16px 14px 42px;
+        border: 2px solid #e0e8f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--navy);
+        background: white;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      #site-search:focus {
+        outline: none;
+        border-color: var(--yellow);
+        box-shadow: 0 0 0 3px rgba(255, 206, 86, 0.1);
+      }
+      #site-search::placeholder {
+        color: #999;
+        font-weight: 600;
+      }
+
+      /* Search Results */
+      .search-results {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-top: 12px;
+      }
+      .search-result-item {
+        padding: 14px 16px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        background: #f5f9ff;
+        border-left: 4px solid var(--yellow);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .search-result-item:hover {
+        background: #e8f1ff;
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(0, 53, 110, 0.1);
+      }
+      .search-result-title {
+        margin: 0 0 4px;
+        color: var(--navy);
+        font-family: var(--display);
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+      .search-result-category {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: var(--yellow);
+        color: var(--navy);
+        font-size: 0.7rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .search-result-description {
+        margin: 0;
+        color: #3a4d78;
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .search-no-results {
+        padding: 24px 16px;
+        text-align: center;
+        color: #999;
+        font-weight: 600;
+      }
+      .search-results-header {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a class="active" href="#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a href="reading.html"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="listening.html"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="#developers"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <img class="hero-bg" src="assets/hero-background-approved.png" alt="" aria-hidden="true" />
+        <div class="wide-shell hero-inner">
+          <div class="hero-content">
+            <h1 id="hero-title">A Brighter <span class="accent">You</span> with English</h1>
+            <p class="hero-subhead">Explore. Learn. Play. Grow.</p>
+            <a class="hero-cta" href="#featured-activities">Let's Go! <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-menu" id="play-games" aria-labelledby="quick-menu-title">
+        <h2 id="quick-menu-title" class="sr-only">Choose an English YO! activity</h2>
+        <div class="wide-shell quick-grid">
+          <a class="feature-card feature-card--games" href="games.html">
+            <span class="feature-icon" aria-hidden="true">🎮</span>
+            <h3>Play Games YO!</h3>
+            <p>Play, learn, and have fun!</p>
+            <span class="feature-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="feature-card feature-card--learning" href="learning.html">
+            <span class="feature-icon" aria-hidden="true">💡</span>
+            <h3>Learning YO!</h3>
+            <p>Simple lessons for real life.</p>
+            <span class="feature-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="feature-card feature-card--reading" href="reading.html">
+            <span class="feature-icon" aria-hidden="true">📖</span>
+            <h3>Reading YO!</h3>
+            <p>Great stories, bigger ideas.</p>
+            <span class="feature-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="feature-card feature-card--listening" href="listening.html">
+            <span class="feature-icon" aria-hidden="true">🎧</span>
+            <h3>Listening YO!</h3>
+            <p>Real English, real voices.</p>
+            <span class="feature-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
+      <div class="wide-shell dashboard">
+        <section class="featured-panel" id="featured-activities" aria-labelledby="featured-title">
+          <div class="panel-heading">
+            <div><span class="heading-star" aria-hidden="true">★</span><h2 id="featured-title">Featured Activities</h2><p>Try these popular activities today!</p></div>
+            <a class="all-activities" href="#play-games">See All Activities <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="activity-grid">
+            <!-- FEATURED ACTIVITIES - EDIT LINKS HERE -->
+            <a class="activity-card" href="games.html"><img src="assets/activity-word-approved.png" alt="Word Match — Match words with pictures. Play now." /></a>
+            <a class="activity-card" href="games.html"><img src="assets/activity-tense-approved.png" alt="Tense Race — Choose the correct tense before time runs out. Play now." /></a>
+            <a class="activity-card" href="reading.html"><img src="assets/activity-reading-approved.png" alt="A Day in Yogyakarta — Read and answer questions. Play now." /></a>
+            <a class="activity-card" href="listening.html"><img src="assets/activity-listening-approved.png" alt="Listening Quest — Listen and complete the challenge. Play now." /></a>
+            <!-- END FEATURED ACTIVITIES -->
+          </div>
+        </section>
+        <section class="community-panel" id="developers" aria-labelledby="community-title">
+          <h2 class="sr-only" id="community-title">Our English YO! Community</h2>
+          <img src="assets/community-approved.png" alt="A Global Community of Learners: six ENGLISH YO! student mascots from around the world, embracing a globe. Different Places, Same Friends, Brighter Futures. Connect. Share. Learn. Grow." />
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="reading.html">Reading YO!</a><a href="listening.html">Listening YO!</a><a href="#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+    <div class="search-panel" data-search-panel hidden>
+      <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <button class="close-search" type="button" aria-label="Close search" data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id="search-title">What do you want to learn?</h2>
+        <form onsubmit="return false;">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." />
+          </div>
+        </form>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+    <!-- DEVELOPER MODAL -->
+    <div class="developer-modal" id="developerModal">
+      <div class="modal-card">
+        <button class="modal-close" type="button" aria-label="Close modal" id="modalCloseBtn">×</button>
+        <h2 class="modal-title">About the Developer</h2>
+        <h3 class="modal-name">Mega Ayu Wulandari</h3>
+        <p class="modal-role">English Teacher · Educator · Creator of English Yo!</p>
+        <p class="modal-description">English Yo! is a learning space designed to help students learn, play, read, and listen to English in a fun and accessible way.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      // Developer Modal Handler
+      (function() {
+        const modal = document.getElementById('developerModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const devLink = document.querySelector('a[href="#developers"]');
+        
+        if (!modal || !devLink) return;
+        
+        // Open modal when Developers link is clicked
+        devLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          modal.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        });
+        
+        // Close modal functions
+        function closeModal() {
+          modal.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+        
+        // Close on X button
+        modalCloseBtn.addEventListener('click', closeModal);
+        
+        // Close on clicking outside modal
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+          }
+        });
+      })();
+    </script>
+
+  </body>
+</html>

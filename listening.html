@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Listening YO! Listen. Learn. Discover." />
+    <title>Listening YO! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ===== Listening YO! page-specific styles (kept separate from styles.css) ===== */
+      .listening-hero { padding: clamp(30px, 6vw, 64px) 0 clamp(16px, 3vw, 28px); text-align: center; }
+      .listening-hero .badge { display: inline-block; margin-bottom: 14px; padding: 7px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-weight: 800; font-size: 0.8rem; transform: rotate(-4deg); }
+      .listening-hero h1 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.85rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.03; }
+      .listening-hero h1 .accent { color: var(--pink); }
+      .listening-hero p { max-width: 48ch; margin: 0 auto; color: #2a3d68; font-size: clamp(0.95rem, 1.6vw, 1.25rem); font-weight: 800; }
+
+      /* Series (topic) blocks */
+      .series-section { padding: clamp(8px, 1.6vw, 16px) 0 clamp(40px, 5vw, 60px); }
+      .series-block + .series-block { margin-top: clamp(28px, 3.4vw, 44px); }
+      .series-header { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(10px, 1.4vw, 16px); margin-bottom: clamp(14px, 1.8vw, 22px); padding: clamp(14px, 1.6vw, 20px) clamp(16px, 1.8vw, 24px); border-radius: clamp(16px, 1.8vw, 24px); }
+      .series-header .series-icon { flex: 0 0 auto; font-size: clamp(1.7rem, 2.4vw, 2.3rem); line-height: 1; }
+      .series-header .series-text h2 { margin: 0 0 2px; color: var(--navy); font-family: var(--display); font-size: clamp(1.15rem, 1.9vw, 1.55rem); font-weight: 800; letter-spacing: -0.01em; }
+      .series-header .series-text p { margin: 0; color: #3a4d78; font-size: clamp(0.78rem, 1vw, 0.95rem); font-weight: 700; }
+      .series-header--yellow { background: var(--card-yellow); }
+      .series-header--blue { background: var(--card-blue); }
+      .series-header--pink { background: var(--card-pink); }
+
+      .episode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 20px); }
+      .episode-card { display: flex; overflow: hidden; position: relative; flex-direction: column; align-items: flex-start; gap: 6px; padding: clamp(16px, 1.6vw, 22px); border: 0; border-radius: clamp(16px, 1.6vw, 22px); background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); text-align: left; font: inherit; width: 100%; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+      .episode-card:hover, .episode-card:focus-visible { box-shadow: 0 14px 28px rgba(0, 53, 110, 0.16); transform: translateY(-3px); }
+      .episode-card .episode-number { color: var(--pink); font-family: var(--display); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; }
+      .episode-card h3 { margin: 0; color: var(--navy); font-family: var(--display); font-size: clamp(1rem, 1.2vw, 1.15rem); font-weight: 800; line-height: 1.15; }
+      .episode-card p { margin: 0; color: #3a4d78; font-size: 0.84rem; font-weight: 700; line-height: 1.35; }
+      .episode-play { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; color: var(--navy); font-family: var(--display); font-size: 0.82rem; font-weight: 800; }
+
+      /* Episode reader (dynamic, JS-rendered) */
+      .episode-reader-section { padding-bottom: clamp(60px, 7vw, 100px); }
+      .reader-topbar { display: flex; justify-content: center; margin-bottom: clamp(14px, 1.6vw, 20px); }
+      .back-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 0; border-radius: 999px; background: #fff; box-shadow: 0 4px 12px rgba(0, 53, 110, 0.1); color: var(--navy); font-family: var(--display); font-size: 0.82rem; font-weight: 800; cursor: pointer; }
+      .back-link:hover { box-shadow: 0 6px 16px rgba(0, 53, 110, 0.16); }
+      .episode-frame { overflow: hidden; border-radius: clamp(18px, 1.8vw, 28px); background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.1); }
+      .episode-body { padding: clamp(18px, 2.2vw, 34px); }
+      .episode-series-tag { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 6px 16px; border-radius: 999px; font-family: var(--display); font-size: 0.82rem; font-weight: 800; color: var(--navy); }
+      .episode-series-tag--yellow { background: var(--card-yellow); }
+      .episode-series-tag--blue { background: var(--card-blue); }
+      .episode-series-tag--pink { background: var(--card-pink); }
+      .episode-body h2 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.25rem, 2.2vw, 1.85rem); font-weight: 800; line-height: 1.1; }
+      .episode-meta { margin: 0 0 clamp(14px, 1.6vw, 18px); color: #3a4d78; font-size: 0.86rem; font-weight: 800; }
+      .episode-audio-wrap { max-width: 380px; margin: 0 0 clamp(16px, 1.8vw, 22px); }
+      .episode-audio-wrap audio { display: block; width: 100%; height: 38px; }
+      .audio-placeholder, .worksheet-placeholder { display: flex; align-items: center; gap: 10px; max-width: 380px; padding: 14px 16px; border: 2px dashed #bcd7f4; border-radius: 14px; background: var(--paper); color: #3a4d78; font-size: 0.85rem; font-weight: 700; }
+      .worksheet-placeholder { max-width: none; }
+      .episode-description { max-width: 62ch; margin: 0 0 clamp(20px, 2.4vw, 28px); color: #2a3d68; font-size: 0.96rem; font-weight: 600; line-height: 1.6; }
+      .worksheet-block h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 clamp(10px, 1.2vw, 14px); color: var(--navy); font-family: var(--display); font-size: 1rem; font-weight: 800; }
+      .worksheet-image-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: clamp(12px, 1.6vw, 18px); border-radius: 18px; background: var(--paper); }
+      .worksheet-image-wrap img { width: auto; max-width: 100%; height: auto; max-height: 560px; border-radius: 14px; box-shadow: 0 8px 18px rgba(0, 53, 110, 0.14); }
+      .view-full-size { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border: 0; border-radius: 999px; background: var(--navy); color: #fff; font-family: var(--display); font-size: 0.84rem; font-weight: 700; }
+      .view-full-size:hover { background: #041a58; }
+
+      .is-hidden { display: none !important; }
+
+      @media (max-width: 900px) {
+        .episode-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 480px) {
+        .episode-grid { grid-template-columns: 1fr; gap: 10px; }
+        .episode-card { padding: 14px; }
+        .series-header { padding: 12px 14px; gap: 10px; }
+        .episode-audio-wrap, .audio-placeholder { max-width: 100%; }
+        .worksheet-image-wrap img { max-height: 320px; }
+      }
+      /* Developer Modal */
+      .developer-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; }
+      .developer-modal.is-open { display: flex; }
+      .modal-card { position: relative; background: #fff; border-radius: clamp(18px, 2vw, 28px); padding: clamp(32px, 4vw, 48px); max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0, 53, 110, 0.2); animation: slideIn 0.3s ease-out; }
+      @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      .modal-close { position: absolute; top: clamp(16px, 1.6vw, 20px); right: clamp(16px, 1.6vw, 20px); border: 0; background: transparent; color: var(--navy); font-size: 1.5rem; cursor: pointer; padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
+      .modal-close:hover { color: var(--pink); }
+      .modal-title { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 800; }
+      .modal-name { margin: 0 0 4px; color: var(--navy); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.3rem); font-weight: 800; }
+      .modal-role { margin: 0 0 16px; color: #3a4d78; font-size: clamp(0.85rem, 1vw, 0.95rem); font-weight: 700; }
+      .modal-description { margin: 0; color: #2a3d68; font-size: clamp(0.9rem, 1.1vw, 1rem); font-weight: 600; line-height: 1.6; }
+      @media (max-width: 480px) {
+        .modal-card { padding: 28px 24px; }
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
+        <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
+          <a href="index.html#home"><span aria-hidden="true">⌂</span> Home</a>
+          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
+          <a href="reading.html"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a class="active" href="listening.html"><span aria-hidden="true">🎧</span> Listening YO!</a>
+          <a href="index.html#developers" class="dev-link"><span aria-hidden="true">♟</span> Developers</a>
+        </nav>
+        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- HERO -->
+      <section class="listening-hero" aria-labelledby="listening-title">
+        <div class="wide-shell">
+          <span class="badge">Podcast Library</span>
+          <h1 id="listening-title">LISTENING <span class="accent">YO!</span></h1>
+          <p>Listen. Learn. Discover.</p>
+        </div>
+      </section>
+
+      <!-- EPISODE LIBRARY (rendered by JavaScript) -->
+      <section class="series-section" id="library" aria-labelledby="library-title">
+        <div class="wide-shell">
+          <h2 id="library-title" class="sr-only">Episode Library</h2>
+          <div id="series-container"></div>
+        </div>
+      </section>
+
+      <!-- EPISODE READER (rendered by JavaScript) -->
+      <section class="episode-reader-section is-hidden" id="reader" aria-labelledby="reader-title">
+        <div class="wide-shell">
+          <div class="reader-topbar">
+            <button type="button" class="back-link" id="back-to-episodes">← Back to Episodes</button>
+          </div>
+          <h2 id="reader-title" class="sr-only">Episode</h2>
+          <div class="episode-frame">
+            <div class="episode-body" id="episode-body"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-logo" href="index.html#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="index.html#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="reading.html">Reading YO!</a><a href="listening.html">Listening YO!</a><a href="index.html#developers">Developers</a></nav>
+        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
+        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+      </div>
+    </footer>
+
+        <div class="search-panel" data-search-panel hidden>
+      <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <button class="close-search" type="button" aria-label="Close search" data-search-close>×</button>
+        <p>FIND YOUR NEXT ADVENTURE</p><h2 id="search-title">What do you want to learn?</h2>
+        <form onsubmit="return false;">
+          <div class="search-input-wrapper">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." />
+          </div>
+        </form>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+      // ===== Listening YO! data & single-page logic =====
+      // Episodes are stored as plain JS data objects so new episodes/series can be
+      // added later without creating additional HTML files. Audio and worksheet
+      // paths are left empty ("") until the real assets are supplied.
+      const seriesInfo = {
+        money: {
+          icon: "\ud83d\udcb0",
+          name: "MONEY MATTERS",
+          tagline: "Financial Literacy",
+          description: "Friendly conversations about money, budgeting, and everyday choices.",
+          color: "yellow"
+        },
+        screen: {
+          icon: "\ud83c\udfae",
+          name: "BEHIND THE SCREEN",
+          tagline: "Gaming & Digital Life",
+          description: "Real talk about games, screen time, and staying safe online.",
+          color: "blue"
+        },
+        mind: {
+          icon: "\ud83d\udcad",
+          name: "MIND MATTERS",
+          tagline: "Understanding Feelings",
+          description: "Gentle episodes about emotions, worries, and taking care of your mind.",
+          color: "pink"
+        }
+      };
+
+      const episodes = {
+        money: [
+          {
+            id: "money-01",
+            number: "01",
+            title: "Managing Money and Saving",
+            level: "B1",
+            description: "A friendly look at everyday spending and where our money really goes.",
+            audio: "assets/money-01.mp3",
+            worksheet: "assets/money-01-worksheet.png"
+          },
+          {
+            id: "money-02",
+            number: "02",
+            title: "Need It or Want It?",
+            level: "A2",
+            description: "Learning the difference between things we need and things we want.",
+            audio: "assets/money-02.mp3",
+            worksheet: "assets/money-02-worksheet.png"
+          },
+          {
+            id: "money-03",
+            number: "03",
+            title: "How Was Money Created",
+            level: "A2",
+            description: "A small change, A big story of money.",
+            audio: "assets/money-03.mp3",
+            worksheet: "assets/money-03-worksheet.png"
+          }
+        ],
+        screen: [
+          {
+            id: "screen-01",
+            number: "01",
+            title: "The Good, the Bad, and the Roblox",
+            level: "B1",
+            description: "Exploring the fun side of gaming and the things to watch out for.",
+            audio: "",
+            worksheet: ""
+          },
+          {
+            id: "screen-02",
+            number: "02",
+            title: "When Gaming Becomes Too Much",
+            level: "B1",
+            description: "A conversation about balance and knowing when to take a break.",
+            audio: "",
+            worksheet: ""
+          },
+          {
+            id: "screen-03",
+            number: "03",
+            title: "Who Are You Talking to Online?",
+            level: "B1",
+            description: "Thinking about online friends, strangers, and staying safe.",
+            audio: "",
+            worksheet: ""
+          }
+        ],
+        mind: [
+          {
+            id: "mind-01",
+            number: "01",
+            title: "Why Do I Feel So Worried?",
+            level: "A2",
+            description: "Understanding worry and where those nervous feelings come from.",
+            audio: "",
+            worksheet: ""
+          },
+          {
+            id: "mind-02",
+            number: "02",
+            title: "Before the Test: Why Am I So Nervous?",
+            level: "A2",
+            description: "A calm chat about test-day nerves and how to feel a little better.",
+            audio: "",
+            worksheet: ""
+          },
+          {
+            id: "mind-03",
+            number: "03",
+            title: "Take a Breath",
+            level: "A2",
+            description: "Simple breathing and calming ideas for busy, worried minds.",
+            audio: "",
+            worksheet: ""
+          }
+        ]
+      };
+
+      const seriesContainer = document.getElementById("series-container");
+      const librarySection = document.getElementById("library");
+      const readerSection = document.getElementById("reader");
+      const episodeBody = document.getElementById("episode-body");
+
+      function scrollToSection(section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function renderLibrary() {
+        seriesContainer.innerHTML = "";
+
+        Object.keys(episodes).forEach(function (seriesKey) {
+          const info = seriesInfo[seriesKey];
+          const block = document.createElement("div");
+          block.className = "series-block";
+
+          const cardsHtml = episodes[seriesKey].map(function (ep, index) {
+            return (
+              '<button type="button" class="episode-card" data-series="' + seriesKey + '" data-index="' + index + '">' +
+                '<span class="episode-number">EPISODE ' + ep.number + '</span>' +
+                "<h3>" + ep.title + "</h3>" +
+                "<p>" + ep.description + "</p>" +
+                '<span class="episode-play">\u25b6 Listen</span>' +
+              "</button>"
+            );
+          }).join("");
+
+          block.innerHTML =
+            '<div class="series-header series-header--' + info.color + '">' +
+              '<span class="series-icon" aria-hidden="true">' + info.icon + "</span>" +
+              '<div class="series-text">' +
+                "<h2>" + info.icon + " " + info.name + "</h2>" +
+                "<p>" + info.tagline + " \u2014 " + info.description + "</p>" +
+              "</div>" +
+            "</div>" +
+            '<div class="episode-grid">' + cardsHtml + "</div>";
+
+          seriesContainer.appendChild(block);
+        });
+
+        seriesContainer.querySelectorAll(".episode-card").forEach(function (card) {
+          card.addEventListener("click", function () {
+            openEpisode(card.dataset.series, Number(card.dataset.index));
+          });
+        });
+      }
+
+      function openEpisode(seriesKey, index) {
+        const info = seriesInfo[seriesKey];
+        const ep = episodes[seriesKey][index];
+        if (!ep) return;
+
+        const audioHtml = ep.audio
+          ? (
+              '<div class="episode-audio-wrap">' +
+                '<audio controls preload="none" src="' + ep.audio + '">' +
+                  "Your browser does not support the audio element." +
+                "</audio>" +
+              "</div>"
+            )
+          : (
+              '<div class="audio-placeholder">' +
+                '<span aria-hidden="true">\ud83c\udfa7</span> Audio coming soon' +
+              "</div>"
+            );
+
+        const worksheetHtml = ep.worksheet
+          ? (
+              '<div class="worksheet-image-wrap">' +
+                '<img src="' + ep.worksheet + '" alt="Worksheet for ' + ep.title + '" />' +
+                '<a class="view-full-size" href="' + ep.worksheet + '" target="_blank" rel="noopener">\ud83d\udd0d View Full Size</a>' +
+              "</div>"
+            )
+          : (
+              '<div class="worksheet-placeholder">' +
+                '<span aria-hidden="true">\ud83d\udcdd</span> Worksheet coming soon' +
+              "</div>"
+            );
+
+        episodeBody.innerHTML =
+          '<span class="episode-series-tag episode-series-tag--' + info.color + '">' + info.icon + " " + info.name + "</span>" +
+          "<h2>" + ep.title + "</h2>" +
+          '<p class="episode-meta">' + ep.level + " \u2022 Listening Activity</p>" +
+          audioHtml +
+          '<p class="episode-description">' + ep.description + "</p>" +
+          '<div class="worksheet-block">' +
+            "<h4>\ud83d\udcdd Worksheet</h4>" +
+            worksheetHtml +
+          "</div>";
+
+        librarySection.classList.add("is-hidden");
+        readerSection.classList.remove("is-hidden");
+        scrollToSection(readerSection);
+      }
+
+      document.getElementById("back-to-episodes").addEventListener("click", function () {
+        readerSection.classList.add("is-hidden");
+        librarySection.classList.remove("is-hidden");
+        scrollToSection(librarySection);
+      });
+
+      renderLibrary();
+    </script>
+  </body>
+</html>

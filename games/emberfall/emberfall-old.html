@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d0b1a" />
+    <meta
+      name="description"
+      content="Emberfall - an original 2D side-scrolling platformer. Guide Kip the lantern sprite through Mosswood Trail and Cinder Hollow."
+    />
+    <title>Emberfall</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #0d0b1a;
+        font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+        color: #f4e7cf;
+        /* Stop mobile browsers hijacking touch gestures over the canvas. */
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      #game-root {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 50% 18%, #241c44 0%, #0d0b1a 62%, #05040c 100%);
+      }
+
+      #game-root canvas {
+        display: block;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        touch-action: none;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+      }
+
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 14px;
+        background: #0d0b1a;
+        z-index: 10;
+        transition: opacity 420ms ease;
+      }
+
+      #boot-splash.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #boot-splash h1 {
+        margin: 0;
+        font-size: clamp(30px, 7vw, 56px);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #ffb347;
+        text-shadow: 0 0 18px rgba(255, 150, 60, 0.55);
+      }
+
+      #boot-splash p {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #8d84b5;
+      }
+
+      .spark-bar {
+        width: min(240px, 60vw);
+        height: 4px;
+        border-radius: 999px;
+        background: #211c3a;
+        overflow: hidden;
+      }
+
+      .spark-bar span {
+        display: block;
+        height: 100%;
+        width: 40%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #ff7a3d, #ffd166);
+        animation: sweep 1.1s ease-in-out infinite;
+      }
+
+      @keyframes sweep {
+        0% {
+          transform: translateX(-120%);
+        }
+        100% {
+          transform: translateX(320%);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .spark-bar span {
+          animation: none;
+          width: 100%;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-6Jbp-CG1.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/phaser-DXXWZowi.js">
+  </head>
+  <body>
+    <div id="game-root"></div>
+
+    <div id="boot-splash">
+      <h1>Emberfall</h1>
+      <div class="spark-bar"><span></span></div>
+      <p>Lighting the lanterns</p>
+    </div>
+
+  </body>
+</html>
