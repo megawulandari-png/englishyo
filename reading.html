@@ -48,6 +48,12 @@
       .story-card p { margin: 0; color: #3a4d78; font-size: 0.86rem; font-weight: 700; }
       .story-link { display: inline-block; margin-top: 6px; border: 0; background: none; padding: 0; color: var(--pink); font-family: var(--display); font-size: 0.9rem; font-weight: 800; cursor: pointer; }
       .library-empty { max-width: 46ch; margin: 0 auto; padding: clamp(22px, 2.4vw, 30px); border-radius: 20px; background: #fff; box-shadow: 0 8px 20px rgba(0, 53, 110, 0.08); color: #3a4d78; font-size: 0.95rem; font-weight: 700; text-align: center; }
+      .coming-soon { max-width: 46ch; margin: clamp(10px, 1.4vw, 16px) auto; padding: clamp(30px, 3.6vw, 46px) clamp(22px, 2.6vw, 32px); border-radius: 24px; background: var(--card-yellow); box-shadow: 0 10px 24px rgba(0, 53, 110, 0.1); text-align: center; }
+      .coming-soon-icon { font-size: clamp(2.6rem, 5vw, 3.4rem); margin-bottom: 6px; }
+      .coming-soon h3 { margin: 6px 0 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.7rem); font-weight: 800; }
+      .coming-soon-headline { margin: 4px 0 14px; color: var(--pink); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.35rem); font-weight: 800; }
+      .coming-soon-message { margin: 0 auto clamp(18px, 2.2vw, 24px); max-width: 34ch; color: #3a4d78; font-size: 0.95rem; font-weight: 700; line-height: 1.5; }
+      .coming-soon-back { display: inline-flex; }
 
       /* Story Reader (dynamic, JS-rendered) */
       .reader-section { padding-bottom: clamp(60px, 7vw, 100px); }
@@ -55,6 +61,7 @@
       .reader-body { padding: clamp(20px, 2.4vw, 36px); }
       .reader-header { margin-bottom: clamp(16px, 2vw, 26px); text-align: center; }
       .reader-illustration { display: block; width: 100%; max-width: 220px; margin: 0 auto clamp(14px, 1.8vw, 18px); border-radius: 18px; box-shadow: 0 8px 18px rgba(0, 53, 110, 0.14); }
+      .reader-illustration-hero { max-width: 1000px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 24px; margin: 0 auto clamp(20px, 2.4vw, 28px); }
       .reader-header h3 { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 800; }
       .reader-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
       .reader-meta span { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--card-pink); color: var(--navy); font-size: 0.75rem; font-weight: 800; }
@@ -70,6 +77,57 @@
       .words-to-know li b { color: var(--navy); }
       .reader-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 
+      /* Story card thumbnail + type badge (A1 cards only) */
+      .story-thumb { width: 100%; height: 120px; object-fit: cover; border-radius: 12px; margin-bottom: 2px; }
+      .story-type { display: inline-block; margin-left: 6px; padding: 4px 10px; border-radius: 999px; background: var(--card-yellow); color: var(--navy); font-size: 0.7rem; font-weight: 800; }
+
+      /* Section icon headings (Reading / Comprehension / Vocabulary) */
+      .section-icon-heading { max-width: 62ch; margin: clamp(18px, 2vw, 26px) auto 10px; padding: 0 clamp(16px, 1.8vw, 22px); color: var(--navy); font-family: var(--display); font-size: clamp(1.05rem, 1.4vw, 1.25rem); font-weight: 800; }
+
+      /* Comprehension Activities */
+      .comprehension-section { max-width: 62ch; margin: 0 auto clamp(20px, 2.4vw, 30px); padding: clamp(16px, 1.8vw, 22px); border-radius: 18px; background: var(--card-blue); }
+      .comp-part { margin-bottom: clamp(14px, 1.6vw, 20px); }
+      .comp-part h5 { margin: 0 0 10px; color: var(--navy); font-family: var(--display); font-size: 0.95rem; font-weight: 800; }
+      .mcq-question, .tf-question { margin-bottom: clamp(12px, 1.4vw, 18px); padding: clamp(12px, 1.4vw, 16px); border-radius: 14px; background: #fff; box-shadow: 0 4px 12px rgba(0, 53, 110, 0.08); }
+      .mcq-q-text, .tf-q-text { margin: 0 0 10px; color: #2a3d68; font-size: 0.9rem; font-weight: 700; line-height: 1.5; }
+      .mcq-options { display: grid; gap: 8px; }
+      .mcq-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 2px solid #e0e8f5; border-radius: 12px; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease; font-size: 0.86rem; font-weight: 700; color: #2a3d68; }
+      .mcq-option:hover { border-color: var(--yellow); background: #fffbe8; }
+      .mcq-option input { accent-color: var(--pink); }
+      .mcq-option.is-correct { border-color: #2eb872; background: #e7f9ef; }
+      .mcq-option.is-incorrect { border-color: #ff3e79; background: #ffe9ef; }
+      .tf-buttons { display: flex; gap: 10px; }
+      .tf-btn { flex: 1; padding: 10px 14px; border: 2px solid #e0e8f5; border-radius: 999px; background: #fff; color: var(--navy); font-family: var(--display); font-size: 0.85rem; font-weight: 800; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease; }
+      .tf-btn:hover { border-color: var(--yellow); background: #fffbe8; }
+      .tf-btn.is-selected { border-color: var(--navy); background: var(--card-blue); }
+      .tf-btn.is-correct { border-color: #2eb872; background: #e7f9ef; }
+      .tf-btn.is-incorrect { border-color: #ff3e79; background: #ffe9ef; }
+      .answer-feedback { margin: 8px 0 0; font-size: 0.82rem; font-weight: 800; }
+      .answer-feedback.is-correct-text { color: #1e9e5f; }
+      .answer-feedback.is-incorrect-text { color: #e0295b; }
+      .check-answers-btn { display: block; margin: 4px auto 0; padding: 12px 30px; border: 0; border-radius: 999px; background: var(--pink); color: #fff; font-family: var(--display); font-size: 0.95rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 22px rgba(255, 62, 121, 0.3); transition: transform 0.15s ease, box-shadow 0.15s ease; }
+      .check-answers-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(255, 62, 121, 0.38); }
+      .score-summary { margin: clamp(14px, 1.6vw, 18px) auto 0; padding: 14px 20px; border-radius: 14px; background: #fff; box-shadow: 0 6px 16px rgba(0, 53, 110, 0.12); color: var(--navy); font-family: var(--display); font-size: 1.05rem; font-weight: 800; text-align: center; }
+      .score-summary .score-line { margin: 4px 0; }
+      .score-summary .friendly-message { margin-top: 8px; color: var(--pink); font-size: 0.95rem; }
+
+      /* Vocabulary in Context */
+      .vocabulary-section { max-width: 62ch; margin: 0 auto clamp(20px, 2.4vw, 30px); padding: clamp(16px, 1.8vw, 22px); border-radius: 18px; background: var(--card-green); }
+      .vocab-grid { display: grid; gap: clamp(12px, 1.4vw, 16px); }
+      .vocab-item { padding: clamp(12px, 1.4vw, 16px); border-radius: 14px; background: #fff; box-shadow: 0 4px 12px rgba(0, 53, 110, 0.08); }
+      .vocab-word { margin: 0 0 6px; color: var(--navy); font-size: 0.95rem; }
+      .vocab-sentence { margin: 0 0 8px; color: #3a4d78; font-size: 0.86rem; font-weight: 600; font-style: italic; line-height: 1.5; }
+      .vocab-question { margin: 0 0 10px; color: #2a3d68; font-size: 0.88rem; font-weight: 700; }
+      .vocab-options { display: grid; gap: 8px; }
+      .vocab-option { padding: 10px 14px; border: 2px solid #e0e8f5; border-radius: 12px; background: #fff; color: #2a3d68; font-size: 0.85rem; font-weight: 700; text-align: left; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease; }
+      .vocab-option:hover:not(:disabled) { border-color: var(--yellow); background: #fffbe8; }
+      .vocab-option.is-correct { border-color: #2eb872; background: #e7f9ef; }
+      .vocab-option.is-incorrect { border-color: #ff3e79; background: #ffe9ef; }
+      .vocab-option:disabled { cursor: default; opacity: 0.85; }
+      .vocab-feedback { margin: 10px 0 0; font-size: 0.82rem; font-weight: 800; }
+      .vocab-feedback.is-correct-text { color: #1e9e5f; }
+      .vocab-feedback.is-incorrect-text { color: #e0295b; }
+
       .is-hidden { display: none !important; }
 
       @media (max-width: 900px) {
@@ -80,7 +138,12 @@
         .level-card { min-height: 120px; padding: 16px; }
         .story-grid { grid-template-columns: 1fr; }
         .reader-illustration { max-width: 170px; }
+        .reader-illustration-hero { max-width: 100%; aspect-ratio: 16 / 9; }
         .reader-audio-wrap { max-width: 100%; }
+        .story-thumb { height: 100px; }
+        .comprehension-section, .vocabulary-section { padding: 14px; }
+        .tf-buttons { flex-direction: column; }
+        .check-answers-btn { width: 100%; }
       }
 
       /* Contributors Section */
@@ -469,155 +532,257 @@
       const stories = {
         A1: [
           {
-            id: "a-piece-of-sky",
-            title: "A Piece of Sky",
+            id: "yogyakarta",
+            title: "Yogyakarta",
             level: "A1",
-            type: "Short Story",
-            description: "A simple story about animals, panic, and checking the facts.",
-            image: "assets/a-piece-of-sky.png",
-            audio: "assets/a-piece-of-sky.mp3",
+            type: "Descriptive Text",
+            description: "A simple text about Yogyakarta, its places, culture, food, and people.",
+            image: "assets/yogyakarta.png",
             text: [
-              "One morning, Chickee the little chicken was walking in the yard.",
-              "Suddenly \u2014 plop! \u2014 something hit her head.",
-              "\u201cOh no!\u201d Chickee cried. \u201cThe sky is falling!\u201d",
-              "She ran to tell the duck.",
-              "\u201cThe sky is falling! Run!\u201d",
-              "Then the duck told the cat, and the cat told the goat.",
-              "Soon, all the animals were running and shouting, \u201cThe sky is falling!\u201d",
-              "Just then, the wise owl flew down.",
-              "\u201cStop!\u201d said the owl. \u201cShow me what hit you.\u201d",
-              "Chickee looked down. It was just a leaf.",
-              "Everyone stopped. They felt silly.",
-              "The owl smiled and said,",
-              "\u201cBefore you panic, check the facts.\u201d"
+              "Yogyakarta is a city in Indonesia. It is on the island of Java. Many people call it Jogja. Yogyakarta is a beautiful and interesting city. Many people visit this city every year.",
+              "Yogyakarta has many interesting places. There are temples, museums, parks, markets, and beaches. One famous place is Malioboro Street. Malioboro is a busy street in the center of Yogyakarta. Many people walk along the street. They can buy clothes, food, bags, and souvenirs. There are also many shops and restaurants.",
+              "Yogyakarta is also famous for its culture. People can see traditional dances and listen to traditional music. Some people also wear traditional clothes. The city has many traditional foods. Gudeg is one of the most famous foods in Yogyakarta. It is made from young jackfruit. It is usually sweet and tasty.",
+              "Yogyakarta also has many schools and universities. Many young people live and study there. The people of Yogyakarta are friendly and kind.",
+              "Yogyakarta is a special city. It has beautiful places, interesting culture, and delicious food. It is a nice place to visit with family and friends."
             ],
-            words: [
-              { word: "yard", meaning: "halaman" },
-              { word: "suddenly", meaning: "tiba-tiba" },
-              { word: "hit", meaning: "mengenai" },
-              { word: "cry", meaning: "berteriak / menangis" },
-              { word: "run", meaning: "berlari" },
-              { word: "shout", meaning: "berteriak" },
-              { word: "wise", meaning: "bijaksana" },
-              { word: "leaf", meaning: "daun" },
-              { word: "panic", meaning: "panik" },
-              { word: "facts", meaning: "fakta" }
+            comprehension: {
+              mcq: [
+                { q: "What island is Yogyakarta on?", options: ["A. Sumatra", "B. Java", "C. Bali"], correct: 1 },
+                { q: "What do many people call Yogyakarta?", options: ["A. Jakarta", "B. Jogja", "C. Bali"], correct: 1 },
+                { q: "What is Malioboro?", options: ["A. A busy street", "B. A mountain", "C. A university"], correct: 0 },
+                { q: "What is Gudeg made from?", options: ["A. Rice", "B. Young jackfruit", "C. Chicken"], correct: 1 },
+                { q: "How are the people of Yogyakarta?", options: ["A. Friendly and kind", "B. Angry and loud", "C. Shy and quiet"], correct: 0 }
+              ],
+              tf: [
+                { statement: "Yogyakarta is a city in Indonesia.", correct: true },
+                { statement: "Malioboro Street is quiet and empty.", correct: false },
+                { statement: "Gudeg is usually sweet and tasty.", correct: true }
+              ]
+            },
+            vocabulary: [
+              { word: "island", sentence: "Yogyakarta is on the island of Java.", question: "What does “island” mean?", options: ["A. Land with water all around it", "B. A big city", "C. A kind of food"], correct: 0 },
+              { word: "busy", sentence: "Malioboro is a busy street in the center of Yogyakarta.", question: "What does “busy” mean?", options: ["A. Full of people and activity", "B. Empty and quiet", "C. Very old"], correct: 0 },
+              { word: "souvenirs", sentence: "People can buy clothes, food, bags, and souvenirs in Malioboro.", question: "What does “souvenirs” mean?", options: ["A. Things people buy to remember a place", "B. Places to eat", "C. Traditional dances"], correct: 0 },
+              { word: "traditional", sentence: "People can see traditional dances and listen to traditional music.", question: "What does “traditional” mean?", options: ["A. From the past, part of a culture", "B. Very new and modern", "C. Made in a factory"], correct: 0 },
+              { word: "tasty", sentence: "Gudeg is usually sweet and tasty.", question: "What does “tasty” mean?", options: ["A. Having a good flavor", "B. Very cold", "C. Difficult to make"], correct: 0 },
+              { word: "friendly", sentence: "The people of Yogyakarta are friendly and kind.", question: "What does “friendly” mean?", options: ["A. Nice and easy to talk to", "B. Angry and rude", "C. Quiet and shy"], correct: 0 }
+            ]
+          },
+          {
+            id: "ra-kartini",
+            title: "R.A. Kartini",
+            level: "A1",
+            type: "Biography",
+            description: "A simple biography about R.A. Kartini and her love of education.",
+            image: "assets/kartini.png",
+            text: [
+              "R.A. Kartini was an Indonesian woman. Her full name was Raden Ajeng Kartini. She was born on April 21, 1879, in Jepara, Central Java. She came from a Javanese family.",
+              "Kartini was a smart and brave woman. She loved reading books and learning new things. When she was young, she studied at school. She learned many subjects and also learned Dutch. However, she could not go to school for a long time because girls had different rules at that time.",
+              "Kartini wanted girls to have better education. She believed that girls should have the chance to study and learn. She also wanted women to have a better life. She shared her ideas through letters to her friends.",
+              "Kartini wrote about education, women, and life. Her letters became important after her death. Her ideas inspired many people in Indonesia.",
+              "Today, Indonesian people remember Kartini every year on April 21. This day is called Kartini Day. On this day, students and teachers sometimes wear traditional clothes.",
+              "R.A. Kartini is an important figure in Indonesia. She is remembered as a woman who loved education and wanted a better future for Indonesian girls."
+            ],
+            comprehension: {
+              mcq: [
+                { q: "Where was Kartini born?", options: ["A. Jepara, Central Java", "B. Jakarta", "C. Bali"], correct: 0 },
+                { q: "What did Kartini love to do?", options: ["A. Play sports", "B. Reading books and learning", "C. Cooking food"], correct: 1 },
+                { q: "What did Kartini want for girls?", options: ["A. Better education", "B. More money", "C. New clothes"], correct: 0 },
+                { q: "How did Kartini share her ideas?", options: ["A. Through letters", "B. Through movies", "C. Through songs"], correct: 0 },
+                { q: "When is Kartini Day?", options: ["A. April 21", "B. August 17", "C. December 25"], correct: 0 }
+              ],
+              tf: [
+                { statement: "R.A. Kartini's full name was Raden Ajeng Kartini.", correct: true },
+                { statement: "Kartini did not like reading books.", correct: false },
+                { statement: "Indonesian people remember Kartini every year.", correct: true }
+              ]
+            },
+            vocabulary: [
+              { word: "smart", sentence: "Kartini was a smart and brave woman.", question: "What does “smart” mean?", options: ["A. Able to learn and think well", "B. Very tall", "C. Very old"], correct: 0 },
+              { word: "brave", sentence: "Kartini was a smart and brave woman.", question: "What does “brave” mean?", options: ["A. Not afraid to do hard things", "B. Very shy", "C. Very slow"], correct: 0 },
+              { word: "education", sentence: "Kartini wanted girls to have better education.", question: "What does “education” mean?", options: ["A. Learning at school", "B. A type of food", "C. A place to sleep"], correct: 0 },
+              { word: "believed", sentence: "She believed that girls should have the chance to study and learn.", question: "What does “believed” mean?", options: ["A. Thought something was true", "B. Forgot something", "C. Sold something"], correct: 0 },
+              { word: "inspired", sentence: "Her ideas inspired many people in Indonesia.", question: "What does “inspired” mean?", options: ["A. Gave people a good feeling to do something", "B. Made people angry", "C. Made people tired"], correct: 0 },
+              { word: "remember", sentence: "Indonesian people remember Kartini every year.", question: "What does “remember” mean?", options: ["A. Think about someone from the past", "B. Forget about someone", "C. Visit someone's house"], correct: 0 }
+            ]
+          },
+          {
+            id: "malin-kundang",
+            title: "Malin Kundang",
+            level: "A1",
+            type: "Folktale",
+            description: "A famous Indonesian folktale about a son, his mother, and respect for parents.",
+            image: "assets/malinkundang.png",
+            text: [
+              "Malin Kundang is a famous story from Indonesia. It is a story from West Sumatra. Malin is a young boy who lives with his mother. They are poor, but they love each other.",
+              "Malin wants to have a better life. One day, he goes to the sea with some sailors. He travels to many places. He works hard and becomes a rich man.",
+              "After many years, Malin returns to his village. He comes with his beautiful wife and many people. His mother is very happy. She goes to the beach to meet him.",
+              "Malin's mother knows him. She calls his name and says, “Malin, my son!” However, Malin is ashamed of his mother. He does not want his wife and other people to know that she is his mother. He says that she is not his mother.",
+              "His mother is very sad. She feels hurt because Malin does not recognize her. She prays to God. Suddenly, the sky becomes dark. There is a big storm. Lightning and strong waves hit the sea.",
+              "Malin is afraid. He cannot save himself. The story says that Malin becomes a stone.",
+              "Malin Kundang is a famous Indonesian story. It teaches us to love and respect our parents. We should not be rude to our mother and father."
+            ],
+            comprehension: {
+              mcq: [
+                { q: "Where is the story of Malin Kundang from?", options: ["A. West Sumatra", "B. Central Java", "C. Bali"], correct: 0 },
+                { q: "Why does Malin go to sea?", options: ["A. To have a better life", "B. To visit his mother", "C. To go to school"], correct: 0 },
+                { q: "What does Malin's mother do when she sees him?", options: ["A. She goes to the beach to meet him", "B. She hides from him", "C. She goes to sleep"], correct: 0 },
+                { q: "What does Malin say about his mother?", options: ["A. She is not his mother", "B. She is his best friend", "C. She is a queen"], correct: 0 },
+                { q: "What happens to Malin at the end of the story?", options: ["A. He becomes rich again", "B. He becomes a stone", "C. He goes back to sea happily"], correct: 1 }
+              ],
+              tf: [
+                { statement: "Malin becomes a rich man.", correct: true },
+                { statement: "Malin is happy to see his mother again.", correct: false },
+                { statement: "The story teaches us to respect our parents.", correct: true }
+              ]
+            },
+            vocabulary: [
+              { word: "poor", sentence: "They are poor, but they love each other.", question: "What does “poor” mean?", options: ["A. Not having much money", "B. Very happy", "C. Very tall"], correct: 0 },
+              { word: "sailors", sentence: "He goes to the sea with some sailors.", question: "What does “sailors” mean?", options: ["A. People who work on a ship", "B. People who cook food", "C. People who teach at school"], correct: 0 },
+              { word: "ashamed", sentence: "Malin is ashamed of his mother.", question: "What does “ashamed” mean?", options: ["A. Feeling embarrassed about something", "B. Feeling very happy", "C. Feeling very hungry"], correct: 0 },
+              { word: "recognize", sentence: "She feels hurt because Malin does not recognize her.", question: "What does “recognize” mean?", options: ["A. Know who someone is", "B. Forget how to walk", "C. Feel happy about someone"], correct: 0 },
+              { word: "storm", sentence: "There is a big storm.", question: "What does “storm” mean?", options: ["A. Very bad weather with wind and rain", "B. A quiet sunny day", "C. A type of boat"], correct: 0 },
+              { word: "respect", sentence: "It teaches us to love and respect our parents.", question: "What does “respect” mean?", options: ["A. To treat someone with care and value them", "B. To ignore someone", "C. To compete with someone"], correct: 0 }
             ]
           }
         ],
         A2: [
           {
-            id: "the-silent-bird",
-            title: "The Silent Bird",
+            id: "putri-serindang-bulan",
+            title: "Putri Serindang Bulan",
             level: "A2",
-            type: "Short Story",
-            description: "A short story about friendship, listening, and kindness.",
-            image: "assets/the-silent-bird.png",
-            audio: "assets/the-silent-bird.mp3",
+            type: "Folktale",
+            description: "A traditional Indonesian story about a princess, kindness, honesty, and forgiveness.",
+            image: "assets/putri-serindang-bulan.png",
+            imageAlt: "Illustration of Putri Serindang Bulan",
             text: [
-              "In a big forest, there lived a little bird who couldn\u2019t sing.",
-              "Every morning, all the other birds sang beautiful songs. The little bird stayed quiet.",
-              "He tried, but no sound came out.",
-              "Some birds laughed at him.",
-              "\u201cYou\u2019re not a real bird if you can\u2019t sing!\u201d they said.",
-              "But one day, a young bird was sad and didn\u2019t want to sing anymore.",
-              "The little bird sat beside him quietly. He listened. He didn\u2019t speak. He just stayed.",
-              "Slowly, the sad bird smiled.",
-              "\u201cYou helped me,\u201d he said.",
-              "\u201cYou didn\u2019t sing, but you were there.\u201d",
-              "From that day on, the little bird still didn\u2019t sing.",
-              "But he became the forest\u2019s best friend \u2014 because he listened with all his heart."
+              "A long time ago, in Bengkulu, there lived a beautiful princess named Putri Serindang Bulan. Her skin shone softly like the moonlight. She was kind and gentle, and everyone loved her.",
+              "After her father passed away, her oldest brother became the new king. One day, he asked Serindang Bulan to marry a prince from another kingdom. But something strange happened. Each time a prince came to see her, red spots appeared on her skin. The princes became scared and refused to marry her. The new king was angry and thought his sister brought shame to the family.",
+              "He ordered a soldier to take her deep into the forest and kill her. The soldier felt sorry for her. Instead of harming her, he built a small boat and let her float away on the river and whispered, “Go, Princess. May this river carry you to safety.”",
+              "After many days, the princess reached another kingdom. The wise king there listened to her story and used his magic to find the truth. He discovered that the red spots appeared when people around her were not honest. The wise king removed the curse, and Serindang Bulan became healthy again.",
+              "From that day on, Putri Serindang Bulan lived happily with the wise king. She was loved not only for her beauty but also for her gentle spirit and forgiving heart. Under her care and the wise king’s rule, the land shone like the moon that once reflected her name."
             ],
-            words: [
-              { word: "forest", meaning: "hutan" },
-              { word: "quiet", meaning: "diam / tenang" },
-              { word: "laugh", meaning: "menertawakan" },
-              { word: "sad", meaning: "sedih" },
-              { word: "listen", meaning: "mendengarkan" },
-              { word: "heart", meaning: "hati" }
+            comprehension: {
+              partALabel: "Reading Comprehension",
+              mcq: [
+                { q: "What is this story mainly about?", options: ["A. A princess who becomes queen of another kingdom", "B. A soldier who becomes king", "C. A prince who marries many princesses", "D. A king who builds a boat"], correct: 0 },
+                { q: "Where did Putri Serindang Bulan come from?", options: ["A. Jakarta", "B. Bengkulu", "C. Aceh", "D. Bali"], correct: 1 },
+                { q: "Why did the princes refuse to marry her?", options: ["A. She did not want to get married", "B. Red spots appeared on her skin", "C. She was not a princess", "D. She lived far away"], correct: 1 },
+                { q: "What did the soldier do instead of harming her?", options: ["A. He took her back to the king", "B. He built a small boat and let her float on the river", "C. He kept her hidden in the forest", "D. He told the king the truth"], correct: 1 },
+                { q: "What did the wise king discover about the red spots?", options: ["A. They appeared when people around her were not honest", "B. They appeared because she was sick", "C. They appeared because of the sun", "D. They appeared because of the river water"], correct: 0 },
+                { q: "What happened to Putri Serindang Bulan at the end of the story?", options: ["A. She went back to her brother's kingdom", "B. She lived happily with the wise king", "C. She became a soldier", "D. She stayed alone in the forest"], correct: 1 }
+              ],
+              tf: [
+                { statement: "Putri Serindang Bulan's skin shone like the moonlight.", correct: true },
+                { statement: "The new king was happy about the red spots on his sister's skin.", correct: false },
+                { statement: "The soldier killed the princess in the forest.", correct: false },
+                { statement: "The wise king removed the curse, and the princess became healthy again.", correct: true }
+              ]
+            },
+            splitScoring: true,
+            vocabulary: [
+              { word: "princess", sentence: "There lived a beautiful princess named Putri Serindang Bulan.", question: "What does “princess” mean?", options: ["A. The daughter of a king", "B. A type of flower", "C. A small boat"], correct: 0 },
+              { word: "gentle", sentence: "She was kind and gentle, and everyone loved her.", question: "What does “gentle” mean?", options: ["A. Soft and kind in behavior", "B. Very loud and angry", "C. Very fast"], correct: 0 },
+              { word: "refused", sentence: "The princes became scared and refused to marry her.", question: "What does “refused” mean?", options: ["A. Said no to something", "B. Agreed happily", "C. Forgot about something"], correct: 0 },
+              { word: "shame", sentence: "The new king was angry and thought his sister brought shame to the family.", question: "What does “shame” mean?", options: ["A. A feeling of embarrassment", "B. A feeling of joy", "C. A type of food"], correct: 0 },
+              { word: "soldier", sentence: "He ordered a soldier to take her deep into the forest.", question: "What does “soldier” mean?", options: ["A. A person who serves in an army", "B. A person who cooks food", "C. A person who teaches school"], correct: 0 },
+              { word: "harming", sentence: "Instead of harming her, he built a small boat and let her float away.", question: "What does “harming” mean?", options: ["A. Hurting someone", "B. Helping someone", "C. Teaching someone"], correct: 0 },
+              { word: "safety", sentence: "“Go, Princess. May this river carry you to safety.”", question: "What does “safety” mean?", options: ["A. A safe place, free from danger", "B. A dangerous place", "C. A type of boat"], correct: 0 },
+              { word: "honest", sentence: "He discovered that the red spots appeared when people around her were not honest.", question: "What does “honest” mean?", options: ["A. Telling the truth", "B. Telling lies", "C. Feeling scared"], correct: 0 }
+            ]
+          },
+          {
+            id: "my-cat-miko",
+            title: "My Cat Miko",
+            level: "A2",
+            type: "Descriptive Text",
+            description: "A simple descriptive text about a friendly pet cat and daily life with him.",
+            image: "assets/my-cat-miko-reading.png",
+            imageAlt: "Illustration of Miko, a friendly orange and white cat",
+            text: [
+              "I have a lovely cat named Miko. He is my favorite pet at home. Miko has lived with my family for two years. He is a male cat, and he is very friendly and playful.",
+              "Miko has soft white and orange fur. His body is small, but he has a long tail. He has two bright eyes, a small nose, and four little paws. His ears are small and always move when he hears a sound. His fur is very soft, so I like to touch and brush it.",
+              "Miko is an active cat. He likes to run around the house and play with a small ball. Sometimes, he jumps onto the sofa and sleeps there. He also likes to look through the window and watch birds outside. In the afternoon, he usually sleeps in his favorite place near the door.",
+              "Miko likes eating fish and cat food. He also drinks fresh water every day. When he is hungry, he often walks around me and makes a soft “meow” sound.",
+              "I really love Miko because he is cute, friendly, and funny. He makes my home feel happier. Taking care of him is sometimes difficult, but I enjoy spending time with my little friend."
+            ],
+            comprehension: {
+              partALabel: "Reading Comprehension",
+              mcq: [
+                { q: "What is this text mainly about?", options: ["A. A description of the writer's pet cat", "B. A story about a wild cat", "C. Instructions on how to buy a cat", "D. A story about different animals"], correct: 0 },
+                { q: "How long has Miko lived with the writer's family?", options: ["A. One year", "B. Two years", "C. Three years", "D. Five years"], correct: 1 },
+                { q: "What color is Miko's fur?", options: ["A. Black and white", "B. White and orange", "C. Brown and grey", "D. All black"], correct: 1 },
+                { q: "What does Miko usually do in the afternoon?", options: ["A. He plays with a ball", "B. He watches birds outside", "C. He sleeps in his favorite place near the door", "D. He drinks fresh water"], correct: 2 },
+                { q: "Why does Miko often walk around the writer and make a soft “meow” sound?", options: ["A. Because he is hungry", "B. Because he wants to sleep", "C. Because he is scared", "D. Because he wants to go outside"], correct: 0 },
+                { q: "Why does the writer like Miko?", options: ["A. Because he is cute, friendly, and funny", "B. Because he is very quiet", "C. Because he does not need care", "D. Because he is expensive"], correct: 0 }
+              ],
+              tf: [
+                { statement: "Miko is a female cat.", correct: false },
+                { statement: "Miko likes to look through the window and watch birds.", correct: true },
+                { statement: "Miko does not like eating fish.", correct: false },
+                { statement: "Taking care of Miko is sometimes difficult, but the writer enjoys it.", correct: true }
+              ]
+            },
+            splitScoring: true,
+            vocabulary: [
+              { word: "lovely", sentence: "I have a lovely cat named Miko.", question: "What does “lovely” mean?", options: ["A. Very nice and pleasant", "B. Very old", "C. Very dangerous"], correct: 0 },
+              { word: "playful", sentence: "He is a male cat, and he is very friendly and playful.", question: "What does “playful” mean?", options: ["A. Liking to play and have fun", "B. Liking to sleep all day", "C. Feeling angry"], correct: 0 },
+              { word: "fur", sentence: "Miko has soft white and orange fur.", question: "What does “fur” mean?", options: ["A. The soft hair covering an animal's body", "B. A type of food", "C. A part of a house"], correct: 0 },
+              { word: "paws", sentence: "He has two bright eyes, a small nose, and four little paws.", question: "What does “paws” mean?", options: ["A. An animal's feet", "B. An animal's ears", "C. An animal's tail"], correct: 0 },
+              { word: "active", sentence: "Miko is an active cat.", question: "What does “active” mean?", options: ["A. Full of energy and movement", "B. Very tired and sleepy", "C. Very quiet and shy"], correct: 0 },
+              { word: "brush", sentence: "His fur is very soft, so I like to touch and brush it.", question: "What does “brush” mean here?", options: ["A. To clean or smooth with a special tool", "B. To cut something", "C. To wash with water"], correct: 0 },
+              { word: "hungry", sentence: "When he is hungry, he often walks around me and makes a soft “meow” sound.", question: "What does “hungry” mean?", options: ["A. Wanting or needing food", "B. Wanting to sleep", "C. Feeling happy"], correct: 0 },
+              { word: "taking care", sentence: "Taking care of him is sometimes difficult, but I enjoy spending time with my little friend.", question: "What does “taking care” mean?", options: ["A. Looking after someone or something", "B. Ignoring someone", "C. Selling something"], correct: 0 }
+            ]
+          },
+          {
+            id: "bj-habibie",
+            title: "B.J. Habibie",
+            level: "A2",
+            type: "Biography",
+            description: "A short biography about B.J. Habibie, his education, career, and contribution to Indonesia.",
+            image: "assets/bj-habibie-reading.png",
+            imageAlt: "Illustration of B.J. Habibie and aircraft technology",
+            text: [
+              "Bacharuddin Jusuf Habibie, or B.J. Habibie, was an important Indonesian figure. He was born on June 25, 1936, in Parepare, South Sulawesi. He was the fourth of eight children in his family. From a young age, Habibie liked learning, especially science and technology.",
+              "After finishing school in Indonesia, Habibie went to Germany to continue his education. He studied engineering at RWTH Aachen University. He worked hard and became a talented engineer. He was especially interested in airplanes and aircraft technology. After finishing his studies, he worked for a German aircraft company.",
+              "In 1974, Habibie returned to Indonesia. He worked with the Indonesian government and helped develop technology and aircraft industries in Indonesia. He also helped develop IPTN, an Indonesian aircraft company.",
+              "In 1998, Habibie became the third President of Indonesia. He served as president for a short period. During his presidency, he made several important changes in Indonesia.",
+              "After leaving the presidency, Habibie continued to write books and share his ideas. He was also known as a person who loved science, education, and technology.",
+              "B.J. Habibie died on September 11, 2019, in Jakarta. Many Indonesian people remember him as a smart engineer, a leader, and a person who worked for the development of Indonesia."
+            ],
+            comprehension: {
+              partALabel: "Reading Comprehension",
+              mcq: [
+                { q: "What is this text mainly about?", options: ["A. The life of B.J. Habibie", "B. The history of Germany", "C. How to build airplanes", "D. The cities of Indonesia"], correct: 0 },
+                { q: "Where was Habibie born?", options: ["A. Jakarta", "B. Parepare, South Sulawesi", "C. Germany", "D. Aachen"], correct: 1 },
+                { q: "Why did Habibie go to Germany?", options: ["A. To continue his education", "B. To become president", "C. To visit his family", "D. To learn the Indonesian language"], correct: 0 },
+                { q: "What did Habibie study at RWTH Aachen University?", options: ["A. Medicine", "B. Engineering", "C. Business", "D. Law"], correct: 1 },
+                { q: "What did Habibie do after returning to Indonesia in 1974?", options: ["A. He became president immediately", "B. He helped develop technology and aircraft industries", "C. He went back to Germany", "D. He stopped working"], correct: 1 },
+                { q: "When did Habibie become the third President of Indonesia?", options: ["A. 1974", "B. 1936", "C. 1998", "D. 2019"], correct: 2 }
+              ],
+              tf: [
+                { statement: "B.J. Habibie was the fourth of eight children in his family.", correct: true },
+                { statement: "Habibie studied engineering in Germany.", correct: true },
+                { statement: "Habibie was Indonesia's first president.", correct: false },
+                { statement: "Habibie stopped sharing his ideas after leaving the presidency.", correct: false }
+              ]
+            },
+            splitScoring: true,
+            vocabulary: [
+              { word: "figure", sentence: "Bacharuddin Jusuf Habibie, or B.J. Habibie, was an important Indonesian figure.", question: "What does “figure” mean here?", options: ["A. An important or well-known person", "B. A type of number", "C. A kind of drawing"], correct: 0 },
+              { word: "technology", sentence: "From a young age, Habibie liked learning, especially science and technology.", question: "What does “technology” mean?", options: ["A. The use of science for practical purposes and machines", "B. A type of sport", "C. A kind of food"], correct: 0 },
+              { word: "engineering", sentence: "He studied engineering at RWTH Aachen University.", question: "What does “engineering” mean?", options: ["A. The study of designing and building machines or structures", "B. The study of cooking", "C. The study of painting"], correct: 0 },
+              { word: "talented", sentence: "He worked hard and became a talented engineer.", question: "What does “talented” mean?", options: ["A. Having a natural skill or ability", "B. Having no skill at all", "C. Feeling very tired"], correct: 0 },
+              { word: "aircraft", sentence: "He was especially interested in airplanes and aircraft technology.", question: "What does “aircraft” mean?", options: ["A. A machine that can fly, like an airplane", "B. A type of car", "C. A type of boat"], correct: 0 },
+              { word: "government", sentence: "He worked with the Indonesian government and helped develop technology and aircraft industries in Indonesia.", question: "What does “government” mean?", options: ["A. The group of people who officially run a country", "B. A type of school", "C. A type of company selling food"], correct: 0 },
+              { word: "presidency", sentence: "During his presidency, he made several important changes in Indonesia.", question: "What does “presidency” mean?", options: ["A. The time when someone is president", "B. A type of building", "C. A type of ceremony for students"], correct: 0 },
+              { word: "development", sentence: "He worked for the development of Indonesia.", question: "What does “development” mean?", options: ["A. The process of growth and improvement", "B. The process of destruction", "C. A type of money"], correct: 0 }
             ]
           }
         ],
-B1: [
-    {
-        id: "the-tortoises-path",
-        title: "The Tortoise's Path",
-        level: "B1",
-        type: "Short Story",
-        description: "A story about patience, courage, and finishing your journey.",
-        image: "assets/the-tortoises-path.png",
-        audio: "assets/the-tortoises-path.mp3",
-        text: [
-            "In a big green forest, the animals held a race to reach the mountain top.",
-            "The birds flew. The deer ran. The monkeys climbed.",
-            "But one old tortoise joined too.",
-            "The other animals laughed.",
-            "“You will never make it,” said the fox.",
-            "“You are too slow,” said the rabbit.",
-            "The tortoise smiled and said nothing.",
-            "He just walked — step by step — every day.",
-            "While the others fought, rested, or gave up, the tortoise kept going.",
-            "He watched the sunrise, listened to the wind, and moved forward.",
-            "After many days, the tortoise finally reached the top.",
-            "No one else was there.",
-            "But he was not sad.",
-            "He looked at the forest below and whispered,",
-            "“I didn’t win the race, but I finished my journey.”"
-        ],
-        words: [
-            { word: "tortoise", meaning: "kura-kura darat" },
-            { word: "race", meaning: "perlombaan" },
-            { word: "reach", meaning: "mencapai" },
-            { word: "mountain top", meaning: "puncak gunung" },
-            { word: "joined", meaning: "ikut / bergabung" },
-            { word: "slow", meaning: "lambat" },
-            { word: "step by step", meaning: "selangkah demi selangkah" },
-            { word: "give up", meaning: "menyerah" },
-            { word: "move forward", meaning: "terus maju" },
-            { word: "journey", meaning: "perjalanan" }
-        ]
-    }
-],
-        B2: [{
-    id: "the-day-i-accidentally-became-a-school-hero",
-    title: "The Day I Accidentally Became a School Hero",
-    level: "B2",
-    type: "Short Story",
-    description: "A funny story about a student, a cat, and an unexpected adventure.",
-    image: "assets/the-day-i-accidentally-became-a-school-hero.png",
-    audio: "assets/the-day-i-accidentally-became-a-school-hero.mp3",
-    text: [
-        "Last Monday started like any ordinary school day. I arrived at school five minutes before the bell, carrying my backpack, a half-eaten sandwich, and absolutely no motivation.",
-        "I was walking toward my classroom when I noticed something strange. A small orange cat was sitting on the school roof, looking down at everyone as if it owned the entire building.",
-        "“Is that Mr. Whiskers?” my friend Dito asked.",
-        "Nobody knew where the cat had come from, but everyone agreed that it looked suspiciously confident.",
-        "During the first lesson, we suddenly heard a loud MEOW! from outside. Our teacher stopped explaining the lesson and looked at the window. The cat was still on the roof, but now it was walking dangerously close to the edge.",
-        "Without thinking, I jumped up.",
-        "“I’ll save it!” I shouted.",
-        "Unfortunately, I forgot one important detail: I was terrified of heights.",
-        "I climbed the stairs to the roof, followed by three curious classmates. When I finally reached the cat, it immediately ran away. I chased it across the roof while shouting, “Come back! I am trying to help you!”",
-        "Suddenly, I stepped on a wet patch and slipped.",
-        "Instead of falling, however, I landed perfectly on a large pile of old mattresses that had been placed there for a school event.",
-        "Everyone screamed. Then they started laughing.",
-        "The cat calmly walked over, sat beside me, and began licking its paw.",
-        "The principal later called me “a brave young hero.”",
-        "I smiled proudly.",
-        "Nobody needed to know that I had actually slipped while chasing a cat."
-    ],
-    words: [
-        { word: "ordinary", meaning: "biasa" },
-        { word: "motivation", meaning: "motivasi" },
-        { word: "strange", meaning: "aneh" },
-        { word: "suspiciously", meaning: "dengan mencurigakan" },
-        { word: "dangerously", meaning: "dengan berbahaya" },
-        { word: "terrified", meaning: "sangat takut" },
-        { word: "heights", meaning: "tempat yang tinggi / ketinggian" },
-        { word: "curious", meaning: "penasaran" },
-        { word: "slipped", meaning: "tergelincir" },
-        { word: "mattresses", meaning: "kasur" },
-        { word: "proudly", meaning: "dengan bangga" }
-    ]
-}]
+B1: [],
+        B2: []
       };
 
       let currentLevel = null;
@@ -646,17 +811,33 @@ B1: [
         const levelStories = stories[level] || [];
 
         if (levelStories.length === 0) {
-          storyGrid.innerHTML = "";
-          const empty = document.createElement("div");
-          empty.className = "library-empty";
-          empty.textContent = "Stories for this level are coming soon!";
-          storyGrid.appendChild(empty);
+          storyGrid.innerHTML =
+            '<div class="coming-soon">' +
+              '<div class="coming-soon-icon" aria-hidden="true">🚀</div>' +
+              "<h3>" + level + " Reading</h3>" +
+              '<p class="coming-soon-headline">Coming Soon!</p>' +
+              '<p class="coming-soon-message">More exciting ' + levelNames[level].toLowerCase() + ' reading stories are coming soon. Please check back later!</p>' +
+              '<button type="button" class="back-link coming-soon-back" id="coming-soon-back">← Back to Levels</button>' +
+            "</div>";
+          const comingSoonBack = document.getElementById("coming-soon-back");
+          if (comingSoonBack) {
+            comingSoonBack.addEventListener("click", function () {
+              document.getElementById("back-to-levels-from-library").click();
+            });
+          }
         } else {
           levelStories.forEach(function (story, index) {
             const card = document.createElement("article");
             card.className = "story-card";
+            const isEnhanced = !!(story.comprehension || story.vocabulary);
+            const thumbHtml = isEnhanced && story.image
+              ? '<img class="story-thumb" src="' + story.image + '" alt="' + (story.imageAlt || "") + '" onerror="this.remove()" />'
+              : "";
+            const typeHtml = isEnhanced ? '<span class="story-type">' + story.type + '</span>' : "";
             card.innerHTML =
+              thumbHtml +
               '<span class="story-tag">' + story.level + '</span>' +
+              typeHtml +
               "<h3>" + story.title + "</h3>" +
               "<p>" + story.description + "</p>" +
               '<button type="button" class="story-link" data-index="' + index + '">Read \u2192</button>';
@@ -675,6 +856,216 @@ B1: [
         scrollToSection(librarySection);
       }
 
+      // ----- Comprehension Activities (Part A: multiple choice, Part B: true/false) -----
+      function buildComprehensionHTML(story) {
+        if (!story.comprehension) return "";
+
+        const mcqHtml = story.comprehension.mcq.map(function (item, qIndex) {
+          const optsHtml = item.options.map(function (opt, oIndex) {
+            return (
+              '<label class="mcq-option" data-o="' + oIndex + '">' +
+                '<input type="radio" name="mcq-q' + qIndex + '" value="' + oIndex + '" />' +
+                "<span>" + opt + "</span>" +
+              "</label>"
+            );
+          }).join("");
+          return (
+            '<div class="mcq-question" data-question="' + qIndex + '">' +
+              '<p class="mcq-q-text"><b>' + (qIndex + 1) + ".</b> " + item.q + "</p>" +
+              '<div class="mcq-options">' + optsHtml + "</div>" +
+              '<p class="answer-feedback is-hidden"></p>' +
+            "</div>"
+          );
+        }).join("");
+
+        const tfHtml = story.comprehension.tf.map(function (item, tIndex) {
+          return (
+            '<div class="tf-question" data-question="' + tIndex + '">' +
+              '<p class="tf-q-text"><b>' + (tIndex + 1) + ".</b> " + item.statement + "</p>" +
+              '<div class="tf-buttons">' +
+                '<button type="button" class="tf-btn" data-val="true">TRUE</button>' +
+                '<button type="button" class="tf-btn" data-val="false">FALSE</button>' +
+              "</div>" +
+              '<p class="answer-feedback is-hidden"></p>' +
+            "</div>"
+          );
+        }).join("");
+
+        const partALabel = story.comprehension.partALabel || "Choose the Answer";
+        const partBLabel = story.comprehension.partBLabel || "True or False";
+
+        return (
+          '<div class="comprehension-section">' +
+            '<h4 class="section-icon-heading">\ud83d\udcdd Comprehension Activities</h4>' +
+            '<div class="comp-part"><h5>Part A \u2014 ' + partALabel + '</h5>' + mcqHtml + "</div>" +
+            '<div class="comp-part"><h5>Part B \u2014 ' + partBLabel + '</h5>' + tfHtml + "</div>" +
+            '<button type="button" class="check-answers-btn" id="check-answers-btn">CHECK ANSWERS</button>' +
+            '<div class="score-summary is-hidden" id="score-summary"></div>' +
+          "</div>"
+        );
+      }
+
+      function attachComprehensionEvents(story, activityState) {
+        const section = readerBody.querySelector(".comprehension-section");
+        if (!section) return;
+
+        section.querySelectorAll(".tf-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            btn.closest(".tf-question").querySelectorAll(".tf-btn").forEach(function (b) {
+              b.classList.remove("is-selected");
+            });
+            btn.classList.add("is-selected");
+          });
+        });
+
+        const checkBtn = section.querySelector("#check-answers-btn");
+        checkBtn.addEventListener("click", function () {
+          let score = 0;
+          const total = story.comprehension.mcq.length + story.comprehension.tf.length;
+
+          story.comprehension.mcq.forEach(function (item, qIndex) {
+            const qEl = section.querySelector('.mcq-question[data-question="' + qIndex + '"]');
+            const options = qEl.querySelectorAll(".mcq-option");
+            const feedback = qEl.querySelector(".answer-feedback");
+            const selected = qEl.querySelector('input[type="radio"]:checked');
+
+            options.forEach(function (opt, oIndex) {
+              opt.classList.remove("is-correct", "is-incorrect");
+              if (oIndex === item.correct) opt.classList.add("is-correct");
+            });
+
+            if (selected) {
+              const chosenIndex = Number(selected.value);
+              if (chosenIndex === item.correct) {
+                score++;
+                feedback.textContent = "\u2705 Correct!";
+                feedback.className = "answer-feedback is-correct-text";
+              } else {
+                options[chosenIndex].classList.add("is-incorrect");
+                feedback.textContent = "\u274c Not quite. Correct answer: " + item.options[item.correct];
+                feedback.className = "answer-feedback is-incorrect-text";
+              }
+            } else {
+              feedback.textContent = "\u2757 You didn\u2019t answer. Correct answer: " + item.options[item.correct];
+              feedback.className = "answer-feedback is-incorrect-text";
+            }
+            feedback.classList.remove("is-hidden");
+          });
+
+          story.comprehension.tf.forEach(function (item, tIndex) {
+            const qEl = section.querySelector('.tf-question[data-question="' + tIndex + '"]');
+            const feedback = qEl.querySelector(".answer-feedback");
+            const selectedBtn = qEl.querySelector(".tf-btn.is-selected");
+            const correctText = item.correct ? "TRUE" : "FALSE";
+
+            qEl.querySelectorAll(".tf-btn").forEach(function (b) {
+              b.classList.remove("is-correct", "is-incorrect");
+              if ((b.dataset.val === "true") === item.correct) b.classList.add("is-correct");
+            });
+
+            if (selectedBtn) {
+              const chosen = selectedBtn.dataset.val === "true";
+              if (chosen === item.correct) {
+                score++;
+                feedback.textContent = "\u2705 Correct!";
+                feedback.className = "answer-feedback is-correct-text";
+              } else {
+                selectedBtn.classList.add("is-incorrect");
+                feedback.textContent = "\u274c Not quite. Correct answer: " + correctText;
+                feedback.className = "answer-feedback is-incorrect-text";
+              }
+            } else {
+              feedback.textContent = "\u2757 You didn\u2019t answer. Correct answer: " + correctText;
+              feedback.className = "answer-feedback is-incorrect-text";
+            }
+            feedback.classList.remove("is-hidden");
+          });
+
+          const scoreBox = section.querySelector("#score-summary");
+
+          if (story.splitScoring) {
+            const percent = total ? score / total : 0;
+            const friendlyMsg = percent >= 0.7
+              ? "\ud83c\udf1f Excellent! You got " + score + "/" + total + "."
+              : "\ud83d\udc4d Good job! Keep reading and try again.";
+
+            let html = '<div class="score-line">\ud83d\udcd6 Reading Score: ' + score + " / " + total + "</div>";
+            if (activityState && activityState.vocabTotal) {
+              html += '<div class="score-line">\ud83d\udd24 Vocabulary Score: ' + activityState.vocabCorrect + " / " + activityState.vocabTotal + "</div>";
+            }
+            html += '<div class="friendly-message">' + friendlyMsg + "</div>";
+            scoreBox.innerHTML = html;
+          } else {
+            scoreBox.textContent = "\ud83c\udf1f Your score: " + score + " / " + total;
+          }
+
+          scoreBox.classList.remove("is-hidden");
+          scoreBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      }
+
+      // ----- Vocabulary in Context -----
+      function buildVocabularyHTML(story) {
+        if (!story.vocabulary) return "";
+
+        const itemsHtml = story.vocabulary.map(function (item, vIndex) {
+          const optsHtml = item.options.map(function (opt, oIndex) {
+            return '<button type="button" class="vocab-option" data-o="' + oIndex + '">' + opt + "</button>";
+          }).join("");
+          return (
+            '<div class="vocab-item" data-vocab="' + vIndex + '">' +
+              '<p class="vocab-word">\ud83d\udd39 <b>' + item.word + "</b></p>" +
+              '<p class="vocab-sentence">\u201c' + item.sentence + '\u201d</p>' +
+              '<p class="vocab-question">' + item.question + "</p>" +
+              '<div class="vocab-options">' + optsHtml + "</div>" +
+              '<p class="vocab-feedback is-hidden"></p>' +
+            "</div>"
+          );
+        }).join("");
+
+        return (
+          '<div class="vocabulary-section">' +
+            '<h4 class="section-icon-heading">\ud83d\udd24 Vocabulary in Context</h4>' +
+            '<div class="vocab-grid">' + itemsHtml + "</div>" +
+          "</div>"
+        );
+      }
+
+      function attachVocabularyEvents(story, activityState) {
+        const section = readerBody.querySelector(".vocabulary-section");
+        if (!section) return;
+
+        section.querySelectorAll(".vocab-option").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const wrap = btn.closest(".vocab-item");
+            if (wrap.classList.contains("is-answered")) return;
+            wrap.classList.add("is-answered");
+
+            const vIndex = Number(wrap.dataset.vocab);
+            const item = story.vocabulary[vIndex];
+            const chosenIndex = Number(btn.dataset.o);
+            const feedback = wrap.querySelector(".vocab-feedback");
+            const options = wrap.querySelectorAll(".vocab-option");
+
+            options.forEach(function (opt, oIndex) {
+              opt.disabled = true;
+              if (oIndex === item.correct) opt.classList.add("is-correct");
+            });
+
+            if (chosenIndex === item.correct) {
+              feedback.textContent = "\u2705 Great job! That\u2019s correct.";
+              feedback.className = "vocab-feedback is-correct-text";
+              if (activityState) activityState.vocabCorrect++;
+            } else {
+              btn.classList.add("is-incorrect");
+              feedback.textContent = "\ud83d\udca1 Not quite \u2014 the correct meaning is: \u201c" + item.options[item.correct] + "\u201d";
+              feedback.className = "vocab-feedback is-incorrect-text";
+            }
+            feedback.classList.remove("is-hidden");
+          });
+        });
+      }
+
       function openStory(level, index) {
         const story = stories[level][index];
         if (!story) return;
@@ -685,26 +1076,39 @@ B1: [
           return "<p>" + line + "</p>";
         }).join("");
 
-        const words = story.words.map(function (item) {
-          return "<li><b>" + item.word + "</b> \u2014 " + item.meaning + "</li>";
-        }).join("");
+        // Reading YO! has no audio activities \u2014 the reader never renders an audio player.
+        const hasNewActivities = !!(story.comprehension || story.vocabulary);
+        const readingHeading = hasNewActivities ? '<h4 class="section-icon-heading">\ud83d\udcd6 Reading</h4>' : "";
+
+        let wordsBlockHtml = "";
+        if (story.vocabulary) {
+          wordsBlockHtml = buildVocabularyHTML(story);
+        } else if (story.words) {
+          const words = story.words.map(function (item) {
+            return "<li><b>" + item.word + "</b> \u2014 " + item.meaning + "</li>";
+          }).join("");
+          wordsBlockHtml = '<div class="words-to-know"><h4>Words to Know</h4><ul>' + words + "</ul></div>";
+        }
+
+        const comprehensionHtml = buildComprehensionHTML(story);
+
+        const heroClass = story.splitScoring ? "reader-illustration reader-illustration-hero" : "reader-illustration";
+        const heroAlt = story.imageAlt || ("Illustration for " + story.title);
 
         readerBody.innerHTML =
           '<div class="reader-header">' +
-            '<img class="reader-illustration" src="' + story.image + '" alt="Illustration for ' + story.title + '" />' +
+            '<img class="' + heroClass + '" src="' + story.image + '" alt="' + heroAlt + '" onerror="this.style.display=\'none\'" />' +
             "<h3>" + story.title + "</h3>" +
             '<div class="reader-meta"><span>Level: ' + story.level + '</span><span>' + story.type + '</span></div>' +
-            '<div class="reader-audio-wrap">' +
-              '<audio controls preload="none" src="' + story.audio + '">' +
-                "Your browser does not support the audio element." +
-              "</audio>" +
-            "</div>" +
           "</div>" +
+          readingHeading +
           '<div class="reader-story-text">' + paragraphs + "</div>" +
-          '<div class="words-to-know">' +
-            "<h4>Words to Know</h4>" +
-            "<ul>" + words + "</ul>" +
-          "</div>";
+          wordsBlockHtml +
+          comprehensionHtml;
+
+        const activityState = { vocabCorrect: 0, vocabTotal: story.vocabulary ? story.vocabulary.length : 0 };
+        attachComprehensionEvents(story, activityState);
+        attachVocabularyEvents(story, activityState);
 
         librarySection.classList.add("is-hidden");
         readerSection.classList.remove("is-hidden");
