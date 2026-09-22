@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ENGLISH YO! — Play Games YO! Choose your challenge, play, learn, and grow with Emberfall, Word Tug of War, Detective Eyes, Scrabble YO!, Crossword Adventure and Sort It Out!" />
     <title>Play Games YO! — ENGLISH YO!</title>
+<link rel="icon" type="image/png" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
@@ -51,8 +52,17 @@
       }
       .games-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: clamp(18px, 2.4vw, 34px);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(16px, 1.8vw, 26px);
+      }
+      @media (max-width: 1100px) {
+        .games-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: clamp(18px, 2.4vw, 34px);
+        }
+      }
+      .game-card[hidden] {
+        display: none !important;
       }
       .game-card {
         display: flex;
@@ -141,6 +151,15 @@
         box-shadow: 0 16px 28px rgba(255, 62, 121, 0.4);
         transform: translateY(-2px);
       }
+      .game-card__body .game-card__devices {
+        flex: 0 0 auto;
+        margin: 2px 0 0;
+        color: #3a4d78;
+        font-size: clamp(0.76rem, 0.85vw, 0.84rem);
+        font-weight: 700;
+        line-height: 1.35;
+        opacity: 0.88;
+      }
       .game-card--emberfall .game-card__tag {
         color: #7a3a00;
       }
@@ -176,6 +195,149 @@
       @media (max-width: 760px) {
         .games-grid {
           grid-template-columns: 1fr;
+        }
+      }
+
+      /* --- search / filter / sort toolbar --- */
+      .games-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+        margin-bottom: clamp(16px, 2vw, 26px);
+      }
+      .games-search {
+        position: relative;
+        flex: 1 1 260px;
+        min-width: 0;
+      }
+      .games-search__icon {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        font-size: 0.95rem;
+        pointer-events: none;
+      }
+      .games-search input {
+        width: 100%;
+        padding: 12px 18px 12px 44px;
+        border: 2px solid #dbe6fb;
+        border-radius: 999px;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0, 53, 110, 0.08);
+        color: var(--navy);
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+      .games-search input::placeholder {
+        color: #8296bd;
+        font-weight: 700;
+      }
+      .games-filters {
+        display: flex;
+        gap: 8px;
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .games-filters::-webkit-scrollbar {
+        display: none;
+      }
+      .games-filter {
+        flex: 0 0 auto;
+        padding: 10px 16px;
+        border: 2px solid #dbe6fb;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--navy);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 800;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+      .games-filter:hover {
+        border-color: var(--navy);
+        transform: translateY(-2px);
+      }
+      .games-filter.is-active {
+        border-color: var(--navy);
+        background: var(--navy);
+        color: #fff;
+      }
+      .games-sort {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #3a4d78;
+        font-size: 0.84rem;
+        font-weight: 800;
+      }
+      .games-sort select {
+        padding: 10px 14px;
+        border: 2px solid #dbe6fb;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--navy);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .games-empty {
+        margin-top: 8px;
+        padding: clamp(28px, 4vw, 44px) 20px;
+        border-radius: clamp(20px, 2vw, 30px);
+        background: #fff;
+        box-shadow: 0 14px 34px rgba(0, 53, 110, 0.14);
+        text-align: center;
+      }
+      .games-empty[hidden] {
+        display: none;
+      }
+      .games-empty__title {
+        margin: 0;
+        color: var(--navy);
+        font-family: var(--display);
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+        font-weight: 800;
+      }
+      .games-empty__copy {
+        margin: 6px 0 16px;
+        color: #3a4d78;
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+      .games-empty__reset {
+        padding: 12px 24px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--pink);
+        box-shadow: 0 12px 22px rgba(255, 62, 121, 0.32);
+        color: #fff;
+        font-family: var(--display);
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      @media (max-width: 760px) {
+        .games-search {
+          flex: 1 1 100%;
+        }
+        .games-filters {
+          width: 100%;
+          -webkit-overflow-scrolling: touch;
+        }
+        .games-sort {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .games-sort select {
+          flex: 1 1 auto;
+          margin-left: 6px;
         }
       }
       /* Developer Modal */
@@ -223,21 +385,27 @@
       </section>
 
       <section class="games-grid-section" aria-label="Available games">
+        <div class="wide-shell games-toolbar">
+          <div class="games-search">
+            <span class="games-search__icon" aria-hidden="true">🔎</span>
+            <input id="game-search" type="search" placeholder="Search games..." aria-label="Search games" autocomplete="off" />
+          </div>
+          <div class="games-filters" role="group" aria-label="Filter games by device">
+            <button class="games-filter is-active" type="button" data-device="all" aria-pressed="true">All</button>
+            <button class="games-filter" type="button" data-device="mobile" aria-pressed="false">📱 Mobile</button>
+            <button class="games-filter" type="button" data-device="desktop" aria-pressed="false">💻 Desktop</button>
+            <button class="games-filter" type="button" data-device="interactive" aria-pressed="false">🖥️ Interactive</button>
+          </div>
+          <label class="games-sort" for="game-sort">Sort:
+            <select id="game-sort">
+              <option value="featured">Featured</option>
+              <option value="az">A–Z</option>
+              <option value="za">Z–A</option>
+            </select>
+          </label>
+        </div>
         <div class="wide-shell games-grid">
-          <article class="game-card game-card--emberfall">
-            <a class="game-card__image" href="games/emberfall/emberfall.html" aria-label="Play Emberfall">
-              <img src="assets/games/emberfall-card.png" alt="Emberfall — Kip the lantern sprite stands beside a glowing beacon in the Mosswood Trail" loading="lazy" />
-              <span class="game-card__tag">Adventure • English Learning</span>
-            </a>
-            <div class="game-card__body">
-              <h2>EMBERFALL</h2>
-              <p>An English-learning adventure game.</p>
-              <p>A2 Level - Simple Present Tense in Fun Way.</p>
-              <a class="game-card__play" href="games/emberfall/emberfall.html">PLAY NOW <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="game-card game-card--wordtug">
+          <article class="game-card game-card--wordtug" data-title="WORD TUG OF WAR" data-devices="mobile desktop interactive" data-category="Grammar Sentence Building" data-order="1">
             <a class="game-card__image" href="games/word-tug/word-tug.html" aria-label="Play Word Tug of War">
               <img src="assets/games/word-tug-card.png" alt="Word Tug of War — Kobo the fox and Rex the panda pulling the rope in the ENGLISH YO! arena" loading="lazy" />
               <span class="game-card__tag">Grammar • Sentence Building</span>
@@ -246,11 +414,24 @@
               <h2>WORD TUG OF WAR</h2>
               <p>Build correct English sentences and pull your way to victory.</p>
               <p>A2-B1 Level - Arranging Tenses in Fun Way.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <a class="game-card__play" href="games/word-tug/word-tug.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-
- <article class="game-card game-card--detective">
+          <article class="game-card game-card--emberfall" data-title="EMBERFALL" data-devices="mobile desktop" data-category="Adventure English Learning" data-order="2">
+            <a class="game-card__image" href="games/emberfall/emberfall.html" aria-label="Play Emberfall">
+              <img src="assets/games/emberfall-card.png" alt="Emberfall — Kip the lantern sprite stands beside a glowing beacon in the Mosswood Trail" loading="lazy" />
+              <span class="game-card__tag">Adventure • English Learning</span>
+            </a>
+            <div class="game-card__body">
+              <h2>EMBERFALL</h2>
+              <p>An English-learning adventure game.</p>
+              <p>A2 Level - Simple Present Tense in Fun Way.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop</p>
+              <a class="game-card__play" href="games/emberfall/emberfall.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article class="game-card game-card--detective" data-title="DETECTIVE EYES" data-devices="desktop interactive" data-category="Critical Thinking Investigation Reading" data-order="3">
     <a class="game-card__image"
        href="games/detective-eyes/detective-eyes.html"
        aria-label="Play Detective Eyes">
@@ -276,6 +457,7 @@
             A2-B1 Level · Critical Thinking &amp; Reading Comprehension.
         </p>
 
+        <p class="game-card__devices">Works on: 💻 Desktop · 🖥️ Interactive Display</p>
         <a
             class="game-card__play"
             href="games/detective-eyes/detective-eyes.html"
@@ -284,8 +466,7 @@
         </a>
     </div>
 </article>
-
-          <article class="game-card game-card--scrabble">
+          <article class="game-card game-card--scrabble" data-title="SCRABBLE YO!" data-devices="mobile desktop interactive" data-category="Vocabulary Word Building" data-order="4">
             <a class="game-card__image" href="games/scrabble-yo/index.html" aria-label="Play Scrabble YO!">
               <img src="assets/games/scrabble-yo-card.png" alt="Scrabble YO! — Kobo the fox and Rex the panda beside the SCRABBLE YO! logo" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Word Building</span>
@@ -294,11 +475,11 @@
               <h2>SCRABBLE YO!</h2>
               <p>Build real English words on the board and learn what every word means.</p>
               <p>A1-B2 Level - 123,000+ Words - 1-4 Players.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <a class="game-card__play" href="games/scrabble-yo/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-
-          <article class="game-card game-card--crossword">
+          <article class="game-card game-card--crossword" data-title="CROSSWORD ADVENTURE" data-devices="mobile desktop interactive" data-category="Vocabulary Crossword" data-order="5">
             <a class="game-card__image" href="games/crossword.html" aria-label="Play Crossword Adventure">
               <img src="assets/games/crossword-card.png" alt="Crossword Adventure — Kobo the fox and Rex the panda beside a crossword grid spelling ENGLISH, LEARN and PLAY" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Crossword</span>
@@ -308,11 +489,11 @@
               <p>Solve clues. Build vocabulary.</p>
               <p>Solve English crossword puzzles from A1 to B2. Challenge yourself or play together in Class Mode!</p>
               <p>A1-B2 Level - Vocabulary - Solo &amp; Class Mode.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <a class="game-card__play" href="games/crossword.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-
-          <article class="game-card game-card--sortit">
+          <article class="game-card game-card--sortit" data-title="SORT IT OUT!" data-devices="mobile desktop interactive" data-category="Vocabulary Listening Game" data-order="6">
             <a class="game-card__image" href="games/sort-it-out/index.html" aria-label="Play Sort It Out">
               <img src="assets/games/sort-it-out-card.png" alt="Sort It Out! — two ENGLISH YO! students beside the five waste bins: organic, non-organic, paper, hazardous and residual" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Listening • Game</span>
@@ -321,11 +502,11 @@
               <h2>SORT IT OUT! ♻️</h2>
               <p>Learn the words. Sort the waste.</p>
               <p>A1-A2 Level - 25 Words - Sort, Listen &amp; Quiz.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <a class="game-card__play" href="games/sort-it-out/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-
-          <article class="game-card game-card--time">
+          <article class="game-card game-card--time" data-title="TELLING THE TIME!" data-devices="mobile desktop interactive" data-category="Speaking Listening Numbers Time" data-order="7">
             <a class="game-card__image" href="games/telling-time/index.html" aria-label="Play Telling the Time">
   <img
   src="assets/games/telling-time-card.png"
@@ -338,9 +519,16 @@
               <h2>TELLING THE TIME! 🕐</h2>
               <p>Move the hands, listen, choose and match.</p>
               <p>A1-A2 Level - British English - 6 Games, 3 Levels.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <a class="game-card__play" href="games/telling-time/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
+
+        </div>
+        <div class="wide-shell games-empty" id="games-empty" role="status" hidden>
+          <p class="games-empty__title">No games found.</p>
+          <p class="games-empty__copy">Try another search or device filter.</p>
+          <button class="games-empty__reset" type="button" id="games-reset">Reset filters</button>
         </div>
       </section>
     </main>
@@ -417,6 +605,78 @@
             closeModal();
           }
         });
+      })();
+    </script>
+
+
+    <!-- Play Games YO! - search, device filter and sort (vanilla JS, no libraries) -->
+    <script>
+      // games-controls
+      (function () {
+        var grid = document.querySelector('.games-grid');
+        if (!grid) return;
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.game-card'));
+        var search = document.getElementById('game-search');
+        var sortSel = document.getElementById('game-sort');
+        var empty = document.getElementById('games-empty');
+        var resetBtn = document.getElementById('games-reset');
+        var filters = Array.prototype.slice.call(document.querySelectorAll('.games-filter'));
+        var device = 'all';
+
+        // searchable text: title, description, level, category, "Works on" devices
+        cards.forEach(function (card) {
+          card.setAttribute('data-haystack', (
+            card.textContent + ' ' + (card.getAttribute('data-category') || '') + ' ' +
+            (card.getAttribute('data-devices') || '')
+          ).replace(/\s+/g, ' ').toLowerCase());
+        });
+
+        function applyFilters() {
+          var q = (search && search.value ? search.value : '').trim().toLowerCase();
+          var shown = 0;
+          cards.forEach(function (card) {
+            var matchesText = !q || card.getAttribute('data-haystack').indexOf(q) !== -1;
+            var matchesDevice = device === 'all' ||
+              (' ' + card.getAttribute('data-devices') + ' ').indexOf(' ' + device + ' ') !== -1;
+            var show = matchesText && matchesDevice;
+            if (show) { card.removeAttribute('hidden'); shown++; } else { card.setAttribute('hidden', ''); }
+          });
+          if (empty) { if (shown === 0) { empty.removeAttribute('hidden'); } else { empty.setAttribute('hidden', ''); } }
+        }
+
+        function applySort() {
+          var mode = sortSel ? sortSel.value : 'featured';
+          cards.slice().sort(function (a, b) {
+            if (mode === 'az') return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
+            if (mode === 'za') return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+            return parseInt(a.getAttribute('data-order'), 10) - parseInt(b.getAttribute('data-order'), 10);
+          }).forEach(function (card) { grid.appendChild(card); });
+        }
+
+        function setDevice(value) {
+          device = value;
+          filters.forEach(function (btn) {
+            var on = btn.getAttribute('data-device') === value;
+            btn.classList.toggle('is-active', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+        }
+
+        if (search) search.addEventListener('input', applyFilters);
+        filters.forEach(function (btn) {
+          btn.addEventListener('click', function () { setDevice(btn.getAttribute('data-device')); applyFilters(); });
+        });
+        if (sortSel) sortSel.addEventListener('change', function () { applySort(); applyFilters(); });
+        if (resetBtn) resetBtn.addEventListener('click', function () {
+          if (search) search.value = '';
+          setDevice('all');
+          if (sortSel) sortSel.value = 'featured';
+          applySort(); applyFilters();
+          if (search) search.focus();
+        });
+
+        applySort();
+        applyFilters();
       })();
     </script>
 
