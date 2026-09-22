@@ -87,7 +87,9 @@
 
       /* ---------- home ---------- */
       .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); gap: clamp(16px, 2.2vw, 28px); align-items: center; padding-top: 6px; }
-      .hero-logo { width: min(100%, 460px); border-radius: 26px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42); }
+      /* Logo is ONE external file: assets/pattern-quest-logo.png
+         Replace that PNG (same filename) and it appears automatically. */
+      .hero-logo { width: min(100%, 460px); max-height: 340px; object-fit: contain; border-radius: 26px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42); }
       .hero p { font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.5; color: #d9e6ff; margin: 14px 0 0; }
       .demo-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
       .demo-tile {
@@ -122,8 +124,15 @@
       }
       .world:hover { transform: translateY(-5px); }
       .world[aria-pressed="true"] { border-color: var(--mint); box-shadow: 0 0 0 4px rgba(110, 240, 189, 0.26); }
-      .world > img { width: 100%; aspect-ratio: 1 / 1.55; object-fit: cover; }
-      .world-badge { position: absolute; top: 8px; left: 8px; width: 54px; height: 54px; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5)); }
+      /* Planet artwork: assets/planet-1.png … planet-4.png
+         object-fit: contain keeps any replacement image undistorted. */
+      .world > img { width: 100%; aspect-ratio: 1 / 1.55; object-fit: contain; background: #0d1747; }
+      .world-badge { position: absolute; top: 8px; left: 8px; width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5)); }
+      .world-level { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 999px; background: rgba(4, 10, 40, 0.86); border: 1px solid rgba(255, 255, 255, 0.3); font-family: var(--display); font-size: 0.74rem; font-weight: 800; letter-spacing: 0.04em; }
+      .world-meter { display: flex; gap: 4px; margin-bottom: 6px; }
+      .world-meter i { width: 16px; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.28); }
+      .world-meter i.on { background: var(--gold); }
+      .world-topic { display: block; margin-top: 3px; font-style: normal; font-size: 0.72rem; font-weight: 700; color: #bcd0f7; }
       .world-foot { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px 12px; background: linear-gradient(transparent, rgba(4, 10, 40, 0.94) 38%); }
       .world-foot b { display: block; font-family: var(--display); font-size: 1.05rem; }
       .world-foot small { color: #ffdf88; font-size: 0.76rem; font-weight: 800; }
@@ -178,7 +187,27 @@
         border-radius: 20px; background: #fff; border: 3px solid #d7e6f7;
         display: grid; place-items: center; box-shadow: 0 5px 0 rgba(14, 50, 96, 0.13);
       }
+      .pattern .step { display: inline-flex; align-items: center; gap: clamp(5px, 1.1vw, 11px); }
+      .cell.wide { width: clamp(72px, 11vw, 116px); }
       .cell img { width: 78%; height: 78%; object-fit: contain; }
+      /* one picture, three sizes (size patterns) */
+      .cell .pi { object-fit: contain; }
+      .cell .pi.sz-sm { width: 46%; height: 46%; }
+      .cell .pi.sz-md { width: 68%; height: 68%; }
+      .cell .pi.sz-lg { width: 94%; height: 94%; }
+      /* a group of N pictures inside one cell (quantity patterns) */
+      .cell .grp { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3px; width: 92%; height: 92%; }
+      .cell .grp img { width: auto; height: auto; object-fit: contain; }
+      .cell .grp.g1 img { width: 74%; height: 74%; }
+      .cell .grp.g2 img { width: calc(50% - 4px); height: 48%; }
+      .cell .grp.g3 img, .cell .grp.g4 img { width: calc(50% - 4px); height: 44%; }
+      .cell .grp.g5 img, .cell .grp.g6 img { width: calc(33.3% - 4px); height: 42%; }
+      /* numbers */
+      .cell .num { font-family: var(--display); font-weight: 800; font-size: clamp(1.4rem, 3.6vw, 2.15rem); color: #17306b; line-height: 1; }
+      .cell .numw { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 100%; height: 100%; }
+      .cell .numw b { font-family: var(--display); font-weight: 800; font-size: clamp(1.1rem, 2.8vw, 1.7rem); color: #17306b; line-height: 1; }
+      .cell .numw img { width: 44%; height: 40%; object-fit: contain; }
+      .cell .numw img.tiny { width: 34%; height: 32%; }
       .cell.blank { background: #fff3cd; border: 3px dashed #e3a52a; color: #8a5a00; font-family: var(--display); font-size: clamp(1.6rem, 4vw, 2.4rem); animation: pulse 1.5s ease-in-out infinite; }
       .cell.filled { background: #ddfbec; border-color: #38b985; animation: none; }
       @keyframes pulse { 50% { transform: scale(1.06); } }
@@ -190,7 +219,10 @@
         display: grid; justify-items: center; gap: 6px; color: var(--ink);
         box-shadow: 0 6px 0 rgba(14, 50, 96, 0.15); transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
       }
-      .choice img { width: clamp(56px, 8vw, 76px); height: clamp(56px, 8vw, 76px); object-fit: contain; }
+      .choice .cell.plain { border: 0; background: transparent; box-shadow: none; width: clamp(62px, 9vw, 86px); height: clamp(62px, 9vw, 86px); }
+      .choice .cell.plain.wide { width: clamp(76px, 11vw, 104px); }
+      .choice img { object-fit: contain; }
+      .choice > img { width: clamp(56px, 8vw, 76px); height: clamp(56px, 8vw, 76px); }
       .choice b { font-family: var(--display); font-size: 1.02rem; }
       .choice:hover { transform: translateY(-4px); border-color: var(--sky); background: #f0fbff; }
       .choice:disabled { cursor: default; }
@@ -215,11 +247,13 @@
       .word-card .row { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
       .word-card .row img { width: 72px; height: 72px; object-fit: contain; }
       .word-card .en { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; }
+      .word-card .ipa { font-family: "Space Mono", ui-monospace, monospace; font-size: 0.92rem; font-weight: 700; color: #0a5541; margin-top: 2px; }
       .word-card .id { font-size: 0.92rem; font-weight: 800; color: #0d5a45; }
       .speak { width: 100%; margin-top: 14px; padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, 0.82); color: #04372c; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
       .speak:hover { background: #fff; }
       .mission-card { margin-top: 14px; }
-      .mission-card img { width: 76px; height: 76px; margin: 0 auto 8px; }
+      .mission-card img { width: 76px; height: 76px; object-fit: contain; margin: 0 auto 8px; }
+      .mission-card .skill { display: block; margin-top: 10px; padding: 6px 10px; border-radius: 999px; background: rgba(110, 240, 189, 0.16); border: 1px solid rgba(110, 240, 189, 0.45); color: #8ff0cb; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.04em; text-align: center; }
       .mission-card b { display: block; font-family: var(--display); font-size: 1.15rem; text-align: center; }
       .mission-card p { margin: 6px 0 0; text-align: center; color: #c8d8fb; font-size: 0.88rem; line-height: 1.4; }
 
@@ -296,7 +330,7 @@
       <main id="screen-home" class="screen active">
         <section class="hero">
           <div>
-            <img class="hero-logo" src="assets/logo.jpg" alt="Pattern Quest — Math × English Adventure" />
+            <img class="hero-logo" src="assets/pattern-quest-logo.png" alt="Pattern Quest — Math × English Adventure" />
             <p id="home-intro"></p>
             <div class="demo-strip" aria-hidden="true">
               <span class="demo-tile"><img src="assets/apple.png" alt="" /></span>
@@ -359,18 +393,20 @@
             <div class="word-card">
               <span class="label" id="word-label"></span>
               <div class="row">
-                <img id="word-icon" src="assets/apple.png" alt="" />
+                <img id="word-icon" src="assets/ui-star.png" alt="" />
                 <div>
                   <div class="en" id="word-en">?</div>
+                  <div class="ipa" id="word-ipa"></div>
                   <div class="id" id="word-id"></div>
                 </div>
               </div>
               <button class="speak" id="btn-speak" type="button">🔊 <span id="speak-label"></span></button>
             </div>
             <div class="panel mission-card">
-              <img id="mission-icon" src="assets/map-school.png" alt="" class="float" />
+              <img id="mission-icon" src="assets/planet-badge-1.png" alt="" class="float" />
               <b id="mission-name"></b>
               <p id="mission-desc"></p>
+              <span class="skill" id="mission-skill"></span>
             </div>
             <button class="chip" id="btn-quit" type="button" style="margin-top: 14px; width: 100%; justify-content: center">
               <span id="quit-label"></span>
@@ -403,22 +439,66 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
-      /* =============== data =============== */
-      const WORDS = {
-        apple: ["apple", "apel"], banana: ["banana", "pisang"], orange: ["orange", "jeruk"],
-        book: ["book", "buku"], pencil: ["pencil", "pensil"], eraser: ["eraser", "penghapus"],
-        ruler: ["ruler", "penggaris"], notebook: ["notebook", "buku tulis"], backpack: ["backpack", "tas ransel"],
-        laptop: ["laptop", "laptop"], keyboard: ["keyboard", "papan ketik"], mouse: ["mouse", "tetikus"],
-        calculator: ["calculator", "kalkulator"], scissors: ["scissors", "gunting"], lamp: ["lamp", "lampu"],
-        chair: ["chair", "kursi"], table: ["table", "meja"], sofa: ["sofa", "sofa"], bed: ["bed", "tempat tidur"],
-        pillow: ["pillow", "bantal"], cup: ["cup", "cangkir"], plate: ["plate", "piring"], spoon: ["spoon", "sendok"],
-        bottle: ["bottle", "botol"], towel: ["towel", "handuk"], jacket: ["jacket", "jaket"], shoes: ["shoes", "sepatu"],
-        glasses: ["glasses", "kacamata"], clock: ["clock", "jam dinding"], camera: ["camera", "kamera"],
-        ball: ["ball", "bola"], bicycle: ["bicycle", "sepeda"], car: ["car", "mobil"], bus: ["bus", "bus"],
-        "traffic-light": ["traffic light", "lampu lalu lintas"], tree: ["tree", "pohon"], flower: ["flower", "bunga"],
-        plant: ["plant", "tanaman"], cat: ["cat", "kucing"], dog: ["dog", "anjing"], bird: ["bird", "burung"],
-        butterfly: ["butterfly", "kupu-kupu"], basket: ["basket", "keranjang"], bread: ["bread", "roti"], egg: ["egg", "telur"]
+      /* =============== vocabulary ===============
+         key : [ file, english, IPA, bahasa indonesia, category ]
+         Every icon is an external PNG in assets/ — replace a PNG, keep the
+         filename, and it appears automatically. */
+      const ITEMS = {
+        apple: ["apple.png", "apple", "/ˈæpəl/", "apel", "food"],
+        banana: ["banana.png", "banana", "/bəˈnɑːnə/", "pisang", "food"],
+        orange: ["orange.png", "orange", "/ˈɒrɪndʒ/", "jeruk", "food"],
+        bread: ["bread.png", "bread", "/bred/", "roti", "food"],
+        egg: ["egg.png", "egg", "/eɡ/", "telur", "food"],
+        cat: ["cat.png", "cat", "/kæt/", "kucing", "animals"],
+        dog: ["dog.png", "dog", "/dɒɡ/", "anjing", "animals"],
+        bird: ["bird.png", "bird", "/bɜːd/", "burung", "animals"],
+        butterfly: ["butterfly.png", "butterfly", "/ˈbʌtəflaɪ/", "kupu-kupu", "animals"],
+        book: ["book.png", "book", "/bʊk/", "buku", "school"],
+        pencil: ["pencil.png", "pencil", "/ˈpensəl/", "pensil", "school"],
+        eraser: ["eraser.png", "eraser", "/ɪˈreɪzə/", "penghapus", "school"],
+        ruler: ["ruler.png", "ruler", "/ˈruːlə/", "penggaris", "school"],
+        notebook: ["notebook.png", "notebook", "/ˈnəʊtbʊk/", "buku tulis", "school"],
+        backpack: ["backpack.png", "backpack", "/ˈbækpæk/", "tas ransel", "school"],
+        scissors: ["scissors.png", "scissors", "/ˈsɪzəz/", "gunting", "school"],
+        calculator: ["calculator.png", "calculator", "/ˈkælkjəleɪtə/", "kalkulator", "school"],
+        laptop: ["laptop.png", "laptop", "/ˈlæptɒp/", "laptop", "school"],
+        keyboard: ["keyboard.png", "keyboard", "/ˈkiːbɔːd/", "papan ketik", "school"],
+        mouse: ["mouse.png", "mouse", "/maʊs/", "tetikus", "school"],
+        chair: ["chair.png", "chair", "/tʃeə/", "kursi", "home"],
+        table: ["table.png", "table", "/ˈteɪbəl/", "meja", "home"],
+        sofa: ["sofa.png", "sofa", "/ˈsəʊfə/", "sofa", "home"],
+        bed: ["bed.png", "bed", "/bed/", "tempat tidur", "home"],
+        pillow: ["pillow.png", "pillow", "/ˈpɪləʊ/", "bantal", "home"],
+        cup: ["cup.png", "cup", "/kʌp/", "cangkir", "home"],
+        plate: ["plate.png", "plate", "/pleɪt/", "piring", "home"],
+        spoon: ["spoon.png", "spoon", "/spuːn/", "sendok", "home"],
+        bottle: ["bottle.png", "bottle", "/ˈbɒtəl/", "botol", "home"],
+        towel: ["towel.png", "towel", "/ˈtaʊəl/", "handuk", "home"],
+        lamp: ["lamp.png", "lamp", "/læmp/", "lampu", "home"],
+        clock: ["clock.png", "clock", "/klɒk/", "jam dinding", "home"],
+        basket: ["basket.png", "basket", "/ˈbɑːskɪt/", "keranjang", "home"],
+        camera: ["camera.png", "camera", "/ˈkæmərə/", "kamera", "home"],
+        ball: ["ball.png", "ball", "/bɔːl/", "bola", "home"],
+        jacket: ["jacket.png", "jacket", "/ˈdʒækɪt/", "jaket", "clothes"],
+        shoes: ["shoes.png", "shoes", "/ʃuːz/", "sepatu", "clothes"],
+        glasses: ["glasses.png", "glasses", "/ˈɡlɑːsɪz/", "kacamata", "clothes"],
+        car: ["car.png", "car", "/kɑː/", "mobil", "transport"],
+        bus: ["bus.png", "bus", "/bʌs/", "bus", "transport"],
+        bicycle: ["bicycle.png", "bicycle", "/ˈbaɪsɪkəl/", "sepeda", "transport"],
+        "traffic-light": ["traffic-light.png", "traffic light", "/ˈtræfɪk laɪt/", "lampu lalu lintas", "transport"],
+        tree: ["tree.png", "tree", "/triː/", "pohon", "nature"],
+        flower: ["flower.png", "flower", "/ˈflaʊə/", "bunga", "nature"],
+        plant: ["plant.png", "plant", "/plɑːnt/", "tanaman", "nature"],
+        rocket: ["ui-rocket.png", "rocket", "/ˈrɒkɪt/", "roket", "space"],
+        star: ["ui-star.png", "star", "/stɑː/", "bintang", "space"],
+        planet: ["space-planet.png", "planet", "/ˈplænɪt/", "planet", "space"],
+        satellite: ["space-satellite.png", "satellite", "/ˈsætəlaɪt/", "satelit", "space"],
+        meteor: ["space-meteor.png", "meteor", "/ˈmiːtiə/", "meteor", "space"],
+        spaceship: ["space-saucer.png", "spaceship", "/ˈspeɪsʃɪp/", "pesawat luar angkasa", "space"]
       };
+
+      /* items that must never be counted ("3 breads" is wrong English) */
+      const UNCOUNTABLE = ["bread", "scissors", "glasses", "shoes", "traffic-light"];
 
       const CREW = [
         { key: "nova", name: "Nova", role: { en: "The Explorer", id: "Sang Penjelajah" } },
@@ -427,103 +507,174 @@
         { key: "mira", name: "Mira", role: { en: "The Achiever", id: "Sang Juara" } }
       ];
 
+      /* =============== the four planets = the four difficulty levels ===============
+         card  : big planet artwork   -> assets/planet-N.png
+         badge : small planet icon    -> assets/planet-badge-N.png
+         Replace either PNG with your own, keep the filename, no code changes. */
       const WORLDS = [
         {
-          key: "school", card: "planet-school.jpg", map: "map-school.png",
-          name: { en: "Planet School", id: "Planet Sekolah" },
-          tag: { en: "Level 1 • AB patterns", id: "Level 1 • Pola AB" },
-          desc: { en: "School things repeat two by two. Say each word as you go!", id: "Benda sekolah berulang dua-dua. Ucapkan setiap katanya!" },
-          pool: ["book", "pencil", "eraser", "ruler", "notebook", "backpack", "scissors", "lamp"],
-          rules: ["AB"], options: 3, middle: false
+          level: 1, card: "planet-1.png", badge: "planet-badge-1.png",
+          name: { en: "Planet Cadet", id: "Planet Kadet" },
+          rank: { en: "CADET", id: "KADET" },
+          tag: { en: "Easy · repeating patterns", id: "Mudah · pola berulang" },
+          desc: {
+            en: "Simple repeats: AB, AAB, ABC, AABB. Say each picture out loud.",
+            id: "Pengulangan sederhana: AB, AAB, ABC, AABB. Ucapkan tiap gambar."
+          },
+          topic: { en: "Food & animals", id: "Makanan & hewan" },
+          pool: ["apple", "banana", "orange", "egg", "cat", "dog", "bird", "butterfly", "ball", "flower", "tree", "cup"],
+          gens: ["repeat"], rules: ["AB", "ABC", "AAB", "ABB", "AABB"],
+          options: 3, middle: false, tutorial: 2
         },
         {
-          key: "home", card: "planet-home.jpg", map: "map-home.png",
-          name: { en: "Planet Home", id: "Planet Rumah" },
-          tag: { en: "Level 2 • AAB patterns", id: "Level 2 • Pola AAB" },
-          desc: { en: "Home things come in threes. Listen for the repeated word.", id: "Benda rumah berulang tiga-tiga. Dengarkan kata yang diulang." },
-          pool: ["chair", "table", "sofa", "bed", "pillow", "cup", "plate", "spoon", "towel", "clock"],
-          rules: ["AAB", "ABB"], options: 3, middle: false
+          level: 2, card: "planet-2.png", badge: "planet-badge-2.png",
+          name: { en: "Planet Explorer", id: "Planet Penjelajah" },
+          rank: { en: "EXPLORER", id: "PENJELAJAH" },
+          tag: { en: "Medium · longer units + gaps", id: "Sedang · unit panjang + rumpang" },
+          desc: {
+            en: "Longer units such as ABBC and ABCBC — and the gap can sit in the middle.",
+            id: "Unit lebih panjang seperti ABBC dan ABCBC — kotak kosong bisa di tengah."
+          },
+          topic: { en: "School & household things", id: "Benda sekolah & rumah" },
+          pool: ["book", "pencil", "eraser", "ruler", "notebook", "backpack", "scissors", "calculator", "chair", "table", "cup", "plate", "spoon", "bottle", "lamp", "clock"],
+          gens: ["repeat"], rules: ["ABBC", "AABC", "ABCC", "ABAC", "ABCBC", "AABBCC", "ABBA", "ABC"],
+          options: 4, middle: true, tutorial: 0
         },
         {
-          key: "park", card: "planet-park.jpg", map: "map-park.png",
-          name: { en: "Planet Park", id: "Planet Taman" },
-          tag: { en: "Level 3 • ABC patterns", id: "Level 3 • Pola ABC" },
-          desc: { en: "Three park friends take turns, again and again.", id: "Tiga teman taman bergantian, berulang-ulang." },
-          pool: ["ball", "bicycle", "tree", "flower", "plant", "cat", "dog", "bird", "butterfly"],
-          rules: ["ABC"], options: 4, middle: false
+          level: 3, card: "planet-3.png", badge: "planet-badge-3.png",
+          name: { en: "Planet Commander", id: "Planet Komandan" },
+          rank: { en: "COMMANDER", id: "KOMANDAN" },
+          tag: { en: "Hard · growing & changing", id: "Sulit · tumbuh & berubah" },
+          desc: {
+            en: "Quantity, size and object all change together. Count and compare!",
+            id: "Jumlah, ukuran dan benda berubah bersama. Hitung dan bandingkan!"
+          },
+          topic: { en: "Transport, nature & clothes", id: "Transportasi, alam & pakaian" },
+          pool: ["car", "bus", "bicycle", "tree", "flower", "plant", "jacket", "basket", "towel", "bed", "pillow", "sofa", "camera", "cat", "dog", "apple"],
+          gens: ["grow", "growAlt", "sizeAlt", "sizeCycle", "groupCycle", "repeat"],
+          rules: ["AABBCC", "ABCBC", "ABBC", "ABAC"],
+          options: 4, middle: true, tutorial: 0
         },
         {
-          key: "market", card: "planet-market.jpg", map: "map-market.png",
-          name: { en: "Planet Market", id: "Planet Pasar" },
-          tag: { en: "Level 4 • AABB patterns", id: "Level 4 • Pola AABB" },
-          desc: { en: "Market baskets grow in pairs. Watch the rhythm closely.", id: "Keranjang pasar berpasangan. Perhatikan iramanya." },
-          pool: ["apple", "banana", "orange", "bread", "egg", "basket", "bottle", "cup"],
-          rules: ["AABB", "ABBC", "AAB"], options: 4, middle: false
-        },
-        {
-          key: "city", card: "planet-city.jpg", map: "map-city.png",
-          name: { en: "Planet City", id: "Planet Kota" },
-          tag: { en: "Level 5 • Master patterns", id: "Level 5 • Pola Master" },
-          desc: { en: "City patterns are long and tricky — and the gap can hide anywhere!", id: "Pola kota panjang dan rumit — kotak kosongnya bisa di mana saja!" },
-          pool: ["car", "bus", "traffic-light", "bicycle", "camera", "glasses", "shoes", "jacket", "laptop", "keyboard"],
-          rules: ["ABAC", "ABCD", "AABB", "ABC"], options: 4, middle: true
+          level: 4, card: "planet-4.png", badge: "planet-badge-4.png",
+          name: { en: "Planet Galactic", id: "Planet Galaksi" },
+          rank: { en: "GALACTIC", id: "GALAKSI" },
+          tag: { en: "Challenge · numbers + pictures", id: "Tantangan · angka + gambar" },
+          desc: {
+            en: "Number sequences, skip counting and picture patterns mixed together.",
+            id: "Deret angka, loncat hitung dan pola gambar bercampur jadi satu."
+          },
+          topic: { en: "Space & technology", id: "Luar angkasa & teknologi" },
+          pool: ["rocket", "star", "planet", "satellite", "meteor", "spaceship", "laptop", "keyboard", "camera", "clock", "calculator", "car", "bus", "book", "apple", "cat"],
+          gens: ["arith", "arithDown", "geom", "growDiff", "altOps", "squares", "numIcon", "countWord",
+                 "grow", "growAlt", "sizeAlt", "sizeCycle", "groupCycle", "repeat"],
+          rules: ["AABBCC", "ABCBC", "ABAC", "ABBC"],
+          options: 4, middle: true, tutorial: 0
         }
       ];
 
       const T = {
         en: {
           langName: "English", soundOn: "Sound on", soundOff: "Sound off", back: "Games",
-          intro: "Look at the picture pattern, then choose what comes next. Every right answer teaches you a new English word — with its meaning in Bahasa Indonesia and how to say it out loud.",
+          intro: "Look at the pattern, then choose what comes next. Four planets, four difficulty levels — from simple picture repeats to number sequences. Every right answer teaches a new English word with its pronunciation and Bahasa Indonesia meaning.",
           howTitle: "How to play",
           steps: [
             ["Pick your pilot", "Choose Nova, Luna, Zee or Mira for this mission."],
-            ["Choose a planet", "Each planet has its own words and its own pattern rule."],
-            ["Read the pattern", "Say the pictures out loud: apple, banana, apple, banana…"],
-            ["Tap what comes next", "Tap the picture that fills the yellow box. You have 3 lives."]
+            ["Choose a planet", "Planet 1 is the easiest, Planet 4 is the hardest."],
+            ["Read the pattern", "Look at the objects, the quantity, the size and the order."],
+            ["Fill the yellow box", "Tap the answer that belongs there. You have 3 lives."]
           ],
           crewTitle: "Choose your pilot", worldsTitle: "Choose your planet", start: "Launch mission",
+          levelWord: "LEVEL", difficulty: "Difficulty",
           ask: "What comes next?", askMiddle: "What is missing?",
-          askSub: "Say the pattern out loud, then tap the picture that fits the yellow box.",
-          choose: "Tap one picture", hint: "Show hint", next: "Next challenge", last: "See my stars",
+          askSub: "Study the pattern, then tap the answer that fits the yellow box.",
+          choose: "Tap one answer", hint: "Show hint", next: "Next challenge", last: "See my stars",
+          small: "small", big: "big",
           wordLabel: "WORD POWER", speak: "Hear the word", quit: "← Leave mission",
           correct: "Correct! Great pattern reading.", correctAgain: "Yes! That is the one.",
-          wrong: "Not yet. Look again at how the pictures repeat.",
-          hintText: (u) => "The pattern repeats: " + u + " — then it starts again.",
+          wrong: "Not yet. Look again at how the pattern changes.",
           challenge: (a, b) => "Challenge " + a + " of " + b,
+          skill: "PATTERN TYPE",
           resTitleWin: "MISSION COMPLETE!", resTitleLose: "MISSION OVER",
-          resSubWin: (n) => "Brilliant flying, Pilot " + n + "!",
+          resSubWin: (n, p) => "Brilliant flying, Pilot " + n + " — " + p + " cleared!",
           resSubLose: (n) => "Good try, Pilot " + n + ". Every pilot practises!",
           score: "STARS", correctLabel: "CORRECT", streakLabel: "BEST STREAK", lives: "LIVES LEFT",
           again: "Play this planet again", home: "Back to mission control",
-          badges: { explorer: "Explorer badge — keep exploring!", learner: "Learner badge — you are getting it!", thinker: "Thinker badge — sharp pattern eyes!", achiever: "Achiever badge — Pattern Master!" },
-          leftMission: "Mission cancelled. Back at mission control."
+          badges: {
+            explorer: "Explorer badge — keep exploring!",
+            learner: "Learner badge — you are getting it!",
+            thinker: "Thinker badge — sharp pattern eyes!",
+            achiever: "Achiever badge — Pattern Master!"
+          },
+          leftMission: "Mission cancelled. Back at mission control.",
+          types: {
+            repeat: "Repeating pattern", grow: "Growing quantity", growAlt: "Quantity + object",
+            sizeAlt: "Changing size", sizeCycle: "Size sequence", groupCycle: "Repeating groups",
+            arith: "Number sequence", arithDown: "Counting down", geom: "Doubling numbers",
+            growDiff: "Growing jumps", altOps: "Two steps", squares: "Square numbers",
+            numIcon: "Numbers + pictures", countWord: "Counting words"
+          },
+          hints: {
+            repeat: (u) => "The unit repeats: " + u + " — then it starts again.",
+            grow: (d) => "Count the objects each time. The number changes by " + d + ".",
+            growAlt: (d) => "Two things change: the number (by " + d + ") and the object.",
+            sizeAlt: "Watch the SIZE: small, big, small, big …",
+            sizeCycle: "The size follows an order: small, medium, big, then again.",
+            groupCycle: (u) => "Whole groups repeat: " + u + ".",
+            num: (s) => "Look at the jump between the numbers: " + s + ".",
+            countWord: (d) => "The number goes up by " + d + " and the object takes turns."
+          }
         },
         id: {
           langName: "Bahasa Indonesia", soundOn: "Suara aktif", soundOff: "Suara mati", back: "Permainan",
-          intro: "Lihat pola gambarnya, lalu pilih gambar berikutnya. Setiap jawaban benar mengajarkan kata bahasa Inggris baru — lengkap dengan artinya dan cara mengucapkannya.",
+          intro: "Lihat polanya, lalu pilih yang berikutnya. Empat planet, empat tingkat kesulitan — dari pengulangan gambar sederhana sampai deret angka. Setiap jawaban benar mengajarkan kata bahasa Inggris baru lengkap dengan cara membaca dan artinya.",
           howTitle: "Cara bermain",
           steps: [
             ["Pilih pilotmu", "Pilih Nova, Luna, Zee, atau Mira untuk misi ini."],
-            ["Pilih planet", "Setiap planet punya kosakata dan aturan polanya sendiri."],
-            ["Baca polanya", "Ucapkan gambarnya: apple, banana, apple, banana…"],
-            ["Ketuk gambar berikutnya", "Ketuk gambar yang mengisi kotak kuning. Kamu punya 3 nyawa."]
+            ["Pilih planet", "Planet 1 paling mudah, Planet 4 paling sulit."],
+            ["Baca polanya", "Perhatikan bendanya, jumlahnya, ukurannya dan urutannya."],
+            ["Isi kotak kuning", "Ketuk jawaban yang tepat. Kamu punya 3 nyawa."]
           ],
           crewTitle: "Pilih pilotmu", worldsTitle: "Pilih planetmu", start: "Mulai misi",
-          ask: "Gambar apa selanjutnya?", askMiddle: "Gambar apa yang hilang?",
-          askSub: "Ucapkan polanya dengan keras, lalu ketuk gambar yang cocok untuk kotak kuning.",
-          choose: "Ketuk satu gambar", hint: "Lihat petunjuk", next: "Tantangan berikutnya", last: "Lihat bintangku",
+          levelWord: "LEVEL", difficulty: "Kesulitan",
+          ask: "Apa yang berikutnya?", askMiddle: "Apa yang hilang?",
+          askSub: "Amati polanya, lalu ketuk jawaban yang cocok untuk kotak kuning.",
+          choose: "Ketuk satu jawaban", hint: "Lihat petunjuk", next: "Tantangan berikutnya", last: "Lihat bintangku",
+          small: "kecil", big: "besar",
           wordLabel: "KATA HEBAT", speak: "Dengarkan katanya", quit: "← Keluar dari misi",
           correct: "Benar! Kamu pandai membaca pola.", correctAgain: "Ya! Itu jawabannya.",
-          wrong: "Belum tepat. Lihat lagi urutan gambarnya.",
-          hintText: (u) => "Polanya berulang: " + u + " — lalu dimulai lagi.",
+          wrong: "Belum tepat. Lihat lagi bagaimana polanya berubah.",
           challenge: (a, b) => "Tantangan " + a + " dari " + b,
+          skill: "JENIS POLA",
           resTitleWin: "MISI SELESAI!", resTitleLose: "MISI BERAKHIR",
-          resSubWin: (n) => "Terbang yang hebat, Pilot " + n + "!",
+          resSubWin: (n, p) => "Terbang yang hebat, Pilot " + n + " — " + p + " tuntas!",
           resSubLose: (n) => "Usaha bagus, Pilot " + n + ". Semua pilot perlu latihan!",
           score: "BINTANG", correctLabel: "BENAR", streakLabel: "RENTETAN TERBAIK", lives: "SISA NYAWA",
           again: "Main planet ini lagi", home: "Kembali ke pusat misi",
-          badges: { explorer: "Lencana Explorer — terus menjelajah!", learner: "Lencana Learner — kamu makin paham!", thinker: "Lencana Thinker — matamu jeli!", achiever: "Lencana Achiever — Master Pola!" },
-          leftMission: "Misi dibatalkan. Kembali ke pusat misi."
+          badges: {
+            explorer: "Lencana Explorer — terus menjelajah!",
+            learner: "Lencana Learner — kamu makin paham!",
+            thinker: "Lencana Thinker — matamu jeli!",
+            achiever: "Lencana Achiever — Master Pola!"
+          },
+          leftMission: "Misi dibatalkan. Kembali ke pusat misi.",
+          types: {
+            repeat: "Pola berulang", grow: "Jumlah bertambah", growAlt: "Jumlah + benda",
+            sizeAlt: "Ukuran berubah", sizeCycle: "Urutan ukuran", groupCycle: "Kelompok berulang",
+            arith: "Deret angka", arithDown: "Hitung mundur", geom: "Angka berlipat",
+            growDiff: "Lompatan bertambah", altOps: "Dua langkah", squares: "Bilangan kuadrat",
+            numIcon: "Angka + gambar", countWord: "Menghitung kata"
+          },
+          hints: {
+            repeat: (u) => "Unitnya berulang: " + u + " — lalu dimulai lagi.",
+            grow: (d) => "Hitung bendanya setiap kali. Jumlahnya berubah " + d + ".",
+            growAlt: (d) => "Dua hal berubah: jumlahnya (" + d + ") dan bendanya.",
+            sizeAlt: "Perhatikan UKURAN: kecil, besar, kecil, besar …",
+            sizeCycle: "Ukurannya berurutan: kecil, sedang, besar, lalu ulang.",
+            groupCycle: (u) => "Kelompoknya berulang: " + u + ".",
+            num: (s) => "Lihat lompatan antar angka: " + s + ".",
+            countWord: (d) => "Angkanya naik " + d + " dan bendanya bergantian."
+          }
         }
       };
 
@@ -541,8 +692,40 @@
       /* =============== helpers =============== */
       const shuffle = (a) => { const c = [...a]; for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; };
       const pick = (a) => a[Math.floor(Math.random() * a.length)];
-      const wordEn = (k) => WORDS[k][0];
-      const wordId = (k) => WORDS[k][1];
+      const rnd = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+      const wordEn = (k) => ITEMS[k][1];
+      const wordIpa = (k) => ITEMS[k][2];
+      const wordId = (k) => ITEMS[k][3];
+      const fileOf = (k) => ITEMS[k][0];
+      const countable = (pool) => pool.filter((k) => UNCOUNTABLE.indexOf(k) < 0);
+
+      function plural(k, n) {
+        const w = wordEn(k);
+        if (n === 1) return w;
+        if (UNCOUNTABLE.indexOf(k) >= 0) return w;
+        if (/y$/.test(w)) return w.slice(0, -1) + "ies";
+        if (/(s|x|ch|sh)$/.test(w)) return w + "es";
+        return w + "s";
+      }
+
+      /* an "item" is one cell of a pattern */
+      const sig = (it) =>
+        it.t === "num" ? "num:" + it.v + ":" + (it.k || "") + ":" + (it.icon || "") :
+        it.t === "group" ? "grp:" + it.k + ":" + it.n :
+        "icon:" + it.k + ":" + (it.size || "md");
+
+      function itemLabel(it) {
+        if (it.t === "num") return it.k ? it.v + " " + plural(it.k, it.v) : "";
+        if (it.t === "group") return it.n + " " + plural(it.k, it.n);
+        if (it.size === "sm") return wordEn(it.k) + " (" + t().small + ")";
+        if (it.size === "lg") return wordEn(it.k) + " (" + t().big + ")";
+        return wordEn(it.k);
+      }
+      function itemSpeech(it) {
+        if (it.t === "num") return it.k ? it.v + " " + plural(it.k, it.v) : String(it.v);
+        if (it.t === "group") return it.n + " " + plural(it.k, it.n);
+        return wordEn(it.k);
+      }
 
       function tone(kind) {
         if (!soundOn) return;
@@ -627,11 +810,20 @@
           const b = document.createElement("button");
           b.type = "button"; b.className = "world";
           b.setAttribute("aria-pressed", String(i === world));
+          let meter = "";
+          for (let d = 1; d <= WORLDS.length; d++) meter += '<i class="' + (d <= wd.level ? "on" : "") + '"></i>';
           b.innerHTML =
             '<img src="assets/' + wd.card + '" alt="" />' +
-            '<img class="world-badge" src="assets/' + wd.map + '" alt="" />' +
-            '<span class="world-foot"><b>' + wd.name[lang] + "</b><small>" + wd.tag[lang] + "</small></span>";
-          b.setAttribute("aria-label", wd.name[lang] + " — " + wd.tag[lang]);
+            '<img class="world-badge" src="assets/' + wd.badge + '" alt="" />' +
+            '<span class="world-level">' + t().levelWord + " " + wd.level + "</span>" +
+            '<span class="world-foot">' +
+              '<span class="world-meter" aria-hidden="true">' + meter + "</span>" +
+              "<b>" + wd.name[lang] + "</b>" +
+              "<small>" + wd.tag[lang] + "</small>" +
+              '<em class="world-topic">' + wd.topic[lang] + "</em>" +
+            "</span>";
+          b.setAttribute("aria-label",
+            t().levelWord + " " + wd.level + " — " + wd.name[lang] + " — " + wd.tag[lang] + " — " + wd.topic[lang]);
           b.addEventListener("click", () => { world = i; tone("tap"); buildHome(); });
           w.appendChild(b);
         });
@@ -654,46 +846,346 @@
         $("back-label").textContent = t().back;
       }
 
-      /* =============== pattern engine =============== */
-      function makeChallenge(wd) {
-        const rule = pick(wd.rules);
+      /* =============== pattern engine ===============
+         Every generator returns
+         { gen, cells[], blank, answer, options[], hint{en,id}, word }        */
+
+      function buildUnit(wd, rule) {
         const letters = [...new Set(rule.split(""))];
         const chosen = shuffle(wd.pool).slice(0, letters.length);
         const map = {};
         letters.forEach((l, i) => (map[l] = chosen[i]));
-        const unit = rule.split("").map((l) => map[l]);
+        return rule.split("").map((l) => ({ t: "icon", k: map[l] }));
+      }
 
-        const minLen = unit.length * 2 + 1;
-        const len = Math.min(9, minLen + (Math.random() < 0.5 ? 0 : unit.length > 3 ? 0 : 1));
-        const seq = [];
-        while (seq.length < len) seq.push(unit[seq.length % unit.length]);
+      /* --- repeating patterns (all levels) --- */
+      function genRepeat(wd, tutorial) {
+        const rule = tutorial ? pick(["AB", "ABC"]) : pick(wd.rules);
+        const unit = buildUnit(wd, rule);
+        /* keep the strip 7-10 cells long, and always show at least one
+           complete unit before the gap so the answer is never ambiguous */
+        const lenByUnit = { 1: 7, 2: 7, 3: 8, 4: 9, 5: 9, 6: 10 };
+        const total = lenByUnit[unit.length] || unit.length * 2;
+        const cells = [];
+        for (let i = 0; i < total; i++) cells.push(unit[i % unit.length]);
 
-        let blank = len - 1;
-        if (wd.middle && Math.random() < 0.5) {
-          const from = unit.length * 2;
-          blank = from + Math.floor(Math.random() * Math.max(1, len - from));
+        let blank = cells.length - 1;
+        if (!tutorial && wd.middle && Math.random() < 0.42) {
+          blank = rnd(unit.length, cells.length - 2);
         }
-        const answer = seq[blank];
+        const answer = cells[blank];
+        const neighbours = [cells[blank - 1], cells[blank + 1], cells[(blank + 2) % cells.length]].filter(Boolean);
+        const pool = unit.concat(neighbours).concat(shuffle(wd.pool).map((k) => ({ t: "icon", k: k })));
+        return {
+          gen: "repeat", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, pool, wd.options),
+          hint: {
+            en: T.en.hints.repeat(unit.map((i) => wordEn(i.k)).join(" · ")),
+            id: T.id.hints.repeat(unit.map((i) => wordEn(i.k)).join(" · "))
+          },
+          word: answer.k
+        };
+      }
 
-        const distractPool = shuffle([...new Set([...chosen, ...wd.pool])].filter((k) => k !== answer));
-        const options = shuffle([answer, ...distractPool.slice(0, wd.options - 1)]);
-        return { seq, blank, answer, unit, options };
+      /* --- growing quantity: 1,2,3,4 -> 5 of the same object --- */
+      function genGrow(wd) {
+        const k = pick(countable(wd.pool));
+        const step = pick([1, 1, 2]);
+        const up = Math.random() < 0.72;
+        const terms = 4;
+        let start = up ? rnd(1, 2) : step * terms + rnd(1, 2);
+        const counts = [];
+        for (let i = 0; i < terms + 1; i++) counts.push(start + (up ? 1 : -1) * step * i);
+        if (counts.some((n) => n < 1 || n > 6)) return genGrow(wd);
+        const cells = counts.map((n) => ({ t: "group", k: k, n: n }));
+        const blank = cells.length - 1;
+        const answer = cells[blank];
+        const cand = [answer,
+          { t: "group", k: k, n: answer.n + step }, { t: "group", k: k, n: answer.n - step },
+          { t: "group", k: k, n: answer.n + 1 }, { t: "group", k: k, n: answer.n - 1 }]
+          .filter((c) => c.n >= 1 && c.n <= 6);
+        const d = (up ? "+" : "−") + step;
+        return {
+          gen: "grow", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: { en: T.en.hints.grow(d), id: T.id.hints.grow(d) },
+          word: k
+        };
+      }
+
+      /* --- growing quantity + alternating object --- */
+      function genGrowAlt(wd) {
+        const ks = shuffle(countable(wd.pool)).slice(0, 2);
+        const step = pick([1, 1, 2]);
+        const start = rnd(1, 2);
+        const counts = [];
+        for (let i = 0; i < 5; i++) counts.push(start + step * i);
+        if (counts[4] > 6) return genGrowAlt(wd);
+        const cells = counts.map((n, i) => ({ t: "group", k: ks[i % 2], n: n }));
+        const blank = cells.length - 1;
+        const answer = cells[blank];
+        const other = ks[(blank + 1) % 2];
+        const cand = [answer,
+          { t: "group", k: other, n: answer.n },
+          { t: "group", k: answer.k, n: answer.n - step },
+          { t: "group", k: answer.k, n: answer.n + step },
+          { t: "group", k: other, n: answer.n - step }]
+          .filter((c) => c.n >= 1 && c.n <= 6);
+        return {
+          gen: "growAlt", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: { en: T.en.hints.growAlt("+" + step), id: T.id.hints.growAlt("+" + step) },
+          word: answer.k
+        };
+      }
+
+      /* --- size alternation: small, big, small, big --- */
+      function genSizeAlt(wd) {
+        const two = Math.random() < 0.5;
+        const ks = shuffle(wd.pool).slice(0, two ? 2 : 1);
+        const sizes = ["sm", "lg"];
+        const cells = [];
+        for (let i = 0; i < 6; i++) cells.push({ t: "icon", k: ks[two ? i % 2 : 0], size: sizes[i % 2] });
+        let blank = cells.length - 1;
+        if (wd.middle && Math.random() < 0.35) blank = rnd(2, cells.length - 2);
+        const answer = cells[blank];
+        const otherK = two ? ks[(ks.indexOf(answer.k) + 1) % 2] : pick(wd.pool.filter((x) => x !== answer.k));
+        const cand = [answer,
+          { t: "icon", k: answer.k, size: answer.size === "sm" ? "lg" : "sm" },
+          { t: "icon", k: otherK, size: answer.size },
+          { t: "icon", k: otherK, size: answer.size === "sm" ? "lg" : "sm" }];
+        return {
+          gen: "sizeAlt", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: { en: T.en.hints.sizeAlt, id: T.id.hints.sizeAlt },
+          word: answer.k
+        };
+      }
+
+      /* --- size cycle: small, medium, big, small, medium, big --- */
+      function genSizeCycle(wd) {
+        const k = pick(wd.pool);
+        const sizes = ["sm", "md", "lg"];
+        const cells = [];
+        for (let i = 0; i < 7; i++) cells.push({ t: "icon", k: k, size: sizes[i % 3] });
+        let blank = cells.length - 1;
+        if (wd.middle && Math.random() < 0.4) blank = rnd(3, cells.length - 2);
+        const answer = cells[blank];
+        const cand = [answer].concat(sizes.map((s) => ({ t: "icon", k: k, size: s })));
+        return {
+          gen: "sizeCycle", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, Math.min(3, wd.options)),
+          hint: { en: T.en.hints.sizeCycle, id: T.id.hints.sizeCycle },
+          word: k
+        };
+      }
+
+      /* --- repeating groups: 1 cat, 2 dogs, 1 cat, 2 dogs --- */
+      function genGroupCycle(wd) {
+        const ks = shuffle(countable(wd.pool)).slice(0, 2);
+        const a = rnd(1, 2), b = rnd(2, 4);
+        if (a === b) return genGroupCycle(wd);
+        const unit = [{ t: "group", k: ks[0], n: a }, { t: "group", k: ks[1], n: b }];
+        const cells = [];
+        for (let i = 0; i < 6; i++) cells.push(unit[i % 2]);
+        let blank = cells.length - 1;
+        if (wd.middle && Math.random() < 0.4) blank = rnd(2, cells.length - 2);
+        const answer = cells[blank];
+        const cand = [answer, unit[0], unit[1],
+          { t: "group", k: answer.k, n: Math.min(6, answer.n + 1) },
+          { t: "group", k: answer.k === ks[0] ? ks[1] : ks[0], n: answer.n }];
+        return {
+          gen: "groupCycle", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: {
+            en: T.en.hints.groupCycle(unit.map((i) => i.n + " " + plural(i.k, i.n)).join(" · ")),
+            id: T.id.hints.groupCycle(unit.map((i) => i.n + " " + plural(i.k, i.n)).join(" · "))
+          },
+          word: answer.k
+        };
+      }
+
+      /* --- numeric sequences --- */
+      function numChallenge(wd, gen, nums, stepText, withIcon, extra) {
+        const k = pick(wd.pool);
+        const cells = nums.map((v) => (withIcon ? { t: "num", v: v, icon: k } : { t: "num", v: v }));
+        const blank = cells.length - 1;
+        const answer = cells[blank];
+        const last = nums[nums.length - 2];
+        const prev = nums[nums.length - 3];
+        /* believable near-misses: the mistakes students actually make */
+        const raw = [answer.v].concat(extra || []).concat([
+          answer.v - 1, answer.v + 1, answer.v - 2, answer.v + 2,
+          last + 1, last + (last - prev) + 1, answer.v + (answer.v - last)]);
+        const cand = [];
+        raw.forEach((v) => { if (v > 0 && v !== null) cand.push(withIcon ? { t: "num", v: v, icon: k } : { t: "num", v: v }); });
+        return {
+          gen: gen, cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: { en: T.en.hints.num(stepText), id: T.id.hints.num(stepText) },
+          word: k
+        };
+      }
+
+      function genArith(wd) {
+        const d = pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20, 25, 50]);
+        const s = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, d, d * 2]);
+        const n = [];
+        for (let i = 0; i < 5; i++) n.push(s + d * i);
+        return numChallenge(wd, "arith", n, "+" + d);
+      }
+      function genArithDown(wd) {
+        const d = pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+        const s = d * 5 + rnd(0, 19);
+        const n = [];
+        for (let i = 0; i < 5; i++) n.push(s - d * i);
+        if (n[4] < 1) return genArithDown(wd);
+        return numChallenge(wd, "arithDown", n, "−" + d);
+      }
+      function genGeom(wd) {
+        const r = pick([2, 2, 2, 3, 3, 4]);
+        const s = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+        const n = [];
+        for (let i = 0; i < 5; i++) n.push(s * Math.pow(r, i));
+        if (n[4] > 900) return genGeom(wd);
+        return numChallenge(wd, "geom", n, "×" + r, false, [n[3] + (n[3] - n[2]), n[4] + n[3], n[3] + r, n[4] - n[3]]);
+      }
+      function genGrowDiff(wd) {
+        const s = rnd(1, 9), d0 = rnd(1, 4), inc = pick([1, 1, 2, 3]);
+        const n = [s];
+        let d = d0;
+        for (let i = 0; i < 4; i++) { n.push(n[n.length - 1] + d); d += inc; }
+        return numChallenge(wd, "growDiff", n, "+" + d0 + ", +" + (d0 + inc) + ", +" + (d0 + inc * 2) + " …");
+      }
+      function genAltOps(wd) {
+        const up = rnd(3, 9), down = rnd(1, 4);
+        const n = [rnd(1, 9)];
+        for (let i = 0; i < 5; i++) n.push(n[n.length - 1] + (i % 2 === 0 ? up : -down));
+        if (up <= down || n.some((v) => v < 1)) return genAltOps(wd);
+        return numChallenge(wd, "altOps", n, "+" + up + ", −" + down);
+      }
+      function genSquares(wd) {
+        const s = rnd(1, 7);
+        const n = [];
+        for (let i = 0; i < 5; i++) n.push((s + i) * (s + i));
+        return numChallenge(wd, "squares", n, "1×1, 2×2, 3×3 …", false, [n[3] + (n[3] - n[2]), n[3] * 2, n[4] + 1]);
+      }
+      function genNumIcon(wd) {
+        const d = pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+        const s = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, d]);
+        const n = [];
+        for (let i = 0; i < 5; i++) n.push(s + d * i);
+        return numChallenge(wd, "numIcon", n, "+" + d, true);
+      }
+
+      /* --- counting words: 1 apple, 2 buses, 3 apples, 4 buses, ? --- */
+      function genCountWord(wd) {
+        const ks = shuffle(countable(wd.pool)).slice(0, 2);
+        const step = pick([1, 1, 2]);
+        const start = rnd(1, 3);
+        const nums = [];
+        for (let i = 0; i < 5; i++) nums.push(start + step * i);
+        const cells = nums.map((v, i) => ({ t: "num", v: v, k: ks[i % 2] }));
+        const blank = cells.length - 1;
+        const answer = cells[blank];
+        const other = ks[(blank + 1) % 2];
+        const cand = [answer,
+          { t: "num", v: answer.v, k: other },
+          { t: "num", v: answer.v - step, k: answer.k },
+          { t: "num", v: answer.v + step, k: answer.k },
+          { t: "num", v: answer.v + 1, k: other }];
+        return {
+          gen: "countWord", cells: cells, blank: blank, answer: answer,
+          options: buildOptions(answer, cand, wd.options),
+          hint: { en: T.en.hints.countWord("+" + step), id: T.id.hints.countWord("+" + step) },
+          word: answer.k
+        };
+      }
+
+      /* --- option builder: correct answer + believable distractors --- */
+      function buildOptions(answer, candidates, howMany) {
+        const out = [answer];
+        const seen = { [sig(answer)]: 1 };
+        candidates.forEach((c) => {
+          if (out.length >= howMany) return;
+          const s = sig(c);
+          if (!seen[s]) { seen[s] = 1; out.push(c); }
+        });
+        let guard = 0;
+        while (out.length < howMany && guard++ < 40) {
+          const base = answer;
+          let c;
+          if (base.t === "num") c = { t: "num", v: base.v + rnd(-4, 5), k: base.k, icon: base.icon };
+          else if (base.t === "group") c = { t: "group", k: base.k, n: Math.min(6, Math.max(1, base.n + rnd(-2, 2))) };
+          else c = { t: "icon", k: pick(Object.keys(ITEMS)), size: base.size };
+          const s = sig(c);
+          if (!seen[s] && !(c.t === "num" && c.v < 1)) { seen[s] = 1; out.push(c); }
+        }
+        return shuffle(out);
+      }
+
+      const GENS = {
+        repeat: genRepeat, grow: genGrow, growAlt: genGrowAlt, sizeAlt: genSizeAlt,
+        sizeCycle: genSizeCycle, groupCycle: genGroupCycle, arith: genArith,
+        arithDown: genArithDown, geom: genGeom, growDiff: genGrowDiff, altOps: genAltOps,
+        squares: genSquares, numIcon: genNumIcon, countWord: genCountWord
+      };
+
+      function makeChallenge(wd, index, seen) {
+        const tutorial = index < (wd.tutorial || 0);
+        for (let tries = 0; tries < 40; tries++) {
+          const gen = tutorial ? "repeat" : pick(wd.gens);
+          const ch = GENS[gen](wd, tutorial);
+          const fingerprint = ch.gen + "|" + ch.cells.map(sig).join(",") + "|" + ch.blank;
+          if (!seen || !seen[fingerprint]) {
+            if (seen) seen[fingerprint] = 1;
+            return ch;
+          }
+        }
+        return GENS[tutorial ? "repeat" : pick(wd.gens)](wd, tutorial);
+      }
+
+      /* =============== rendering =============== */
+      function itemHtml(it) {
+        if (it.t === "num") {
+          if (it.k) {
+            return '<span class="numw"><b>' + it.v + "</b>" +
+              '<img src="assets/' + fileOf(it.k) + '" alt="" /></span>';
+          }
+          if (it.icon) {
+            return '<span class="numw"><b>' + it.v + "</b>" +
+              '<img class="tiny" src="assets/' + fileOf(it.icon) + '" alt="" /></span>';
+          }
+          return '<span class="num">' + it.v + "</span>";
+        }
+        if (it.t === "group") {
+          let imgs = "";
+          for (let i = 0; i < it.n; i++) imgs += '<img src="assets/' + fileOf(it.k) + '" alt="" />';
+          return '<span class="grp g' + Math.min(it.n, 6) + '">' + imgs + "</span>";
+        }
+        return '<img class="pi sz-' + (it.size || "md") + '" src="assets/' + fileOf(it.k) + '" alt="" />';
+      }
+
+      function cellClass(it) {
+        return "cell" + (it && it.t === "group" && it.n > 2 ? " wide" : "");
       }
 
       /* =============== game flow =============== */
       function startGame() {
         const wd = WORLDS[world];
-        game = { wd: wd, index: 0, score: 0, correct: 0, streak: 0, best: 0, lives: 3, tries: 0, ch: null, solved: false };
+        game = {
+          wd: wd, index: 0, score: 0, correct: 0, streak: 0, best: 0,
+          lives: 3, tries: 0, ch: null, solved: false, seen: {}
+        };
         $("hud-avatar").src = "assets/char-" + CREW[pilot].key + ".jpg";
         $("hud-name").textContent = CREW[pilot].name;
-        $("mission-icon").src = "assets/" + wd.map;
+        $("mission-icon").src = "assets/" + wd.badge;
         show("screen-play");
         loadChallenge();
       }
 
       function loadChallenge() {
-        const wd = game.wd;
-        game.ch = makeChallenge(wd);
+        game.ch = makeChallenge(game.wd, game.index, game.seen);
         game.solved = false;
         game.tries = 0;
         $("feedback").hidden = true;
@@ -709,9 +1201,10 @@
         $("hud-score").textContent = game.score;
         $("hud-streak").textContent = game.streak;
         $("hud-progress").style.width = (game.index / ROUNDS) * 100 + "%";
-        $("mission-name").textContent = wd.name[lang];
+        $("mission-name").textContent = L.levelWord + " " + wd.level + " · " + wd.name[lang];
         $("mission-desc").textContent = wd.desc[lang];
-        $("ask").textContent = ch.blank === ch.seq.length - 1 ? L.ask : L.askMiddle;
+        $("mission-skill").textContent = L.skill + ": " + (L.types[ch.gen] || "");
+        $("ask").textContent = ch.blank === ch.cells.length - 1 ? L.ask : L.askMiddle;
         $("ask-sub").textContent = L.askSub;
         $("choose-title").textContent = L.choose;
         $("hint-label").textContent = L.hint;
@@ -722,48 +1215,54 @@
 
         const strip = $("pattern");
         strip.innerHTML = "";
-        ch.seq.forEach((key, i) => {
+        ch.cells.forEach((it, i) => {
+          const step = document.createElement("span");
+          step.className = "step";
           if (i) {
             const ar = document.createElement("span");
             ar.className = "arrow"; ar.setAttribute("aria-hidden", "true"); ar.textContent = "→";
-            strip.appendChild(ar);
+            step.appendChild(ar);
           }
           const cell = document.createElement("span");
           if (i === ch.blank && !game.solved) {
             cell.className = "cell blank"; cell.textContent = "?";
           } else {
-            cell.className = "cell" + (i === ch.blank ? " filled" : "");
-            cell.innerHTML = '<img src="assets/' + key + '.png" alt="' + wordEn(key) + '" />';
+            cell.className = cellClass(it) + (i === ch.blank ? " filled" : "");
+            cell.innerHTML = itemHtml(it);
           }
-          strip.appendChild(cell);
+          step.appendChild(cell);
+          strip.appendChild(step);
         });
-        strip.setAttribute(
-          "aria-label",
-          ch.seq.map((k, i) => (i === ch.blank && !game.solved ? "?" : wordEn(k))).join(", ")
-        );
+        strip.setAttribute("aria-label",
+          ch.cells.map((it, i) => (i === ch.blank && !game.solved ? "?" : itemLabel(it) || it.v)).join(", "));
 
         const box = $("choices");
         box.innerHTML = "";
-        ch.options.forEach((key, i) => {
+        ch.options.forEach((it, i) => {
           const b = document.createElement("button");
-          b.type = "button"; b.className = "choice"; b.dataset.key = key;
-          b.innerHTML = '<img src="assets/' + key + '.png" alt="" /><b>' + wordEn(key) + "</b>";
-          b.setAttribute("aria-label", (i + 1) + ". " + wordEn(key));
-          b.addEventListener("click", () => answer(key, b));
+          b.type = "button";
+          b.className = "choice" + (it.t === "num" && !it.k ? " numeric" : "");
+          b.dataset.sig = sig(it);
+          const label = itemLabel(it);
+          b.innerHTML = '<span class="' + cellClass(it) + ' plain">' + itemHtml(it) + "</span>" +
+            (label ? "<b>" + label + "</b>" : "");
+          b.setAttribute("aria-label", (i + 1) + ". " + (label || itemSpeech(it)));
+          b.addEventListener("click", () => answer(it, b));
           if (game.solved) {
             b.disabled = true;
-            if (key === ch.answer) b.classList.add("good");
+            if (sig(it) === sig(ch.answer)) b.classList.add("good");
           }
           box.appendChild(b);
         });
 
-        setWordCard(ch.answer, game.solved);
+        setWordCard(ch.word, game.solved);
         renderHearts();
       }
 
       function setWordCard(key, reveal) {
-        $("word-icon").src = "assets/" + (reveal ? key : "ui-star") + ".png";
+        $("word-icon").src = "assets/" + (reveal ? fileOf(key) : "ui-star.png");
         $("word-en").textContent = reveal ? wordEn(key) : "? ? ?";
+        $("word-ipa").textContent = reveal ? wordIpa(key) : "";
         $("word-id").textContent = reveal ? wordId(key) : "";
         $("btn-speak").disabled = !reveal;
         $("btn-speak").style.opacity = reveal ? "1" : "0.55";
@@ -780,10 +1279,10 @@
         }
       }
 
-      function answer(key, btn) {
+      function answer(item, btn) {
         if (game.solved) return;
         const ch = game.ch, L = t();
-        if (key === ch.answer) {
+        if (sig(item) === sig(ch.answer)) {
           game.solved = true;
           game.correct++;
           game.streak++;
@@ -802,7 +1301,7 @@
           $("btn-hint").disabled = true;
           tone("good");
           renderPlay();
-          say(wordEn(ch.answer));
+          say(wordEn(ch.word));
           $("btn-next").focus();
         } else {
           game.tries++;
@@ -832,12 +1331,11 @@
         const L = t();
         const maxScore = ROUNDS * 125;
         const ratio = game.score / maxScore;
-        let stars = 1, badge = "explorer", badgeKey = "explorer";
+        let stars = 1, badgeKey = "explorer";
         if (!won && game.correct < 3) { stars = 1; badgeKey = "explorer"; }
         else if (ratio >= 0.8) { stars = 3; badgeKey = "achiever"; }
         else if (ratio >= 0.5) { stars = 2; badgeKey = "thinker"; }
         else { stars = 1; badgeKey = "learner"; }
-        badge = badgeKey;
 
         const starBox = $("res-stars");
         starBox.innerHTML = "";
@@ -849,7 +1347,9 @@
         }
         starBox.setAttribute("aria-label", stars + " / 3");
         $("res-title").textContent = won ? L.resTitleWin : L.resTitleLose;
-        $("res-sub").textContent = won ? L.resSubWin(CREW[pilot].name) : L.resSubLose(CREW[pilot].name);
+        $("res-sub").textContent = won
+          ? L.resSubWin(CREW[pilot].name, game.wd.name[lang])
+          : L.resSubLose(CREW[pilot].name);
         $("res-score").textContent = game.score;
         $("res-correct").textContent = game.correct + "/" + ROUNDS;
         $("res-streak").textContent = game.best;
@@ -858,7 +1358,7 @@
         $("lab-correct").textContent = L.correctLabel;
         $("lab-streak").textContent = L.streakLabel;
         $("lab-lives").textContent = L.lives;
-        $("res-badge").src = "assets/badge-" + badge + ".png";
+        $("res-badge").src = "assets/badge-" + badgeKey + ".png";
         $("res-badge-text").textContent = L.badges[badgeKey];
         $("again-label").textContent = L.again;
         $("home-label").textContent = L.home;
@@ -896,15 +1396,14 @@
 
         $("btn-hint").addEventListener("click", () => {
           if (!game || !game.ch) return;
-          const unit = game.ch.unit.map(wordEn).join(" · ");
-          $("hintbox").textContent = "💡 " + t().hintText(unit);
+          $("hintbox").textContent = "💡 " + game.ch.hint[lang];
           $("hintbox").hidden = false;
           $("btn-hint").disabled = true;
           tone("tap");
         });
 
         $("btn-speak").addEventListener("click", () => {
-          if (game && game.solved) { tone("tap"); say(wordEn(game.ch.answer)); }
+          if (game && game.solved) { tone("tap"); say(wordEn(game.ch.word)); }
         });
 
         document.addEventListener("keydown", (e) => {
@@ -917,7 +1416,7 @@
         });
 
         // warm the image cache so the first challenge appears instantly
-        Object.keys(WORDS).forEach((k) => { const i = new Image(); i.src = "assets/" + k + ".png"; });
+        Object.keys(ITEMS).forEach((k) => { const i = new Image(); i.src = "assets/" + fileOf(k); });
       });
     </script>
   </body>
