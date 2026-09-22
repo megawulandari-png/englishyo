@@ -38,6 +38,7 @@ const searchIndex = [
   { title: "Word Tug of War", category: "Play Games YO!", description: "Build correct English sentences and pull your way to victory.", keywords: ["game", "word tug", "grammar", "sentence building", "tenses"], page: "games.html" },
   { title: "Detective Eyes", category: "Play Games YO!", description: "Investigate rumors, evaluate sources, and write evidence-based conclusions.", keywords: ["game", "detective", "critical thinking", "investigation", "reasoning", "reading"], page: "games.html" },
   { title: "Crossword Adventure", category: "Play Games YO!", description: "Solve English crossword puzzles from A1 to B2. Challenge yourself or play together in Class Mode!", keywords: ["game", "crossword", "vocabulary", "words", "clues", "class mode", "puzzle"], page: "games.html" },
+  { title: "Sort It Out!", category: "Play Games YO!", description: "Learn the words. Sort the waste.", keywords: ["game", "sort it out", "waste", "recycling", "rubbish", "vocabulary", "listening", "bins", "environment"], page: "games.html" },
 
   // Featured Activities
   { title: "Word Match", category: "Play Games YO!", description: "Match words with pictures to build vocabulary.", keywords: ["game", "word match", "vocabulary", "words"], page: "games.html" },
