@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ENGLISH YO! — Telling the Time! Learn o'clock, quarter past, half past and quarter to. Move the hands, listen, choose and match in British English." />
+    <title>Telling the Time! — ENGLISH YO!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --navy:#052574; --pink:#ff3e79; --yellow:#ffda26; --paper:#f6fcff;
+        --display:"Baloo 2", system-ui, cursive; --body:"Nunito Sans", system-ui, sans-serif;
+        --green:#2f9e44; --blue:#2f8fd6; --red:#d9453f; --mint:#9be4cc;
+        --shadow:0 10px 24px rgba(0,53,110,.14);
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0}
+      body{
+        min-height:100vh; color:var(--navy); font-family:var(--body); font-weight:700;
+        background:
+          radial-gradient(circle at 12% 8%, #fff 0 18%, transparent 18.5%),
+          radial-gradient(circle at 88% 4%, #fff 0 12%, transparent 12.5%),
+          linear-gradient(180deg,#dff2ff 0%, #f6fcff 42%, #fff7dd 100%);
+        background-attachment:fixed;
+        -webkit-tap-highlight-color:transparent;
+      }
+      [hidden]{display:none !important}
+      button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+      button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:14px}
+      h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;letter-spacing:-.01em}
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      .shell{width:min(95%,1180px);margin:0 auto;padding-bottom:46px}
+
+      /* ---------- top bar ---------- */
+      .topbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 0 6px}
+      .wordmark{font-family:var(--display);font-weight:800;font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--navy);text-decoration:none;line-height:1}
+      .wordmark span{color:var(--pink)}
+      .wordmark small{display:block;font-family:var(--body);font-size:.58rem;letter-spacing:.18em;color:#5b6f9e}
+      .spacer{flex:1}
+      .chip-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#fff;
+        box-shadow:0 5px 14px rgba(0,53,110,.14);color:var(--navy);font-weight:900;font-size:clamp(.72rem,1vw,.86rem);
+        text-decoration:none;transition:transform .15s ease, box-shadow .15s ease}
+      .chip-btn:hover{transform:translateY(-2px);box-shadow:0 9px 18px rgba(0,53,110,.2)}
+      .chip-btn.off{opacity:.5}
+
+      /* ---------- screens ---------- */
+      .screen{display:none}
+      .screen.active{display:block;animation:pop .32s ease both}
+      @keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+      /* ---------- buttons ---------- */
+      .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:999px;
+        font-family:var(--display);font-weight:800;font-size:clamp(.95rem,1.2vw,1.1rem);transition:transform .15s ease, box-shadow .15s ease}
+      .btn:hover{transform:translateY(-2px)}
+      .btn-pink{background:var(--pink);color:#fff;box-shadow:0 12px 22px rgba(255,62,121,.32)}
+      .btn-navy{background:var(--navy);color:#fff;box-shadow:0 12px 22px rgba(5,37,116,.26)}
+      .btn-yellow{background:var(--yellow);color:var(--navy);box-shadow:0 12px 22px rgba(255,218,38,.4)}
+      .btn-ghost{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
+      .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+      /* ---------- home ---------- */
+      .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.8fr);align-items:center;gap:18px;padding:10px 0 4px}
+      .badge{display:inline-block;margin-bottom:12px;padding:8px 20px;border-radius:999px;background:var(--yellow);
+        color:var(--navy);font-family:var(--display);font-weight:800;font-size:.82rem;transform:rotate(-4deg)}
+      .hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.02;margin-bottom:10px}
+      .hero h1 .accent{color:var(--pink)}
+      .hero p{margin:0 0 14px;color:#31467a;font-size:clamp(.95rem,1.3vw,1.12rem);max-width:46ch}
+      .hero-art{justify-self:center;width:min(300px,86%)}
+
+      .level-card{margin-top:18px;padding:18px 20px;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
+      .level-card h2{font-size:1.05rem;margin-bottom:10px}
+      .level-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+      .level-opt input{position:absolute;opacity:0;pointer-events:none}
+      .level-opt span{display:block;padding:12px 10px;border-radius:16px;border:3px solid #dbe6fb;background:#fff;
+        text-align:center;font-family:var(--display);font-weight:800;cursor:pointer;line-height:1.15;font-size:.95rem}
+      .level-opt span small{display:block;font-family:var(--body);font-size:.68rem;font-weight:800;color:#6b7da8;margin-top:3px}
+      .level-opt input:checked + span{background:var(--navy);border-color:var(--navy);color:#fff}
+      .level-opt input:checked + span small{color:#bed3ff}
+      .level-opt input:focus-visible + span{outline:3px solid var(--pink);outline-offset:3px}
+
+      .mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+      .mode-card{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#fff;
+        box-shadow:var(--shadow);text-align:left;transition:transform .18s ease, box-shadow .18s ease}
+      .mode-card:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(0,53,110,.2)}
+      .mode-card .ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:6px}
+      .mode-card h2{font-size:1.15rem}
+      .mode-card p{margin:0;color:#3a4d78;font-size:.88rem;font-weight:700;line-height:1.45}
+      .mode-card .go{position:absolute;right:18px;bottom:16px;color:var(--pink);font-size:1.3rem}
+
+      /* ---------- learn ---------- */
+      .panel{margin-top:16px;padding:clamp(20px,3vw,34px);border-radius:28px;background:#fff;box-shadow:var(--shadow)}
+      .rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+      .rule{padding:18px;border-radius:20px;background:#eaf5ff}
+      .rule.to{background:#fff6d8}
+      .rule h3{font-size:1.2rem;margin-bottom:6px}
+      .rule p{margin:0;color:#31467a;font-size:.92rem;line-height:1.5}
+      .example-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+      .example{padding:14px 10px;border-radius:18px;border:3px solid #e2ebfb;text-align:center}
+      .example b{display:block;font-family:var(--display);font-size:1.35rem;color:var(--pink)}
+      .example span{display:block;margin-top:4px;font-size:.84rem;color:#31467a}
+
+      /* ---------- game HUD ---------- */
+      .hud{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px}
+      .hud .stat{padding:8px 14px;border-radius:999px;background:#fff;box-shadow:0 5px 14px rgba(0,53,110,.12);
+        font-size:.78rem;font-weight:900;letter-spacing:.04em}
+      .hud .stat b{color:var(--pink)}
+      .hud .stat.time b{color:var(--red)}
+      .track{height:12px;border-radius:999px;background:rgba(5,37,116,.12);overflow:hidden;margin-top:10px}
+      .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--pink),var(--yellow));transition:width .35s ease}
+
+      .play-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);gap:18px;margin-top:16px;align-items:start}
+      .stage{padding:clamp(18px,2.4vw,28px);border-radius:28px;background:#fff;box-shadow:var(--shadow)}
+      .tag{display:inline-block;padding:6px 14px;border-radius:999px;background:#eaf1ff;color:var(--navy);
+        font-family:var(--display);font-weight:800;font-size:.75rem;letter-spacing:.04em}
+      .ask{font-size:clamp(1.3rem,2.4vw,1.8rem);margin-top:10px}
+      .ask-sub{margin:6px 0 0;color:#3a4d78;font-size:.98rem;line-height:1.45}
+      .target{display:inline-block;margin-top:12px;padding:10px 22px;border-radius:18px;background:#fff6d8;
+        font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2rem);color:var(--navy)}
+
+      /* ---------- clock ---------- */
+      .clock-wrap{width:min(330px,78vw);margin:16px auto 0;touch-action:none;user-select:none}
+      #clock-holder.compact{width:min(240px,62vw)}
+      .clock-svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,53,110,.16))}
+      .face{fill:#fffdf4;stroke:var(--navy);stroke-width:7}
+      .tick-m{stroke:#a9bcdd;stroke-width:2}
+      .tick-h{stroke:var(--navy);stroke-width:5}
+      .num{fill:var(--navy);font-family:"Baloo 2",system-ui,cursive;font-size:26px;font-weight:800;text-anchor:middle;dominant-baseline:central}
+      .hand-h{stroke:var(--navy);stroke-width:15;stroke-linecap:round}
+      .hand-m{stroke:var(--pink);stroke-width:10;stroke-linecap:round}
+      .pin{fill:var(--yellow);stroke:var(--navy);stroke-width:5}
+      .clock-svg.live{cursor:grab}
+      .clock-svg.live:active{cursor:grabbing}
+      .clock-svg.shake{animation:shake .4s}
+      @keyframes shake{25%{transform:rotate(-2.5deg)}75%{transform:rotate(2.5deg)}}
+
+      .hand-picker{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+      .hand-btn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#eef4ff;
+        font-weight:900;font-size:.82rem;border:3px solid transparent}
+      .hand-btn.on{background:#fff;border-color:var(--pink);box-shadow:0 6px 14px rgba(255,62,121,.2)}
+      .hand-btn .dot{width:14px;height:5px;border-radius:99px;background:var(--navy)}
+      .hand-btn.minute .dot{background:var(--pink)}
+      .stepper{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px}
+      .step{width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:1.2rem;font-weight:900}
+      .readout{min-width:132px;text-align:center;padding:10px 12px;border-radius:16px;background:var(--navy);color:#fff;
+        font-family:var(--display);font-size:1.5rem;letter-spacing:.04em}
+
+      /* ---------- choices & match ---------- */
+      .choices{display:grid;gap:10px;margin-top:18px}
+      .choice{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;border:3px solid #dbe6fb;
+        background:#fff;text-align:left;font-weight:800;font-size:1rem;transition:.15s}
+      .choice:hover{border-color:var(--navy);transform:translateX(3px)}
+      .choice .key{width:30px;height:30px;flex:none;border-radius:50%;background:#eaf1ff;display:grid;place-items:center;
+        font-family:var(--display);font-size:.95rem}
+      .choice.right{border-color:var(--green);background:#e6f8ec}
+      .choice.wrong{border-color:var(--red);background:#ffeceb}
+
+      .match-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+      .match-col h3{text-align:center;font-size:.95rem;letter-spacing:.06em;color:#5b6f9e;margin-bottom:8px}
+      .match-card{width:100%;min-height:66px;margin-bottom:10px;padding:12px;border-radius:18px;border:3px solid #dbe6fb;
+        background:#fff;font-weight:800;font-family:var(--display);font-size:1.05rem;transition:.15s}
+      .match-card:hover{border-color:var(--navy)}
+      .match-card.sel{border-color:var(--pink);background:#fff3f7}
+      .match-card.done{border-color:var(--green);background:#e6f8ec;opacity:.65;cursor:default}
+
+      .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+
+      /* ---------- side ---------- */
+      .side{display:grid;gap:14px}
+      .feedback{padding:18px 20px;border-radius:24px;background:#fff;box-shadow:var(--shadow);min-height:132px}
+      .feedback h3{font-size:1.1rem}
+      .feedback p{margin:8px 0 0;color:#3a4d78;font-size:.92rem;line-height:1.5}
+      .feedback.good{background:#e6f8ec;box-shadow:0 10px 24px rgba(47,158,68,.18)}
+      .feedback.good h3{color:var(--green)}
+      .feedback.bad{background:#ffeceb;box-shadow:0 10px 24px rgba(217,69,63,.16)}
+      .feedback.bad h3{color:var(--red)}
+      .feedback .say{margin-top:12px;padding:9px 16px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,53,110,.14);
+        font-weight:900;font-size:.8rem}
+      .tipbox{padding:18px 20px;border-radius:24px;background:#fff6d8;box-shadow:var(--shadow)}
+      .tipbox h3{font-size:.95rem;letter-spacing:.05em;color:#8a6a00}
+      .tipbox p{margin:8px 0 0;font-size:.9rem;color:#4a3b00;line-height:1.5}
+      .streakbox{padding:18px 20px;border-radius:24px;background:var(--navy);color:#fff}
+      .streakbox h3{font-size:.85rem;letter-spacing:.08em;color:var(--yellow)}
+      .streakbox p{margin:8px 0 0;font-size:.98rem}
+
+      /* ---------- result ---------- */
+      .result{max-width:720px;margin:24px auto 0;padding:clamp(24px,4vw,44px);border-radius:32px;background:#fff;
+        box-shadow:var(--shadow);text-align:center}
+      .result .big{font-family:var(--display);font-size:clamp(3rem,9vw,4.6rem);line-height:1;color:var(--pink)}
+      .result h1{font-size:clamp(1.6rem,3.4vw,2.4rem);margin-top:6px}
+      .score-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+      .score-row div{padding:16px 10px;border-radius:20px;background:#eaf1ff}
+      .score-row span{display:block;font-size:.68rem;letter-spacing:.1em;color:#5b6f9e}
+      .score-row b{display:block;margin-top:4px;font-family:var(--display);font-size:1.8rem}
+
+      @media (max-width:900px){
+        .play-grid{grid-template-columns:1fr}
+        .mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .example-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      }
+      @media (max-width:640px){
+        .hero{grid-template-columns:1fr}
+        .hero-art{display:none}
+        .mode-grid{grid-template-columns:1fr}
+        .rule-grid{grid-template-columns:1fr}
+        .match-grid{gap:8px}
+        .match-card{font-size:.95rem;min-height:58px}
+        .hud .stat{font-size:.68rem;padding:6px 11px}
+        .hud{gap:6px}
+      }
+      @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="wordmark" href="../../index.html#home">ENGLISH <span>YO!</span><small>LEARN · PLAY · SPEAK</small></a>
+        <span class="spacer"></span>
+        <button class="chip-btn" id="btn-sound" type="button" aria-pressed="true">🔊 <span id="sound-label">Sound on</span></button>
+        <a class="chip-btn" href="../../games.html">🎮 <span>Games</span></a>
+      </header>
+
+      <!-- ================= HOME ================= -->
+      <main id="screen-home" class="screen active">
+        <section class="hero">
+          <div>
+            <span class="badge">🕐 Telling the Time</span>
+            <h1>WHAT TIME <span class="accent">IS IT?</span></h1>
+            <p>Move the hands, listen, choose and match. Learn to say the time in British English — <b>o'clock, quarter past, half past</b> and <b>quarter to</b>.</p>
+            <button class="btn btn-yellow" type="button" data-go="learn">📖 How to tell the time</button>
+          </div>
+          <svg class="hero-art" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="86" fill="#ffda26" stroke="#052574" stroke-width="8"/>
+            <circle cx="100" cy="100" r="70" fill="#fffdf4" stroke="#052574" stroke-width="5"/>
+            <line x1="100" y1="100" x2="100" y2="55" stroke="#052574" stroke-width="9" stroke-linecap="round"/>
+            <line x1="100" y1="100" x2="136" y2="112" stroke="#ff3e79" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="7" fill="#ff3e79" stroke="#052574" stroke-width="4"/>
+            <circle cx="46" cy="42" r="14" fill="#ff3e79"/><circle cx="160" cy="48" r="9" fill="#2f8fd6"/>
+          </svg>
+        </section>
+
+        <section class="level-card">
+          <h2>1. Choose your level</h2>
+          <div class="level-row">
+            <label class="level-opt"><input type="radio" name="level" value="easy" checked />
+              <span>EASY<small>o'clock · quarter · half</small></span></label>
+            <label class="level-opt"><input type="radio" name="level" value="medium" />
+              <span>MEDIUM<small>five · ten · twenty past &amp; to</small></span></label>
+            <label class="level-opt"><input type="radio" name="level" value="expert" />
+              <span>EXPERT<small>every minute · 00–59</small></span></label>
+          </div>
+        </section>
+
+        <h2 style="margin:24px 0 0;font-size:1.05rem">2. Choose your game</h2>
+        <nav class="mode-grid" aria-label="Game modes">
+          <button class="mode-card" type="button" data-play="set">
+            <span class="ico" style="background:#fff2c2">🕹️</span>
+            <h2>MOVE THE HANDS</h2>
+            <p>Read the time in words, then set the clock yourself.</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+          <button class="mode-card" type="button" data-play="listen">
+            <span class="ico" style="background:#d9edff">🎧</span>
+            <h2>LISTEN &amp; SET</h2>
+            <p>Hear the time in British English and show it on the clock.</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+          <button class="mode-card" type="button" data-play="choose">
+            <span class="ico" style="background:#d9f6e5">👀</span>
+            <h2>LOOK &amp; CHOOSE</h2>
+            <p>Look at the clock and choose the correct English sentence.</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+          <button class="mode-card" type="button" data-play="digital">
+            <span class="ico" style="background:#e8dcff">📱</span>
+            <h2>DIGITAL → CLOCK</h2>
+            <p>See a digital time and put the hands in the right place.</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+          <button class="mode-card" type="button" data-play="match">
+            <span class="ico" style="background:#ffe0cf">🔗</span>
+            <h2>MATCH IT!</h2>
+            <p>Match each digital time with its English expression.</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+          <button class="mode-card" type="button" data-play="challenge">
+            <span class="ico" style="background:#ffd6de">⚡</span>
+            <h2>TIME CHALLENGE</h2>
+            <p>60 seconds, all question types. How many can you get?</p>
+            <span class="go" aria-hidden="true">→</span>
+          </button>
+        </nav>
+      </main>
+
+      <!-- ================= LEARN ================= -->
+      <section id="screen-learn" class="screen">
+        <div class="panel">
+          <h1 style="font-size:clamp(1.6rem,3.4vw,2.3rem);text-align:center">HOW TO TELL THE TIME 🇬🇧</h1>
+          <p style="text-align:center;max-width:56ch;margin:10px auto 0;color:#31467a">
+            In British English we cut the clock in half. The <b>right side</b> is <b>PAST</b>, the <b>left side</b> is <b>TO</b>.
+          </p>
+          <div class="rule-grid">
+            <div class="rule">
+              <h3>➡️ PAST (1 – 30 minutes)</h3>
+              <p>The minute hand is on the <b>right</b>. Say the minutes, then <b>past</b>, then <b>this hour</b>.<br />
+              <b>3:20 → It's twenty past three.</b></p>
+            </div>
+            <div class="rule to">
+              <h3>⬅️ TO (31 – 59 minutes)</h3>
+              <p>The minute hand is on the <b>left</b>. Say how many minutes are <b>left</b>, then <b>to</b>, then <b>the next hour</b>.<br />
+              <b>3:40 → It's twenty to four.</b></p>
+            </div>
+          </div>
+          <div class="example-grid">
+            <div class="example"><b>3:00</b><span>It's three o'clock.</span></div>
+            <div class="example"><b>3:15</b><span>It's quarter past three.</span></div>
+            <div class="example"><b>3:30</b><span>It's half past three.</span></div>
+            <div class="example"><b>3:45</b><span>It's quarter to four.</span></div>
+          </div>
+          <div class="tipbox" style="margin-top:18px">
+            <h3>⭐ REMEMBER</h3>
+            <p>15 minutes = a <b>quarter</b> of an hour. 30 minutes = <b>half</b> an hour.
+            After half past, we look forward to the <b>next</b> hour: 8:50 is <b>ten to nine</b>, not "ten to eight".
+            Every small tick is <b>1 minute</b>, so we can say any time exactly:
+            7:01 is <b>one minute past seven</b> and 7:59 is <b>one minute to eight</b>.</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-ghost" type="button" data-go="home">← Back</button>
+            <button class="btn btn-pink" type="button" data-play="choose">▶ Let's play!</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= GAME ================= -->
+      <section id="screen-game" class="screen">
+        <div class="hud">
+          <button class="chip-btn" type="button" data-go="home">✕ Quit</button>
+          <span class="spacer"></span>
+          <span class="stat">SCORE <b id="hud-score">0</b></span>
+          <span class="stat">STREAK <b id="hud-streak">0</b> 🔥</span>
+          <span class="stat" id="hud-q-wrap">QUESTION <b id="hud-q">1/10</b></span>
+          <span class="stat time" id="hud-time-wrap" hidden>TIME <b id="hud-time">60s</b></span>
+        </div>
+        <div class="track"><i id="track-fill"></i></div>
+
+        <div class="play-grid">
+          <div class="stage">
+            <span class="tag" id="mode-tag">MOVE THE HANDS</span>
+            <h1 class="ask" id="ask">Set the time:</h1>
+            <p class="ask-sub" id="ask-sub"></p>
+            <div id="target-wrap" hidden><span class="target" id="target"></span></div>
+
+            <div id="clock-area">
+              <div class="clock-wrap" id="clock-holder"></div>
+              <div id="hand-tools" hidden>
+                <div class="hand-picker">
+                  <button class="hand-btn on" type="button" data-hand="hour"><span class="dot"></span> HOUR hand</button>
+                  <button class="hand-btn minute" type="button" data-hand="minute"><span class="dot"></span> MINUTE hand</button>
+                </div>
+                <div class="stepper">
+                  <button class="step" type="button" data-step="-1" aria-label="Move hand back">−</button>
+                  <span class="readout" id="readout">12:00</span>
+                  <button class="step" type="button" data-step="1" aria-label="Move hand forward">+</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="choices" id="choices" hidden></div>
+            <div class="match-grid" id="match" hidden></div>
+
+            <div class="actions">
+              <button class="btn btn-yellow" id="btn-listen" type="button" hidden>🔊 <span id="listen-label">Listen</span></button>
+              <button class="btn btn-pink" id="btn-check" type="button">✓ Check</button>
+              <button class="btn btn-navy" id="btn-next" type="button" hidden>Next →</button>
+            </div>
+          </div>
+
+          <aside class="side">
+            <div class="feedback" id="feedback">
+              <h3 id="fb-title">Ready? 🙂</h3>
+              <p id="fb-text">Take your time and think in English.</p>
+              <button class="say" id="fb-say" type="button" hidden>🔊 Hear it again</button>
+            </div>
+            <div class="tipbox">
+              <h3>💡 QUICK TIP</h3>
+              <p id="tip">15 = quarter past · 30 = half past · 45 = quarter to.</p>
+            </div>
+            <div class="streakbox">
+              <h3>TIME STREAK 🔥</h3>
+              <p id="streak-msg">Answer 3 in a row for bonus points!</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ================= RESULT ================= -->
+      <section id="screen-result" class="screen">
+        <div class="result">
+          <div class="big" id="res-score">0</div>
+          <h1 id="res-title">Well done!</h1>
+          <p id="res-msg" style="color:#31467a;margin-top:8px"></p>
+          <div class="score-row">
+            <div><span>CORRECT</span><b id="res-correct">0/10</b></div>
+            <div><span>ACCURACY</span><b id="res-acc">0%</b></div>
+            <div><span>BEST STREAK</span><b id="res-streak">0</b></div>
+          </div>
+          <p id="res-badge" style="margin-top:20px;font-family:var(--display);font-size:1.25rem"></p>
+          <div class="actions">
+            <button class="btn btn-pink" id="btn-again" type="button">↻ Play again</button>
+            <button class="btn btn-navy" type="button" data-go="home">🏠 All games</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+    (function () {
+      "use strict";
+
+      /* ---------------- language ---------------- */
+      var HOURS = ["twelve","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+      /* number words 1–29, used for every minute the clock can show */
+      var NUM = ["zero","one","two","three","four","five","six","seven","eight","nine","ten",
+                 "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty",
+                 "twenty-one","twenty-two","twenty-three","twenty-four","twenty-five",
+                 "twenty-six","twenty-seven","twenty-eight","twenty-nine"];
+      /* the conventional British expressions students must learn */
+      var MINS  = {5:"five",10:"ten",20:"twenty",25:"twenty-five"};
+
+      /* says any minute 0–59: classic wording for 5/10/15/20/25/30/45…,
+         "N minutes past/to" for the minutes in between (singular for 1). */
+      function minuteWords(n) {
+        return MINS[n] ? MINS[n] : NUM[n] + (n === 1 ? " minute" : " minutes");
+      }
+      function expr(h, m) {
+        var hh = ((h - 1) % 12) + 1, next = hh === 12 ? 1 : hh + 1;
+        if (m === 0)  return HOURS[hh] + " o'clock";
+        if (m === 15) return "quarter past " + HOURS[hh];
+        if (m === 30) return "half past " + HOURS[hh];
+        if (m === 45) return "quarter to " + HOURS[next];
+        if (m < 30)   return minuteWords(m) + " past " + HOURS[hh];
+        return minuteWords(60 - m) + " to " + HOURS[next];
+      }
+      function sentence(h, m) { return "It's " + expr(h, m) + "."; }
+      function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+      function pad(n) { return n < 10 ? "0" + n : "" + n; }
+      function digital(h, m) { return pad(h) + ":" + pad(m); }
+
+      var CONTEXTS = [
+        "The English lesson starts at ___.",
+        "The school bus leaves at ___.",
+        "Break time begins at ___.",
+        "We have lunch at ___.",
+        "The football match starts at ___.",
+        "My favourite programme is on at ___.",
+        "The library closes at ___.",
+        "Our online class begins at ___."
+      ];
+
+      var LEVELS = {
+        easy:   [0, 15, 30, 45],
+        medium: [5, 10, 20, 25, 35, 40, 50, 55],
+        expert: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
+      };
+      var EVERY_MINUTE = (function () { var a = [], i; for (i = 0; i < 60; i++) a.push(i); return a; })();
+      var MODE_NAMES = {
+        set: "MOVE THE HANDS", listen: "LISTEN & SET", choose: "LOOK & CHOOSE",
+        digital: "DIGITAL → CLOCK", match: "MATCH IT!", challenge: "TIME CHALLENGE"
+      };
+
+      /* ---------------- state ---------------- */
+      var S = {
+        mode: "set", level: "easy", type: "set",
+        score: 0, streak: 0, best: 0, correct: 0, index: 0, total: 10,
+        q: null, options: null, pairs: null, picked: null, matched: 0,
+        setH: 12, setM: 0, hand: "hour",
+        answered: false, sound: true, timer: null, seconds: 60,
+        speechToken: 0, speechTimer: null
+      };
+
+      var $ = function (id) { return document.getElementById(id); };
+      function rnd(n) { return Math.floor(Math.random() * n); }
+      function pick(a) { return a[rnd(a.length)]; }
+      function shuffle(a) { var c = a.slice(), i, j, t;
+        for (i = c.length - 1; i > 0; i--) { j = rnd(i + 1); t = c[i]; c[i] = c[j]; c[j] = t; } return c; }
+
+      /* ---------------- screens ---------------- */
+      function show(name) {
+        ["home","learn","game","result"].forEach(function (n) {
+          $("screen-" + n).classList.toggle("active", n === name);
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      /* ---------------- speech: British English, Web Speech API ---------------- */
+      var VOICES = [];
+      function hasSpeech() {
+        try {
+          return !!window.speechSynthesis && typeof window.speechSynthesis.speak === "function" &&
+                 typeof window.SpeechSynthesisUtterance === "function";
+        } catch (e) { return false; }
+      }
+      function loadVoices() {
+        if (!hasSpeech()) return;
+        try { VOICES = window.speechSynthesis.getVoices() || []; } catch (e) { VOICES = []; }
+      }
+      /* prefer en-GB; then a British-sounding voice; then any English voice */
+      function bestVoice() {
+        var i, v, lang;
+        if (!VOICES.length) loadVoices();
+        for (i = 0; i < VOICES.length; i++) {
+          lang = (VOICES[i].lang || "").toLowerCase().replace("_", "-");
+          if (lang.indexOf("en-gb") === 0) return VOICES[i];
+        }
+        for (i = 0; i < VOICES.length; i++) {
+          v = VOICES[i].name || "";
+          if (/british|uk english|daniel|serena|kate|arthur|oliver/i.test(v)) return VOICES[i];
+        }
+        for (i = 0; i < VOICES.length; i++) {
+          lang = (VOICES[i].lang || "").toLowerCase();
+          if (lang.indexOf("en") === 0) return VOICES[i];
+        }
+        return null;
+      }
+      function noAudioMessage() {
+        feedback("bad", "🔇 Audio is not available",
+          "Audio is not available in this browser. Please try Chrome or Edge. You can still read the question and set the clock.");
+      }
+      /* speaks one sentence at a time: any earlier speech is stopped first */
+      function speak(text, done) {
+        if (!hasSpeech()) { noAudioMessage(); if (done) done(); return false; }
+        if (!S.sound) { if (done) done(); return false; }
+        var token = ++S.speechToken, finished = false;
+        function finish() {
+          if (finished) return;
+          finished = true;
+          clearTimeout(S.speechTimer);
+          if (done) done(token === S.speechToken);
+        }
+        try {
+          window.speechSynthesis.cancel();                 /* no overlapping voices */
+          var u = new SpeechSynthesisUtterance(text);
+          u.lang = "en-GB"; u.rate = 0.8; u.pitch = 1.05;
+          var v = bestVoice();
+          if (v) { try { u.voice = v; } catch (e2) { /* keep u.lang = en-GB */ } }
+          u.onend = finish; u.onerror = finish;
+          clearTimeout(S.speechTimer);
+          S.speechTimer = setTimeout(finish, Math.max(1800, text.length * 120));
+          window.speechSynthesis.speak(u);
+          return true;
+        } catch (e) { finish(); return false; }
+      }
+      function stopSpeech() {
+        S.speechToken++;
+        clearTimeout(S.speechTimer);
+        if (hasSpeech()) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      }
+      /* LISTEN → PLAYING… → LISTEN AGAIN, as many times as the student wants */
+      function setListenLabel(t) { var el = $("listen-label"); if (el) el.textContent = t; }
+      function resetListenButton() {
+        var b = $("btn-listen");
+        if (!b) return;
+        b.disabled = false;
+        setListenLabel(hasSpeech() ? "Listen" : "Audio unavailable");
+      }
+      function playPrompt() {
+        var b = $("btn-listen");
+        if (!hasSpeech()) { noAudioMessage(); if (b) { b.disabled = true; setListenLabel("Audio unavailable"); } return; }
+        if (!S.sound) {
+          feedback("", "🔈 Sound is off",
+            "Tap “Sound off” at the top of the page to turn the sound back on, then press Listen.");
+          return;
+        }
+        if (b) { b.disabled = true; }
+        setListenLabel("Playing…");
+        speak(sentence(S.q.h, S.q.m), function () {
+          if (b) b.disabled = false;
+          setListenLabel("Listen again");
+        });
+      }
+
+      /* ---------------- clock ---------------- */
+      function clockSVG(live) {
+        var s = '', i, a, n;
+        for (i = 0; i < 60; i++) {
+          a = i * 6 * Math.PI / 180;
+          var out = 176, inn = (i % 5 === 0) ? 160 : 168;
+          s += '<line class="' + (i % 5 === 0 ? "tick-h" : "tick-m") + '" x1="' + (200 + Math.sin(a) * inn).toFixed(1) +
+               '" y1="' + (200 - Math.cos(a) * inn).toFixed(1) + '" x2="' + (200 + Math.sin(a) * out).toFixed(1) +
+               '" y2="' + (200 - Math.cos(a) * out).toFixed(1) + '"/>';
+        }
+        for (n = 1; n <= 12; n++) {
+          a = n * 30 * Math.PI / 180;
+          s += '<text class="num" x="' + (200 + Math.sin(a) * 126).toFixed(1) + '" y="' +
+               (200 - Math.cos(a) * 126).toFixed(1) + '">' + n + '</text>';
+        }
+        return '<svg class="clock-svg' + (live ? " live" : "") + '" id="clock-svg" viewBox="0 0 400 400" ' +
+               'role="img" aria-label="Analogue clock">' +
+               '<circle class="face" cx="200" cy="200" r="182"/>' + s +
+               '<line class="hand-h" id="hand-h" x1="200" y1="212" x2="200" y2="112"/>' +
+               '<line class="hand-m" id="hand-m" x1="200" y1="220" x2="200" y2="66"/>' +
+               '<circle class="pin" cx="200" cy="200" r="13"/></svg>';
+      }
+      function drawHands() {
+        var hh = $("hand-h"), mm = $("hand-m");
+        if (!hh || !mm) return;
+        /* the hour hand creeps forward as the minutes pass — it never jumps */
+        var hA = ((S.setH % 12) + S.setM / 60) * 30, mA = S.setM * 6;
+        hh.setAttribute("transform", "rotate(" + hA + " 200 200)");
+        mm.setAttribute("transform", "rotate(" + mA + " 200 200)");
+        var ro = $("readout");
+        if (ro) ro.textContent = digital(S.setH, S.setM);
+      }
+      function renderClock(live, h, m) {
+        S.setH = h; S.setM = m;
+        $("clock-holder").innerHTML = clockSVG(live);
+        drawHands();
+        $("hand-tools").hidden = !live;
+        if (live) bindDrag();
+      }
+      function setHand(name) {
+        S.hand = name;
+        document.querySelectorAll(".hand-btn").forEach(function (b) {
+          b.classList.toggle("on", b.dataset.hand === name);
+        });
+      }
+      function bindDrag() {
+        var svg = $("clock-svg"), dragging = false;
+        function angleFrom(ev) {
+          var r = svg.getBoundingClientRect();
+          var x = ev.clientX - (r.left + r.width / 2);
+          var y = ev.clientY - (r.top + r.height / 2);
+          var a = Math.atan2(x, -y) * 180 / Math.PI;
+          return a < 0 ? a + 360 : a;
+        }
+        function apply(ev) {
+          var a = angleFrom(ev);
+          if (S.hand === "minute") {
+            S.setM = Math.round(a / 6) % 60;                  /* snap to the nearest of 60 minutes */
+          } else {
+            /* take the minute creep off the angle first, then land on a whole hour */
+            var idx = Math.round((((a - S.setM * 0.5) % 360 + 360) % 360) / 30) % 12;
+            S.setH = idx === 0 ? 12 : idx;
+          }
+          drawHands();
+        }
+        /* grab whichever hand the student actually touched */
+        function grab(ev) {
+          var r = svg.getBoundingClientRect();
+          var x = ev.clientX - (r.left + r.width / 2), y = ev.clientY - (r.top + r.height / 2);
+          var dist = Math.sqrt(x * x + y * y) / (r.width / 2);
+          var a = angleFrom(ev);
+          function gap(b) { var d = Math.abs(((a - b) % 360 + 360) % 360); return d > 180 ? 360 - d : d; }
+          var toM = gap(S.setM * 6), toH = gap(((S.setH % 12) + S.setM / 60) * 30);
+          if (toM < 15 && toM <= toH) setHand("minute");
+          else if (toH < 15 && toH < toM) setHand("hour");
+          else setHand(dist > 0.62 ? "minute" : "hour");
+        }
+        svg.addEventListener("pointerdown", function (e) {
+          if (S.answered) return;
+          dragging = true; svg.setPointerCapture && svg.setPointerCapture(e.pointerId);
+          e.preventDefault(); grab(e); apply(e);
+        });
+        svg.addEventListener("pointermove", function (e) { if (dragging) apply(e); });
+        svg.addEventListener("pointerup", function () { dragging = false; });
+        svg.addEventListener("pointercancel", function () { dragging = false; });
+      }
+      function stepHand(dir) {
+        if (S.answered) return;
+        if (S.hand === "minute") {
+          var m = S.setM + dir;                               /* one minute at a time */
+          if (m > 59) { m = 0; S.setH = S.setH === 12 ? 1 : S.setH + 1; }   /* 12:59 + 1 → 1:00 */
+          if (m < 0)  { m = 59; S.setH = S.setH === 1 ? 12 : S.setH - 1; }  /* 12:00 − 1 → 11:59 */
+          S.setM = m;
+        } else {
+          S.setH = ((S.setH - 1 + dir + 12) % 12) + 1;
+        }
+        drawHands();
+      }
+
+      /* ---------------- questions ---------------- */
+      /* Which minutes may a question use?
+         EXPERT + a clock-setting game  → every minute 00–59 (precise clock reading)
+         everything else                → the British expressions students must learn */
+      function minutePool() {
+        if (S.level === "expert" && (S.type === "set" || S.type === "listen" || S.type === "digital")) {
+          return EVERY_MINUTE;
+        }
+        return LEVELS[S.level];
+      }
+      function newTime() {
+        var mins = minutePool();
+        return { h: rnd(12) + 1, m: mins[rnd(mins.length)] };
+      }
+      function buildQuestion() {
+        var t = newTime();
+        S.q = { h: t.h, m: t.m, words: expr(t.h, t.m), digital: digital(t.h, t.m), context: pick(CONTEXTS) };
+      }
+      function distractors() {
+        var q = S.q, all = LEVELS.expert, out = [{ t: q.words, ok: true }], c = [], i;
+        var nextH = q.h === 12 ? 1 : q.h + 1, prevH = q.h === 1 ? 12 : q.h - 1;
+        if (q.m !== 0 && q.m !== 30) c.push({ h: q.h, m: 60 - q.m });          /* past ↔ to */
+        c.push({ h: nextH, m: q.m });
+        c.push({ h: prevH, m: q.m });
+        c.push({ h: q.h, m: (q.m + 15) % 60 });
+        c.push({ h: q.h, m: (q.m + 30) % 60 });
+        c = shuffle(c);
+        for (i = 0; i < c.length && out.length < 4; i++) {
+          var txt = expr(c[i].h, c[i].m);
+          if (!out.some(function (o) { return o.t === txt; })) out.push({ t: txt, ok: false });
+        }
+        while (out.length < 4) {
+          var r = { h: rnd(12) + 1, m: all[rnd(all.length)] }, x = expr(r.h, r.m);
+          if (!out.some(function (o) { return o.t === x; })) out.push({ t: x, ok: false });
+        }
+        return shuffle(out);
+      }
+
+      /* ---------------- HUD ---------------- */
+      function hud() {
+        $("hud-score").textContent = S.score;
+        $("hud-streak").textContent = S.streak;
+        $("hud-q").textContent = Math.min(S.index, S.total) + "/" + S.total;
+        $("hud-time").textContent = Math.max(0, S.seconds) + "s";
+        var pct = S.mode === "challenge" ? ((60 - S.seconds) / 60) * 100 : ((S.index - 1) / S.total) * 100;
+        $("track-fill").style.width = Math.max(0, Math.min(100, pct)) + "%";
+        $("streak-msg").textContent = S.streak >= 3
+          ? S.streak + "× in a row! Brilliant! 🎉"
+          : "Answer 3 in a row for bonus points!";
+      }
+      function feedback(kind, title, text, sayText) {
+        var box = $("feedback");
+        box.className = "feedback" + (kind ? " " + kind : "");
+        $("fb-title").textContent = title;
+        $("fb-text").textContent = text;
+        var say = $("fb-say");
+        say.hidden = !sayText;
+        say.onclick = sayText ? function () { speak(sayText); } : null;
+      }
+      function tipFor(m) {
+        if (m === 0) return "O'clock means zero minutes — the minute hand points straight up at 12.";
+        if (m === 15) return "Quarter past = 15 minutes after the hour. The minute hand points at 3.";
+        if (m === 30) return "Half past = 30 minutes. The minute hand points straight down at 6.";
+        if (m === 45) return "Quarter to = 15 minutes before the NEXT hour. The minute hand points at 9.";
+        if (m % 5 !== 0) {
+          return m < 30
+            ? "Every small tick is 1 minute. Count on from the last big number: " + m + " minutes PAST the hour."
+            : "Every small tick is 1 minute. Count the ticks up to the next hour: " + (60 - m) + " minutes TO go.";
+        }
+        if (m < 30) return "Minute hand on the right? Use PAST and count the minutes in fives.";
+        return "Minute hand on the left? Use TO and count how many minutes are left until the next hour.";
+      }
+
+      /* ---------------- rounds ---------------- */
+      function startGame(mode) {
+        var lv = document.querySelector('input[name="level"]:checked');
+        S.level = lv ? lv.value : "easy";
+        S.mode = mode; S.score = 0; S.streak = 0; S.best = 0; S.correct = 0; S.index = 0;
+        S.total = mode === "match" ? 3 : 10;
+        S.seconds = 60;
+        clearInterval(S.timer); S.timer = null;
+        $("hud-time-wrap").hidden = mode !== "challenge";
+        $("hud-q-wrap").hidden = mode === "challenge";
+        if (mode === "challenge") {
+          S.total = 999;
+          S.timer = setInterval(function () {
+            S.seconds--; hud();
+            if (S.seconds <= 0) { clearInterval(S.timer); finish(); }
+          }, 1000);
+        }
+        show("game");
+        nextQuestion();
+      }
+
+      function nextQuestion() {
+        if (S.mode !== "challenge" && S.index >= S.total) return finish();
+        S.index++; S.answered = false; S.picked = null; S.matched = 0;
+        /* the question type decides which minutes may appear, so choose it first */
+        S.type = S.mode === "challenge" ? pick(["choose", "set", "digital", "listen"]) : S.mode;
+        buildQuestion();
+
+        $("mode-tag").textContent = MODE_NAMES[S.mode];
+        $("choices").hidden = true; $("match").hidden = true;
+        $("clock-area").hidden = false; $("target-wrap").hidden = true;
+        $("clock-holder").classList.remove("compact");
+        $("btn-check").hidden = false; $("btn-next").hidden = true; $("btn-listen").hidden = true;
+        resetListenButton();
+        setHand("hour");
+        $("tip").textContent = tipFor(S.q.m);
+        feedback("", "Your turn! 🙂", "Think in English, then check your answer.");
+        hud();
+
+        if (S.type === "choose") {
+          $("ask").textContent = "What time is it?";
+          $("ask-sub").textContent = "Choose the correct British English sentence.";
+          renderClock(false, S.q.h, S.q.m);
+          renderChoices();
+        } else if (S.type === "match") {
+          renderMatch();
+        } else if (S.type === "set") {
+          $("ask").textContent = "Set the clock:";
+          $("ask-sub").textContent = S.q.context.replace("___", expr(S.q.h, S.q.m));
+          renderClock(true, 12, 0);
+        } else if (S.type === "digital") {
+          $("ask").textContent = "Show this time on the clock:";
+          $("ask-sub").textContent = "Move the hour hand and the minute hand, then press Check.";
+          $("target-wrap").hidden = false;
+          $("target").textContent = S.q.digital;
+          renderClock(true, 12, 0);
+        } else if (S.type === "listen") {
+          $("ask").textContent = "Listen, then set the clock.";
+          $("ask-sub").textContent = "Press Listen as many times as you need.";
+          $("btn-listen").hidden = false;
+          renderClock(true, 12, 0);
+          setTimeout(playPrompt, 400);
+        }
+      }
+
+      function renderChoices() {
+        S.options = distractors();
+        $("clock-holder").classList.add("compact");
+        var box = $("choices");
+        box.hidden = false;
+        box.innerHTML = S.options.map(function (o, i) {
+          return '<button class="choice" type="button" data-i="' + i + '">' +
+                 '<span class="key">' + "ABCD"[i] + '</span>It\'s ' + o.t + '.</button>';
+        }).join("");
+        $("btn-check").hidden = true;
+      }
+
+      function renderMatch() {
+        $("ask").textContent = "Match the time!";
+        $("ask-sub").textContent = "Tap a digital time, then tap its English expression.";
+        $("clock-area").hidden = true;
+        $("btn-check").hidden = true;
+        var used = [], t;
+        while (used.length < 4) {
+          t = newTime();
+          if (!used.some(function (u) { return u.h === t.h && u.m === t.m; })) used.push(t);
+        }
+        S.pairs = used.map(function (u, i) {
+          return { id: "p" + i, h: u.h, m: u.m, d: digital(u.h, u.m), w: cap(expr(u.h, u.m)) };
+        });
+        var left = shuffle(S.pairs), right = shuffle(S.pairs);
+        $("match").hidden = false;
+        $("match").innerHTML =
+          '<div class="match-col"><h3>DIGITAL</h3>' + left.map(function (p) {
+            return '<button class="match-card" type="button" data-side="d" data-id="' + p.id + '">' + p.d + '</button>';
+          }).join("") + '</div>' +
+          '<div class="match-col"><h3>IN ENGLISH</h3>' + right.map(function (p) {
+            return '<button class="match-card" type="button" data-side="w" data-id="' + p.id + '">' + p.w + '</button>';
+          }).join("") + '</div>';
+      }
+
+      /* ---------------- answering ---------------- */
+      function award(bonus) {
+        var pts = 10 + (S.streak >= 2 ? 5 : 0) + (bonus || 0);
+        S.score += pts; S.correct++; S.streak++;
+        if (S.streak > S.best) S.best = S.streak;
+        hud();
+        return pts;
+      }
+      function missed() { S.streak = 0; hud(); }
+
+      function checkAnswer() {
+        if (S.answered) return;
+        var ok;
+        if (S.type === "choose") {
+          if (S.picked === null) return;
+          ok = S.options[S.picked].ok === true;
+        } else {
+          ok = (S.setH === S.q.h && S.setM === S.q.m);
+        }
+        S.answered = true;
+        var right = sentence(S.q.h, S.q.m);
+
+        if (ok) {
+          var pts = award(S.mode === "challenge" ? Math.max(0, Math.floor(S.seconds / 10)) : 0);
+          feedback("good", "✓ Correct! +" + pts + " points",
+            right + "  (" + S.q.digital + ")", right);
+          speak(right);
+        } else {
+          missed();
+          feedback("bad", "✕ Not quite — the answer is:",
+            right + "  (" + S.q.digital + ")  " + tipFor(S.q.m), right);
+          var svg = $("clock-svg");
+          if (svg) { svg.classList.add("shake"); setTimeout(function () { svg.classList.remove("shake"); }, 420); }
+          if (S.type !== "choose") { S.setH = S.q.h; S.setM = S.q.m; drawHands(); }
+        }
+
+        if (S.type === "choose") {
+          document.querySelectorAll(".choice").forEach(function (el, i) {
+            if (S.options[i].ok) el.classList.add("right");
+            else if (i === S.picked) el.classList.add("wrong");
+          });
+        }
+        $("btn-check").hidden = true;
+        $("btn-next").hidden = false;
+        if (S.mode === "challenge") {
+          setTimeout(function () { if (S.seconds > 0 && S.answered) nextQuestion(); }, ok ? 800 : 1500);
+        }
+      }
+
+      function onMatchTap(btn) {
+        if (btn.classList.contains("done")) return;
+        var side = btn.dataset.side, id = btn.dataset.id;
+        document.querySelectorAll('.match-card[data-side="' + side + '"]').forEach(function (el) {
+          el.classList.remove("sel");
+        });
+        btn.classList.add("sel");
+        if (!S.picked) S.picked = {};
+        S.picked[side] = id;
+        if (S.picked.d && S.picked.w) {
+          var pair = S.pairs.filter(function (p) { return p.id === S.picked.d; })[0];
+          if (S.picked.d === S.picked.w) {
+            document.querySelectorAll('.match-card[data-id="' + pair.id + '"]').forEach(function (el) {
+              el.classList.remove("sel"); el.classList.add("done");
+            });
+            S.matched++;
+            award(0);
+            speak("It's " + expr(pair.h, pair.m) + ".");
+            if (S.matched === 4) {
+              S.answered = true;
+              feedback("good", "✓ All four matched!", "Superb — you linked every clock time to the right English words.");
+              $("btn-next").hidden = false;
+            } else {
+              feedback("good", "✓ Good match!", pair.d + " = " + pair.w + ". " + (4 - S.matched) + " to go.",
+                "It's " + expr(pair.h, pair.m) + ".");
+            }
+          } else {
+            missed();
+            feedback("bad", "✕ Try again", pair.d + " is not that one. " + tipFor(pair.m));
+            document.querySelectorAll(".match-card.sel").forEach(function (el) { el.classList.remove("sel"); });
+          }
+          S.picked = {};
+        }
+      }
+
+      /* ---------------- finish ---------------- */
+      function finish() {
+        clearInterval(S.timer); S.timer = null;
+        stopSpeech();
+        var asked = S.mode === "challenge" ? Math.max(1, S.index - 1) : (S.mode === "match" ? S.total * 4 : S.total);
+        var got = S.correct;
+        var acc = Math.round((got / Math.max(1, asked)) * 100);
+        $("res-score").textContent = S.score;
+        $("res-correct").textContent = got + "/" + asked;
+        $("res-acc").textContent = acc + "%";
+        $("res-streak").textContent = S.best;
+        var badge, title, msg;
+        if (acc >= 90) { badge = "👑 TIME EXPERT"; title = "Outstanding!"; msg = "You can tell the time like a native speaker."; }
+        else if (acc >= 70) { badge = "🏆 TIME MASTER"; title = "Great job!"; msg = "Almost perfect — keep practising 'to' and 'past'."; }
+        else if (acc >= 40) { badge = "🏅 TIME LEARNER"; title = "Good effort!"; msg = "Read the tips again, then try the same level once more."; }
+        else { badge = "⭐ TIME STARTER"; title = "Nice try!"; msg = "Visit 'How to tell the time', then play EASY level."; }
+        $("res-badge").textContent = badge;
+        $("res-title").textContent = title;
+        $("res-msg").textContent = msg;
+        show("result");
+      }
+
+      /* ---------------- events ---------------- */
+      document.addEventListener("click", function (e) {
+        var go = e.target.closest("[data-go]");
+        if (go) { clearInterval(S.timer); stopSpeech(); return show(go.dataset.go); }
+
+        var play = e.target.closest("[data-play]");
+        if (play) return startGame(play.dataset.play);
+
+        var hand = e.target.closest(".hand-btn");
+        if (hand) { setHand(hand.dataset.hand); return; }
+        var step = e.target.closest(".step");
+        if (step) return stepHand(parseInt(step.dataset.step, 10));
+
+        var ch = e.target.closest(".choice");
+        if (ch && !S.answered) {
+          S.picked = parseInt(ch.dataset.i, 10);
+          document.querySelectorAll(".choice").forEach(function (el) { el.classList.remove("sel"); });
+          return checkAnswer();
+        }
+        var mc = e.target.closest(".match-card");
+        if (mc && !S.answered) return onMatchTap(mc);
+      });
+
+      $("btn-check").addEventListener("click", checkAnswer);
+      $("btn-next").addEventListener("click", function () {
+        if (S.mode === "match") { if (S.index >= S.total) return finish(); }
+        nextQuestion();
+      });
+      $("btn-listen").addEventListener("click", playPrompt);
+      $("btn-again").addEventListener("click", function () { startGame(S.mode); });
+      $("btn-sound").addEventListener("click", function () {
+        S.sound = !S.sound;
+        this.setAttribute("aria-pressed", String(S.sound));
+        this.classList.toggle("off", !S.sound);
+        $("sound-label").textContent = S.sound ? "Sound on" : "Sound off";
+        if (!S.sound) { stopSpeech(); resetListenButton(); }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (!$("screen-game").classList.contains("active")) return;
+        if (e.key === "ArrowRight" || e.key === "ArrowUp") { stepHand(1); e.preventDefault(); }
+        if (e.key === "ArrowLeft" || e.key === "ArrowDown") { stepHand(-1); e.preventDefault(); }
+        if (e.key === "h" || e.key === "H") setHand("hour");
+        if (e.key === "m" || e.key === "M") setHand("minute");
+        if (e.key === "Enter") { if (!$("btn-next").hidden) $("btn-next").click(); else if (!$("btn-check").hidden) $("btn-check").click(); }
+      });
+
+      /* voices often arrive a moment after the page loads */
+      if (hasSpeech()) {
+        loadVoices();
+        try { window.speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
+        setTimeout(loadVoices, 600);
+        setTimeout(loadVoices, 1800);
+      } else {
+        resetListenButton();
+      }
+      renderClock(false, 10, 10);
+
+      /* expose a few helpers for testing */
+      window.__TT__ = { expr: expr, digital: digital, sentence: sentence, LEVELS: LEVELS,
+                        state: S, stepHand: stepHand, setHand: setHand, bestVoice: bestVoice };
+    })();
+    </script>
+  </body>
+</html>
