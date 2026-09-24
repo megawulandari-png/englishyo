@@ -26,6 +26,60 @@
         .modal-card { padding: 28px 24px; }
       }
 
+
+      /* Featured Activities: 5 labelled cards */
+      .activity-grid.activity-grid--five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .featured-card { display: flex; flex-direction: column; background: #fff; text-decoration: none; }
+      .featured-card img { display: block; width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; }
+      .featured-card__body { display: flex; flex-direction: column; gap: 3px; padding: 7px 9px 9px; }
+      .featured-card__tag { align-self: flex-start; padding: 2px 8px; border-radius: 999px; background: #fff1b8; color: var(--navy); font-size: clamp(.56rem, .62vw, .66rem); font-weight: 900; letter-spacing: .04em; text-transform: uppercase; line-height: 1.35; }
+      .featured-card--game .featured-card__tag { background: #fff1b8; }
+      .featured-card--reading .featured-card__tag { background: #ffdcea; }
+      .featured-card--listening .featured-card__tag { background: #d9f5e3; }
+      .featured-card--learning .featured-card__tag { background: #dcecff; }
+      .featured-card__title { color: var(--navy); font-family: var(--display); font-size: clamp(.8rem, .92vw, .98rem); font-weight: 800; line-height: 1.12; }
+      @media (max-width: 1110px) and (min-width: 801px) {
+        .activity-grid.activity-grid--five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+      @media (max-width: 480px) {
+        .activity-grid.activity-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .activity-grid--five .featured-card:first-child { grid-column: span 2; }
+        .featured-card__title { font-size: .92rem; }
+        .featured-card__tag { font-size: .6rem; }
+      }
+
+      /* Developer modal: avatar + contact */
+      .modal-profile { display: flex; align-items: center; gap: 14px; margin: 0 0 12px; }
+      .modal-avatar { flex: 0 0 auto; width: 84px; height: 84px; border-radius: 50%; object-fit: cover; box-shadow: 0 6px 16px rgba(0,53,110,.18); }
+      .modal-profile .modal-name { margin: 0 0 2px; }
+      .modal-profile .modal-role { margin: 0; }
+      .modal-contact { margin: 16px 0 0; padding: 12px 14px; border-radius: 16px; background: linear-gradient(180deg, #f7fcff, #e6f3ff); border: 1px solid #cfe7ff; }
+      .modal-contact p { margin: 0 0 4px; color: #2a3d68; font-size: .82rem; font-weight: 700; line-height: 1.45; }
+      .modal-contact a { color: #1674ef; font-size: .84rem; font-weight: 900; word-break: break-all; text-decoration: none; }
+      .modal-contact a:hover, .modal-contact a:focus-visible { text-decoration: underline; }
+      @media (max-width: 480px) {
+        .modal-avatar { width: 68px; height: 68px; }
+        .modal-profile { gap: 12px; }
+      }
+
+      /* Welcome greeting toast */
+      .welcome-toast { position: fixed; z-index: 900; right: clamp(14px, 2vw, 28px); bottom: clamp(14px, 2vw, 28px); width: min(320px, calc(100vw - 28px)); padding: 16px 18px 16px; border-radius: 22px; background: linear-gradient(160deg, #ffffff 0%, #f1f8ff 100%); border: 2px solid #ffda26; box-shadow: 0 16px 40px rgba(0,53,110,.22); color: var(--navy); opacity: 0; transform: translateY(18px) scale(.97); transition: opacity .35s ease, transform .35s cubic-bezier(.2,1.2,.4,1); pointer-events: none; }
+      .welcome-toast.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+      .welcome-toast__hi { margin: 0; font-family: var(--display); font-size: 1.05rem; font-weight: 800; }
+      .welcome-toast__title { margin: 0 0 4px; font-family: var(--display); font-size: 1.3rem; font-weight: 800; line-height: 1.1; }
+      .welcome-toast__title span { color: var(--pink); }
+      .welcome-toast__text { margin: 0 0 12px; color: #2a3d68; font-size: .86rem; font-weight: 700; line-height: 1.45; }
+      .welcome-toast__btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border: 0; border-radius: 999px; background: var(--pink); color: #fff; font: inherit; font-size: .9rem; font-weight: 900; cursor: pointer; box-shadow: 0 5px 12px rgba(255,62,121,.3); transition: transform .15s ease; }
+      .welcome-toast__btn:hover { transform: translateY(-2px); }
+      .welcome-toast__btn:focus-visible, .welcome-toast__close:focus-visible { outline: 3px solid #1674ef; outline-offset: 2px; }
+      .welcome-toast__close { position: absolute; top: 8px; right: 10px; border: 0; background: transparent; color: #7a88a8; font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 4px; }
+      @media (max-width: 480px) {
+        .welcome-toast { left: 14px; right: 14px; bottom: 14px; width: auto; padding: 13px 15px; }
+        .welcome-toast__title { font-size: 1.15rem; }
+        .welcome-toast__text { margin-bottom: 10px; font-size: .82rem; }
+      }
+      @media (prefers-reduced-motion: reduce) { .welcome-toast { transition: none; } }
+
       /* Search Input Styling */
       .search-input-wrapper {
         position: relative;
@@ -190,12 +244,13 @@
             <div><span class="heading-star" aria-hidden="true">★</span><h2 id="featured-title">Featured Activities</h2><p>Try these popular activities today!</p></div>
             <a class="all-activities" href="#play-games">See All Activities <span aria-hidden="true">→</span></a>
           </div>
-          <div class="activity-grid">
+          <div class="activity-grid activity-grid--five">
             <!-- FEATURED ACTIVITIES - EDIT LINKS HERE -->
-            <a class="activity-card" href="games.html"><img src="assets/activity-word-approved.png" alt="Word Match — Match words with pictures. Play now." /></a>
-            <a class="activity-card" href="games.html"><img src="assets/activity-tense-approved.png" alt="Tense Race — Choose the correct tense before time runs out. Play now." /></a>
-            <a class="activity-card" href="reading.html"><img src="assets/activity-reading-approved.png" alt="A Day in Yogyakarta — Read and answer questions. Play now." /></a>
-            <a class="activity-card" href="listening.html"><img src="assets/activity-listening-approved.png" alt="Listening Quest — Listen and complete the challenge. Play now." /></a>
+            <a class="activity-card featured-card featured-card--game" href="games/narrative-quest/index.html" aria-label="Game: Narrative Quest — Explore story worlds and master narratives"><img src="assets/featured/narrative-quest.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Game</span><span class="featured-card__title">Narrative Quest</span></span></a>
+            <a class="activity-card featured-card featured-card--game" href="games/telling-time/index.html" aria-label="Game: Telling the Time — Move, listen, choose and match"><img src="assets/featured/telling-time.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Game</span><span class="featured-card__title">Telling the Time</span></span></a>
+            <a class="activity-card featured-card featured-card--reading" href="reading.html?open=bj-habibie" aria-label="Reading: B.J. Habibie — A short biography · A2"><img src="assets/featured/bj-habibie.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Reading</span><span class="featured-card__title">B.J. Habibie</span></span></a>
+            <a class="activity-card featured-card featured-card--listening" href="listening.html?open=screen-03" aria-label="Listening: Who Are You Talking To? — Online friends and staying safe · B1"><img src="assets/featured/who-are-you-talking-to.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Listening</span><span class="featured-card__title">Who Are You Talking To?</span></span></a>
+            <a class="activity-card featured-card featured-card--learning" href="learning.html?open=prepositions" aria-label="Learning: Prepositions — in, on, under, behind, next to"><img src="assets/featured/prepositions.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Learning</span><span class="featured-card__title">Prepositions</span></span></a>
             <!-- END FEATURED ACTIVITIES -->
           </div>
         </section>
@@ -233,14 +288,55 @@
       <div class="modal-card">
         <button class="modal-close" type="button" aria-label="Close modal" id="modalCloseBtn">×</button>
         <h2 class="modal-title">About the Developer</h2>
-        <h3 class="modal-name">Mega Ayu Wulandari</h3>
-        <p class="modal-role">English Teacher · Educator · Creator of English Yo!</p>
+        <div class="modal-profile">
+          <img class="modal-avatar" src="assets/developer-mega.png" alt="Mega Ayu Wulandari" width="84" height="84" />
+          <div>
+            <h3 class="modal-name">Mega Ayu Wulandari</h3>
+            <p class="modal-role">English Teacher · Educator · Creator of English Yo!</p>
+          </div>
+        </div>
         <p class="modal-description">English Yo! is a learning space designed to help students learn, play, read, and listen to English in a fun and accessible way.</p>
+        <div class="modal-contact">
+          <p>Interested in collaborating with ENGLISH YO!? Feel free to get in touch.</p>
+          <a href="mailto:mega.wulandari@smpn15yk.sch.id">✉ mega.wulandari@smpn15yk.sch.id</a>
+        </div>
       </div>
+    </div>
+
+    <!-- WELCOME GREETING (shown once per browser session) -->
+    <div class="welcome-toast" id="welcomeToast" role="status" aria-live="polite" hidden>
+      <button class="welcome-toast__close" type="button" aria-label="Close welcome message" data-welcome-close>×</button>
+      <p class="welcome-toast__hi">Hi there! 👋</p>
+      <p class="welcome-toast__title">Welcome to ENGLISH <span>YO!</span></p>
+      <p class="welcome-toast__text">Explore, learn, play, and grow with us.<br />Ready for a brighter YOU?</p>
+      <button class="welcome-toast__btn" type="button" data-welcome-close>Let's Go! 🚀</button>
     </div>
 
     <script src="script.js"></script>
     <script>
+      // Welcome greeting: once per browser session (sessionStorage)
+      (function () {
+        var KEY = 'englishyo-welcome-shown';
+        var toast = document.getElementById('welcomeToast');
+        if (!toast) return;
+        try { if (sessionStorage.getItem(KEY)) return; sessionStorage.setItem(KEY, '1'); } catch (e) { /* storage blocked: still show once for this page view */ }
+        var hideTimer = null, showTimer = null;
+        function hide() {
+          clearTimeout(hideTimer); clearTimeout(showTimer);
+          toast.classList.remove('is-visible');
+          setTimeout(function () { toast.hidden = true; }, 400);
+        }
+        showTimer = setTimeout(function () {
+          toast.hidden = false;
+          requestAnimationFrame(function () { requestAnimationFrame(function () { toast.classList.add('is-visible'); }); });
+          hideTimer = setTimeout(hide, 9000);
+        }, 900);
+        toast.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+        toast.addEventListener('focusin', function () { clearTimeout(hideTimer); });
+        toast.querySelectorAll('[data-welcome-close]').forEach(function (b) { b.addEventListener('click', hide); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toast.classList.contains('is-visible')) hide(); });
+      })();
+
       // Developer Modal Handler
       (function() {
         const modal = document.getElementById('developerModal');
