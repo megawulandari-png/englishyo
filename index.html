@@ -80,6 +80,50 @@
       }
       @media (prefers-reduced-motion: reduce) { .welcome-toast { transition: none; } }
 
+      /* KNOW YOUR LEVEL! banner */
+      .level-banner { position: relative; isolation: isolate; container-type: inline-size; display: flex; min-height: clamp(170px, 15vw, 250px); background: linear-gradient(135deg, #1674ef 0%, #0b3ea8 55%, #062568 100%); color: #fff; box-shadow: 0 12px 28px rgba(0,53,110,.2); }
+      .level-banner__inner { display: grid; flex: 1; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: clamp(10px, 2cqi, 22px); padding: clamp(16px, 4cqi, 30px) clamp(16px, 4.5cqi, 34px); }
+      .level-banner__blob { position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
+      .level-banner__blob--1 { width: 60%; aspect-ratio: 1; right: -18%; top: -45%; background: radial-gradient(circle, rgba(255,218,38,.35), rgba(255,218,38,0) 70%); }
+      .level-banner__blob--2 { width: 45%; aspect-ratio: 1; left: -14%; bottom: -55%; background: radial-gradient(circle, rgba(255,62,121,.45), rgba(255,62,121,0) 70%); }
+      .level-banner__spark { position: absolute; z-index: -1; color: var(--yellow); line-height: 1; pointer-events: none; animation: lbTwinkle 2.6s ease-in-out infinite; }
+      .level-banner__spark--1 { top: 12%; left: 48%; font-size: clamp(.9rem, 3cqi, 1.3rem); }
+      .level-banner__spark--2 { bottom: 12%; left: 4%; font-size: clamp(.7rem, 2.4cqi, 1rem); color: #9fe3ff; animation-delay: 1.2s; }
+      @keyframes lbTwinkle { 0%, 100% { opacity: .45; transform: scale(.85) rotate(0); } 50% { opacity: 1; transform: scale(1.15) rotate(15deg); } }
+      .level-banner__text { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+      .level-banner__tag { margin-bottom: 6px; padding: 3px 10px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-size: clamp(.58rem, 1.9cqi, .7rem); font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+      .level-banner__title { margin: 0; font-family: var(--display); font-size: clamp(1.5rem, 8cqi, 2.6rem); font-weight: 800; line-height: .95; letter-spacing: -.01em; text-shadow: 0 3px 0 rgba(0,20,70,.35); }
+      .level-banner__title span { color: var(--yellow); }
+      .level-banner__question { margin: 8px 0 0; font-family: var(--display); font-size: clamp(.98rem, 4cqi, 1.3rem); font-weight: 800; line-height: 1.1; }
+      .level-banner__sub { margin: 2px 0 clamp(10px, 3cqi, 16px); color: #d6ebff; font-size: clamp(.78rem, 2.8cqi, .95rem); font-weight: 700; line-height: 1.3; }
+      .level-banner__cta { display: inline-flex; align-items: center; gap: 8px; padding: clamp(8px, 2.2cqi, 11px) clamp(14px, 4cqi, 22px); border-radius: 999px; background: var(--pink); color: #fff; font-size: clamp(.78rem, 2.8cqi, .95rem); font-weight: 900; letter-spacing: .03em; white-space: nowrap; box-shadow: 0 5px 0 #c4144c, 0 10px 18px rgba(0,0,0,.2); transition: transform .15s ease, box-shadow .15s ease; }
+      .level-banner__cta span { transition: transform .15s ease; }
+      .level-banner__cta:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #c4144c, 0 14px 22px rgba(0,0,0,.24); }
+      .level-banner__cta:hover span { transform: translateX(3px); }
+      .level-banner__cta:active { transform: translateY(3px); box-shadow: 0 2px 0 #c4144c, 0 6px 10px rgba(0,0,0,.2); }
+      .level-banner__cta:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+      .level-banner__path { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); align-items: end; gap: clamp(3px, 1.1cqi, 7px); height: 100%; min-height: clamp(120px, 34cqi, 190px); margin: 0; padding: 0; list-style: none; }
+      .level-banner__path::before { position: absolute; left: 12%; right: 12%; bottom: 18%; height: 3px; border-top: 3px dashed rgba(255,255,255,.35); transform: rotate(-24deg); transform-origin: left; content: ""; }
+      .level-step { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding: 6px 2px 8px; border-radius: 14px 14px 8px 8px; color: var(--navy); box-shadow: inset 0 -5px 0 rgba(0,0,0,.12), 0 6px 12px rgba(0,0,0,.18); animation: lbRise .7s cubic-bezier(.2,1.4,.4,1) both; }
+      .level-step b { font-family: var(--display); font-size: clamp(.8rem, 3.2cqi, 1.2rem); font-weight: 800; line-height: 1; }
+      .level-step__icon { font-size: clamp(.85rem, 3.4cqi, 1.3rem); line-height: 1.1; animation: lbBob 2.4s ease-in-out infinite; }
+      .level-step--a1 { height: 36%; background: #ddf6e4; animation-delay: .05s; }
+      .level-step--a2 { height: 48%; background: #fff1c2; animation-delay: .12s; }
+      .level-step--b1 { height: 60%; background: #dceeff; animation-delay: .19s; }
+      .level-step--b2 { height: 72%; background: #ffe1ec; animation-delay: .26s; }
+      .level-step--c1 { height: 84%; background: #eadfff; animation-delay: .33s; }
+      .level-step--c2 { height: 97%; background: linear-gradient(180deg, #ffe46b, #ffc21f); animation-delay: .4s; }
+      .level-step--a2 .level-step__icon { animation-delay: .25s; } .level-step--b1 .level-step__icon { animation-delay: .5s; } .level-step--b2 .level-step__icon { animation-delay: .75s; } .level-step--c1 .level-step__icon { animation-delay: 1s; } .level-step--c2 .level-step__icon { animation-delay: 1.25s; }
+      @keyframes lbRise { from { opacity: 0; transform: translateY(30%) scaleY(.6); } to { opacity: 1; transform: none; } }
+      @keyframes lbBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+      @container (max-width: 400px) {
+        .level-banner__inner { grid-template-columns: 1fr; }
+        .level-banner__path { min-height: 118px; height: 118px; }
+        .level-step { padding: 5px 1px 6px; }
+        .level-banner__spark--1 { left: auto; right: 8%; }
+      }
+      @media (prefers-reduced-motion: reduce) { .level-banner__spark, .level-step, .level-step__icon { animation: none; } }
+
       /* Search Input Styling */
       .search-input-wrapper {
         position: relative;
@@ -254,9 +298,29 @@
             <!-- END FEATURED ACTIVITIES -->
           </div>
         </section>
-        <section class="community-panel" id="developers" aria-labelledby="community-title">
-          <h2 class="sr-only" id="community-title">Our English YO! Community</h2>
-          <img src="assets/community-approved.png" alt="A Global Community of Learners: six ENGLISH YO! student mascots from around the world, embracing a globe. Different Places, Same Friends, Brighter Futures. Connect. Share. Learn. Grow." />
+        <!-- KNOW YOUR LEVEL! promotional banner (replaces the former "A Global Community of Learners" image) -->
+        <section class="community-panel level-banner" id="developers" aria-labelledby="level-banner-title">
+          <span class="level-banner__blob level-banner__blob--1" aria-hidden="true"></span>
+          <span class="level-banner__blob level-banner__blob--2" aria-hidden="true"></span>
+          <span class="level-banner__spark level-banner__spark--1" aria-hidden="true">★</span>
+          <span class="level-banner__spark level-banner__spark--2" aria-hidden="true">✦</span>
+          <div class="level-banner__inner">
+          <div class="level-banner__text">
+            <span class="level-banner__tag">New challenge</span>
+            <h2 class="level-banner__title" id="level-banner-title">KNOW YOUR <span>LEVEL!</span></h2>
+            <p class="level-banner__question">What’s your English level?</p>
+            <p class="level-banner__sub">Take the challenge and find out!</p>
+            <a class="level-banner__cta" href="level-test.html">START THE TEST <span aria-hidden="true">→</span></a>
+          </div>
+          <ol class="level-banner__path" aria-label="Levels from A1 to C2">
+            <li class="level-step level-step--a1"><span class="level-step__icon" aria-hidden="true">🌱</span><b>A1</b></li>
+            <li class="level-step level-step--a2"><span class="level-step__icon" aria-hidden="true">🚀</span><b>A2</b></li>
+            <li class="level-step level-step--b1"><span class="level-step__icon" aria-hidden="true">🧭</span><b>B1</b></li>
+            <li class="level-step level-step--b2"><span class="level-step__icon" aria-hidden="true">🏆</span><b>B2</b></li>
+            <li class="level-step level-step--c1"><span class="level-step__icon" aria-hidden="true">🌟</span><b>C1</b></li>
+            <li class="level-step level-step--c2"><span class="level-step__icon" aria-hidden="true">👑</span><b>C2</b></li>
+          </ol>
+          </div>
         </section>
       </div>
     </main>
