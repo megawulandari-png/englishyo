@@ -69,6 +69,9 @@ h1,h2,h3{font-family:var(--display);font-weight:900;margin:0;letter-spacing:.02e
 .icon-btn.off img{filter:grayscale(1) brightness(.7)}
 .icon-btn.off{position:relative}
 .icon-btn.off::after{content:"";position:absolute;width:40px;height:4px;background:var(--red);border-radius:4px;transform:rotate(-45deg);box-shadow:0 0 0 2px #fff}
+.bar .pill.games{text-decoration:none;color:#fff;min-height:44px;cursor:pointer;transition:transform .15s}
+.bar .pill.games:active{transform:scale(.96)}
+@media (max-width:480px){.bar .pill.games span{display:none}.bar .pill.games{padding:6px 10px}}
 
 /* ---------- buttons ---------- */
 .btn{--c1:var(--blue);--c2:var(--blue2);display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:12px 26px;
@@ -525,6 +528,7 @@ h1,h2,h3{font-family:var(--display);font-weight:900;margin:0;letter-spacing:.02e
   <span class="pill" id="scorePill" hidden>⭐ <span id="scoreVal">0</span></span>
   <button class="icon-btn" id="soundBtn" aria-label="Sound on/off" aria-pressed="true"><img src="img/ic-sound.webp" alt="" /></button>
   <button class="icon-btn" id="homeBtn" aria-label="Home"><img src="img/ic-home.webp" alt="" /></button>
+  <a class="pill games" href="../../games.html" aria-label="Back to ENGLISH YO! games menu">🏠 <span>BACK TO GAMES</span></a>
 </header>
 
 <main class="wrap" id="app">

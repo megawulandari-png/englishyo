@@ -434,9 +434,50 @@
         }
       }
 
+
+      /* ---- back to games overlay (English Yo! nav) ---------------------- */
+      #back-to-games {
+        position: fixed;
+        top: max(8px, env(safe-area-inset-top, 0px));
+        left: max(8px, env(safe-area-inset-left, 0px));
+        z-index: 9999;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 32px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 209, 102, 0.45);
+        background: rgba(13, 11, 26, 0.55);
+        color: #f4e7cf;
+        font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        opacity: 0.55;
+        transition: opacity 150ms ease, background 150ms ease;
+        touch-action: manipulation;
+      }
+
+      #back-to-games:hover,
+      #back-to-games:focus-visible,
+      #back-to-games:active {
+        opacity: 1;
+        background: rgba(13, 11, 26, 0.85);
+      }
+
+      @media (pointer: coarse) {
+        #back-to-games {
+          min-width: 44px;
+          min-height: 44px;
+        }
+      }
         </style>
   </head>
   <body>
+    <a id="back-to-games" href="../../games.html" aria-label="Back to Games">🏠 Back to Games</a>
     <div id="game-root"></div>
 
     <div id="boot-splash">

@@ -160,6 +160,27 @@
         line-height: 1.35;
         opacity: 0.88;
       }
+      .game-card__body .game-card__plays {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 5px;
+        margin: -2px 0 0;
+        color: #7186ac;
+        font-size: clamp(0.72rem, 0.8vw, 0.8rem);
+        font-weight: 700;
+        line-height: 1.3;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .game-card__body .game-card__plays.is-ready {
+        opacity: 1;
+      }
+      .game-card__plays-flag {
+        color: var(--pink);
+        font-size: 0.8em;
+        opacity: 0.85;
+      }
       .game-card--emberfall .game-card__tag {
         color: #7a3a00;
       }
@@ -417,7 +438,7 @@
           </label>
         </div>
         <div class="wide-shell games-grid">
-          <article class="game-card game-card--wordtug" data-title="WORD TUG OF WAR" data-devices="mobile desktop interactive" data-category="Grammar Sentence Building" data-order="1">
+          <article class="game-card game-card--wordtug" data-title="WORD TUG OF WAR" data-devices="mobile desktop interactive" data-category="Grammar Sentence Building" data-order="1" data-game-id="word-tug">
             <a class="game-card__image" href="games/word-tug/word-tug.html" aria-label="Play Word Tug of War">
               <img src="assets/games/word-tug-card.png" alt="Word Tug of War — Kobo the fox and Rex the panda pulling the rope in the ENGLISH YO! arena" loading="lazy" />
               <span class="game-card__tag">Grammar • Sentence Building</span>
@@ -427,10 +448,11 @@
               <p>Build correct English sentences and pull your way to victory.</p>
               <p>A2-B1 Level - Arranging Tenses in Fun Way.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/word-tug/word-tug.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--emberfall" data-title="EMBERFALL" data-devices="mobile desktop" data-category="Adventure English Learning" data-order="2">
+          <article class="game-card game-card--emberfall" data-title="EMBERFALL" data-devices="mobile desktop" data-category="Adventure English Learning" data-order="2" data-game-id="emberfall">
             <a class="game-card__image" href="games/emberfall/emberfall.html" aria-label="Play Emberfall">
               <img src="assets/games/emberfall-card.png" alt="Emberfall — Kip the lantern sprite stands beside a glowing beacon in the Mosswood Trail" loading="lazy" />
               <span class="game-card__tag">Adventure • English Learning</span>
@@ -440,10 +462,11 @@
               <p>An English-learning adventure game.</p>
               <p>A2 Level - Simple Present Tense in Fun Way.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/emberfall/emberfall.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--detective" data-title="DETECTIVE EYES" data-devices="desktop interactive" data-category="Critical Thinking Investigation Reading" data-order="3">
+          <article class="game-card game-card--detective" data-title="DETECTIVE EYES" data-devices="desktop interactive" data-category="Critical Thinking Investigation Reading" data-order="3" data-game-id="detective-eyes">
     <a class="game-card__image"
        href="games/detective-eyes/detective-eyes.html"
        aria-label="Play Detective Eyes">
@@ -470,7 +493,8 @@
         </p>
 
         <p class="game-card__devices">Works on: 💻 Desktop · 🖥️ Interactive Display</p>
-        <a
+        <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
+              <a
             class="game-card__play"
             href="games/detective-eyes/detective-eyes.html"
         >
@@ -478,7 +502,7 @@
         </a>
     </div>
 </article>
-          <article class="game-card game-card--scrabble" data-title="SCRABBLE YO!" data-devices="mobile desktop interactive" data-category="Vocabulary Word Building" data-order="4">
+          <article class="game-card game-card--scrabble" data-title="SCRABBLE YO!" data-devices="mobile desktop interactive" data-category="Vocabulary Word Building" data-order="4" data-game-id="scrabble-yo">
             <a class="game-card__image" href="games/scrabble-yo/index.html" aria-label="Play Scrabble YO!">
               <img src="assets/games/scrabble-yo-card.png" alt="Scrabble YO! — Kobo the fox and Rex the panda beside the SCRABBLE YO! logo" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Word Building</span>
@@ -488,10 +512,11 @@
               <p>Build real English words on the board and learn what every word means.</p>
               <p>A1-B2 Level - 123,000+ Words - 1-4 Players.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/scrabble-yo/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--crossword" data-title="CROSSWORD ADVENTURE" data-devices="mobile desktop interactive" data-category="Vocabulary Crossword" data-order="5">
+          <article class="game-card game-card--crossword" data-title="CROSSWORD ADVENTURE" data-devices="mobile desktop interactive" data-category="Vocabulary Crossword" data-order="5" data-game-id="crossword">
             <a class="game-card__image" href="games/crossword.html" aria-label="Play Crossword Adventure">
               <img src="assets/games/crossword-card.png" alt="Crossword Adventure — Kobo the fox and Rex the panda beside a crossword grid spelling ENGLISH, LEARN and PLAY" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Crossword</span>
@@ -502,10 +527,11 @@
               <p>Solve English crossword puzzles from A1 to B2. Challenge yourself or play together in Class Mode!</p>
               <p>A1-B2 Level - Vocabulary - Solo &amp; Class Mode.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/crossword.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--sortit" data-title="SORT IT OUT!" data-devices="mobile desktop interactive" data-category="Vocabulary Listening Game" data-order="6">
+          <article class="game-card game-card--sortit" data-title="SORT IT OUT!" data-devices="mobile desktop interactive" data-category="Vocabulary Listening Game" data-order="6" data-game-id="sort-it-out">
             <a class="game-card__image" href="games/sort-it-out/index.html" aria-label="Play Sort It Out">
               <img src="assets/games/sort-it-out-card.png" alt="Sort It Out! — two ENGLISH YO! students beside the five waste bins: organic, non-organic, paper, hazardous and residual" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Listening • Game</span>
@@ -515,10 +541,11 @@
               <p>Learn the words. Sort the waste.</p>
               <p>A1-A2 Level - 25 Words - Sort, Listen &amp; Quiz.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/sort-it-out/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--time" data-title="TELLING THE TIME!" data-devices="mobile desktop interactive" data-category="Speaking Listening Numbers Time" data-order="7">
+          <article class="game-card game-card--time" data-title="TELLING THE TIME!" data-devices="mobile desktop interactive" data-category="Speaking Listening Numbers Time" data-order="7" data-game-id="telling-time">
             <a class="game-card__image" href="games/telling-time/index.html" aria-label="Play Telling the Time">
   <img
   src="assets/games/telling-time-card.png"
@@ -532,10 +559,11 @@
               <p>Move the hands, listen, choose and match.</p>
               <p>A1-A2 Level - British English - 6 Games, 3 Levels.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/telling-time/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--pattern" data-title="PATTERN QUEST" data-devices="mobile desktop interactive" data-category="Vocabulary Patterns Logic Listening" data-order="8">
+          <article class="game-card game-card--pattern" data-title="PATTERN QUEST" data-devices="mobile desktop interactive" data-category="Vocabulary Patterns Logic Listening" data-order="8" data-game-id="pattern-quest">
             <a class="game-card__image" href="games/pattern-quest/index.html" aria-label="Play Pattern Quest">
               <img src="assets/games/pattern-quest-card.png" alt="Pattern Quest — Nova, Luna, Zee and Mira beside a picture pattern of apple, banana, apple, banana and a question mark" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Patterns • Logic</span>
@@ -545,10 +573,11 @@
               <p>Read the picture pattern, choose what comes next, and collect English words.</p>
               <p>A1-A2 Level - 45 Words, 5 Planets, English &amp; Bahasa.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/pattern-quest/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--family" data-title="WHO'S IN MY FAMILY?" data-devices="mobile desktop interactive" data-category="Grammar Family Vocabulary Possessives Logic Critical Thinking" data-order="9">
+          <article class="game-card game-card--family" data-title="WHO'S IN MY FAMILY?" data-devices="mobile desktop interactive" data-category="Grammar Family Vocabulary Possessives Logic Critical Thinking" data-order="9" data-game-id="whos-in-my-family">
             <a class="game-card__image" href="games/whos-in-my-family/index.html" aria-label="Play Who's In My Family?">
               <img src="assets/games/whos-in-my-family-card.png" alt="Who's In My Family? — George, Helen and their family tree" loading="lazy" />
               <span class="game-card__tag">Family Vocabulary • Possessives • Logic &amp; Critical Thinking</span>
@@ -558,10 +587,11 @@
               <p>Solve family logic missions: follow the family tree, find the clues that matter, and use his, her, their and possessive ’s.</p>
               <p>A1–A2 Level · Vocabulary &amp; Grammar</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/whos-in-my-family/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--animal" data-title="ANIMAL KINGDOM" data-devices="mobile desktop interactive" data-category="Science Vocabulary Listening Classification Critical Thinking" data-order="10">
+          <article class="game-card game-card--animal" data-title="ANIMAL KINGDOM" data-devices="mobile desktop interactive" data-category="Science Vocabulary Listening Classification Critical Thinking" data-order="10" data-game-id="animal-kingdom">
             <a class="game-card__image" href="games/animal-kingdom/index.html" aria-label="Play Animal Kingdom">
               <img src="assets/games/animal-kingdom-card.png" alt="Animal Kingdom — Kobo the fox beside tigers, frogs, butterflies, spiders and starfish: vertebrates vs invertebrates" loading="lazy" />
               <span class="game-card__tag">Science Vocabulary • Listening • Classify</span>
@@ -571,10 +601,11 @@
               <p>Learn the field guide, then match, drag, listen and classify: vertebrates vs invertebrates.</p>
               <p>A1–B1 Level · 45+ Animals · 8 Games.</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/animal-kingdom/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--narrative" data-title="NARRATIVE QUEST" data-devices="mobile desktop interactive" data-category="Reading Narrative Text Vocabulary Grammar Simple Past Critical Thinking" data-order="11">
+          <article class="game-card game-card--narrative" data-title="NARRATIVE QUEST" data-devices="mobile desktop interactive" data-category="Reading Narrative Text Vocabulary Grammar Simple Past Critical Thinking" data-order="11" data-game-id="narrative-quest">
             <a class="game-card__image" href="games/narrative-quest/index.html" aria-label="Play Narrative Quest">
               <img src="assets/games/narrative-quest-card.png" alt="Narrative Quest — Putri Serindang Bulan by a moonlit river with the soldier and his small boat" loading="lazy" />
               <span class="game-card__tag">Reading • Narrative Text • Simple Past</span>
@@ -584,6 +615,7 @@
               <p>Enter a story world, read an illustrated folktale, then hunt words, investigate the plot, prove character traits and master the simple past.</p>
               <p>A2–B1 Level · 14 Stories · 4 Story Worlds</p>
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/narrative-quest/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
@@ -741,6 +773,98 @@
 
         applySort();
         applyFilters();
+      })();
+    </script>
+
+    <!-- Play Games YO! - global play counter (Firebase Realtime Database REST API) -->
+    <script>
+      // play-counter
+      (function () {
+        // TODO: paste your Firebase Realtime Database URL here, e.g.
+        // "https://english-yo-default-rtdb.asia-southeast1.firebasedatabase.app"
+        var PLAY_COUNTS_DB_URL = "https://english-yo-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.game-card[data-game-id]'));
+        if (!cards.length) return;
+
+        // Not configured yet -- leave the stat hidden rather than showing a broken 0.
+        if (!PLAY_COUNTS_DB_URL) return;
+
+        function formatPlayCount(n) {
+          n = Number(n) || 0;
+          if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (n >= 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+          return n.toLocaleString('en-US');
+        }
+
+        function showCount(card, n) {
+          var wrap = card.querySelector('.game-card__plays');
+          var countEl = card.querySelector('.game-card__plays-count');
+          if (!wrap || !countEl) return;
+          card.setAttribute('data-play-count', String(n));
+          countEl.textContent = formatPlayCount(n);
+          wrap.classList.add('is-ready');
+        }
+
+        // One request loads every game's count at once.
+        fetch(PLAY_COUNTS_DB_URL.replace(/\/$/, '') + '/playCounts.json')
+          .then(function (res) { return res.ok ? res.json() : {}; })
+          .then(function (counts) {
+            counts = counts || {};
+            cards.forEach(function (card) {
+              var id = card.getAttribute('data-game-id');
+              showCount(card, counts[id] || 0);
+            });
+          })
+          .catch(function () {
+            // Network/config issue -- fail silently, keep the stat hidden.
+          });
+
+        // Count a play only when the image thumbnail or the PLAY NOW button is clicked.
+        cards.forEach(function (card) {
+          var id = card.getAttribute('data-game-id');
+          var links = card.querySelectorAll('.game-card__image, .game-card__play');
+          Array.prototype.forEach.call(links, function (link) {
+            link.addEventListener('click', function (e) {
+              var destination = link.getAttribute('href');
+              if (!destination) return; // nothing to navigate to -- let the default click happen
+
+              // Hold navigation briefly so the increment request actually leaves the
+              // browser first. Firing-and-forgetting it while navigating away
+              // immediately was cancelling the request before Firebase ever saw it.
+              e.preventDefault();
+
+              var current = parseInt(card.getAttribute('data-play-count') || '0', 10);
+              showCount(card, current + 1); // optimistic UI update
+
+              var navigated = false;
+              function goToGame() {
+                if (navigated) return;
+                navigated = true;
+                window.location.href = destination;
+              }
+              // Never block the click for more than 400ms, even if Firebase is slow
+              // or unreachable.
+              var safetyTimer = setTimeout(goToGame, 400);
+
+              // Firebase's REST increment pattern: PATCH the *parent* path with the
+              // target field as a body key holding the ".sv" placeholder. (PATCHing
+              // the leaf path directly with a bare ".sv" body is not a valid child
+              // key and does not resolve as an increment.)
+              var body = {};
+              body[id] = { '.sv': { increment: 1 } };
+
+              fetch(PLAY_COUNTS_DB_URL.replace(/\/$/, '') + '/playCounts.json', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+                keepalive: true
+              })
+                .then(function () { clearTimeout(safetyTimer); goToGame(); })
+                .catch(function () { clearTimeout(safetyTimer); goToGame(); });
+            });
+          });
+        });
       })();
     </script>
 
