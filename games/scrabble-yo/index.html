@@ -47,7 +47,7 @@
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:100%;overflow-x:hidden}
-body{font-family:var(--body);font-weight:400;color:var(--ink);background:var(--cream);
+body{font-family:var(--body);font-weight:400;color:var(--ink);background:var(--cream) url('./scrabble-bg.png') center/cover fixed no-repeat;
      -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 h1,h2,h3,p{margin:0}
 button,input{font:inherit;color:inherit}
@@ -65,9 +65,11 @@ img{display:block;max-width:100%}
 .screen{display:none;width:100%;min-height:100vh;position:relative}
 .screen.on{display:flex}
 .screen.mid{align-items:center;justify-content:center;padding:22px 18px}
-.bg-soft{background:
-  radial-gradient(1100px 620px at 50% -18%, #ffffff 0%, rgba(255,255,255,0) 70%),
-  linear-gradient(168deg,#e9f7ee 0%,#fdf6e3 46%,#f4ecff 100%)}
+.bg-soft{
+  background:
+    linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.12)),
+    url('./scrabble-bg.png') center center / cover no-repeat;
+}
 .blobs{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .blobs i{position:absolute;border-radius:50%;filter:blur(2px);opacity:.5}
 .b1{width:190px;height:190px;background:var(--yellow-l);top:-46px;left:-42px}
