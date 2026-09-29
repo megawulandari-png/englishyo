@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <meta name="description" content="ENGLISH YO! Multiplayer — create or join a room and race your friends (prototype)." />
+    <title>Multiplayer Lobby — ENGLISH YO!</title>
+    <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --navy: #052574;
+        --pink: #ff3e79;
+        --yellow: #ffda26;
+        --paper: #f6fcff;
+        --green: #1fbf75;
+        --red: #ff4d4f;
+        --card-yellow: #fff1c2;
+        --card-blue: #dceeff;
+        --card-pink: #ffe1ec;
+        --card-green: #ddf6e4;
+        --display: "Baloo 2", system-ui, cursive;
+        --body: "Nunito Sans", system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        color: var(--navy);
+        font-family: var(--body);
+        font-weight: 700;
+        background: radial-gradient(circle at 50% 0%, #fff 0, #f7fcff 45%, #e5f6ff 100%);
+        -webkit-tap-highlight-color: transparent;
+      }
+      button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+      button:disabled { opacity: .5; cursor: not-allowed; }
+      button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; border-radius: 12px; }
+      h1, h2, h3 { font-family: var(--display); font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+      [hidden] { display: none !important; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+      .topbar { display: flex; align-items: center; gap: 12px; padding: 16px clamp(16px, 4vw, 40px); }
+      .topbar img { height: 34px; }
+      .topbar .status { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 800; color: #3a4d78; }
+      .status .dot { width: 9px; height: 9px; border-radius: 50%; background: #c8d6ec; }
+      .status.online .dot { background: var(--green); box-shadow: 0 0 0 3px rgba(31,191,117,.18); }
+      .status.offline .dot { background: var(--red); box-shadow: 0 0 0 3px rgba(255,77,79,.18); }
+
+      main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 12px clamp(16px, 4vw, 40px) 40px; }
+      .shell { width: min(94%, 480px); }
+
+      .card { background: #fff; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,53,110,.12); padding: clamp(24px, 5vw, 36px); }
+      .eyebrow { margin: 0 0 6px; color: var(--pink); font-size: .72rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+      .title { font-size: clamp(1.6rem, 5vw, 2.1rem); margin-bottom: 6px; }
+      .subtitle { margin: 0 0 22px; color: #3a4d78; font-size: .92rem; font-weight: 700; }
+
+      label.field-label { display: block; margin: 0 0 6px; font-size: .8rem; font-weight: 900; color: var(--navy); }
+      .field { width: 100%; padding: 14px 16px; margin-bottom: 16px; border: 2px solid #d9e9fb; border-radius: 16px; background: var(--paper); color: var(--navy); font-weight: 800; font-size: 1rem; }
+      .field:focus { border-color: var(--pink); }
+      .field.code-input { text-transform: uppercase; letter-spacing: .12em; }
+
+      .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px 18px; border-radius: 18px; font-family: var(--display); font-weight: 700; font-size: 1.05rem; transition: transform .15s ease, box-shadow .15s ease; }
+      .btn:not(:disabled):hover { transform: translateY(-2px); }
+      .btn-primary { background: var(--pink); color: #fff; box-shadow: 0 12px 24px rgba(255,62,121,.32); }
+      .btn-secondary { background: var(--navy); color: #fff; box-shadow: 0 12px 24px rgba(5,37,116,.25); }
+      .btn-ghost { background: var(--card-blue); color: var(--navy); box-shadow: none; }
+      .btn-danger { background: #fff0f0; color: var(--red); box-shadow: none; }
+      .btn-start { background: var(--yellow); color: var(--navy); box-shadow: 0 12px 24px rgba(255,218,38,.4); }
+      .stack { display: flex; flex-direction: column; gap: 12px; }
+      .divider { display: flex; align-items: center; gap: 10px; margin: 22px 0; color: #93a6c9; font-size: .72rem; font-weight: 900; letter-spacing: .1em; }
+      .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #e2edfa; }
+
+      .error-msg { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: #fff0f0; color: var(--red); font-size: .82rem; font-weight: 800; }
+
+      .room-code-box { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 20px; margin-bottom: 20px; border-radius: 20px; background: var(--navy); color: #fff; }
+      .room-code-box .label { font-size: .68rem; font-weight: 900; letter-spacing: .14em; color: #9fc0ff; text-transform: uppercase; }
+      .room-code-box .code { font-family: var(--display); font-size: clamp(2rem, 9vw, 2.6rem); letter-spacing: .06em; }
+      .room-code-box .copy-btn { margin-top: 4px; padding: 6px 16px; border-radius: 999px; background: rgba(255,255,255,.14); color: #fff; font-size: .75rem; font-weight: 800; }
+      .room-code-box .copy-btn:hover { background: rgba(255,255,255,.24); }
+
+      .player-count { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+      .player-count h2 { font-size: 1.1rem; }
+      .player-count span { font-size: .8rem; font-weight: 900; color: #3a4d78; background: var(--card-blue); padding: 4px 12px; border-radius: 999px; }
+
+      .player-list { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; }
+      .player-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 14px; background: var(--paper); border: 2px solid transparent; }
+      .player-item.is-me { border-color: var(--pink); }
+      .player-avatar { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border-radius: 50%; background: var(--card-yellow); font-family: var(--display); font-weight: 800; color: var(--navy); }
+      .player-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; }
+      .player-tag { font-size: .64rem; font-weight: 900; color: var(--pink); background: var(--card-pink); padding: 3px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: .04em; }
+      .ready-badge { font-size: .7rem; font-weight: 900; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
+      .ready-badge.ready { background: var(--card-green); color: var(--green); }
+      .ready-badge.not-ready { background: #f1f4fa; color: #93a6c9; }
+
+      .waiting-note { text-align: center; margin: 0 0 16px; font-size: .8rem; color: #3a4d78; }
+
+      .started-icon { font-size: 3rem; text-align: center; margin-bottom: 6px; }
+
+      @media (max-width: 420px) { .card { padding: 22px 18px; border-radius: 22px; } }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <img src="../../assets/favicon.png" alt="" />
+      <strong style="font-family: var(--display); font-size: 1rem;">ENGLISH YO!</strong>
+      <span id="connection-status" class="status">
+        <span class="dot"></span>
+        <span class="status-text">Connecting…</span>
+      </span>
+    </div>
+
+    <main>
+      <div class="shell">
+        <!-- SCREEN 1: Landing (nickname + create/join) -->
+        <section id="screen-landing" class="card">
+          <p class="eyebrow">Multiplayer · Beta</p>
+          <h1 class="title">Ready to play together?</h1>
+          <p class="subtitle">Enter a nickname, then create a room or join one with a room code.</p>
+
+          <div id="landing-error" class="error-msg" hidden></div>
+
+          <label class="field-label" for="nickname-input">Your nickname</label>
+          <input id="nickname-input" class="field" type="text" maxlength="16" placeholder="e.g. Mega" autocomplete="off" />
+
+          <div class="stack">
+            <button id="btn-create-room" class="btn btn-primary">🚀 Create Room</button>
+          </div>
+
+          <div class="divider">OR JOIN A ROOM</div>
+
+          <label class="field-label" for="room-code-input">Room code</label>
+          <input id="room-code-input" class="field code-input" type="text" maxlength="6" placeholder="YO4821" autocomplete="off" />
+
+          <div class="stack">
+            <button id="btn-join-room" class="btn btn-secondary">🔑 Join Room</button>
+          </div>
+        </section>
+
+        <!-- SCREEN 2: Waiting room / lobby -->
+        <section id="screen-lobby" class="card" hidden>
+          <div class="room-code-box">
+            <span class="label">Room code — share this</span>
+            <span id="lobby-room-code" class="code">YO0000</span>
+            <button id="btn-copy-code" class="copy-btn">Copy code</button>
+          </div>
+
+          <div class="player-count">
+            <h2>Players</h2>
+            <span id="player-count-label">0 / 8</span>
+          </div>
+
+          <ul id="player-list" class="player-list"></ul>
+
+          <p id="lobby-note" class="waiting-note">Waiting for the host to start the game…</p>
+
+          <div class="stack">
+            <button id="btn-toggle-ready" class="btn btn-ghost">✅ I'm Ready</button>
+            <button id="btn-start-game" class="btn btn-start" hidden>▶ START GAME</button>
+            <button id="btn-leave-room" class="btn btn-danger">Leave room</button>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: Game started placeholder -->
+        <section id="screen-started" class="card" hidden>
+          <div class="started-icon">🎉</div>
+          <h1 class="title" style="text-align:center;">Game is starting!</h1>
+          <p class="subtitle" style="text-align:center;">
+            The race/gameplay screen isn't built yet — this prototype only proves that
+            room creation, joining, and the player list sync in realtime.
+          </p>
+          <div class="stack">
+            <button id="btn-back-home" class="btn btn-secondary">Back to lobby list</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Firebase (compat SDK — no build step needed) -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+      "use strict";
+
+      const MAX_PLAYERS = 8;
+      const $ = (id) => document.getElementById(id);
+
+      // ---------- Firebase setup ----------
+      let db = null;
+      let firebaseReady = false;
+      try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        firebaseReady = true;
+      } catch (err) {
+        console.error("Firebase failed to initialize. Did you fill in firebase-config.js?", err);
+      }
+
+      const statusEl = $("connection-status");
+      const statusText = statusEl.querySelector(".status-text");
+      if (firebaseReady) {
+        db.ref(".info/connected").on("value", (snap) => {
+          const online = snap.val() === true;
+          statusEl.classList.toggle("online", online);
+          statusEl.classList.toggle("offline", !online);
+          statusText.textContent = online ? "Realtime connected" : "Offline";
+        });
+      } else {
+        statusEl.classList.add("offline");
+        statusText.textContent = "Firebase not configured";
+      }
+
+      // ---------- Player identity (per browser tab) ----------
+      function getPlayerId() {
+        let id = sessionStorage.getItem("yo_mp_playerId");
+        if (!id) {
+          id = "p-" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+          sessionStorage.setItem("yo_mp_playerId", id);
+        }
+        return id;
+      }
+      const playerId = getPlayerId();
+
+      // ---------- App state ----------
+      let currentRoomCode = null;
+      let isHost = false;
+      let playersRef = null;
+      let statusRef = null;
+      let onDisconnectRef = null;
+
+      // ---------- Screens ----------
+      const screens = {
+        landing: $("screen-landing"),
+        lobby: $("screen-lobby"),
+        started: $("screen-started"),
+      };
+      function showScreen(name) {
+        Object.entries(screens).forEach(([key, el]) => (el.hidden = key !== name));
+      }
+
+      function showLandingError(message) {
+        const el = $("landing-error");
+        el.textContent = message;
+        el.hidden = !message;
+      }
+
+      // ---------- Helpers ----------
+      function randomRoomCode() {
+        const digits = Math.floor(1000 + Math.random() * 9000);
+        return "YO" + digits;
+      }
+
+      async function findAvailableRoomCode() {
+        for (let attempt = 0; attempt < 8; attempt++) {
+          const code = randomRoomCode();
+          const snap = await db.ref("rooms/" + code).get();
+          if (!snap.exists()) return code;
+        }
+        throw new Error("Could not generate a free room code, please try again.");
+      }
+
+      function sanitizeNickname(raw) {
+        return raw.trim().slice(0, 16);
+      }
+
+      function sanitizeRoomCode(raw) {
+        return raw.trim().toUpperCase().slice(0, 6);
+      }
+
+      // ---------- Create room ----------
+      $("btn-create-room").addEventListener("click", async () => {
+        showLandingError("");
+        if (!firebaseReady) return showLandingError("Firebase isn't configured yet — fill in firebase-config.js.");
+        const nickname = sanitizeNickname($("nickname-input").value);
+        if (!nickname) return showLandingError("Please enter a nickname first.");
+
+        $("btn-create-room").disabled = true;
+        try {
+          const roomCode = await findAvailableRoomCode();
+          const roomRef = db.ref("rooms/" + roomCode);
+          await roomRef.set({
+            hostId: playerId,
+            status: "waiting",
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+            players: {
+              [playerId]: {
+                name: nickname,
+                isHost: true,
+                ready: true,
+                joinedAt: firebase.database.ServerValue.TIMESTAMP,
+              },
+            },
+          });
+          enterRoom(roomCode, true);
+        } catch (err) {
+          console.error(err);
+          showLandingError(err.message || "Could not create the room. Please try again.");
+        } finally {
+          $("btn-create-room").disabled = false;
+        }
+      });
+
+      // ---------- Join room ----------
+      $("btn-join-room").addEventListener("click", async () => {
+        showLandingError("");
+        if (!firebaseReady) return showLandingError("Firebase isn't configured yet — fill in firebase-config.js.");
+        const nickname = sanitizeNickname($("nickname-input").value);
+        const roomCode = sanitizeRoomCode($("room-code-input").value);
+        if (!nickname) return showLandingError("Please enter a nickname first.");
+        if (!roomCode) return showLandingError("Please enter a room code.");
+
+        $("btn-join-room").disabled = true;
+        try {
+          const roomRef = db.ref("rooms/" + roomCode);
+          const snap = await roomRef.get();
+          if (!snap.exists()) return showLandingError("Room not found. Check the code and try again.");
+          const room = snap.val();
+          if (room.status !== "waiting") return showLandingError("This game has already started.");
+          const playerCount = room.players ? Object.keys(room.players).length : 0;
+          if (playerCount >= MAX_PLAYERS) return showLandingError("This room is full.");
+
+          await roomRef.child("players/" + playerId).set({
+            name: nickname,
+            isHost: false,
+            ready: false,
+            joinedAt: firebase.database.ServerValue.TIMESTAMP,
+          });
+          enterRoom(roomCode, false);
+        } catch (err) {
+          console.error(err);
+          showLandingError(err.message || "Could not join the room. Please try again.");
+        } finally {
+          $("btn-join-room").disabled = false;
+        }
+      });
+
+      // ---------- Lobby ----------
+      function enterRoom(roomCode, hostFlag) {
+        currentRoomCode = roomCode;
+        isHost = hostFlag;
+
+        $("lobby-room-code").textContent = roomCode;
+        $("btn-start-game").hidden = !isHost;
+        $("btn-toggle-ready").hidden = isHost;
+
+        const roomRef = db.ref("rooms/" + roomCode);
+        playersRef = roomRef.child("players");
+        statusRef = roomRef.child("status");
+
+        // Auto-remove this player if the tab/connection drops.
+        onDisconnectRef = roomRef.child("players/" + playerId);
+        onDisconnectRef.onDisconnect().remove();
+        if (isHost) {
+          // If the host disconnects, close the whole room for everyone.
+          roomRef.onDisconnect().remove();
+        }
+
+        playersRef.on("value", (snap) => renderPlayers(snap.val() || {}));
+        statusRef.on("value", (snap) => {
+          if (snap.val() === "started") showScreen("started");
+        });
+        roomRef.on("value", (snap) => {
+          if (!snap.exists() && currentRoomCode === roomCode) {
+            alert("The room was closed.");
+            resetToLanding();
+          }
+        });
+
+        showScreen("lobby");
+      }
+
+      function renderPlayers(playersObj) {
+        const list = $("player-list");
+        list.innerHTML = "";
+        const players = Object.entries(playersObj)
+          .map(([id, data]) => ({ id, ...data }))
+          .sort((a, b) => (a.joinedAt || 0) - (b.joinedAt || 0));
+
+        $("player-count-label").textContent = players.length + " / " + MAX_PLAYERS;
+
+        players.forEach((player) => {
+          const li = document.createElement("li");
+          li.className = "player-item" + (player.id === playerId ? " is-me" : "");
+
+          const avatar = document.createElement("span");
+          avatar.className = "player-avatar";
+          avatar.textContent = (player.name || "?").trim().charAt(0).toUpperCase() || "?";
+
+          const name = document.createElement("span");
+          name.className = "player-name";
+          name.textContent = player.name || "Player";
+
+          li.appendChild(avatar);
+          li.appendChild(name);
+
+          if (player.isHost) {
+            const tag = document.createElement("span");
+            tag.className = "player-tag";
+            tag.textContent = "Host";
+            li.appendChild(tag);
+          }
+
+          const badge = document.createElement("span");
+          badge.className = "ready-badge " + (player.ready ? "ready" : "not-ready");
+          badge.textContent = player.ready ? "Ready" : "Not ready";
+          li.appendChild(badge);
+
+          list.appendChild(li);
+        });
+
+        const me = playersObj[playerId];
+        if (me) {
+          $("btn-toggle-ready").textContent = me.ready ? "❌ Not ready" : "✅ I'm Ready";
+        }
+      }
+
+      $("btn-toggle-ready").addEventListener("click", async () => {
+        if (!currentRoomCode) return;
+        const ref = db.ref("rooms/" + currentRoomCode + "/players/" + playerId + "/ready");
+        const snap = await ref.get();
+        await ref.set(!snap.val());
+      });
+
+      $("btn-start-game").addEventListener("click", async () => {
+        if (!currentRoomCode || !isHost) return;
+        await db.ref("rooms/" + currentRoomCode + "/status").set("started");
+      });
+
+      $("btn-copy-code").addEventListener("click", async () => {
+        if (!currentRoomCode) return;
+        try {
+          await navigator.clipboard.writeText(currentRoomCode);
+          const btn = $("btn-copy-code");
+          const original = btn.textContent;
+          btn.textContent = "Copied!";
+          setTimeout(() => (btn.textContent = original), 1200);
+        } catch (err) {
+          console.warn("Clipboard copy failed", err);
+        }
+      });
+
+      async function leaveRoom() {
+        if (!currentRoomCode) return;
+        const roomRef = db.ref("rooms/" + currentRoomCode);
+        if (onDisconnectRef) onDisconnectRef.onDisconnect().cancel();
+        if (isHost) {
+          roomRef.onDisconnect().cancel();
+          await roomRef.remove();
+        } else {
+          await roomRef.child("players/" + playerId).remove();
+        }
+        detachListeners();
+        resetToLanding();
+      }
+
+      function detachListeners() {
+        if (playersRef) playersRef.off();
+        if (statusRef) statusRef.off();
+        if (currentRoomCode) db.ref("rooms/" + currentRoomCode).off();
+      }
+
+      function resetToLanding() {
+        currentRoomCode = null;
+        isHost = false;
+        playersRef = null;
+        statusRef = null;
+        onDisconnectRef = null;
+        $("room-code-input").value = "";
+        showLandingError("");
+        showScreen("landing");
+      }
+
+      $("btn-leave-room").addEventListener("click", leaveRoom);
+      $("btn-back-home").addEventListener("click", leaveRoom);
+
+      window.addEventListener("beforeunload", () => {
+        if (currentRoomCode && isHost) {
+          db.ref("rooms/" + currentRoomCode).remove();
+        } else if (currentRoomCode) {
+          db.ref("rooms/" + currentRoomCode + "/players/" + playerId).remove();
+        }
+      });
+    </script>
+  </body>
+</html>
