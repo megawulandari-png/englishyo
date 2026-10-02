@@ -10,9 +10,9 @@
     return null;
   }
   var ROUTES = {
-    // Reading YO!: A2 level, then the B.J. Habibie story
+    // Reading YO!: Recount Text genre, then the B.J. Habibie story
     "bj-habibie": function () {
-      var level = document.querySelector('.level-card[data-level="A2"]');
+      var level = document.querySelector('.genre-card[data-genre="recount"]');
       if (!level) return false;
       level.click();
       var card = byText("#story-grid > *, .story-grid > *", "Habibie");

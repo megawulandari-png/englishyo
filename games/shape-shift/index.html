@@ -1,0 +1,2427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="ENGLISH YO! — SHAPE SHIFT: Similarity Lab. A bilingual (EN/ID) math game about similar shapes: rotate, flip, scale, measure and find the missing side." />
+<title>SHAPE SHIFT: Similarity Lab — ENGLISH YO!</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#052574; --pink:#ff3e79; --yellow:#ffda26; --paper:#f6fcff; --blue:#2f8fd6; --green:#2f9e44; --orange:#f08a1c;
+  --ink2:#31467a; --line:#dbe6fb;
+  --display:"Baloo 2", system-ui, cursive; --body:"Nunito Sans", system-ui, sans-serif;
+  --shadow:0 10px 24px rgba(0,53,110,.14); --shadow-s:0 5px 14px rgba(0,53,110,.14);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100vh; color:var(--navy); font-family:var(--body); font-weight:700; font-size:clamp(16px,.4vw + 14px,18px); line-height:1.4;
+  background:linear-gradient(155deg,#d6ecff 0%,#e4e2ff 48%,#d2f6f0 100%);
+  background-attachment:fixed; -webkit-tap-highlight-color:transparent; overflow-x:hidden;
+}
+[hidden]{display:none !important}
+h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;line-height:1.08;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+button:disabled{cursor:not-allowed}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:4px solid var(--pink);outline-offset:3px;border-radius:14px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(8deg)}}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:relative;z-index:20;display:grid;align-items:center;gap:8px 12px;padding:8px clamp(12px,3vw,34px);
+  grid-template-columns:auto auto auto 1fr auto;grid-template-areas:"logo back how . right";
+  background:rgba(255,255,255,.97);border-radius:0 0 28px 28px;box-shadow:0 3px 12px rgba(12,79,139,.1);
+}
+.logo{grid-area:logo;display:block;line-height:0}
+.logo img{height:clamp(46px,5.2vw,62px);width:auto;display:block}
+.tb-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;
+  font-family:var(--display);font-weight:800;font-size:clamp(.95rem,1.1vw,1.08rem);white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.tb-btn:hover{transform:translateY(-2px)}
+.tb-back{grid-area:back;background:#fff;border:3px solid var(--navy);color:var(--navy)}
+.tb-how{grid-area:how;background:var(--yellow);color:var(--navy);box-shadow:0 6px 14px rgba(255,218,38,.45)}
+.tb-right{grid-area:right;display:flex;align-items:center;gap:10px;justify-self:end}
+.tb-sound{background:#fff;border:3px solid var(--line);color:var(--navy);padding:0 16px;box-shadow:var(--shadow-s)}
+.tb-sound[aria-pressed="false"]{background:#eef0f6;color:#6b7694}
+.tb-sound .si{font-size:1.25rem;line-height:1}
+.lang{display:inline-flex;align-items:center;background:#eaf3ff;border-radius:999px;padding:4px;justify-self:end}
+.lang button{min-width:54px;min-height:44px;border-radius:999px;font-family:var(--display);font-weight:800;font-size:1.05rem;color:var(--navy)}
+.lang button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.lang .sep{width:2px;height:20px;background:#b9cdee;border-radius:2px;margin:0 2px}
+@media (max-width:1180px){
+  .tb-sound{padding:0;min-width:50px}
+  .tb-sound .sl{display:none}
+}
+@media (max-width:820px){
+  .topbar{grid-template-columns:1fr 1fr;grid-template-areas:"logo right" "back how"}
+  .tb-btn{padding:0 10px;font-size:.95rem}
+  .lang button{min-width:50px}
+}
+
+/* ---------- layout ---------- */
+main{position:relative;z-index:1;width:min(96%,1220px);margin:0 auto;padding:18px 0 110px}
+.screen[hidden]{display:none}
+.screen{animation:pop .32s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:clamp(14px,2vw,20px)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:999px;
+  font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,1.3vw,1.2rem);transition:transform .15s ease,box-shadow .15s ease,opacity .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn-pink{background:var(--pink);color:#fff;box-shadow:0 10px 20px rgba(255,62,121,.32)}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 10px 20px rgba(5,37,116,.26)}
+.btn-yellow{background:var(--yellow);color:var(--navy);box-shadow:0 10px 20px rgba(255,218,38,.45)}
+.btn-ghost{background:#fff;color:var(--navy);box-shadow:var(--shadow-s);border:3px solid var(--line)}
+.btn:disabled{opacity:.45}
+
+/* ---------- home ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px;align-items:center;padding:6px 0 10px}
+.badge{display:inline-block;margin-bottom:12px;padding:8px 20px;border-radius:999px;background:var(--yellow);font-family:var(--display);font-weight:800;font-size:.95rem;transform:rotate(-3deg)}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);line-height:.95}
+.hero h1 .accent{color:var(--pink)}
+.hero .lab{margin:6px 0 10px;font-family:var(--display);font-weight:800;font-size:clamp(1.3rem,2.6vw,1.9rem);color:var(--blue)}
+.hero .lead{color:var(--ink2);font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:34ch;margin-bottom:18px}
+.hero-art{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:240px}
+.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-art img{position:relative;width:min(250px,60%);height:auto;filter:drop-shadow(0 12px 14px rgba(5,37,116,.18));animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.sec-title{font-size:clamp(1.4rem,2.4vw,1.8rem);margin:20px 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.act-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px 16px 14px;border-radius:26px;text-align:left;
+  box-shadow:var(--shadow);min-height:250px;transition:transform .18s ease,box-shadow .18s ease}
+.act-card:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(0,53,110,.2)}
+.act-card.c1{background:#dceeff}.act-card.c2{background:#ffe1ec}.act-card.c3{background:#fff1c2}.act-card.c4{background:#ddf6e4}.act-card.c5{background:#ece3ff}
+.act-card .num{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:800;box-shadow:var(--shadow-s)}
+.act-card .art{width:100%;height:76px;display:block}
+.act-card .art svg{width:100%;height:100%}
+.act-card .ttl{font-family:var(--display);font-weight:800;font-size:1.3rem;line-height:1.05}
+.act-card .dsc{font-size:.98rem;color:var(--ink2);flex:1}
+.act-card .bst{font-size:.9rem;font-weight:900;color:#7a5a00}
+.act-card .go{align-self:stretch;margin-top:4px;min-height:48px;border-radius:999px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+
+/* ---------- play ---------- */
+.play-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;border-radius:999px;background:#fff;box-shadow:var(--shadow-s);font-family:var(--display);font-weight:800;font-size:1rem}
+.ph-title{flex:1;min-width:150px;font-family:var(--display);font-weight:800;font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.1}
+.ph-title small{display:block;font-family:var(--body);font-weight:800;font-size:.85rem;color:var(--ink2)}
+.dots{display:flex;gap:8px}
+.dots b{width:18px;height:18px;border-radius:50%;background:#cfdcf2;display:block}
+.dots b.cur{background:var(--pink);transform:scale(1.25)}
+.dots b.ok{background:var(--green)}
+.dots b.miss{background:var(--orange)}
+.starsum{min-height:46px;display:inline-flex;align-items:center;gap:6px;padding:0 16px;border-radius:999px;background:var(--yellow);font-family:var(--display);font-weight:800;font-size:1.15rem}
+
+.play-grid{display:grid;gap:16px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"stage guide" "stage q" "stage wa";align-items:start}
+.guide{grid-area:guide}.stage-card{grid-area:stage}.qwrap{grid-area:q}.wa{grid-area:wa}
+@media (min-width:901px){.stage-card{position:sticky;top:12px}}
+@media (max-width:900px){.play-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"guide" "stage" "q" "wa"}}
+
+.guide{display:flex;align-items:flex-end;gap:10px}
+.guide-btn{flex:0 0 auto;width:clamp(78px,9vw,104px);border-radius:20px}
+.guide-btn img{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 8px rgba(5,37,116,.18))}
+.guide-btn.wig img{animation:wig .6s ease}
+@keyframes wig{0%{transform:rotate(0)}25%{transform:rotate(-9deg) scale(1.05)}60%{transform:rotate(7deg)}100%{transform:rotate(0)}}
+.bubble{position:relative;flex:1;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:var(--shadow-s);font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.2;margin-bottom:10px}
+.bubble::before{content:"";position:absolute;left:-10px;bottom:18px;border:10px solid transparent;border-left:0;border-right-color:#fff}
+
+.stage-card{padding:12px;position:relative}
+#stageWrap{position:relative;border-radius:20px;background:linear-gradient(180deg,#f2faff,#fffbe9);overflow:hidden}
+#stage{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+#stage.drag{touch-action:none}
+.scale-chip{position:absolute;bottom:10px;right:12px;padding:6px 14px;border-radius:999px;background:var(--navy);color:#fff;font-family:var(--display);font-weight:800;font-size:1.05rem;box-shadow:var(--shadow-s)}
+.dock{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:12px}
+.dk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:68px;padding:6px 4px;border-radius:18px;background:#fff;border:3px solid var(--line);
+  box-shadow:var(--shadow-s);font-family:var(--display);font-weight:800;font-size:.82rem;line-height:1;transition:transform .12s ease,background .12s}
+.dk .ic{font-size:1.5rem;line-height:1}
+.dk:hover:not(:disabled){transform:translateY(-2px)}
+.dk:active:not(:disabled){transform:scale(.96)}
+.dk.on{background:var(--yellow);border-color:var(--navy)}
+.dk:disabled{opacity:.45}
+@media (max-width:560px){.dock{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pad{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.pad button{width:60px;height:56px;border-radius:16px;background:var(--navy);color:#fff;font-size:1.5rem;box-shadow:var(--shadow-s)}
+.pad button:active{transform:scale(.94)}
+
+/* stage svg parts */
+.panelbg{fill:rgba(255,255,255,.78);stroke:#c6d9f5;stroke-width:2.5;stroke-dasharray:7 7}
+.pchip rect{fill:var(--navy)}
+.pchip text{fill:#fff;font-family:var(--display);font-weight:800;font-size:16px;dominant-baseline:middle}
+.pchip.alt rect{fill:var(--pink)}
+.shp{stroke:var(--navy);stroke-width:3.5;stroke-linejoin:round}
+.shp.a{fill:#bfe3ff}
+.shp.b{fill:#ffc2d6}
+.shp.me{fill:#ffb3cb;fill-opacity:.92}
+.shp.tgt{fill:rgba(255,218,38,.4);stroke-dasharray:9 7}
+.shp.done{stroke:var(--green)}
+.vtx{fill:var(--navy)}
+.grab{fill:transparent;stroke:transparent;stroke-width:34;stroke-linejoin:round;cursor:grab;pointer-events:all}
+.grab:active{cursor:grabbing}
+.lab rect{fill:#fff;stroke:#b8cdee;stroke-width:2}
+.lab text{fill:var(--navy);font-family:var(--display);font-weight:800;font-size:17px;dominant-baseline:central}
+.lab.q rect{fill:var(--pink);stroke:var(--pink)}
+.lab.q text{fill:#fff}
+.lab.q{animation:pulse 1.4s ease-in-out infinite}
+.lab.mute rect{fill:rgba(255,255,255,.85);stroke:#e0d28a}
+.lab.mute text{fill:#8a7a1a}
+.lab.pop{animation:labpop .35s ease}
+@keyframes labpop{0%{opacity:0;transform:scale(.3)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.78}}
+.hit{stroke:transparent;stroke-width:34;stroke-linecap:round;pointer-events:stroke;cursor:pointer}
+.mline{stroke:var(--pink);stroke-width:7;stroke-linecap:round;opacity:.55;pointer-events:none}
+.tapdot{cursor:pointer}
+.tapdot circle{fill:var(--yellow);stroke:var(--navy);stroke-width:3;animation:pulse 1.6s ease-in-out infinite}
+.tapdot text{font-size:18px;text-anchor:middle;dominant-baseline:central}
+.legend text{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--navy);dominant-baseline:middle}
+
+/* question / feedback */
+.qwrap{display:grid;gap:14px}
+.q-title{font-size:clamp(1.3rem,2.2vw,1.7rem);margin-bottom:6px}
+.q-sub{color:var(--ink2);font-size:1rem;margin-bottom:10px}
+.steps5{display:grid;gap:6px;margin:6px 0 12px;padding:0;list-style:none}
+.steps5 li{display:flex;align-items:center;gap:10px;font-size:1rem}
+.steps5 li b{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-family:var(--display)}
+.bin{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.bbtn{min-height:76px;border-radius:22px;font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.05;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  box-shadow:var(--shadow-s);transition:transform .15s ease}
+.bbtn:hover:not(:disabled){transform:translateY(-3px)}
+.bbtn .em{font-size:1.5rem}
+.bbtn.yes{background:#d9f6e2;border:3px solid var(--green)}
+.bbtn.no{background:#ffe1ec;border:3px solid var(--pink)}
+.bbtn:disabled{opacity:.4}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.cans{min-width:84px;min-height:56px;padding:0 18px;border-radius:18px;background:#fff;border:3px solid var(--line);box-shadow:var(--shadow-s);font-family:var(--display);font-weight:800;font-size:1.25rem}
+.cans.sel{background:var(--yellow);border-color:var(--navy)}
+.cans:disabled{opacity:.5}
+.num-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.num-in{display:flex;align-items:center;gap:8px;padding:0 14px;border:3px solid var(--line);border-radius:18px;background:#fff;min-height:58px}
+.num-in:focus-within{border-color:var(--pink)}
+.num-in input{width:6ch;border:0;outline:0;background:none;font-family:var(--display);font-weight:800;font-size:1.5rem;color:var(--navy);text-align:center}
+.num-in span{font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--ink2)}
+.row-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.tapline{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:#fff6c9;font-size:.95rem;margin-bottom:8px}
+
+.fbx{border-radius:22px;padding:14px 16px;border:3px solid var(--line);background:#fff}
+.fbx.ok{background:#e4f8ea;border-color:var(--green)}
+.fbx.no{background:#fff0dc;border-color:var(--orange)}
+.fbx.hint{background:#fff9d6;border-color:#e8c931}
+.fbx.bye{background:#eaf3ff;border-color:var(--blue)}
+.fb-h{display:flex;align-items:flex-start;gap:10px;font-family:var(--display);font-weight:800;font-size:clamp(1.1rem,1.6vw,1.3rem);line-height:1.15}
+.fb-h .fb-ic{font-size:1.5rem;line-height:1}
+.fbx p{margin-top:6px;font-size:1.02rem}
+.fbx .eq{display:inline-block;margin-top:6px;padding:6px 14px;border-radius:14px;background:#fff;font-family:var(--display);font-weight:800;font-size:1.25rem}
+.rchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rchip{padding:6px 12px;border-radius:14px;background:#fff;border:2px solid #b7e2c2;font-size:.95rem;font-weight:900;line-height:1.1}
+.rchip.odd{border-color:var(--orange);background:#fff7ea}
+.fb-stars{margin-top:8px;font-size:1.6rem;letter-spacing:2px}
+.st.off{filter:grayscale(1);opacity:.28}
+.fbx .btn{margin-top:12px;width:100%}
+.stars-pop .st.on{display:inline-block;animation:starpop .5s ease both}
+.stars-pop .st.on:nth-child(2){animation-delay:.12s}.stars-pop .st.on:nth-child(3){animation-delay:.24s}
+@keyframes starpop{0%{transform:scale(0) rotate(-40deg)}70%{transform:scale(1.35) rotate(8deg)}100%{transform:scale(1)}}
+
+/* working area */
+.wa-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;font-family:var(--display);font-weight:800;font-size:1.2rem;text-align:left}
+.wa-head .car{transition:transform .2s}
+.wa-head[aria-expanded="false"] .car{transform:rotate(-90deg)}
+.wa-body{margin-top:10px}
+.wa-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.wt{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 14px;border-radius:14px;background:#fff;border:3px solid var(--line);font-family:var(--display);font-weight:800;font-size:.98rem}
+.wt.on{background:var(--yellow);border-color:var(--navy)}
+.wt:disabled{opacity:.4}
+.wa-canvas{position:relative;height:clamp(150px,22vh,200px);border-radius:18px;border:3px dashed #c6d9f5;background:#fffef6;overflow:hidden}
+.wa-guide{position:absolute;inset:0;padding:10px 16px;pointer-events:none;color:#c2cde6;font-family:var(--display);font-weight:800;font-size:clamp(1rem,1.5vw,1.2rem);display:flex;flex-direction:column;justify-content:space-around}
+#wa-cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+
+/* formula */
+.formula{position:fixed;right:clamp(10px,2vw,22px);bottom:clamp(10px,2vw,22px);z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.f-btn{min-height:52px;padding:0 20px;border-radius:999px;background:var(--yellow);color:var(--navy);font-family:var(--display);font-weight:800;font-size:1.05rem;box-shadow:0 8px 18px rgba(5,37,116,.28);border:3px solid var(--navy)}
+.f-pop{width:min(310px,calc(100vw - 28px));padding:14px 16px;border-radius:22px;background:#fff;border:3px solid var(--navy);box-shadow:0 14px 30px rgba(5,37,116,.28);animation:pop .22s ease both}
+.f-pop h3{font-size:1.1rem;margin-bottom:8px}
+.f-pop .fl{padding:8px 12px;border-radius:14px;background:#eef6ff;margin-top:6px;font-size:1.02rem;line-height:1.25}
+.f-pop .fl.note{background:#fff3c4}
+.f-pop .fx{position:absolute;top:6px;right:8px;width:40px;height:40px;border-radius:50%;font-size:1.3rem}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:14px;background:rgba(4,29,83,.55);backdrop-filter:blur(5px)}
+.m-box{position:relative;width:min(520px,100%);max-height:calc(100vh - 28px);overflow:auto;padding:22px 22px 20px;border-radius:30px;background:#fff;box-shadow:0 30px 80px rgba(0,26,71,.35);animation:pop .25s ease both}
+.m-box h2{font-size:clamp(1.7rem,4vw,2.2rem);text-align:center;margin-bottom:12px}
+.m-x{position:absolute;top:10px;right:10px;width:46px;height:46px;border-radius:50%;background:#eaf3ff;font-size:1.4rem}
+.how-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.how-list li{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:16px;background:#f2f8ff;font-size:1.03rem}
+.how-list li b{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font-family:var(--display)}
+.how-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.how-icons div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:16px;background:#fff6c9;font-family:var(--display);font-weight:800;font-size:.9rem;text-align:center;line-height:1.05}
+.how-icons span{font-size:1.6rem}
+.m-box .btn{width:100%}
+
+/* done */
+.done-card{position:relative;overflow:hidden;max-width:620px;margin:10px auto;text-align:center;padding:26px 20px 24px}
+.done-card img.mas{width:min(190px,48%);height:auto;filter:drop-shadow(0 10px 12px rgba(5,37,116,.2));animation:bob 3s ease-in-out infinite}
+.done-card h1{font-size:clamp(2.2rem,6vw,3.4rem);color:var(--pink);margin:6px 0}
+.done-card .score{font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--ink2)}
+.big-stars{font-size:clamp(3rem,10vw,4.6rem);line-height:1.1;margin:2px 0 4px}
+.big-stars .st{display:inline-block}
+.big-stars .st.on{animation:starpop .6s ease both}
+.big-stars .st.on:nth-child(2){animation-delay:.18s}.big-stars .st.on:nth-child(3){animation-delay:.36s}
+.done-sum{font-family:var(--display);font-weight:800;font-size:1.25rem}
+.done-msg{margin:6px auto 18px;max-width:34ch;font-size:1.1rem;color:var(--ink2)}
+.done-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.done-btns .btn{flex:1 1 220px}
+.linkbtn{margin-top:14px;min-height:48px;padding:0 18px;font-family:var(--display);font-weight:800;text-decoration:underline;color:var(--ink2)}
+.cf{position:absolute;top:-24px;width:14px;height:14px;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(560px) rotate(540deg);opacity:.9}}
+
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero-art{min-height:200px;order:-1}}
+
+/* ---------- geometry-lab background ---------- */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-svg{position:absolute;inset:0;width:100%;height:100%}
+.bg .grid{opacity:.1;transition:opacity .6s}
+.bg .deco{opacity:.3;transition:opacity .6s}
+.bg .deco text{font-family:var(--display);font-weight:800;font-size:44px;fill:#7a5cd6;stroke:none}
+.glow{position:absolute;border-radius:50%;filter:blur(64px);opacity:.55;transition:opacity .6s}
+.g1{width:46vmax;height:46vmax;left:-14vmax;top:-16vmax;background:#9fd4ff}
+.g2{width:40vmax;height:40vmax;right:-12vmax;top:8vh;background:#cdb8ff}
+.g3{width:36vmax;height:36vmax;left:28vw;bottom:-22vmax;background:#9ff0e2}
+.ruler{position:absolute;opacity:.28;transition:opacity .6s}
+.rv{left:0;top:0;bottom:0;width:12px;background:repeating-linear-gradient(to bottom,#2f5fc9 0 1.5px,transparent 1.5px 12px)}
+.rvm{left:0;top:0;bottom:0;width:22px;background:repeating-linear-gradient(to bottom,#2f5fc9 0 2px,transparent 2px 60px)}
+.rh{left:0;right:0;bottom:0;height:12px;background:repeating-linear-gradient(to right,#2f5fc9 0 1.5px,transparent 1.5px 12px)}
+.rhm{left:0;right:0;bottom:0;height:22px;background:repeating-linear-gradient(to right,#2f5fc9 0 2px,transparent 2px 60px)}
+body.mode-home .bg .deco{opacity:.6}
+body.mode-home .bg .grid{opacity:.17}
+body.mode-home .glow{opacity:.8}
+body.mode-home .ruler{opacity:.42}
+body.mode-play .bg .deco{opacity:.18}
+body.mode-play .bg .grid{opacity:.07}
+body.mode-play .glow{opacity:.42}
+body.mode-play .ruler{opacity:.2}
+.bg .spin{transform-box:fill-box;transform-origin:center;animation:slowspin 40s linear infinite}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+
+/* ---------- feedback animations (short, soft) ---------- */
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.shake{animation:shake .45s ease}
+@keyframes okglow{0%{box-shadow:var(--shadow)}30%{box-shadow:0 0 0 5px rgba(47,158,68,.4),0 0 28px 6px rgba(47,158,68,.4)}100%{box-shadow:var(--shadow)}}
+.glow-ok{animation:okglow 1.2s ease}
+@keyframes cheer{0%{transform:none}30%{transform:translateY(-16px) scale(1.1) rotate(-5deg)}55%{transform:translateY(0) rotate(3deg)}75%{transform:translateY(-6px)}100%{transform:none}}
+.guide-btn.cheer img,.done-card img.mas.cheer{animation:cheer .75s ease}
+@keyframes nod{0%,100%{transform:none}35%{transform:rotate(-6deg) translateY(2px)}70%{transform:rotate(4deg)}}
+.guide-btn.nod img{animation:nod .6s ease}
+.spark{position:fixed;z-index:70;pointer-events:none;font-size:22px;line-height:1;animation:spark .95s ease-out forwards}
+@keyframes spark{0%{opacity:0;transform:translate(0,0) scale(.3)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(120deg)}}
+@media (prefers-reduced-motion:reduce){.spark{display:none}.bg .spin{animation:none}}
+
+/* ---------- topics + concept boxes ---------- */
+.topics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.topic{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 10px;min-height:96px;border-radius:24px;background:#fff;border:4px solid var(--line);box-shadow:var(--shadow-s);text-align:center;transition:transform .15s ease,border-color .15s}
+.topic:hover{transform:translateY(-3px)}
+.topic .ti{font-size:1.7rem;line-height:1}
+.topic .tt{font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.05;text-transform:uppercase}
+.topic .ts{font-size:.92rem;color:var(--ink2)}
+.topic.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.topic.on .ts{color:#cfe0ff}
+.topic.t-sim.on{background:#2f8fd6;border-color:#1e6fb0}
+.topic.t-cong.on{background:#2f9e44;border-color:#1f7a33}
+.topic.t-mixed.on{background:#8b5cd6;border-color:#6b3fb8}
+@media (max-width:640px){.topics{grid-template-columns:1fr}.topic{flex-direction:row;justify-content:flex-start;gap:12px;min-height:72px;text-align:left}.topic .tt,.topic .ts{display:block}}
+.concept-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.concept{flex:1 1 220px;padding:12px 16px;border-radius:20px;background:#fff;border-left:8px solid var(--blue);box-shadow:var(--shadow-s)}
+.concept.c-cong{border-left-color:var(--green)}
+.concept h3{font-size:1.1rem;margin-bottom:4px}
+.concept ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.concept li{font-size:1rem}
+.concept li::before{content:"✔ ";color:var(--green)}
+.concept.c-sim li::before{color:var(--blue)}
+.c-pair{display:grid;gap:8px}
+.c-pair .concept{box-shadow:none;background:#f2f8ff;opacity:.6}
+.c-pair .concept.now{opacity:1;background:#fff8d6}
+
+/* ---------- congruence activities ---------- */
+.rel{display:grid;gap:10px;margin:10px 0}
+.relbtn{display:flex;align-items:center;gap:12px;min-height:66px;padding:6px 16px;border-radius:20px;background:#fff;border:3px solid var(--line);box-shadow:var(--shadow-s);font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,1.6vw,1.25rem);text-align:left;line-height:1.1;transition:transform .15s}
+.relbtn:hover:not(:disabled){transform:translateY(-2px)}
+.relbtn b{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center}
+.relbtn.r-cong{background:#e4f8ea;border-color:var(--green)}
+.relbtn.r-sim{background:#fff6c9;border-color:#e8c931}
+.relbtn.r-none{background:#efe8ff;border-color:#a98be0}
+.relbtn:disabled{opacity:.4}
+.selcount{margin:6px 0 10px;font-family:var(--display);font-weight:800;font-size:1.1rem;color:var(--ink2)}
+.sidepill{display:inline-block;padding:0 12px;border-radius:12px;background:var(--pink);color:#fff}
+.cans.side{min-width:96px;font-size:1.5rem;letter-spacing:.06em}
+.rchip.hi{background:#fff6c9;border-color:#e8c931}
+.dk.locked{opacity:.55;border-style:dashed}
+.pickcell{cursor:pointer}
+.pickcell .cell{fill:rgba(255,255,255,.85);stroke:#c6d9f5;stroke-width:2.5}
+.pickcell:hover .cell{stroke:#8fb0e6}
+.pickcell.sel .cell{stroke:var(--pink);stroke-width:5;fill:#fff0f5}
+.pickcell.ok .cell{stroke:var(--green);stroke-width:5;fill:#ecfaef}
+.pickcell .pickd{fill:#ffe27a}
+.pbadge circle{fill:var(--pink)}
+.pbadge.ok circle{fill:var(--green)}
+.pbadge text{fill:#fff;font-family:var(--display);font-weight:800;font-size:16px;text-anchor:middle;dominant-baseline:central}
+.vl circle{fill:var(--navy);stroke:#fff;stroke-width:2}
+.vl text{fill:#fff;font-family:var(--display);font-weight:800;font-size:14px;text-anchor:middle;dominant-baseline:central}
+.mline.hi{stroke-width:9;opacity:.8}
+.mline.ok{stroke:var(--green)}
+.lab.sm text{font-size:13px}
+
+
+.lab{pointer-events:none}
+.aarc{fill:rgba(255,62,121,.2);stroke:#d6246a;stroke-width:2.5;stroke-linejoin:round;pointer-events:none}
+.atx{font-family:var(--display);font-weight:800;font-size:14px;fill:#c11a5e;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.vtap{cursor:pointer}
+.vhit{fill:transparent}
+.vtap:hover circle:not(.vhit){fill:var(--pink)}
+.stepchip{display:inline-block;margin-bottom:6px;padding:4px 14px;border-radius:999px;background:var(--navy);color:#fff;font-family:var(--display);font-weight:800;font-size:.95rem}
+.cans.ang{min-width:84px;font-size:1.4rem}
+/* ---------- formula / concept buttons ---------- */
+.f-row{display:flex;gap:8px}
+.f-btn{min-height:50px;padding:0 16px;font-size:1rem}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}.cf{display:none}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+  <div class="ruler rv"></div><div class="ruler rvm"></div><div class="ruler rh"></div><div class="ruler rhm"></div>
+  <svg class="bg-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs><pattern id="bgGrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#3d6fd1" stroke-width="1"/></pattern></defs>
+    <rect class="grid" width="1200" height="800" fill="url(#bgGrid)"/>
+    <g class="deco" fill="none" stroke="#2f5fc9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+      <polygon points="90,330 150,330 90,250"/>
+      <polygon points="90,720 210,720 90,560" stroke="#7a5cd6" stroke-dasharray="8 8"/>
+      <g class="spin"><path d="M1010 118a46 46 0 1 1-36-18" stroke="#7a5cd6"/><polygon points="968,84 992,76 984,104" fill="#7a5cd6" stroke="none"/></g>
+      <rect x="1040" y="470" width="70" height="70" rx="6"/>
+      <rect x="1040" y="470" width="70" height="70" rx="6" transform="rotate(30 1075 505)" stroke="#1fa8a0" stroke-dasharray="7 7"/>
+      <polygon points="905,650 955,686 936,744 874,744 855,686" stroke="#1fa8a0"/>
+      <path d="M330 770A110 110 0 0 1 550 770Z"/>
+      <path d="M440 770v-20M385 758l8-12M495 758l-8-12M350 735l12-8M530 735l-12-8" stroke-width="2"/>
+      <polygon points="600,170 700,170 678,120 622,120" stroke="#7a5cd6"/>
+      <path d="M740 92h180M740 80v24M920 80v24" stroke="#1fa8a0" stroke-dasharray="3 7"/>
+      <path d="M300 190h16M308 182v16M1130 330h16M1138 322v16M700 560h16M708 552v16" stroke="#7a5cd6"/>
+      <circle cx="260" cy="480" r="4" fill="#2f5fc9"/><circle cx="278" cy="502" r="3" fill="#1fa8a0"/><circle cx="244" cy="510" r="3" fill="#7a5cd6"/>
+      <circle cx="820" cy="330" r="4" fill="#7a5cd6"/><circle cx="846" cy="352" r="3" fill="#2f5fc9"/><circle cx="800" cy="360" r="3" fill="#1fa8a0"/>
+      <circle cx="1120" cy="700" r="4" fill="#2f5fc9"/><circle cx="1090" cy="716" r="3" fill="#7a5cd6"/>
+      <text x="520" y="330">∠</text><text x="1000" y="300" fill="#2f5fc9">×2</text><text x="190" y="140">π</text><text x="760" y="740">÷</text>
+    </g>
+  </svg>
+</div>
+
+<header class="topbar">
+  <a class="logo" href="../../index.html" data-i18n-aria="homeAria"><img src="../../assets/logo-approved.png" alt="ENGLISH YO!" /></a>
+  <a class="tb-btn tb-back" href="../../games.html" data-i18n="back">← Back to Games</a>
+  <button class="tb-btn tb-how" id="howBtn" type="button"><span aria-hidden="true">❓</span> <span data-i18n="how">How to Play</span></button>
+  <div class="tb-right">
+    <button class="tb-btn tb-sound" id="soundBtn" type="button" aria-pressed="true"><span class="si" id="soundIco" aria-hidden="true">🔊</span><span class="sl" id="soundLbl">Sound On</span></button>
+    <div class="lang" role="group" aria-label="Language / Bahasa">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button><span class="sep" aria-hidden="true"></span><button type="button" data-lang="id" aria-pressed="false">ID</button>
+    </div>
+  </div>
+</header>
+
+<main id="app">
+  <!-- HOME -->
+  <section id="home" class="screen">
+    <div class="hero">
+      <div>
+        <span class="badge">🔬 <span data-i18n="topic">Similar Shapes</span></span>
+        <h1>SHAPE <span class="accent">SHIFT</span></h1>
+        <p class="lab" data-i18n="lab">Similarity Lab</p>
+        <p class="lead" data-i18n="lead"></p>
+        <button class="btn btn-pink" id="startBtn" type="button">▶ <span data-i18n="start">START MISSION</span></button>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+          <polygon points="20,150 80,150 20,70" fill="#bfe3ff" stroke="#052574" stroke-width="5" stroke-linejoin="round"/>
+          <polygon points="270,250 390,250 270,90" fill="#ffc2d6" stroke="#052574" stroke-width="5" stroke-linejoin="round"/>
+          <text x="40" y="60" font-family="Baloo 2" font-weight="800" font-size="30" fill="#2f8fd6">×1</text>
+          <text x="318" y="82" font-family="Baloo 2" font-weight="800" font-size="30" fill="#ff3e79">×2</text>
+        </svg>
+        <img id="heroImg" alt="" />
+      </div>
+    </div>
+    <h2 class="sec-title" data-i18n="pickTopic">Choose a topic</h2>
+    <div class="topics" id="topics" role="group"></div>
+    <div class="concept-row" id="conceptRow"></div>
+    <h2 class="sec-title" data-i18n="pick">Pick a challenge</h2>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- PLAY -->
+  <section id="play" class="screen" hidden>
+    <div class="play-head">
+      <button class="chip" id="menuBtn" type="button" data-i18n="menu">← Menu</button>
+      <div class="ph-title"><span id="actName"></span><small id="roundTxt"></small></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="starsum" id="starSum" aria-live="polite"></div>
+    </div>
+    <div class="play-grid">
+      <div class="guide">
+        <button class="guide-btn" id="guideBtn" type="button" data-i18n-aria="guideAria"><img id="guideImg" alt="" /></button>
+        <div class="bubble" id="bubble" aria-live="polite"></div>
+      </div>
+
+      <div class="card stage-card">
+        <div id="stageWrap">
+          <svg id="stage" role="img" tabindex="-1"></svg>
+          <div class="scale-chip" id="scaleChip" hidden></div>
+        </div>
+        <div class="dock" id="dock" hidden>
+          <button class="dk" type="button" data-c="move"><span class="ic">✋</span><span data-i18n="move">MOVE</span></button>
+          <button class="dk" type="button" data-c="rotate"><span class="ic">↻</span><span data-i18n="rotate">ROTATE</span></button>
+          <button class="dk" type="button" data-c="flip"><span class="ic">↔</span><span data-i18n="flip">FLIP</span></button>
+          <button class="dk" type="button" data-c="up"><span class="ic">🔍＋</span><span data-i18n="up">SCALE +</span></button>
+          <button class="dk" type="button" data-c="down"><span class="ic">🔍－</span><span data-i18n="down">SCALE −</span></button>
+          <button class="dk" type="button" data-c="reset"><span class="ic">⟲</span><span data-i18n="reset">RESET</span></button>
+        </div>
+        <div class="pad" id="pad" hidden>
+          <button type="button" data-p="l" aria-label="←">◀</button>
+          <button type="button" data-p="u" aria-label="↑">▲</button>
+          <button type="button" data-p="d" aria-label="↓">▼</button>
+          <button type="button" data-p="r" aria-label="→">▶</button>
+        </div>
+      </div>
+
+      <div class="qwrap">
+        <div class="card" id="qBox"></div>
+        <div id="fb" aria-live="polite"></div>
+      </div>
+
+      <div class="card wa" id="wa">
+        <button class="wa-head" id="waHead" type="button" aria-expanded="true" aria-controls="waBody"><span>✏️ <span data-i18n="wa">MY WORKING AREA</span></span><span class="car" aria-hidden="true">▾</span></button>
+        <div class="wa-body" id="waBody">
+          <div class="wa-tools">
+            <button class="wt on" type="button" data-w="pen"><span aria-hidden="true">✏️</span> <span data-i18n="pen">Pen</span></button>
+            <button class="wt" type="button" data-w="eraser"><span aria-hidden="true">🧽</span> <span data-i18n="eraser">Eraser</span></button>
+            <button class="wt" type="button" data-w="undo"><span aria-hidden="true">↶</span> <span data-i18n="undo">Undo</span></button>
+            <button class="wt" type="button" data-w="clear"><span aria-hidden="true">🗑️</span> <span data-i18n="clear">Clear</span></button>
+          </div>
+          <div class="wa-canvas" id="waCanvas">
+            <div class="wa-guide" aria-hidden="true"><span data-i18n="wa1">Scale factor = ___</span><span data-i18n="wa2">New side = ___ × ___</span><span data-i18n="wa3">Answer = ___</span></div>
+            <canvas id="wa-cv" aria-label="Working area"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section id="done" class="screen" hidden>
+    <div class="card done-card" id="doneCard">
+      <img class="mas" id="doneImg" alt="" />
+      <h1 data-i18n="doneTitle">MISSION COMPLETE!</h1>
+      <p class="score" data-i18n="score">Score:</p>
+      <div class="big-stars" id="bigStars" aria-live="polite"></div>
+      <p class="done-sum" id="doneSum"></p>
+      <p class="done-msg" id="doneMsg"></p>
+      <div class="done-btns">
+        <button class="btn btn-yellow" id="againBtn" type="button">↺ <span data-i18n="again">PLAY AGAIN</span></button>
+        <button class="btn btn-pink" id="nextChBtn" type="button"><span data-i18n="nextCh">NEXT CHALLENGE</span> →</button>
+      </div>
+      <button class="linkbtn" id="doneMenu" type="button" data-i18n="menuAll">All challenges</button>
+    </div>
+  </section>
+</main>
+
+<!-- formula -->
+<div class="formula" id="formula">
+  <div class="f-pop" id="cPop" role="dialog" aria-labelledby="cTitle" hidden>
+    <button class="fx" id="cClose" type="button" data-i18n-aria="close">✕</button>
+    <h3 id="cTitle">📘 <span data-i18n="concept">CONCEPT</span></h3>
+    <div class="c-pair" id="cBody"></div>
+  </div>
+  <div class="f-pop" id="fPop" role="dialog" aria-labelledby="fTitle" hidden>
+    <button class="fx" id="fClose" type="button" data-i18n-aria="close">✕</button>
+    <h3 id="fTitle">💡 <span data-i18n="formula">FORMULA</span></h3>
+    <div id="fLines"></div>
+  </div>
+  <div class="f-row">
+    <button class="f-btn" id="cBtn" type="button" aria-expanded="false" aria-controls="cPop">📘 <span data-i18n="concept">CONCEPT</span></button>
+    <button class="f-btn" id="fBtn" type="button" aria-expanded="false" aria-controls="fPop">💡 <span data-i18n="formula">FORMULA</span></button>
+  </div>
+</div>
+
+<!-- how to play -->
+<div class="modal" id="howModal" hidden>
+  <div class="m-box" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+    <button class="m-x" id="howX" type="button" data-i18n-aria="close">✕</button>
+    <h2 id="howTitle" data-i18n="howTitle">HOW TO PLAY</h2>
+    <ol class="how-list">
+      <li><b>1</b><span data-i18n="how1"></span></li>
+      <li><b>2</b><span data-i18n="how2"></span></li>
+      <li><b>3</b><span data-i18n="how3"></span></li>
+      <li><b>4</b><span data-i18n="how4"></span></li>
+      <li><b>5</b><span data-i18n="how5"></span></li>
+      <li><b>6</b><span data-i18n="how6"></span></li>
+    </ol>
+    <div class="how-icons">
+      <div><span>✋</span><i style="font-style:normal" data-i18n="move2">Move</i></div>
+      <div><span>↻</span><i style="font-style:normal" data-i18n="rotate2">Rotate</i></div>
+      <div><span>↔</span><i style="font-style:normal" data-i18n="flip2">Flip</i></div>
+      <div><span>🔍</span><i style="font-style:normal" data-i18n="scale2">Scale</i></div>
+      <div><span>✏️</span><i style="font-style:normal" data-i18n="wa2t">Working Area</i></div>
+      <div><span>💡</span><i style="font-style:normal" data-i18n="formula2">Formula</i></div>
+    </div>
+    <button class="btn btn-pink" id="letsBtn" type="button" data-i18n="lets">LET'S PLAY!</button>
+  </div>
+</div>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   SHAPE SHIFT: Similarity Lab — ENGLISH YO!
+   ===================================================================== */
+
+/* ---------- translations ---------- */
+var I18N = {
+  en: {
+    soundOn: 'Sound On', soundOff: 'Sound Off',
+    a9: 'Match Sides & Angles', a9d: 'Match the corresponding sides and angles.',
+    a11: 'Find the Missing Angle', a11d: 'Matching angles are equal.',
+    cc3: 'Matching sides are equal', cc4: 'Matching angles are equal',
+    q9a: 'Which angle of SHAPE B matches ∠{s} of SHAPE A?', stepN: 'Step {n} of 2',
+    q11: 'What is ∠{s}?', q11s: 'Congruent shapes have equal corresponding angles. Find the matching angle in SHAPE A.',
+    fAngleOk: 'Correct! Corresponding angles in congruent shapes are equal.', fAngleEq: '∠{e} = ∠{b} = {v}°',
+    fStep2: 'Sides matched! Now match the angle.', fAngPair: '∠{a} ↔ ∠{b}   ({n}° = {n}°)', fBothOk: 'Great! Matching sides and matching angles are equal.',
+    fAngNo: 'Almost! Look for the angle with the same size.', fAngNo11: 'Not yet. Matching angles are equal. Find the angle in SHAPE A that matches ∠{s}.',
+    fDiffAngles: 'The sides can match, but the angles are different — so the shapes are not congruent.',
+    fCheckAngles: 'Check the angles!', fCheckAnglesTip: 'Same side lengths are not enough — the angles must match too.',
+    hAngle: 'The marked angle ∠{s} is {n}°. Which angle of SHAPE B is also {n}°?',
+    hAng11a: 'Find which angle of SHAPE A matches ∠{s}. The shape may be rotated or flipped.', hAng11b: 'Angles in SHAPE A: {s}. Which one is left for ∠{e}?',
+    gAngle: 'Matching angles are equal!', gCheckAngles: 'Check the angles!', gStart11: 'Find the angle that matches!', gStart9b: 'Now match the angles!',
+    fc4: 'Congruent: matching angles are equal.',
+    topicSim: 'Similarity', topicCong: 'Congruence', topicMixed: 'Mixed Challenge', pickTopic: 'Choose a topic',
+    concept: 'CONCEPT', simShapes: 'Similar Shapes', congShapes: 'Congruent Shapes', cSim: 'SIMILAR', cCong: 'CONGRUENT',
+    cs1: 'Same shape', cs2: 'Size may be different', cs3: 'Same proportion', cc2: 'Same size',
+    a6: 'Congruent or Not?', a6d: 'Same shape and same size?',
+    a7: 'Rotate & Match', a7d: 'Move, rotate and flip. No resizing!',
+    a8: 'Find the Congruent Pair', a8d: 'Spot the two shapes that match exactly.',
+    a10: 'Mixed Challenge', a10d: 'Congruent, similar, or neither?',
+    congBtn: 'CONGRUENT', notCongBtn: 'NOT CONGRUENT',
+    relA: 'Congruent', relB: 'Similar but not congruent', relC: 'Neither',
+    q6: 'Are these two shapes congruent?', q6s: 'Same shape and same size? They may be rotated or flipped.',
+    q7s: 'Move, rotate or flip it. You cannot resize it. Then press CHECK.',
+    q8: 'Find the two congruent shapes.', q8s: 'Tap two shapes that match exactly. They may be rotated or flipped.', selected: 'Selected: {n} / 2',
+    q9: 'Which side of SHAPE B matches side {s} of SHAPE A?', q9s: 'Matching sides have the same length.',
+    q10: 'What is the relationship between these shapes?',
+    fSameSize: 'Congruent shapes must have the same size.',
+    fCongOk: 'Same shape and same size — congruent!', fCongWhy: 'Every pair of matching sides is equal.',
+    fSimOnly: 'Same shape, different size — similar, but not congruent!', fSimOnlyWhy: 'The sides are bigger or smaller, so the shapes are not congruent.',
+    fNotCong: 'Not congruent. The sides are not all equal.', fNotCongWhy: 'Look at the orange ones: those sides are different.',
+    fCheckSize: 'Check the size!', fCheckSizeTip: 'Tip: congruent shapes have equal matching sides.', fCheckProp: 'Check the proportion!',
+    fNeither: 'Not the same shape. Neither congruent nor similar.', fNeitherWhy: 'The ratios of the matching sides are different.',
+    fMatchOkC: 'Perfect match! Same shape, same size — congruent!',
+    fPairOk: 'Found them! Same shape and same size — congruent!', fPairWhy: 'They were rotated or flipped, but they still match.',
+    fPairNo: 'Not a pair. Check the size!', fPairTip: 'Compare the side lengths.',
+    fSideOk: 'Matching sides are equal!', fSideEq: '{a} ↔ {b}   ({n} cm = {n} cm)', fSideNo: 'Almost! Compare the side lengths.',
+    hCongCompare: 'Compare the matching sides: {a} cm and {b} cm. Are they equal?', hSameSize: 'Congruent shapes keep their size. Only move, rotate or flip.',
+    hPairTip: 'Congruent shapes have the same side lengths. Compare the numbers!', hPairSides: 'Look for two shapes with sides: {s}',
+    hSide: 'Side {s} is {n} cm long. Which side is {n} cm?', hRel1: 'Compare the matching sides. Are they equal?', hRel2: 'Not equal? Check if the ratio is always the same.',
+    gCong: 'Same shape and same size — congruent!', gSimDiff: 'Same shape, different size — similar!', gCheckSize: 'Check the size!', gCheckProp: 'Check the proportion!',
+    gStart7: 'Move, rotate or flip it. Keep the same size!', gStart8: 'Tap two shapes that match exactly!', gStart9: 'Match the sides with the same length.',
+    fc1: 'Congruent: matching sides are equal.', fc2: 'Congruent: scale factor = 1', fc3: 'Congruent shapes can be moved, rotated or flipped.',
+    fm1: 'Scale factor = 1 → congruent', fm2: 'Same ratio, scale factor ≠ 1 → similar', fm3: 'Different ratios → neither',
+    homeAria: 'ENGLISH YO! home', back: '← Back to Games', how: 'How to Play', topic: 'Similarity & Congruence', lab: 'Similarity Lab',
+    lead: 'Same shape, same size or different size? Move, rotate, flip and scale shapes to discover similarity and congruence.',
+    start: 'START MISSION', pick: 'Pick a challenge', play: 'PLAY', menu: '← Menu', menuAll: 'All challenges', isNew: 'New!', close: 'Close',
+    guideAria: 'Change your guide',
+    a1: 'Similar or Not?', a1d: 'Are the two shapes similar?',
+    a2: 'Rotate & Match', a2d: 'Move, rotate and scale to match.',
+    a3: 'Find the Missing Side', a3d: 'Use the scale factor.',
+    a4: 'Measure It!', a4d: 'Tap the sides to measure them.',
+    a5: 'Shape Challenge', a5d: 'Rotate, resize and calculate.',
+    round: 'Round {n} of {m}',
+    simBtn: 'SIMILAR', notBtn: 'NOT SIMILAR', check: 'CHECK', checkT: 'Check Answer', hint: 'Hint', next: 'NEXT', finish: 'FINISH',
+    move: 'MOVE', rotate: 'ROTATE', flip: 'FLIP', up: 'SCALE +', down: 'SCALE −', reset: 'RESET',
+    shapeA: 'SHAPE A', shapeB: 'SHAPE B', original: 'ORIGINAL', newShape: 'NEW SHAPE', target: 'TARGET SHAPE', yours: 'YOUR SHAPE',
+    scaleChip: 'Scale ×{k}',
+    q1: 'Are these two shapes similar?', q1s: 'Compare the matching sides.',
+    q2: 'Match YOUR SHAPE to the TARGET SHAPE.', q2s: 'Move, rotate, flip and scale it. Then press CHECK.',
+    q3: 'What is the missing side?', q3s: 'Find the side marked ?',
+    q4f: 'What is the scale factor?', q4m: 'What is the missing side?',
+    tapSide: 'Tap a side to measure it.',
+    q5: 'Make the new shape {how}.', q5big: '{k}× larger than the original', q5half: 'half the size of the original',
+    s5a: 'Rotate it like the original', s5b: 'Scale it', s5c: 'Find the side marked ?',
+    typeHere: 'Your answer', unitCm: 'cm',
+    wa: 'MY WORKING AREA', pen: 'Pen', eraser: 'Eraser', undo: 'Undo', clear: 'Clear',
+    wa1: 'Scale factor = ___', wa2: 'New side = ___ × ___', wa3: 'Answer = ___',
+    formula: 'FORMULA', f1: 'Scale factor = new side ÷ original side', f2: 'New side = original side × scale factor', f3: 'Matching sides must have the same ratio.',
+    howTitle: 'HOW TO PLAY',
+    how1: 'Look at the two shapes.', how2: 'Move, rotate, flip, or resize the shape.', how3: 'Compare the matching sides.',
+    how4: 'Use the formula or working area if needed.', how5: 'Choose or type your answer.', how6: 'Press CHECK.',
+    move2: 'Move', rotate2: 'Rotate', flip2: 'Flip', scale2: 'Scale', wa2t: 'Working Area', formula2: 'Formula', lets: "LET'S PLAY!",
+    doneTitle: 'MISSION COMPLETE!', score: 'Score:', again: 'PLAY AGAIN', nextCh: 'NEXT CHALLENGE', outOf: '{n} / {m} stars',
+    done3: 'Amazing! You are a Similarity Scientist! 🔬', done2: 'Great work! Almost a perfect lab report!', done1: 'Good try! Play again to earn more stars.',
+    /* guide */
+    gStart: "Let's compare the shapes!", gStart2: "Try rotating it. Then check the scale factor.", gStart3: 'Check the scale factor.', gStart4: 'Tap a side to measure it.',
+    gGood: 'Great job! These shapes are similar.', gNot: 'Nice eye! These shapes are not similar.', gAlmost: 'Almost! Check the proportion again.',
+    gTry: 'Try again. Check the scale factor.', gRotate: 'Try rotating it.', gFlip: 'Try flipping it.', gBigger: 'Make it bigger.', gSmaller: 'Make it smaller.',
+    gMove: 'Drag it onto the target.', gGreat: 'Great! You matched it!', gHelp: "Let's look at it together.", gNeed: 'Type a number or tap an answer.', gHint: 'Here is a little help.',
+    /* feedback */
+    fSimOk: 'Great job! These shapes are similar.', fSimWhy: 'Every pair of matching sides has the same ratio.',
+    fNotOk: 'Nice eye! These shapes are NOT similar.', fNotWhy: 'The ratios are different. Look at the orange ones.',
+    fSimNo: 'Almost! Check the proportion again.', fSimNoTip: 'Tip: divide each new side by its matching side.',
+    fFactorOk: 'Great! The scale factor is {k}.', fEq: '{a} × {k} = {r} cm',
+    fTry: 'Try again. Check the scale factor.',
+    fMatchOk: 'Perfect match! The scale factor is {k}.',
+    fSizeUp: 'Not quite. The target is bigger. Try SCALE +.', fSizeDown: 'Not quite. The target is smaller. Try SCALE −.',
+    fRotate: 'Almost! Try rotating it.', fFlip: 'Almost! Try flipping it ↔.', fMove: 'Almost! Drag it onto the target.',
+    fFinalOk: 'Brilliant! Everything fits.', fFinalSide: '{a} × {k} = {r} cm',
+    fNeedAns: 'Now find the side marked ? and type it.',
+    fAnsNo: 'Not yet. New side = original side × scale factor.',
+    fReveal: "Let's look at it together.", fRevealSim: 'Shapes A and B: {b} ÷ {a} = {r}',
+    hRatio: 'Compare {a} → {b}: {b} ÷ {a} = {r}', hCompare: 'Compare the matching sides: {a} cm → {b} cm.', hFactor: 'Scale factor = {b} ÷ {a} = {k}',
+    hApply: 'Then: {a} × {k} = ?', hTap: 'Tap two matching sides, one on each shape.', hTapMore: 'Tap more sides to measure them.',
+    hTarget: 'The target is {k}× your starting shape.', hRule5: 'New side = original side × {k}',
+    chipRatio: '{a} → {b}  (×{r})'
+  },
+  id: {
+    soundOn: 'Suara Aktif', soundOff: 'Suara Mati',
+    a9: 'Cocokkan Sisi & Sudut', a9d: 'Cocokkan sisi dan sudut yang bersesuaian.',
+    a11: 'Cari Sudut yang Hilang', a11d: 'Sudut yang bersesuaian sama besar.',
+    cc3: 'Sisi yang bersesuaian sama panjang', cc4: 'Sudut yang bersesuaian sama besar',
+    q9a: 'Sudut mana pada BANGUN B yang bersesuaian dengan ∠{s} pada BANGUN A?', stepN: 'Langkah {n} dari 2',
+    q11: 'Berapa besar ∠{s}?', q11s: 'Bangun kongruen memiliki sudut-sudut bersesuaian yang sama besar. Cari sudut yang bersesuaian pada BANGUN A.',
+    fAngleOk: 'Benar! Sudut-sudut yang bersesuaian pada bangun kongruen sama besar.', fAngleEq: '∠{e} = ∠{b} = {v}°',
+    fStep2: 'Sisi cocok! Sekarang cocokkan sudutnya.', fAngPair: '∠{a} ↔ ∠{b}   ({n}° = {n}°)', fBothOk: 'Hebat! Sisi dan sudut yang bersesuaian sama besar.',
+    fAngNo: 'Hampir benar! Cari sudut yang besarnya sama.', fAngNo11: 'Belum. Sudut yang bersesuaian sama besar. Cari sudut pada BANGUN A yang bersesuaian dengan ∠{s}.',
+    fDiffAngles: 'Sisinya bisa sama, tetapi sudutnya berbeda — jadi bangunnya tidak kongruen.',
+    fCheckAngles: 'Periksa sudutnya!', fCheckAnglesTip: 'Panjang sisi yang sama saja tidak cukup — sudutnya juga harus sama.',
+    hAngle: 'Sudut bertanda ∠{s} besarnya {n}°. Sudut mana pada BANGUN B yang juga {n}°?',
+    hAng11a: 'Cari sudut pada BANGUN A yang bersesuaian dengan ∠{s}. Bangun mungkin diputar atau dibalik.', hAng11b: 'Sudut pada BANGUN A: {s}. Mana yang tersisa untuk ∠{e}?',
+    gAngle: 'Sudut yang bersesuaian sama besar!', gCheckAngles: 'Periksa sudutnya!', gStart11: 'Cari sudut yang bersesuaian!', gStart9b: 'Sekarang cocokkan sudutnya!',
+    fc4: 'Kongruen: sudut yang bersesuaian sama besar.',
+    topicSim: 'Kesebangunan', topicCong: 'Kongruen', topicMixed: 'Tantangan Campuran', pickTopic: 'Pilih topik',
+    concept: 'KONSEP', simShapes: 'Bangun Sebangun', congShapes: 'Bangun Kongruen', cSim: 'SEBANGUN', cCong: 'KONGRUEN',
+    cs1: 'Bentuk sama', cs2: 'Ukuran boleh berbeda', cs3: 'Perbandingan tetap sama', cc2: 'Ukuran sama',
+    a6: 'Kongruen atau Bukan?', a6d: 'Bentuk dan ukuran sama?',
+    a7: 'Putar & Cocokkan', a7d: 'Geser, putar, dan balik. Tanpa ubah ukuran!',
+    a8: 'Cari Pasangan Kongruen', a8d: 'Temukan dua bangun yang persis sama.',
+    a10: 'Tantangan Campuran', a10d: 'Kongruen, sebangun, atau bukan keduanya?',
+    congBtn: 'KONGRUEN', notCongBtn: 'TIDAK KONGRUEN',
+    relA: 'Kongruen', relB: 'Sebangun tetapi tidak kongruen', relC: 'Bukan keduanya',
+    q6: 'Apakah kedua bangun ini kongruen?', q6s: 'Bentuk dan ukuran sama? Bangun boleh diputar atau dibalik.',
+    q7s: 'Geser, putar, atau balikkan. Kamu tidak boleh mengubah ukurannya. Lalu tekan PERIKSA.',
+    q8: 'Cari dua bangun yang kongruen.', q8s: 'Ketuk dua bangun yang persis sama. Bangun boleh diputar atau dibalik.', selected: 'Dipilih: {n} / 2',
+    q9: 'Sisi mana pada BANGUN B yang bersesuaian dengan sisi {s} pada BANGUN A?', q9s: 'Sisi yang bersesuaian sama panjang.',
+    q10: 'Apa hubungan kedua bangun ini?',
+    fSameSize: 'Bangun kongruen harus memiliki ukuran yang sama.',
+    fCongOk: 'Bentuk sama dan ukuran sama — kongruen!', fCongWhy: 'Setiap pasang sisi yang bersesuaian sama panjang.',
+    fSimOnly: 'Bentuk sama, ukuran berbeda — sebangun, tetapi tidak kongruen!', fSimOnlyWhy: 'Sisinya lebih besar atau lebih kecil, jadi tidak kongruen.',
+    fNotCong: 'Tidak kongruen. Tidak semua sisinya sama panjang.', fNotCongWhy: 'Lihat yang berwarna oranye: sisi-sisi itu berbeda.',
+    fCheckSize: 'Periksa ukurannya!', fCheckSizeTip: 'Tips: bangun kongruen memiliki sisi-sisi bersesuaian yang sama panjang.', fCheckProp: 'Periksa perbandingannya!',
+    fNeither: 'Bentuknya tidak sama. Bukan kongruen dan bukan sebangun.', fNeitherWhy: 'Perbandingan sisi-sisi yang bersesuaian berbeda.',
+    fMatchOkC: 'Cocok sempurna! Bentuk sama, ukuran sama — kongruen!',
+    fPairOk: 'Ketemu! Bentuk sama dan ukuran sama — kongruen!', fPairWhy: 'Keduanya diputar atau dibalik, tetapi tetap cocok.',
+    fPairNo: 'Bukan pasangan. Periksa ukurannya!', fPairTip: 'Bandingkan panjang sisinya.',
+    fSideOk: 'Sisi yang bersesuaian sama panjang!', fSideEq: '{a} ↔ {b}   ({n} cm = {n} cm)', fSideNo: 'Hampir benar! Bandingkan panjang sisinya.',
+    hCongCompare: 'Bandingkan sisi yang bersesuaian: {a} cm dan {b} cm. Apakah sama?', hSameSize: 'Bangun kongruen tetap berukuran sama. Cukup geser, putar, atau balik.',
+    hPairTip: 'Bangun kongruen memiliki panjang sisi yang sama. Bandingkan angkanya!', hPairSides: 'Cari dua bangun dengan sisi: {s}',
+    hSide: 'Sisi {s} panjangnya {n} cm. Sisi mana yang panjangnya {n} cm?', hRel1: 'Bandingkan sisi yang bersesuaian. Apakah sama panjang?', hRel2: 'Tidak sama? Periksa apakah perbandingannya selalu sama.',
+    gCong: 'Bentuk sama dan ukuran sama — kongruen!', gSimDiff: 'Bentuk sama, ukuran berbeda — sebangun!', gCheckSize: 'Periksa ukurannya!', gCheckProp: 'Periksa perbandingannya!',
+    gStart7: 'Geser, putar, atau balikkan. Ukurannya harus tetap sama!', gStart8: 'Ketuk dua bangun yang persis sama!', gStart9: 'Cocokkan sisi yang sama panjang.',
+    fc1: 'Kongruen: sisi yang bersesuaian sama panjang.', fc2: 'Kongruen: faktor skala = 1', fc3: 'Bangun kongruen boleh digeser, diputar, atau dibalik.',
+    fm1: 'Faktor skala = 1 → kongruen', fm2: 'Perbandingan sama, faktor skala ≠ 1 → sebangun', fm3: 'Perbandingan berbeda → bukan keduanya',
+    homeAria: 'Beranda ENGLISH YO!', back: '← Kembali ke Games', how: 'Cara Bermain', topic: 'Kesebangunan & Kongruen', lab: 'Lab Kesebangunan',
+    lead: 'Bentuk sama, ukuran sama atau berbeda? Geser, putar, balik, dan ubah ukuran bangun untuk menemukan kesebangunan dan kongruen.',
+    start: 'MULAI MISI', pick: 'Pilih tantangan', play: 'MAIN', menu: '← Menu', menuAll: 'Semua tantangan', isNew: 'Baru!', close: 'Tutup',
+    guideAria: 'Ganti pemandumu',
+    a1: 'Sebangun atau Bukan?', a1d: 'Apakah kedua bangun sebangun?',
+    a2: 'Putar & Cocokkan', a2d: 'Geser, putar, dan ubah ukuran.',
+    a3: 'Cari Panjang Sisi yang Hilang', a3d: 'Gunakan faktor skala.',
+    a4: 'Ukur!', a4d: 'Ketuk sisi untuk mengukurnya.',
+    a5: 'Tantangan Bangun', a5d: 'Putar, ubah ukuran, dan hitung.',
+    round: 'Ronde {n} dari {m}',
+    simBtn: 'SEBANGUN', notBtn: 'TIDAK SEBANGUN', check: 'PERIKSA', checkT: 'Periksa Jawaban', hint: 'Petunjuk', next: 'LANJUT', finish: 'SELESAI',
+    move: 'GESER', rotate: 'PUTAR', flip: 'BALIK', up: 'PERBESAR', down: 'PERKECIL', reset: 'ULANG',
+    shapeA: 'BANGUN A', shapeB: 'BANGUN B', original: 'BANGUN AWAL', newShape: 'BANGUN BARU', target: 'BANGUN TARGET', yours: 'BANGUN KAMU',
+    scaleChip: 'Skala ×{k}',
+    q1: 'Apakah kedua bangun ini sebangun?', q1s: 'Bandingkan sisi-sisi yang bersesuaian.',
+    q2: 'Cocokkan BANGUN KAMU dengan BANGUN TARGET.', q2s: 'Geser, putar, balik, dan ubah ukurannya. Lalu tekan PERIKSA.',
+    q3: 'Berapa panjang sisi yang hilang?', q3s: 'Cari sisi yang bertanda ?',
+    q4f: 'Berapa faktor skalanya?', q4m: 'Berapa panjang sisi yang hilang?',
+    tapSide: 'Ketuk sisi untuk mengukurnya.',
+    q5: 'Buat bangun baru {how}.', q5big: '{k}× lebih besar dari bangun awal', q5half: 'setengah ukuran bangun awal',
+    s5a: 'Putar seperti bangun awal', s5b: 'Ubah ukurannya', s5c: 'Cari sisi yang bertanda ?',
+    typeHere: 'Jawabanmu', unitCm: 'cm',
+    wa: 'AREA HITUNG SAYA', pen: 'Pena', eraser: 'Penghapus', undo: 'Urungkan', clear: 'Bersihkan',
+    wa1: 'Faktor skala = ___', wa2: 'Sisi baru = ___ × ___', wa3: 'Jawaban = ___',
+    formula: 'RUMUS', f1: 'Faktor skala = sisi baru ÷ sisi awal', f2: 'Sisi baru = sisi awal × faktor skala', f3: 'Sisi-sisi yang bersesuaian memiliki perbandingan yang sama.',
+    howTitle: 'CARA BERMAIN',
+    how1: 'Perhatikan kedua bangun.', how2: 'Geser, putar, balik, atau ubah ukurannya.', how3: 'Bandingkan sisi yang bersesuaian.',
+    how4: 'Gunakan rumus atau area hitung jika perlu.', how5: 'Pilih atau ketik jawabanmu.', how6: 'Tekan PERIKSA.',
+    move2: 'Geser', rotate2: 'Putar', flip2: 'Balik', scale2: 'Skala', wa2t: 'Area Hitung', formula2: 'Rumus', lets: 'MULAI BERMAIN!',
+    doneTitle: 'MISI SELESAI!', score: 'Skor:', again: 'MAIN LAGI', nextCh: 'TANTANGAN BERIKUTNYA', outOf: '{n} / {m} bintang',
+    done3: 'Luar biasa! Kamu Ilmuwan Kesebangunan! 🔬', done2: 'Kerja bagus! Hampir sempurna!', done1: 'Bagus sudah mencoba! Main lagi untuk dapat lebih banyak bintang.',
+    gStart: 'Ayo bandingkan kedua bangunnya!', gStart2: 'Coba putar bangunnya. Lalu periksa faktor skalanya.', gStart3: 'Periksa faktor skalanya.', gStart4: 'Ketuk sisi untuk mengukurnya.',
+    gGood: 'Bagus! Kedua bangun ini sebangun.', gNot: 'Jeli sekali! Kedua bangun ini tidak sebangun.', gAlmost: 'Hampir benar! Periksa lagi perbandingannya.',
+    gTry: 'Coba lagi. Periksa faktor skalanya.', gRotate: 'Coba putar bangunnya.', gFlip: 'Coba balikkan bangunnya.', gBigger: 'Buat lebih besar.', gSmaller: 'Buat lebih kecil.',
+    gMove: 'Geser ke bangun target.', gGreat: 'Hebat! Kamu berhasil mencocokkannya!', gHelp: 'Ayo kita lihat bersama.', gNeed: 'Ketik angka atau pilih jawaban.', gHint: 'Ini sedikit bantuan.',
+    fSimOk: 'Bagus! Kedua bangun ini sebangun.', fSimWhy: 'Setiap pasang sisi yang bersesuaian memiliki perbandingan yang sama.',
+    fNotOk: 'Jeli sekali! Kedua bangun ini TIDAK sebangun.', fNotWhy: 'Perbandingannya berbeda. Lihat yang berwarna oranye.',
+    fSimNo: 'Hampir benar! Periksa lagi perbandingannya.', fSimNoTip: 'Tips: bagi setiap sisi baru dengan sisi yang bersesuaian.',
+    fFactorOk: 'Hebat! Faktor skalanya adalah {k}.', fEq: '{a} × {k} = {r} cm',
+    fTry: 'Coba lagi. Periksa faktor skalanya.',
+    fMatchOk: 'Cocok sempurna! Faktor skalanya adalah {k}.',
+    fSizeUp: 'Belum tepat. Targetnya lebih besar. Coba PERBESAR.', fSizeDown: 'Belum tepat. Targetnya lebih kecil. Coba PERKECIL.',
+    fRotate: 'Hampir! Coba putar bangunnya.', fFlip: 'Hampir! Coba balikkan bangunnya ↔.', fMove: 'Hampir! Geser ke bangun target.',
+    fFinalOk: 'Keren! Semuanya tepat.', fFinalSide: '{a} × {k} = {r} cm',
+    fNeedAns: 'Sekarang cari sisi yang bertanda ? lalu ketik jawabannya.',
+    fAnsNo: 'Belum. Sisi baru = sisi awal × faktor skala.',
+    fReveal: 'Ayo kita lihat bersama.', fRevealSim: 'Bangun A dan B: {b} ÷ {a} = {r}',
+    hRatio: 'Bandingkan {a} → {b}: {b} ÷ {a} = {r}', hCompare: 'Bandingkan sisi yang bersesuaian: {a} cm → {b} cm.', hFactor: 'Faktor skala = {b} ÷ {a} = {k}',
+    hApply: 'Lalu: {a} × {k} = ?', hTap: 'Ketuk dua sisi yang bersesuaian, satu di tiap bangun.', hTapMore: 'Ketuk lebih banyak sisi untuk mengukurnya.',
+    hTarget: 'Target ini {k}× bangun awalmu.', hRule5: 'Sisi baru = sisi awal × {k}',
+    chipRatio: '{a} → {b}  (×{r})'
+  }
+};
+
+/* ---------- small helpers ---------- */
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+var store = {
+  get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+function rnd(n) { return Math.floor(Math.random() * n); }
+function pick(a) { return a[rnd(a.length)]; }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = rnd(i + 1), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function r2(x) { return Math.round(x * 100) / 100; }
+function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+function r1(x) { return Math.round(x * 10) / 10; }
+
+
+/* ---------- sound: friendly effects + short spoken cheers ---------- */
+var snd = { on: store.get('shapeshift.sound') !== 'off', ctx: null, voice: null, last: {} };
+var LINES = {
+  ok: ['Great job!', 'Excellent!', 'Awesome!', 'Well done!', 'You got it!', 'Perfect match!', 'Nice work!', 'Brilliant!'],
+  no: ['Try again!', 'Almost there!', 'Take another look.', 'Check the scale factor.', 'You can do it!', 'Keep going!'],
+  done: ['Mission complete!', 'Fantastic work!', 'You solved it!', 'Great thinking!']
+};
+function ac() {
+  if (!snd.ctx) { try { snd.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+  if (snd.ctx.state === 'suspended') { try { snd.ctx.resume(); } catch (e) {} }
+  return snd.ctx;
+}
+function tone(freq, at, dur, type, vol, freq2) {
+  var c = ac(); if (!c) return;
+  var t0 = c.currentTime + at, o = c.createOscillator(), g = c.createGain();
+  o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t0);
+  if (freq2) o.frequency.exponentialRampToValueAtTime(freq2, t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.1, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.04);
+}
+var SFX = {
+  click: function () { tone(760, 0, 0.05, 'triangle', 0.06, 540); },
+  correct: function () { [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { tone(f, i * 0.08, 0.2, 'triangle', 0.11); }); },
+  wrong: function () { tone(330, 0, 0.16, 'sine', 0.09, 262); tone(262, 0.13, 0.22, 'sine', 0.08, 220); },
+  star: function (i) { var f = [880, 1108.7, 1318.5][i % 3]; tone(f, 0, 0.18, 'sine', 0.09); tone(f * 2, 0.02, 0.12, 'sine', 0.035); },
+  complete: function () {
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function (f, i) { tone(f, i * 0.1, 0.28, 'triangle', 0.1); });
+    [523.25, 783.99, 1046.5].forEach(function (f) { tone(f, 0.55, 0.7, 'sine', 0.06); });
+  }
+};
+function sfx(name, a) { if (!snd.on) return; try { SFX[name](a); } catch (e) {} }
+
+function pickVoice() {
+  if (snd.voice) return snd.voice;
+  var vs = [];
+  try { vs = window.speechSynthesis.getVoices() || []; } catch (e) {}
+  var en = vs.filter(function (v) { return /^en[-_]/i.test(v.lang); });
+  var nice = en.filter(function (v) { return /samantha|karen|moira|serena|google (us|uk)|aria|jenny|female/i.test(v.name); });
+  snd.voice = (nice[0] || en.filter(function (v) { return /^en[-_]US/i.test(v.lang); })[0] || en[0]) || null;
+  return snd.voice;
+}
+function cancelVoice() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {} }
+/* one voice line at a time: any new line cancels the one still playing */
+function speakLine(kind) {
+  if (!snd.on || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+  var arr = LINES[kind], line;
+  do { line = pick(arr); } while (arr.length > 1 && line === snd.last[kind]);
+  snd.last[kind] = line;
+  try {
+    cancelVoice();
+    var u = new SpeechSynthesisUtterance(line), v = pickVoice();
+    u.lang = v ? v.lang : 'en-US'; if (v) u.voice = v;
+    u.rate = 1; u.pitch = 1.15; u.volume = 1;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ---------- visual feedback ---------- */
+function flash(el, cls, ms) {
+  if (!el) return;
+  el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+  setTimeout(function () { el.classList.remove(cls); }, ms);
+}
+function burst(el, n) {
+  if (!el) return;
+  var r = el.getBoundingClientRect(), glyphs = ['✨', '⭐', '✦', '🌟'];
+  for (var i = 0; i < n; i++) {
+    var s = document.createElement('span'), ang = Math.random() * Math.PI * 2, d = 50 + Math.random() * 90;
+    s.className = 'spark'; s.textContent = pick(glyphs);
+    s.style.left = (r.left + r.width * (0.15 + Math.random() * 0.7)) + 'px';
+    s.style.top = (r.top + r.height * (0.1 + Math.random() * 0.6)) + 'px';
+    s.style.setProperty('--dx', Math.round(Math.cos(ang) * d) + 'px');
+    s.style.setProperty('--dy', Math.round(Math.sin(ang) * d - 30) + 'px');
+    s.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(s);
+    setTimeout(function (n) { return function () { n.remove(); }; }(s), 1300);
+  }
+}
+/* correct / incorrect reaction: sound + voice + short animation (runs after the DOM is redrawn) */
+function react(kind) {
+  if (kind === 'ok') {
+    sfx('correct'); speakLine('ok');
+    var n = (cur() && cur().stars) || 0;
+    for (var i = 0; i < n; i++) setTimeout(function (k) { return function () { sfx('star', k); }; }(i), 380 + i * 170);
+  } else {
+    sfx('wrong'); speakLine('no');
+  }
+  setTimeout(function () {
+    var q = $('#qBox'), g = $('#guideBtn'), f = $('#fb .fbx');
+    if (kind === 'ok') { flash(q, 'glow-ok', 1300); flash(f, 'glow-ok', 1300); flash(g, 'cheer', 800); burst(q, 12); burst(g, 6); }
+    else { flash(q, 'shake', 500); flash(f, 'shake', 500); flash(g, 'nod', 600); }
+  }, 0);
+}
+function updateSoundBtn() {
+  var b = $('#soundBtn');
+  b.setAttribute('aria-pressed', snd.on ? 'true' : 'false');
+  $('#soundIco').textContent = snd.on ? '🔊' : '🔇';
+  $('#soundLbl').textContent = t(snd.on ? 'soundOn' : 'soundOff');
+  b.setAttribute('aria-label', t(snd.on ? 'soundOn' : 'soundOff'));
+}
+
+/* ---------- state ---------- */
+var MASCOTS = [['tiger', 'Tiger'], ['rabbit', 'Rabbit'], ['cat', 'Cat'], ['panda', 'Panda'], ['fox', 'Fox'], ['owl', 'Owl'], ['turtle', 'Turtle'], ['deer', 'Deer']];
+var MAS_DIR = '../thrive/assets/mascots/';
+var ROUNDS = 4, MAXSTARS = 3;
+var ROT = [0, 45, 90, 135, 180, 225, 270, 315];
+
+var st = {
+  lang: store.get('shapeshift.lang') === 'id' ? 'id' : 'en',
+  guide: initialGuide(),
+  screen: 'home', act: 1, rounds: [], r: 0, stars: [],
+  wrong: 0, hint: 0, solved: false, revealed: false, answer: '', picked: null, disabled: {},
+  fb: null, say: { k: 'gStart', mood: 'ready', p: null },
+  me: null, measured: {}, lastTap: null, padOpen: false, topic: 'sim', sel: []
+};
+
+function initialGuide() {
+  var k = store.get('shapeshift.guide');
+  if (!k) { try { var p = JSON.parse(store.get('thrive.progress.v2') || 'null'); if (p && p.mascot) k = p.mascot; } catch (e) {} }
+  for (var i = 0; i < MASCOTS.length; i++) if (MASCOTS[i][0] === k) return k;
+  return 'tiger';
+}
+
+/* ---------- i18n ---------- */
+function fmtNum(n) { var s = String(r2(n)); if (st.lang === 'id') s = s.replace('.', ','); return s; }
+function t(key, p) {
+  var s = I18N[st.lang][key];
+  if (s == null) s = I18N.en[key];
+  if (s == null) return key;
+  if (p) s = s.replace(/\{(\w+)\}/g, function (m, k) { return k in p ? (typeof p[k] === 'number' ? fmtNum(p[k]) : p[k]) : m; });
+  return s;
+}
+function parseNum(s) { s = String(s || '').trim().replace(',', '.'); if (!/^-?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+
+function applyStatic() {
+  document.documentElement.lang = st.lang;
+  $$('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+  $$('[data-i18n-aria]').forEach(function (el) { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))); });
+  $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-lang') === st.lang ? 'true' : 'false'); });
+  updateSoundBtn();
+  $('#fClose').textContent = '✕'; $('#cClose').textContent = '✕';
+  $('#howX').textContent = '✕';
+}
+
+/* ---------- geometry ---------- */
+function mkShape(raw) {
+  var n = raw.length, A = 0, cx = 0, cy = 0, i;
+  for (i = 0; i < n; i++) {
+    var a = raw[i], b = raw[(i + 1) % n], c = a[0] * b[1] - b[0] * a[1];
+    A += c; cx += (a[0] + b[0]) * c; cy += (a[1] + b[1]) * c;
+  }
+  A /= 2; cx /= (6 * A); cy /= (6 * A);
+  var pts = raw.map(function (p) { return [p[0] - cx, p[1] - cy]; });
+  var sides = pts.map(function (p, i) { var q = pts[(i + 1) % n]; return r2(Math.hypot(q[0] - p[0], q[1] - p[1])); });
+  var R = Math.max.apply(null, pts.map(function (p) { return Math.hypot(p[0], p[1]); }));
+  return { pts: pts, sides: sides, R: R, area: Math.abs(A) };
+}
+/* interior angles in degrees (all our shapes are convex) and the "simple" ones worth marking */
+var NICE = [30, 45, 60, 90, 120];
+function shapeAngles(sh) {
+  if (sh._ang) return sh._ang;
+  var n = sh.pts.length;
+  sh._ang = sh.pts.map(function (p, i) {
+    var a = sh.pts[(i + n - 1) % n], b = sh.pts[(i + 1) % n], ux = a[0] - p[0], uy = a[1] - p[1], vx = b[0] - p[0], vy = b[1] - p[1];
+    return Math.acos((ux * vx + uy * vy) / (Math.hypot(ux, uy) * Math.hypot(vx, vy))) * 180 / Math.PI;
+  });
+  return sh._ang;
+}
+function niceAt(sh, i) {
+  var d = shapeAngles(sh)[i];
+  for (var k = 0; k < NICE.length; k++) if (Math.abs(d - NICE[k]) < 0.6) return NICE[k];
+  return null;
+}
+function niceCount(sh) { var c = 0; for (var i = 0; i < sh.pts.length; i++) if (niceAt(sh, i)) c++; return c; }
+function angMarks(sh) { return function (i) { var v = niceAt(sh, i); return v ? { text: v + '°', deg: v } : null; }; }
+function scaleShape(sh, k) { return mkShape(sh.pts.map(function (p) { return [p[0] * k, p[1] * k]; })); }
+var SH = {
+  /* shapes with simple angles (60/120, 90, 30...) */
+  para60: function (b, s) { var h = s * Math.sqrt(3) / 2; return mkShape([[0, h], [b, h], [b + s / 2, 0], [s / 2, 0]]); },
+  itrap60: function (bot, s) { var h = s * Math.sqrt(3) / 2; return mkShape([[0, h], [bot, h], [bot - s / 2, 0], [s / 2, 0]]); },
+  rtrap60: function (bot, d) { var h = d * Math.sqrt(3); return mkShape([[0, h], [bot, h], [bot - d, 0], [0, 0]]); },
+  triA: function (A, B, C) {
+    var r = Math.PI / 180, sa = Math.sin(A * r), sb = Math.sin(B * r), sc = Math.sin(C * r), k = 7 / Math.max(sa, sb, sc);
+    return mkShape([[0, 0], [sc * k, 0], [sb * k * Math.cos(A * r), -sb * k * sa]]);
+  },
+  rect: function (w, h) { return mkShape([[0, 0], [w, 0], [w, h], [0, h]]); },
+  rtri: function (w, h) { return mkShape([[0, h], [w, h], [0, 0]]); },
+  tri: function (a, b, c) { var x = (b * b + c * c - a * a) / (2 * c), y = Math.sqrt(Math.max(0, b * b - x * x)); return mkShape([[0, 0], [c, 0], [x, -y]]); },
+  trap: function (bot, top, h) { return mkShape([[0, h], [bot, h], [top, 0], [0, 0]]); },
+  para: function (b, dx, h) { return mkShape([[0, h], [b, h], [b + dx, 0], [dx, 0]]); },
+  house: function (w, wall, roof) { return mkShape([[0, roof + wall], [w, roof + wall], [w, roof], [w / 2, 0], [0, roof]]); }
+};
+
+/* place a shape: rotate (clockwise), optional mirror, scale, translate */
+function place(sh, o) {
+  var a = (o.rot || 0) * Math.PI / 180, c = Math.cos(a), s = Math.sin(a), k = o.s * o.ppc;
+  return sh.pts.map(function (p) {
+    var x = o.flip ? -p[0] : p[0], y = p[1];
+    return [o.cx + (x * c - y * s) * k, o.cy + (x * s + y * c) * k];
+  });
+}
+function orientPts(sh, o) { return place(sh, { rot: o.rot, flip: o.flip, s: 1, ppc: 1, cx: 0, cy: 0 }); }
+function ptsMatch(P, Q, tol) {
+  function near(p, S) { return S.some(function (q) { return Math.hypot(p[0] - q[0], p[1] - q[1]) <= tol; }); }
+  return P.every(function (p) { return near(p, Q); }) && Q.every(function (q) { return near(q, P); });
+}
+function sameOrient(sh, a, b) { return ptsMatch(orientPts(sh, a), orientPts(sh, b), 0.2); }
+function isChiral(sh) {
+  for (var i = 0; i < ROT.length; i++) if (sameOrient(sh, { rot: ROT[i], flip: true }, { rot: 0, flip: false })) return false;
+  return true;
+}
+function bbox(P) {
+  var xs = P.map(function (p) { return p[0]; }), ys = P.map(function (p) { return p[1]; });
+  return [Math.max.apply(null, xs) - Math.min.apply(null, xs), Math.max.apply(null, ys) - Math.min.apply(null, ys)];
+}
+
+/* ---------- svg building blocks ---------- */
+function polyPts(P) { return P.map(function (p) { return r1(p[0]) + ',' + r1(p[1]); }).join(' '); }
+function pillDims(text, cls) {
+  return /\bsm\b/.test(cls || '') ? { w: 14 + text.length * 7.4, h: 22 } : { w: 20 + text.length * 9.6, h: 30 };
+}
+function pill(x, y, text, cls) {
+  var d = pillDims(text, cls);
+  return '<g class="lab ' + (cls || '') + '" transform="translate(' + r1(x) + ' ' + r1(y) + ')"><rect x="' + r1(-d.w / 2) + '" y="' + (-d.h / 2) + '" width="' + r1(d.w) + '" height="' + d.h + '" rx="' + (d.h / 2) + '"/><text text-anchor="middle">' + text + '</text></g>';
+}
+function sideGeo(P, c, i) {
+  var a = P[i], b = P[(i + 1) % P.length];
+  var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+  dx /= L; dy /= L;
+  var nx = dy, ny = -dx;
+  if (nx * (mx - c[0]) + ny * (my - c[1]) < 0) { nx = -nx; ny = -ny; }
+  return { a: a, b: b, mx: mx, my: my, nx: nx, ny: ny };
+}
+function labelXY(g, text, cls) {
+  var d = pillDims(text, cls), off = 6 + Math.abs(g.nx) * (d.w / 2) + Math.abs(g.ny) * (d.h / 2);
+  return [g.mx + g.nx * off, g.my + g.ny * off];
+}
+function chipSVG(x, y, text, alt) {
+  var w = 26 + text.length * 9.4;
+  return '<g class="pchip ' + (alt ? 'alt' : '') + '" transform="translate(' + x + ' ' + y + ')"><rect width="' + r1(w) + '" height="30" rx="15"/><text x="13" y="16">' + text + '</text></g>';
+}
+
+/* draw one shape. o: {sh,cx,cy,ppc,s,rot,flip,cls, labels:function(i)->{text,cls}|null, taps:'A'|'B'|null, drag:bool,
+   vlabels:[letters], hiSide:index, hiCls} */
+function drawShape(o) {
+  var P = place(o.sh, o), c = [o.cx, o.cy], out = '', i, n = P.length;
+  out += '<polygon class="shp ' + o.cls + '" points="' + polyPts(P) + '"/>';
+  if (o.hiSide != null) {
+    var ha = P[o.hiSide], hb = P[(o.hiSide + 1) % n];
+    out += '<line class="mline hi ' + (o.hiCls || '') + '" x1="' + r1(ha[0]) + '" y1="' + r1(ha[1]) + '" x2="' + r1(hb[0]) + '" y2="' + r1(hb[1]) + '"/>';
+  }
+  if (o.drag) out += '<polygon class="grab" data-drag="1" points="' + polyPts(P) + '"/>';
+  if (o.noDots !== true) P.forEach(function (p) { out += '<circle class="vtx" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="4"/>'; });
+  if (o.angles) {
+    P.forEach(function (p, k) {
+      var a = o.angles(k); if (!a) return;
+      var pv = P[(k + n - 1) % n], nx = P[(k + 1) % n];
+      var ux = pv[0] - p[0], uy = pv[1] - p[1], ul = Math.hypot(ux, uy) || 1, vx = nx[0] - p[0], vy = nx[1] - p[1], vl = Math.hypot(vx, vy) || 1;
+      ux /= ul; uy /= ul; vx /= vl; vy /= vl;
+      var bx = ux + vx, by = uy + vy, bl = Math.hypot(bx, by) || 1; bx /= bl; by /= bl;
+      var right = a.deg === 90, r = right ? 13 : 17, d, sweep = (ux * vy - uy * vx) > 0 ? 1 : 0;
+      var q = function (x, y) { return r1(x) + ' ' + r1(y); };
+      if (right) d = 'M' + q(p[0], p[1]) + 'L' + q(p[0] + ux * r, p[1] + uy * r) + 'L' + q(p[0] + (ux + vx) * r, p[1] + (uy + vy) * r) + 'L' + q(p[0] + vx * r, p[1] + vy * r) + 'Z';
+      else d = 'M' + q(p[0], p[1]) + 'L' + q(p[0] + ux * r, p[1] + uy * r) + 'A' + r + ' ' + r + ' 0 0 ' + sweep + ' ' + q(p[0] + vx * r, p[1] + vy * r) + 'Z';
+      out += '<path class="aarc' + (a.cls ? ' ' + a.cls : '') + '" d="' + d + '"/>';
+      var dist = right ? 34 : (a.deg <= 45 ? 50 : 38), tx = p[0] + bx * dist, ty = p[1] + by * dist;
+      if (a.cls && /\bq\b/.test(a.cls)) out += pill(tx, ty, a.text, 'q sm');
+      else out += '<text class="atx' + (a.cls ? ' ' + a.cls : '') + '" x="' + r1(tx) + '" y="' + r1(ty) + '">' + a.text + '</text>';
+    });
+  }
+  if (o.vlabels) {
+    P.forEach(function (p, k) {
+      var dx = p[0] - c[0], dy = p[1] - c[1], L = Math.hypot(dx, dy) || 1, tapv = o.bpick === 'vtx';
+      out += '<g class="vl' + (tapv ? ' vtap' : '') + '"' + (tapv ? ' data-bvtx="' + k + '"' : '') + ' transform="translate(' + r1(p[0] + dx / L * 19) + ' ' + r1(p[1] + dy / L * 19) + ')">' + (tapv ? '<circle class="vhit" r="22"/>' : '') + '<circle r="12"/><text>' + o.vlabels[k] + '</text></g>';
+    });
+  }
+  var labs = '', taps = '';
+  for (i = 0; i < n; i++) {
+    var g = sideGeo(P, c, i);
+    var key = o.taps ? o.taps + i : null;
+    var lab = o.labels ? o.labels(i) : null;
+    if (key && st.measured[key] && lab) {
+      taps += '<line class="mline" x1="' + r1(g.a[0]) + '" y1="' + r1(g.a[1]) + '" x2="' + r1(g.b[0]) + '" y2="' + r1(g.b[1]) + '"/>';
+    }
+    if (o.bpick === 'side') out += '<line class="hit" data-bside="' + i + '" x1="' + r1(g.a[0]) + '" y1="' + r1(g.a[1]) + '" x2="' + r1(g.b[0]) + '" y2="' + r1(g.b[1]) + '"/>';
+    if (lab) {
+      var xy = labelXY(g, lab.text, lab.cls);
+      labs += pill(xy[0], xy[1], lab.text, (lab.cls || '') + (key && st.lastTap === key ? ' pop' : ''));
+    } else if (key && !(o.noTap && o.noTap(i))) {
+      taps += '<line class="hit" data-side="' + key + '" x1="' + r1(g.a[0]) + '" y1="' + r1(g.a[1]) + '" x2="' + r1(g.b[0]) + '" y2="' + r1(g.b[1]) + '"/>';
+      taps += '<g class="tapdot" data-side="' + key + '" transform="translate(' + r1(g.mx) + ' ' + r1(g.my) + ')"><circle r="17"/><text>📏</text></g>';
+    }
+  }
+  return out + taps + labs;
+}
+
+/* ---------- round generators ---------- */
+function cm(v) { return fmtNum(v) + ' ' + t('unitCm'); }
+
+var SIM_POOL = [
+  function () { return { A: SH.rtri(4, 3), k: 2 }; },
+  function () { return { A: SH.trap(8, 4, 3), k: 1.5 }; },
+  function () { return { A: SH.house(6, 4, 4), k: 0.5 }; },
+  function () { return { A: SH.rect(2, 5), k: 2 }; },
+  function () { return { A: SH.para(4, 3, 4), k: 1.5 }; }
+];
+var NOT_POOL = [
+  function () { return { A: SH.rect(3, 4), B: SH.rect(6, 9) }; },
+  function () { return { A: SH.tri(5, 4, 6), B: SH.tri(10, 8, 13) }; },
+  function () { return { A: SH.house(6, 4, 4), B: SH.house(9, 3, 6) }; },
+  function () { return { A: SH.tri(5, 5, 6), B: SH.tri(10, 10, 11) }; },
+  function () { return { A: SH.trap(8, 4, 3), B: SH.trap(10, 4, 4.5) }; }
+];
+function randView() {
+  return { rotB: pick([30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]), flipB: Math.random() < 0.5 };
+}
+function simRound(similar) {
+  var v = randView(), A, B, k = null;
+  if (similar) { var d = pick(SIM_POOL)(); A = d.A; k = d.k; B = scaleShape(A, k); }
+  else { var e = pick(NOT_POOL)(); A = e.A; B = e.B; }
+  return { kind: 'sim', similar: similar, A: A, B: B, k: k, rotB: v.rotB, flipB: v.flipB };
+}
+function genAct1() { return shuffle([simRound(true), simRound(true), simRound(false), simRound(false)]); }
+
+var MISS_POOL = [
+  function () { return { A: SH.rtri(4, 3), k: 2, miss: 1 }; },
+  function () { return { A: SH.rect(2, 3), k: 3, miss: 1 }; },
+  function () { return { A: SH.tri(6, 4, 8), k: 1.5, miss: 0 }; },
+  function () { return { A: SH.trap(8, 4, 3), k: 2, miss: 1 }; },
+  function () { return { A: SH.house(6, 4, 4), k: 0.5, miss: 2 }; },
+  function () { return { A: SH.rtri(8, 6), k: 0.5, miss: 1 }; }
+];
+function missRound(d) {
+  d = d || pick(MISS_POOL)();
+  var v = randView(), B = scaleShape(d.A, d.k);
+  return { kind: 'miss', A: d.A, B: B, k: d.k, miss: d.miss, rotB: v.rotB, flipB: v.flipB, ans: B.sides[d.miss] };
+}
+function genAct3() {
+  var idx = shuffle([0, 1, 2, 3, 4, 5]).slice(0, ROUNDS);
+  return idx.map(function (i) { return missRound(MISS_POOL[i]()); });
+}
+
+var FACTOR_POOL = [
+  function () { return { A: SH.rtri(4, 3), k: 2 }; },
+  function () { return { A: SH.rect(4, 3), k: 1.5 }; },
+  function () { return { A: SH.trap(8, 4, 3), k: 2 }; },
+  function () { return { A: SH.house(6, 4, 4), k: 0.5 }; },
+  function () { return { A: SH.para(4, 3, 4), k: 1.5 }; }
+];
+function genAct4() {
+  var f = shuffle([0, 1, 2, 3, 4]).slice(0, 2).map(function (i) {
+    var d = FACTOR_POOL[i](), v = randView();
+    return { kind: 'factor', A: d.A, B: scaleShape(d.A, d.k), k: d.k, rotB: v.rotB, flipB: v.flipB, ans: d.k };
+  });
+  var s = simRound(Math.random() < 0.35);
+  var m = missRound();
+  return [f[0], f[1], s, m];
+}
+
+function genMatch(defs) {
+  function orient(sh, tgt, needFlip) {
+    for (var n = 0; n < 60; n++) {
+      var o = { rot: pick(ROT), flip: needFlip ? !tgt.flip : tgt.flip };
+      if (!sameOrient(sh, o, tgt)) return o;
+    }
+    return { rot: (tgt.rot + 90) % 360, flip: tgt.flip };
+  }
+  var vert = Math.random() < 0.5;
+  return defs.map(function (d) {
+    var tgt = { rot: pick(ROT), flip: d.flip, k: d.k };
+    var me = orient(d.sh, tgt, d.flip);
+    var swap = Math.random() < 0.5;
+    return {
+      kind: 'match', A: d.sh, k: d.k, tgt: { rot: tgt.rot, flip: tgt.flip, k: d.k, fx: swap ? 0.27 : 0.73, fy: 0.5 },
+      me0: { s: 1, rot: me.rot, flip: me.flip, fx: swap ? 0.73 : 0.27, fy: 0.5 }, vert: vert
+    };
+  });
+}
+
+
+function genAct2() {
+  return genMatch([
+    { sh: SH.rect(2, 3), k: 2, flip: false },
+    { sh: SH.rtri(4, 3), k: 2, flip: false },
+    { sh: SH.para(4, 3, 4), k: 1.5, flip: true },
+    { sh: SH.house(6, 4, 4), k: 0.5, flip: false }
+  ]);
+}
+/* congruence: same moves, but the size never changes (k = 1) */
+function genAct7() {
+  return genMatch([
+    { sh: pick([function () { return SH.rect(2, 5); }, function () { return SH.tri(5, 5, 6); }])(), k: 1, flip: false },
+    { sh: pick([function () { return SH.rtri(4, 3); }, function () { return SH.house(6, 4, 4); }])(), k: 1, flip: false },
+    { sh: pick([function () { return SH.trap(8, 4, 3); }, function () { return SH.trap(6, 2, 3); }])(), k: 1, flip: true },
+    { sh: pick([function () { return SH.para(4, 3, 4); }, function () { return SH.rtri(12, 5); }])(), k: 1, flip: true }
+  ]);
+}
+
+/* ---------- congruence / mixed content (all whole numbers) ---------- */
+function sig(sh) { return sh.sides.slice().sort(function (a, b) { return a - b; }).join('-') + '|' + r2(sh.area); }
+function sideKey(sh) { return sh.sides.slice().sort(function (a, b) { return a - b; }).join('-'); }
+function isSimilarShapes(a, b) {
+  if (a.sides.length !== b.sides.length) return false;
+  var x = a.sides.slice().sort(function (p, q) { return p - q; }), y = b.sides.slice().sort(function (p, q) { return p - q; }), r = y[0] / x[0];
+  return x.every(function (v, i) { return Math.abs(y[i] / v - r) < 0.01; });
+}
+var ROTS = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+var CONG_POOL = [
+  function () { return SH.rtri(4, 3); }, function () { return SH.rect(3, 5); }, function () { return SH.trap(8, 4, 3); },
+  function () { return SH.house(6, 4, 4); }, function () { return SH.para(4, 3, 4); }, function () { return SH.tri(5, 5, 6); }
+];
+var CSCALED = [
+  function () { return { A: SH.rtri(4, 3), k: 2 }; }, function () { return { A: SH.rect(2, 5), k: 2 }; }, function () { return { A: SH.trap(8, 4, 3), k: 2 }; },
+  function () { return { A: SH.para(4, 3, 4), k: 2 }; }, function () { return { A: SH.house(6, 4, 4), k: 2 }; }, function () { return { A: SH.tri(5, 5, 6), k: 2 }; }
+];
+/* look-alike pairs that are neither congruent nor similar */
+var NONE_PAIRS = [
+  function () { return [SH.rect(3, 4), SH.rect(3, 5)]; }, function () { return [SH.rect(3, 4), SH.rect(6, 9)]; },
+  function () { return [SH.trap(8, 4, 3), SH.trap(7, 4, 4)]; }, function () { return [SH.trap(8, 4, 3), SH.trap(9, 3, 8)]; },
+  function () { return [SH.house(6, 4, 4), SH.house(6, 3, 4)]; }, function () { return [SH.para(4, 3, 4), SH.para(5, 3, 4)]; },
+  function () { return [SH.tri(5, 5, 6), SH.tri(5, 5, 8)]; }, function () { return [SH.tri(5, 4, 6), SH.tri(10, 8, 13)]; }
+];
+/* same side lengths, different angles: sides alone are not enough */
+var ANGLE_PAIRS = [
+  function () { return [SH.para60(6, 4), SH.rect(6, 4)]; },
+  function () { return [SH.para60(5, 5), SH.rect(5, 5)]; }
+];
+CONG_POOL.push(function () { return SH.para60(6, 4); }, function () { return SH.itrap60(10, 4); }, function () { return SH.tri(7, 5, 3); });
+function swapMaybe(A, B) { return Math.random() < 0.5 ? [B, A] : [A, B]; }
+
+/* 6 — Congruent or not? */
+function congRound(why) {
+  var v = randView(), A, B;
+  if (why === 'same') { A = pick(CONG_POOL)(); B = A; }
+  else if (why === 'scaled') { var d = pick(CSCALED)(); var ab = swapMaybe(d.A, scaleShape(d.A, d.k)); A = ab[0]; B = ab[1]; }
+  else {
+    var useAng = Math.random() < 0.5, p = useAng ? pick(ANGLE_PAIRS)() : pick(NONE_PAIRS)(); var pq = swapMaybe(p[0], p[1]); A = pq[0]; B = pq[1];
+    return { kind: 'cong', congruent: false, why: why, A: A, B: B, rotB: v.rotB, flipB: v.flipB, angles: useAng, sameSides: useAng };
+  }
+  return { kind: 'cong', congruent: why === 'same', why: why, A: A, B: B, rotB: v.rotB, flipB: v.flipB, angles: why === 'same' && niceCount(A) > 0 && Math.random() < 0.6 };
+}
+function genAct6() { return shuffle([congRound('same'), congRound('same'), congRound('scaled'), congRound('diff')]); }
+
+/* 8 — Find the congruent pair */
+var TRI_LIB = [
+  function () { return SH.rtri(4, 3); }, function () { return SH.rtri(8, 6); }, function () { return SH.rtri(12, 5); }, function () { return SH.tri(5, 5, 6); },
+  function () { return SH.tri(5, 5, 8); }, function () { return SH.tri(6, 6, 6); }, function () { return SH.tri(7, 6, 5); }, function () { return SH.tri(4, 4, 5); }
+];
+var QUAD_LIB = [
+  function () { return SH.rect(3, 5); }, function () { return SH.rect(4, 5); }, function () { return SH.rect(3, 4); }, function () { return SH.rect(2, 6); },
+  function () { return SH.rect(4, 4); }, function () { return SH.trap(8, 4, 3); }, function () { return SH.trap(7, 4, 4); }, function () { return SH.trap(6, 2, 3); },
+  function () { return SH.para(4, 3, 4); }, function () { return SH.para(5, 3, 4); }, function () { return SH.para(6, 3, 4); }
+];
+function genAct8() {
+  var counts = [4, 5, 6, 6], libs = [TRI_LIB, QUAD_LIB, QUAD_LIB, TRI_LIB.concat(QUAD_LIB)];
+  return counts.map(function (n, ri) {
+    var lib = libs[ri], T = pick(lib)(), used = {}, decoys = [], tries = 0;
+    var keys = {};
+    used[sig(T)] = true; keys[sideKey(T)] = true;
+    if (ri >= 1) { var big = scaleShape(T, 2); used[sig(big)] = true; keys[sideKey(big)] = true; decoys.push(big); }   /* a look-alike that is too big */
+    while (decoys.length < n - 2 && tries++ < 300) {
+      var c = pick(lib)(), sg = sig(c);
+      /* every shape has its own set of side lengths, so comparing the numbers always finds the pair */
+      if (!used[sg] && !keys[sideKey(c)]) { used[sg] = true; keys[sideKey(c)] = true; decoys.push(c); }
+    }
+    var v1 = { rot: pick(ROTS), flip: Math.random() < 0.5 }, v2;
+    do { v2 = { rot: pick(ROTS), flip: Math.random() < 0.5 }; } while (v2.rot === v1.rot && v2.flip === v1.flip);
+    var list = [{ sh: T, rot: v1.rot, flip: v1.flip, t: true }, { sh: T, rot: v2.rot, flip: v2.flip, t: true }];
+    decoys.forEach(function (d) { list.push({ sh: d, rot: pick(ROTS), flip: Math.random() < 0.5 }); });
+    list = shuffle(list);
+    var pair = [];
+    list.forEach(function (it, i) { if (it.t) pair.push(i); });
+    return { kind: 'pick', items: list, pair: pair };
+  });
+}
+
+/* 9 — Match the sides AND angles (two steps per round). Triangles whose sides are all different,
+   each with one simple angle (60°, 90° or 120°) that can be marked. */
+function sideName(L, j) { return [L[j], L[(j + 1) % L.length]].sort().join(''); }
+function genAct9() {
+  var pool = shuffle([
+    function () { return SH.rtri(4, 3); }, function () { return SH.rtri(5, 12); }, function () { return SH.tri(3, 5, 7); },
+    function () { return SH.tri(3, 7, 8); }, function () { return SH.tri(5, 7, 8); }, function () { return SH.tri(7, 8, 13); }
+  ]);
+  return pool.slice(0, ROUNDS).map(function (f) {
+    var A = f(), n = A.sides.length, off = 1 + rnd(n - 1), v = randView(), qv = 0, j;
+    for (j = 0; j < n; j++) if (niceAt(A, j)) { qv = j; break; }
+    var LA = 'ABCDEF'.slice(0, n).split(''), base = 'ABCDEFGHI'.slice(n, 2 * n).split(''), LB = [], order = [];
+    for (j = 0; j < n; j++) { LB.push(base[(j + off) % n]); order.push(j); }
+    return { kind: 'sides', A: A, B: A, rotB: v.rotB, flipB: v.flipB, LA: LA, LB: LB, q: rnd(n), qv: qv, order: shuffle(order), vorder: shuffle(order) };
+  });
+}
+
+/* 11 — Find the missing angle: angles of congruent shapes are equal */
+function genAct11() {
+  var perm = function (a) { return shuffle(a); };
+  var defs = [
+    { make: function () { var a = perm([30, 60, 90]); return SH.triA(a[0], a[1], a[2]); }, off: 0 },
+    { make: function () { var a = perm(pick([[45, 45, 90], [30, 30, 120]])); return SH.triA(a[0], a[1], a[2]); }, off: 0 },
+    { make: pick([function () { return SH.para60(6, 4); }, function () { return SH.itrap60(10, 4); }]), off: 1 },
+    { make: function () { return SH.rtrap60(7, 2); }, off: 1 }
+  ];
+  return defs.map(function (d) {
+    var A = d.make(), n = A.pts.length, v = randView(), off = d.off ? 1 + rnd(n - 1) : 0, q = rnd(n), j;
+    var LA = 'ABCDEF'.slice(0, n).split(''), base = 'ABCDEFGHI'.slice(n, 2 * n).split(''), LB = [];
+    for (j = 0; j < n; j++) LB.push(base[(j + off) % n]);
+    var ans = niceAt(A, q), opts = [ans];
+    shuffle(NICE.filter(function (x) { return x !== ans; })).slice(0, 3).forEach(function (x) { opts.push(x); });
+    return { kind: 'angle', A: A, B: A, rotB: v.rotB, flipB: v.flipB, LA: LA, LB: LB, q: q, ans: ans, opts: shuffle(opts) };
+  });
+}
+
+/* 10 — Mixed challenge: congruent / similar / neither */
+function relRound(rel) {
+  var v = randView(), A, B;
+  if (rel === 'cong') { A = pick(CONG_POOL)(); B = A; }
+  else if (rel === 'sim') { var d = pick(CSCALED)(); var ab = swapMaybe(d.A, scaleShape(d.A, d.k)); A = ab[0]; B = ab[1]; }
+  else {
+    var useAng = Math.random() < 0.4, p = useAng ? pick(ANGLE_PAIRS)() : pick(NONE_PAIRS)(); var pq = swapMaybe(p[0], p[1]); A = pq[0]; B = pq[1];
+    return { kind: 'rel', rel: rel, A: A, B: B, rotB: v.rotB, flipB: v.flipB, angles: useAng, sameSides: useAng };
+  }
+  return { kind: 'rel', rel: rel, A: A, B: B, rotB: v.rotB, flipB: v.flipB, angles: rel === 'cong' && niceCount(A) > 0 && Math.random() < 0.5 };
+}
+function genAct10() { return shuffle([relRound('cong'), relRound('sim'), relRound('none'), relRound(pick(['cong', 'sim', 'none']))]); }
+
+/* Shape Challenge uses whole numbers only: integer sides, integer scale factors, integer answers */
+var CH_POOL = [
+  function () { return { A: SH.rtri(4, 3), k: 2, miss: 1 }; },
+  function () { return { A: SH.rect(3, 2), k: 3, miss: 0 }; },
+  function () { return { A: SH.trap(8, 4, 3), k: 2, miss: 1 }; },
+  function () { return { A: SH.house(6, 4, 4), k: 2, miss: 2 }; },
+  function () { return { A: SH.para(4, 3, 4), k: 3, miss: 1 }; },
+  function () { return { A: SH.rtri(6, 8), k: 2, miss: 1 }; }
+];
+function genAct5() {
+  var idx = shuffle([0, 1, 2, 3, 4, 5]).slice(0, ROUNDS);
+  return idx.map(function (i) {
+    var d = CH_POOL[i](), B = scaleShape(d.A, d.k), me = null;
+    for (var n = 0; n < 80; n++) {
+      var o = { rot: pick(ROT), flip: Math.random() < 0.5 };
+      if (!sameOrient(d.A, o, { rot: 0, flip: false })) { me = o; break; }
+    }
+    me = me || { rot: 90, flip: false };
+    return { kind: 'chal', A: d.A, B: B, k: d.k, miss: d.miss, ans: B.sides[d.miss], me0: { s: 1, rot: me.rot, flip: me.flip, fx: 0.5, fy: 0.55 } };
+  });
+}
+
+var GEN = { 11: genAct11, 1: genAct1, 2: genAct2, 3: genAct3, 4: genAct4, 5: genAct5, 6: genAct6, 7: genAct7, 8: genAct8, 9: genAct9, 10: genAct10 };
+function cur() { return st.rounds[st.r]; }
+
+/* ---------- topics ---------- */
+var ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 10];
+var TOPIC_ACTS = { sim: [1, 2, 3, 4, 5], cong: [6, 7, 8, 9, 11], mixed: [10] };
+var TOPIC_KEY = { sim: 'topicSim', cong: 'topicCong', mixed: 'topicMixed' };
+function topicOf(a) { return a <= 5 ? 'sim' : (a === 10 ? 'mixed' : 'cong'); }
+function isMatch(a) { return a === 2 || a === 7; }          /* move / rotate / flip (+ scale for similarity) onto a target */
+function isInter(a) { return isMatch(a) || a === 5; }        /* shapes the student can manipulate */
+
+/* ---------- layout ---------- */
+function layout() {
+  var w = $('#stageWrap').clientWidth || 700;
+  return w < 540 ? { W: 420, H: 560, vert: true } : { W: 760, H: 440, vert: false };
+}
+function panelRegions(L) {
+  return L.vert ? [{ x: 12, y: 12, w: 396, h: 262 }, { x: 12, y: 286, w: 396, h: 262 }]
+                : [{ x: 12, y: 12, w: 360, h: 416 }, { x: 388, y: 12, w: 360, h: 416 }];
+}
+function fitPair(items, reg, mx, my) {
+  var ppc = Infinity;
+  items.forEach(function (it) {
+    var b = bbox(place(it.sh, { rot: it.rot, flip: it.flip, s: 1, ppc: 1, cx: 0, cy: 0 }));
+    ppc = Math.min(ppc, (reg.w - 2 * mx) / b[0], (reg.h - 2 * my) / b[1]);
+  });
+  return ppc;
+}
+
+/* ---------- stage rendering ---------- */
+function panelBg(reg) { return '<rect class="panelbg" x="' + reg.x + '" y="' + reg.y + '" width="' + reg.w + '" height="' + reg.h + '" rx="24"/>'; }
+
+function stagePair(L, R) {
+  var regs = panelRegions(L), ra = regs[0], rb = regs[1];
+  var ppc = fitPair([{ sh: R.A, rot: 0, flip: false }, { sh: R.B, rot: R.rotB, flip: R.flipB }], ra, 52, 52);
+  var labsA = null, labsB = null, tapsA = null, tapsB = null, noTapB = null;
+  if (st.act === 1 || st.act === 6 || st.act === 10) {
+    labsA = function (i) { return { text: cm(R.A.sides[i]) }; };
+    labsB = function (i) { return { text: cm(R.B.sides[i]) }; };
+  } else if (st.act === 3) {
+    labsA = function (i) { return { text: cm(R.A.sides[i]) }; };
+    labsB = function (i) { return i === R.miss ? { text: '? ' + t('unitCm'), cls: 'q' } : { text: cm(R.B.sides[i]) }; };
+  } else {
+    tapsA = 'A'; tapsB = 'B';
+    labsA = function (i) { return st.measured['A' + i] ? { text: cm(R.A.sides[i]) } : null; };
+    if (R.kind === 'miss') {
+      labsB = function (i) { return i === R.miss ? { text: '? ' + t('unitCm'), cls: 'q' } : (st.measured['B' + i] ? { text: cm(R.B.sides[i]) } : null); };
+    } else {
+      labsB = function (i) { return st.measured['B' + i] ? { text: cm(R.B.sides[i]) } : null; };
+    }
+  }
+  var lblA = st.act === 3 ? t('original') : t('shapeA'), lblB = st.act === 3 ? t('newShape') : t('shapeB');
+  var h = panelBg(ra) + panelBg(rb) + chipSVG(ra.x + 12, ra.y + 12, lblA) + chipSVG(rb.x + 12, rb.y + 12, lblB, true);
+  h += drawShape({ sh: R.A, cx: ra.x + ra.w / 2, cy: ra.y + ra.h / 2 + 14, ppc: ppc, s: 1, rot: 0, flip: false, cls: 'a', labels: labsA, taps: tapsA, angles: R.angles ? angMarks(R.A) : null });
+  h += drawShape({ sh: R.B, cx: rb.x + rb.w / 2, cy: rb.y + rb.h / 2 + 14, ppc: ppc, s: 1, rot: R.rotB, flip: R.flipB, cls: 'b', labels: labsB, taps: tapsB, angles: R.angles ? angMarks(R.B) : null });
+  return h;
+}
+
+/* act 2: positions are stored as fractions of the play region; the narrow layout
+   transposes them so "left/right" starts become "top/bottom" */
+function fpx(L, reg, fx, fy) {
+  var tr = isMatch(st.act) && L.vert;
+  return [reg.x + reg.w * (tr ? fy : fx), reg.y + reg.h * (tr ? fx : fy)];
+}
+function pxf(L, reg, x, y) {
+  var tr = isMatch(st.act) && L.vert, a = (x - reg.x) / reg.w, b = (y - reg.y) / reg.h;
+  return tr ? { fx: b, fy: a } : { fx: a, fy: b };
+}
+
+function stageMatch(L, R) {
+  var reg = { x: 12, y: 54, w: L.W - 24, h: L.H - 66 }, k = R.k, Rr = R.A.R, mx = 34, my = 34;
+  var ppc = L.vert ? Math.min((reg.w - 2 * mx) / (2 * Rr * Math.max(k, 1)), (reg.h - 2 * my) / (2 * Rr * (k + 1)))
+                   : Math.min((reg.h - 2 * my) / (2 * Rr * Math.max(k, 1)), (reg.w - 2 * mx) / (2 * Rr * (k + 1)));
+  var tg = R.tgt, me = st.me;
+  var tp = fpx(L, reg, tg.fx, tg.fy), mp = fpx(L, reg, me.fx, me.fy), tx = tp[0], ty = tp[1], mxp = mp[0], myp = mp[1];
+  var matched = st.solved;
+  var h = '<rect class="panelbg" x="' + reg.x + '" y="' + reg.y + '" width="' + reg.w + '" height="' + reg.h + '" rx="24"/>';
+  h += '<g class="legend"><rect x="16" y="14" width="30" height="24" rx="6" fill="rgba(255,218,38,.45)" stroke="#052574" stroke-width="3" stroke-dasharray="6 4"/><text x="54" y="27">' + t('target') + '</text>';
+  h += '</g>';
+  var lgY = 27, lgX = L.vert ? 258 : 290;
+  h += '<g class="legend"><rect x="' + (lgX - 38) + '" y="14" width="30" height="24" rx="6" fill="#ffb3cb" stroke="#052574" stroke-width="3"/><text x="' + lgX + '" y="' + lgY + '">' + t('yours') + '</text></g>';
+  h += drawShape({ sh: R.A, cx: tx, cy: ty, ppc: ppc, s: k, rot: tg.rot, flip: tg.flip, cls: 'tgt', noDots: true,
+    labels: function (i) { return { text: cm(R.A.sides[i] * k), cls: 'mute' }; } });
+  h += drawShape({ sh: R.A, cx: mxp, cy: myp, ppc: ppc, s: me.s, rot: me.rot, flip: me.flip, cls: 'me' + (matched ? ' done' : ''), drag: !st.solved && !st.revealed,
+    labels: function (i) { return { text: cm(R.A.sides[i] * me.s) }; } });
+  return h;
+}
+
+function geo5(L, R) {
+  var regs = panelRegions(L), ra = regs[0], rb = regs[1];
+  var b = bbox(place(R.A, { rot: 0, flip: false, s: 1, ppc: 1, cx: 0, cy: 0 }));
+  var d = Math.max(b[0], b[1]) * 0.9, big = Math.max(R.k, 1);
+  var ppc = Math.min((rb.w - 90) / (d * big), (rb.h - 80) / (d * big));
+  return { ra: ra, rb: rb, ppc: ppc, reg: rb };
+}
+function stageChal(L, R) {
+  var g = geo5(L, R), me = st.me, ra = g.ra, rb = g.rb;
+  var h = panelBg(ra) + panelBg(rb) + chipSVG(ra.x + 12, ra.y + 12, t('original')) + chipSVG(rb.x + 12, rb.y + 12, t('yours'), true);
+  h += drawShape({ sh: R.A, cx: ra.x + ra.w / 2, cy: ra.y + ra.h / 2 + 14, ppc: g.ppc, s: 1, rot: 0, flip: false, cls: 'a',
+    labels: function (i) { return { text: cm(R.A.sides[i]) }; } });
+  h += drawShape({ sh: R.A, cx: rb.x + rb.w * me.fx, cy: rb.y + rb.h * me.fy, ppc: g.ppc, s: me.s, rot: me.rot, flip: me.flip, cls: 'b' + (st.solved ? ' done' : ''), drag: !st.solved && !st.revealed,
+    labels: function (i) { return i === R.miss ? { text: '? ' + t('unitCm'), cls: 'q' } : { text: cm(R.A.sides[i] * me.s) }; } });
+  return h;
+}
+
+/* 8 — grid of shapes: tap two that are congruent */
+function stagePick(L, R) {
+  var n = R.items.length, area = L.vert ? { x: 12, y: 12, w: 396, h: 536 } : { x: 12, y: 12, w: 736, h: 416 };
+  var cols = L.vert ? 2 : (n <= 4 ? 2 : 3), rows = Math.ceil(n / cols), gap = 12;
+  var cw = (area.w - gap * (cols - 1)) / cols, ch = (area.h - gap * (rows - 1)) / rows;
+  var ppc = Math.min(34, fitPair(R.items.map(function (it) { return { sh: it.sh, rot: it.rot, flip: it.flip }; }), { w: cw, h: ch }, 34, 30));
+  var over = st.solved || st.revealed, h = '';
+  R.items.forEach(function (it, i) {
+    var x = area.x + (i % cols) * (cw + gap), y = area.y + Math.floor(i / cols) * (ch + gap);
+    var si = st.sel.indexOf(i), isSel = si >= 0, ok = over && R.pair.indexOf(i) >= 0;
+    h += '<g class="pickcell' + (ok ? ' ok' : (isSel ? ' sel' : '')) + '" data-pick="' + i + '"><rect class="cell" x="' + r1(x) + '" y="' + r1(y) + '" width="' + r1(cw) + '" height="' + r1(ch) + '" rx="20"/>';
+    h += drawShape({ sh: it.sh, cx: x + cw / 2, cy: y + ch / 2, ppc: ppc, s: 1, rot: it.rot, flip: it.flip, cls: 'a' + (isSel || ok ? ' pickd' : ''), noDots: true,
+      labels: function (j) { return { text: cm(it.sh.sides[j]), cls: 'sm' }; } });
+    if (isSel || ok) h += '<g class="pbadge' + (ok ? ' ok' : '') + '" transform="translate(' + r1(x + 22) + ' ' + r1(y + 22) + ')"><circle r="14"/><text>' + (ok ? '✓' : (si + 1)) + '</text></g>';
+    h += '</g>';
+  });
+  return h;
+}
+
+/* 9 — two congruent shapes with lettered corners; step 1 = sides, step 2 = angles */
+function stageSides(L, R) {
+  var regs = panelRegions(L), ra = regs[0], rb = regs[1], done = st.solved || st.revealed;
+  var ppc = Math.min(38, fitPair([{ sh: R.A, rot: 0, flip: false }, { sh: R.A, rot: R.rotB, flip: R.flipB }], ra, 70, 64));
+  var lab = function (i) { return { text: cm(R.A.sides[i]) }; }, ang = angMarks(R.A);
+  var sidesDone = st.step >= 1 || done;
+  var h = panelBg(ra) + panelBg(rb) + chipSVG(ra.x + 12, ra.y + 12, t('shapeA')) + chipSVG(rb.x + 12, rb.y + 12, t('shapeB'), true);
+  h += drawShape({ sh: R.A, cx: ra.x + ra.w / 2, cy: ra.y + ra.h / 2 + 14, ppc: ppc, s: 1, rot: 0, flip: false, cls: 'a', labels: lab, vlabels: R.LA, hiSide: R.q, angles: ang });
+  h += drawShape({ sh: R.A, cx: rb.x + rb.w / 2, cy: rb.y + rb.h / 2 + 14, ppc: ppc, s: 1, rot: R.rotB, flip: R.flipB, cls: 'b', labels: lab, vlabels: R.LB, hiSide: sidesDone ? R.q : null, hiCls: 'ok', angles: ang,
+    bpick: done ? null : (st.step === 0 ? 'side' : 'vtx') });
+  return h;
+}
+
+/* 11 — angles of two congruent shapes; one angle in SHAPE B is hidden */
+function stageAngles(L, R) {
+  var regs = panelRegions(L), ra = regs[0], rb = regs[1], done = st.solved || st.revealed;
+  var ppc = Math.min(38, fitPair([{ sh: R.A, rot: 0, flip: false }, { sh: R.A, rot: R.rotB, flip: R.flipB }], ra, 70, 64));
+  var h = panelBg(ra) + panelBg(rb) + chipSVG(ra.x + 12, ra.y + 12, t('shapeA')) + chipSVG(rb.x + 12, rb.y + 12, t('shapeB'), true);
+  h += drawShape({ sh: R.A, cx: ra.x + ra.w / 2, cy: ra.y + ra.h / 2 + 14, ppc: ppc, s: 1, rot: 0, flip: false, cls: 'a', vlabels: R.LA,
+    angles: function (i) { var v = niceAt(R.A, i); return { text: v + '°', deg: v }; } });
+  h += drawShape({ sh: R.A, cx: rb.x + rb.w / 2, cy: rb.y + rb.h / 2 + 14, ppc: ppc, s: 1, rot: R.rotB, flip: R.flipB, cls: 'b' + (st.solved ? ' done' : ''), vlabels: R.LB,
+    angles: function (i) { var v = niceAt(R.A, i); return (i === R.q && !done) ? { text: '?', deg: v, cls: 'q' } : { text: v + '°', deg: v, cls: i === R.q ? 'ok' : '' }; } });
+  return h;
+}
+
+function renderStage() {
+  if (st.screen !== 'play') return;
+  var svg = $('#stage'), L = layout(), R = cur(), h, a = st.act;
+  svg.setAttribute('viewBox', '0 0 ' + L.W + ' ' + L.H);
+  var inter = isInter(a);
+  svg.classList.toggle('drag', inter);
+  svg.setAttribute('tabindex', inter ? '0' : '-1');
+  svg.setAttribute('aria-label', t('a' + a));
+  if (isMatch(a)) h = stageMatch(L, R); else if (a === 5) h = stageChal(L, R); else if (a === 8) h = stagePick(L, R); else if (a === 9) h = stageSides(L, R); else if (a === 11) h = stageAngles(L, R); else h = stagePair(L, R);
+  svg.innerHTML = h;
+  var chip = $('#scaleChip'), showChip = a === 2 || a === 5;
+  chip.hidden = !showChip;
+  if (showChip) chip.textContent = t('scaleChip', { k: st.me.s });
+  $('#dock').hidden = !inter;
+  $('#pad').hidden = !(inter && st.padOpen);
+  var mv = $('.dk[data-c="move"]'); if (mv) mv.classList.toggle('on', st.padOpen);
+  $$('#dock .dk').forEach(function (b) {
+    b.disabled = st.solved || st.revealed;
+    var c = b.getAttribute('data-c');
+    b.classList.toggle('locked', a === 7 && (c === 'up' || c === 'down'));   /* congruence: no resizing */
+  });
+}
+
+/* ---------- guide ---------- */
+function masName() { for (var i = 0; i < MASCOTS.length; i++) if (MASCOTS[i][0] === st.guide) return MASCOTS[i][1]; return ''; }
+function masSrc(mood) { return MAS_DIR + st.guide + '-' + mood + '.png'; }
+function sayNow(k, mood, p) { st.say = { k: k, mood: mood || 'ready', p: p || null }; renderGuide(); }
+function renderGuide() {
+  var img = $('#guideImg');
+  img.src = masSrc(st.say.mood);
+  img.alt = masName();
+  $('#bubble').textContent = t(st.say.k, st.say.p);
+  $('#heroImg').src = masSrc('ready');
+}
+
+/* ---------- header / dots ---------- */
+function totalStars() { return st.stars.reduce(function (a, b) { return a + (b || 0); }, 0); }
+function starsHTML(n, max, pop) {
+  var s = '';
+  for (var i = 0; i < max; i++) s += '<span class="st ' + (i < n ? 'on' : 'off') + '">⭐</span>';
+  return s;
+}
+function renderHead() {
+  $('#actName').textContent = t('a' + st.act);
+  $('#roundTxt').textContent = t(TOPIC_KEY[topicOf(st.act)]) + ' · ' + t('round', { n: st.r + 1, m: ROUNDS });
+  var d = '';
+  for (var i = 0; i < ROUNDS; i++) {
+    var c = i === st.r ? 'cur' : (st.stars[i] == null ? '' : (st.stars[i] > 0 ? 'ok' : 'miss'));
+    d += '<b class="' + c + '"></b>';
+  }
+  $('#dots').innerHTML = d;
+  $('#starSum').innerHTML = '⭐ ' + totalStars();
+}
+
+/* ---------- question panel ---------- */
+function qTitleHTML(R) {
+  var a = st.act, h = '';
+  if (a === 1) h = '<h2 class="q-title">' + t('q1') + '</h2><p class="q-sub">' + t('q1s') + '</p>';
+  else if (a === 2) h = '<h2 class="q-title">' + t('q2') + '</h2><p class="q-sub">' + t('q2s') + '</p>';
+  else if (a === 3) h = '<h2 class="q-title">' + t('q3') + '</h2><p class="q-sub">' + t('q3s') + '</p>';
+  else if (a === 4) {
+    var q = R.kind === 'sim' ? t('q1') : (R.kind === 'factor' ? t('q4f') : t('q4m'));
+    h = '<span class="tapline">📏 ' + t('tapSide') + '</span><h2 class="q-title">' + q + '</h2>';
+  } else if (a === 5) {
+    h = '<h2 class="q-title">' + t('q5', { how: t('q5big', { k: R.k }) }) + '</h2>' +
+      '<ul class="steps5"><li><b>1</b>' + t('s5a') + '</li><li><b>2</b>' + t('s5b') + ' (×' + fmtNum(R.k) + ')</li><li><b>3</b>' + t('s5c') + '</li></ul>';
+  }
+  else if (a === 6) h = '<h2 class="q-title">' + t('q6') + '</h2><p class="q-sub">' + t('q6s') + '</p>';
+  else if (a === 7) h = '<h2 class="q-title">' + t('q2') + '</h2><p class="q-sub">' + t('q7s') + '</p>';
+  else if (a === 8) h = '<h2 class="q-title">' + t('q8') + '</h2><p class="q-sub">' + t('q8s') + '</p>';
+  else if (a === 9) {
+    h = '<span class="stepchip">' + t('stepN', { n: (st.step || 0) + 1 }) + '</span><h2 class="q-title">' +
+      ((st.step || 0) === 0 ? t('q9', { s: '<span class="sidepill">' + sideName(R.LA, R.q) + '</span>' }) : t('q9a', { s: '<span class="sidepill">' + R.LA[R.qv] + '</span>' })) +
+      '</h2><p class="q-sub">' + t('q9s') + '</p>';
+  }
+  else if (a === 11) h = '<h2 class="q-title">' + t('q11', { s: '<span class="sidepill">' + R.LB[R.q] + '</span>' }) + '</h2><p class="q-sub">' + t('q11s') + '</p>';
+  else h = '<h2 class="q-title">' + t('q10') + '</h2><p class="q-sub">' + t('q1s') + '</p>';
+  return h;
+}
+function choicesFor(R) {
+  if (R.kind === 'angle') return R.opts;
+  if (st.act === 5 || isMatch(st.act)) return null;
+  var ans = R.kind === 'factor' ? R.k : R.ans, set = [ans], extra;
+  if (R.kind === 'factor') extra = [R.k + 1, R.k + 0.5, R.k > 1 ? R.k - 0.5 : 2, 1 / R.k, R.k * 2];
+  else {
+    var j = R.miss === 0 ? 1 : 0, diff = R.B.sides[j] - R.A.sides[j];
+    extra = [R.A.sides[R.miss] + diff, R.A.sides[R.miss] * (R.k + 1), R.A.sides[R.miss] * (R.k > 1 ? R.k - 0.5 : R.k + 0.5), R.B.sides[j]];
+  }
+  shuffle(extra).forEach(function (v) {
+    v = r2(v);
+    if (v > 0 && set.length < 3 && set.every(function (x) { return Math.abs(x - v) > 0.01; })) set.push(v);
+  });
+  return shuffle(set);
+}
+function renderQ() {
+  if (st.screen !== 'play') return;
+  var R = cur(), a = st.act, over = st.solved || st.revealed, h = qTitleHTML(R);
+  var binary = a === 1 || a === 6 || (a === 4 && R.kind === 'sim');
+  var numeric = a === 3 || a === 5 || a === 11 || (a === 4 && R.kind !== 'sim');
+  if (binary) {
+    var yes = a === 6 ? t('congBtn') : t('simBtn'), no = a === 6 ? t('notCongBtn') : t('notBtn');
+    h += '<div class="bin">' +
+      '<button class="bbtn yes" type="button" data-a="bin" data-v="1"' + (over || st.disabled['1'] ? ' disabled' : '') + '><span class="em">✅</span>' + yes + '</button>' +
+      '<button class="bbtn no" type="button" data-a="bin" data-v="0"' + (over || st.disabled['0'] ? ' disabled' : '') + '><span class="em">❌</span>' + no + '</button></div>';
+  }
+  if (a === 10) {
+    h += '<div class="rel">' + [['cong', 'A', 'relA'], ['sim', 'B', 'relB'], ['none', 'C', 'relC']].map(function (o) {
+      return '<button class="relbtn r-' + o[0] + '" type="button" data-a="rel" data-v="' + o[0] + '"' + (over || st.disabled[o[0]] ? ' disabled' : '') + '><b>' + o[1] + '</b><span>' + t(o[2]) + '</span></button>';
+    }).join('') + '</div>';
+  }
+  if (a === 9 && (st.step || 0) === 0) {
+    h += '<div class="chips">' + R.order.map(function (j) {
+      return '<button class="cans side" type="button" data-a="side" data-v="' + j + '"' + (over || st.disabled['s' + j] ? ' disabled' : '') + '>' + sideName(R.LB, j) + '</button>';
+    }).join('') + '</div>';
+  }
+  if (a === 9 && st.step === 1) {
+    h += '<div class="chips">' + R.vorder.map(function (j) {
+      return '<button class="cans side ang" type="button" data-a="angle" data-v="' + j + '"' + (over || st.disabled['v' + j] ? ' disabled' : '') + '>∠' + R.LB[j] + '</button>';
+    }).join('') + '</div>';
+  }
+  if (a === 8) h += '<p class="selcount">' + t('selected', { n: st.sel.length }) + '</p>';
+  if (numeric) {
+    var ch = R.choices || (R.choices = choicesFor(R));
+    if (ch) {
+      h += '<div class="chips">' + ch.map(function (v) {
+        var txt = R.kind === 'factor' ? '×' + fmtNum(v) : (R.kind === 'angle' ? v + '°' : cm(v));
+        return '<button class="cans' + (st.picked === v ? ' sel' : '') + '" type="button" data-a="pick" data-v="' + v + '"' + (over ? ' disabled' : '') + '>' + txt + '</button>';
+      }).join('') + '</div>';
+    }
+  }
+  if (isMatch(a) || a === 8 || numeric) {
+    h += '<div class="num-row">';
+    if (numeric) {
+      var unit = (a === 4 && R.kind === 'factor') ? '×' : (R.kind === 'angle' ? '°' : t('unitCm'));
+      h += '<label class="num-in"><span class="sr-only">' + t('typeHere') + '</span>' +
+        (unit === '×' ? '<span>×</span>' : '') +
+        '<input id="ans" type="text" inputmode="' + (a === 5 || a === 11 ? 'numeric' : 'decimal') + '" autocomplete="off" enterkeyhint="done" placeholder="?" value="' + (st.answer || '').replace(/"/g, '') + '"' + (over ? ' disabled' : '') + ' />' +
+        (unit === '×' ? '' : '<span>' + unit + '</span>') + '</label>';
+    }
+    var dis = over || (a === 8 && st.sel.length < 2);
+    h += '<button class="btn btn-pink" type="button" data-a="check" title="' + t('checkT') + '"' + (dis ? ' disabled' : '') + '>✔ ' + t('check') + '</button>';
+    h += '</div>';
+  }
+  if (!over) h += '<div class="row-btns"><button class="btn btn-ghost" type="button" data-a="hint">💬 ' + t('hint') + '</button></div>';
+  $('#qBox').innerHTML = h;
+}
+
+/* ---------- feedback ---------- */
+function ratioChips(R) {
+  var rs = R.A.sides.map(function (a, i) { return R.B.sides[i] / a; });
+  var cnt = {}, best = rs[0], bc = 0;
+  rs.forEach(function (r) { var k = r2(r); cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > bc) { bc = cnt[k]; best = r2(r); } });
+  return rs.map(function (r, i) { return { a: R.A.sides[i], b: R.B.sides[i], r: r2(r), odd: Math.abs(r - best) > 0.01 }; });
+}
+function renderFb() {
+  var f = st.fb, box = $('#fb');
+  if (!f) { box.innerHTML = ''; return; }
+  var h = '<div class="fbx ' + f.kind + (f.stars != null ? ' stars-pop' : '') + '">';
+  h += '<div class="fb-h"><span class="fb-ic">' + f.icon + '</span><span>' + t(f.head.k, f.head.p) + '</span></div>';
+  (f.lines || []).forEach(function (l) {
+    if (l.eq) h += '<span class="eq">' + t(l.k, l.p) + '</span><br/>'; else h += '<p>' + t(l.k, l.p) + '</p>';
+  });
+  if (f.chips) h += '<div class="rchips">' + f.chips.map(function (c) { return '<span class="rchip' + (c.odd ? ' odd' : '') + '">' + t('chipRatio', c).replace(/  /g, ' ') + '</span>'; }).join('') + '</div>';
+  if (f.pairs) h += '<div class="rchips">' + f.pairs.map(function (c) { return '<span class="rchip' + (c.hi ? ' hi' : '') + '">' + c.text + '</span>'; }).join('') + '</div>';
+  if (f.stars != null) h += '<div class="fb-stars" aria-label="' + f.stars + ' / 3">' + starsHTML(f.stars, MAXSTARS) + '</div>';
+  if (f.next) h += '<button class="btn btn-navy" type="button" data-a="next">' + (st.r === ROUNDS - 1 ? t('finish') + ' ✓' : t('next') + ' →') + '</button>';
+  h += '</div>';
+  box.innerHTML = h;
+  if (f.scroll) { var el = box.firstChild; if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+}
+
+/* ---------- game flow ---------- */
+function show(name) {
+  st.screen = name;
+  cancelVoice();
+  document.body.classList.toggle('mode-play', name === 'play');
+  document.body.classList.toggle('mode-home', name !== 'play');
+  ['home', 'play', 'done'].forEach(function (s) { $('#' + s).hidden = s !== name; });
+  window.scrollTo(0, 0);
+}
+function startAct(a) {
+  st.act = a; st.topic = topicOf(a); st.rounds = GEN[a](); st.r = 0; st.stars = [];
+  show('play');
+  startRound();
+}
+function startRound() {
+  var R = cur();
+  st.wrong = 0; st.hint = 0; st.solved = false; st.revealed = false; st.answer = ''; st.picked = null; st.disabled = {};
+  st.fb = null; st.measured = {}; st.lastTap = null; st.padOpen = false; st.sel = []; st.step = 0;
+  st.me = isInter(st.act) ? JSON.parse(JSON.stringify(R.me0)) : null;
+  waClear();
+  var g = { 1: 'gStart', 2: 'gStart2', 3: 'gStart3', 4: 'gStart4', 5: 'gStart2', 6: 'gStart', 7: 'gStart7', 8: 'gStart8', 9: 'gStart9', 10: 'gStart', 11: 'gStart11' }[st.act];
+  st.say = { k: st.r === 0 ? 'gStart' : g, mood: 'ready', p: null };
+  renderAll();
+}
+function renderAll() {
+  if (st.screen === 'home') { renderHome(); renderGuide(); }
+  else if (st.screen === 'play') { renderHead(); renderStage(); renderQ(); renderFb(); renderGuide(); }
+  renderFormula(); renderConcept();
+}
+function award(ok) {
+  var R = cur();
+  var n = ok ? clamp(MAXSTARS - st.wrong, 1, MAXSTARS) : 0;
+  R.stars = n; st.stars[st.r] = n; st.solved = ok; st.revealed = !ok;
+  renderHead();
+  return n;
+}
+function finishRound(ok, head, lines, extra) {
+  var n = award(ok);
+  st.fb = Object.assign({ kind: ok ? 'ok' : 'bye', icon: ok ? '🎉' : '🤝', head: head, lines: lines || [], stars: n, next: true, scroll: true }, extra || {});
+}
+function wrongAttempt(max) {
+  st.wrong++;
+  return st.wrong >= max;
+}
+function nextRound() {
+  if (st.r < ROUNDS - 1) { st.r++; startRound(); return; }
+  finishAct();
+}
+function finishAct() {
+  var total = totalStars(), max = ROUNDS * MAXSTARS, pct = total / max;
+  var n = pct >= 0.75 ? 3 : (pct >= 0.4 ? 2 : 1);
+  var best = loadBest();
+  if (best[st.act] == null || total > best[st.act]) { best[st.act] = total; store.set('shapeshift.best', JSON.stringify(best)); }
+  show('done');
+  $('#doneImg').src = masSrc('happy'); $('#doneImg').alt = masName();
+  $('#bigStars').innerHTML = starsHTML(n, 3);
+  $('#bigStars').setAttribute('aria-label', n + ' / 3');
+  $('#doneSum').textContent = t('outOf', { n: total, m: max });
+  $('#doneMsg').textContent = t('done' + n);
+  st.doneN = n;
+  confetti();
+  sfx('complete'); speakLine('done');
+  for (var i = 0; i < n; i++) setTimeout(function (k) { return function () { sfx('star', k); }; }(i), 700 + i * 220);
+  setTimeout(function () { burst($('#bigStars'), 16); flash($('#doneImg'), 'cheer', 800); }, 300);
+}
+function loadBest() { try { return JSON.parse(store.get('shapeshift.best') || '{}') || {}; } catch (e) { return {}; } }
+function confetti() {
+  var host = $('#doneCard');
+  $$('.cf', host).forEach(function (n) { n.remove(); });
+  var cols = ['#ff3e79', '#ffda26', '#2f8fd6', '#2f9e44', '#8b5cd6'], shapes = ['polygon(50% 0,0 100%,100% 100%)', 'none', 'circle(50%)'];
+  for (var i = 0; i < 36; i++) {
+    var s = document.createElement('span');
+    s.className = 'cf';
+    s.style.left = rnd(100) + '%';
+    s.style.background = pick(cols);
+    s.style.clipPath = pick(shapes) === 'none' ? 'none' : pick(shapes);
+    s.style.animationDuration = (2.2 + Math.random() * 2.2) + 's';
+    s.style.animationDelay = (Math.random() * 0.8) + 's';
+    host.appendChild(s);
+  }
+}
+
+/* ---------- answer checking ---------- */
+function checkBinary(choice) {
+  if (st.act === 6) return checkCongBinary(choice);
+  var R = cur(), correctIsSim = R.similar, said = choice === '1';
+  if (said === correctIsSim) {
+    var chips = ratioChips(R);
+    if (correctIsSim) {
+      sayNow('gGood', 'happy');
+      finishRound(true, { k: 'fSimOk' }, [{ k: 'fSimWhy' }], { chips: chips });
+      react('ok');
+    } else {
+      sayNow('gNot', 'happy');
+      finishRound(true, { k: 'fNotOk' }, [{ k: 'fNotWhy' }], { chips: chips });
+      react('ok');
+    }
+  } else {
+    st.disabled[choice] = true;
+    wrongAttempt(99);
+    sayNow('gAlmost', 'think');
+    st.fb = { kind: 'no', icon: '🤔', head: { k: 'fSimNo' }, lines: [{ k: 'fSimNoTip' }], scroll: true };
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+
+/* 6 — congruent or not? */
+function checkCongBinary(choice) {
+  var R = cur(), said = choice === '1';
+  if (said === R.congruent) {
+    var chips = ratioChips(R);
+    if (R.congruent) { sayNow('gCong', 'happy'); finishRound(true, { k: 'fCongOk' }, [{ k: 'fCongWhy' }], { chips: chips }); }
+    else if (R.why === 'scaled') { sayNow('gSimDiff', 'happy'); finishRound(true, { k: 'fSimOnly' }, [{ k: 'fSimOnlyWhy' }], { chips: chips }); }
+    else { sayNow('gGood', 'happy'); finishRound(true, { k: 'fNotCong' }, [{ k: R.sameSides ? 'fDiffAngles' : 'fNotCongWhy' }], { chips: chips }); }
+    react('ok');
+  } else {
+    st.disabled[choice] = true; wrongAttempt(99);
+    sayNow(R.sameSides ? 'gCheckAngles' : 'gCheckSize', 'think');
+    st.fb = { kind: 'no', icon: '🤔', head: { k: R.sameSides ? 'fCheckAngles' : 'fCheckSize' }, lines: [{ k: R.sameSides ? 'fCheckAnglesTip' : 'fCheckSizeTip' }], scroll: true };
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+/* 10 — congruent / similar but not congruent / neither */
+function checkRel(v) {
+  var R = cur(), chips = ratioChips(R);
+  if (v === R.rel) {
+    if (v === 'cong') { sayNow('gCong', 'happy'); finishRound(true, { k: 'fCongOk' }, [{ k: 'fCongWhy' }], { chips: chips }); }
+    else if (v === 'sim') { sayNow('gSimDiff', 'happy'); finishRound(true, { k: 'fSimOnly' }, [{ k: 'fSimOnlyWhy' }], { chips: chips }); }
+    else { sayNow('gGood', 'happy'); finishRound(true, { k: 'fNeither' }, [{ k: R.sameSides ? 'fDiffAngles' : 'fNeitherWhy' }], { chips: chips }); }
+    react('ok');
+  } else {
+    st.disabled[v] = true; wrongAttempt(99);
+    var sizeIssue = (R.rel === 'cong' && v === 'sim') || (R.rel === 'sim' && v === 'cong');
+    var angIssue = R.sameSides && v === 'cong';
+    sayNow(angIssue ? 'gCheckAngles' : (sizeIssue ? 'gCheckSize' : 'gCheckProp'), 'think');
+    st.fb = { kind: 'no', icon: '🤔', head: { k: angIssue ? 'fCheckAngles' : (sizeIssue ? 'fCheckSize' : 'fCheckProp') }, lines: [{ k: angIssue ? 'fCheckAnglesTip' : (sizeIssue ? 'fCheckSizeTip' : 'fSimNoTip') }], scroll: true };
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+/* 9 — step 1: which side matches?  step 2: which angle matches? */
+function sideAnglePairs(R) {
+  var out = [], n = R.A.sides.length;
+  for (var i = 0; i < n; i++) out.push({ text: sideName(R.LA, i) + ' ↔ ' + sideName(R.LB, i), hi: i === R.q });
+  out.push({ text: '∠' + R.LA[R.qv] + ' ↔ ∠' + R.LB[R.qv], hi: true });
+  return out;
+}
+function checkSide(j) {
+  var R = cur();
+  if (st.step !== 0 || st.solved || st.revealed) return;
+  var eq = { k: 'fSideEq', p: { a: sideName(R.LA, R.q), b: sideName(R.LB, R.q), n: R.A.sides[R.q] }, eq: true };
+  if (j === R.q) {
+    sfx('correct'); setTimeout(function () { flash($('#qBox'), 'glow-ok', 1200); burst($('#qBox'), 6); flash($('#guideBtn'), 'cheer', 800); }, 0);
+    st.step = 1; st.disabled = {};
+    sayNow('gStart9b', 'happy');
+    st.fb = { kind: 'ok', icon: '👍', head: { k: 'fStep2' }, lines: [eq], scroll: true };
+  } else {
+    st.disabled['s' + j] = true;
+    var over = wrongAttempt(3);
+    if (over) { sayNow('gHelp', 'think'); finishRound(false, { k: 'fReveal' }, [eq], { pairs: sideAnglePairs(R) }); }
+    else { sayNow('gAlmost', 'think'); st.fb = { kind: 'no', icon: '🤔', head: { k: 'fSideNo' }, lines: [{ k: 'hSide', p: { s: sideName(R.LA, R.q), n: R.A.sides[R.q] } }], scroll: true }; }
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+function checkAngle(j) {
+  var R = cur();
+  if (st.step !== 1 || st.solved || st.revealed) return;
+  var v = niceAt(R.A, R.qv);
+  var lines = [{ k: 'fSideEq', p: { a: sideName(R.LA, R.q), b: sideName(R.LB, R.q), n: R.A.sides[R.q] }, eq: true },
+               { k: 'fAngPair', p: { a: R.LA[R.qv], b: R.LB[R.qv], n: v }, eq: true }];
+  if (j === R.qv) {
+    sayNow('gAngle', 'happy');
+    finishRound(true, { k: 'fBothOk' }, lines, { pairs: sideAnglePairs(R) });
+    react('ok');
+  } else {
+    st.disabled['v' + j] = true;
+    var over = wrongAttempt(3);
+    if (over) { sayNow('gHelp', 'think'); finishRound(false, { k: 'fReveal' }, lines, { pairs: sideAnglePairs(R) }); }
+    else { sayNow('gAlmost', 'think'); st.fb = { kind: 'no', icon: '🤔', head: { k: 'fAngNo' }, lines: [{ k: 'hAngle', p: { s: R.LA[R.qv], n: v } }], scroll: true }; }
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+/* 11 — what is the missing angle? */
+function checkAngleValue(v) {
+  var R = cur(), eqLine = { k: 'fAngleEq', p: { e: R.LB[R.q], b: R.LA[R.q], v: R.ans }, eq: true };
+  if (Math.abs(v - R.ans) < 0.5) {
+    sayNow('gAngle', 'happy');
+    finishRound(true, { k: 'fAngleOk' }, [eqLine]);
+    react('ok');
+  } else {
+    var over = wrongAttempt(3);
+    if (over) { sayNow('gHelp', 'think'); finishRound(false, { k: 'fReveal' }, [eqLine]); st.answer = ''; }
+    else { sayNow('gTry', 'think'); st.fb = { kind: 'no', icon: '🤔', head: { k: 'fAngNo11', p: { s: R.LB[R.q] } }, scroll: true }; }
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+
+/* 8 — find the congruent pair */
+function checkPick() {
+  var R = cur();
+  if (st.sel.length < 2) return;
+  var ok = st.sel.slice().sort().join() === R.pair.slice().sort().join();
+  if (ok) {
+    sayNow('gCong', 'happy');
+    finishRound(true, { k: 'fPairOk' }, [{ k: 'fPairWhy' }]);
+    react('ok');
+  } else {
+    var over = wrongAttempt(3);
+    if (over) {
+      st.sel = R.pair.slice();
+      sayNow('gHelp', 'think');
+      finishRound(false, { k: 'fReveal' }, [{ k: 'fPairWhy' }]);
+    } else {
+      var a = R.items[st.sel[0]].sh, b = R.items[st.sel[1]].sh, likeOnly = isSimilarShapes(a, b) && sig(a) !== sig(b);
+      sayNow(likeOnly ? 'gSimDiff' : 'gCheckSize', 'think');
+      st.fb = { kind: 'no', icon: '🤔', head: { k: likeOnly ? 'fSimOnly' : 'fPairNo' }, lines: [{ k: likeOnly ? 'fSimOnlyWhy' : 'fPairTip' }], scroll: true };
+      st.sel = [];
+    }
+    react('no');
+  }
+  renderQ(); renderFb(); renderStage();
+}
+function checkNumeric() {
+  var R = cur(), v = parseNum(st.answer);
+  if (isNaN(v)) { sayNow('gNeed', 'think'); st.fb = { kind: 'hint', icon: '✏️', head: { k: 'gNeed' }, scroll: true }; renderFb(); return; }
+  if (R.kind === 'angle') return checkAngleValue(v);
+  var target = R.kind === 'factor' ? R.k : R.ans;
+  if (Math.abs(v - target) < 0.011) {
+    var j = R.miss === 0 ? 1 : 0, lines = [];
+    if (R.kind === 'factor') {
+      sayNow('gGreat', 'happy');
+      var a = R.A.sides[0], b = R.B.sides[0];
+      finishRound(true, { k: 'fFactorOk', p: { k: R.k } }, [{ k: 'hFactor', p: { b: b, a: a, k: R.k }, eq: true }]);
+      react('ok');
+    } else {
+      sayNow('gGreat', 'happy');
+      var kk = r2(R.B.sides[j] / R.A.sides[j]);
+      finishRound(true, { k: 'fFactorOk', p: { k: kk } }, [{ k: 'fEq', p: { a: R.A.sides[R.miss], k: kk, r: R.ans }, eq: true }]);
+      react('ok');
+    }
+  } else {
+    var over = wrongAttempt(3);
+    if (over) {
+      sayNow('gHelp', 'think');
+      revealNumeric(R);
+      react('no');
+    } else {
+      sayNow('gTry', 'think');
+      st.fb = { kind: 'no', icon: '🤔', head: { k: 'fTry' }, lines: [], scroll: true };
+      react('no');
+    }
+  }
+  renderQ(); renderFb(); renderStage();
+}
+function revealNumeric(R) {
+  var j = R.miss === 0 ? 1 : 0;
+  if (R.kind === 'factor') {
+    finishRound(false, { k: 'fReveal' }, [{ k: 'hFactor', p: { b: R.B.sides[0], a: R.A.sides[0], k: R.k }, eq: true }]);
+  } else {
+    var kk = r2(R.B.sides[j] / R.A.sides[j]);
+    finishRound(false, { k: 'fReveal' }, [{ k: 'hFactor', p: { b: R.B.sides[j], a: R.A.sides[j], k: kk }, eq: true }, { k: 'fEq', p: { a: R.A.sides[R.miss], k: kk, r: R.ans }, eq: true }]);
+  }
+  st.answer = ''; st.measured = {};
+  for (var i = 0; i < R.A.sides.length; i++) { st.measured['A' + i] = true; if (i !== R.miss) st.measured['B' + i] = true; }
+}
+function diagMatch(R) {
+  var me = st.me, tg = R.tgt;
+  if (Math.abs(me.s - R.k) > 0.01) return me.s < R.k ? 'up' : 'down';
+  var sh = R.A, chiral = isChiral(sh);
+  if (chiral && me.flip !== tg.flip) return 'flip';
+  if (!sameOrient(sh, me, tg)) return 'rotate';
+  var L = layout(), reg = playRegion(L), ppc = ppcMatch(L, R);
+  var a = fpx(L, reg, me.fx, me.fy), b = fpx(L, reg, tg.fx, tg.fy);
+  if (Math.hypot(a[0] - b[0], a[1] - b[1]) / ppc > 0.55) return 'move';
+  return 'ok';
+}
+function ppcMatch(L, R) {
+  var reg = { w: L.W - 24, h: L.H - 66 }, k = R.k, Rr = R.A.R, mx = 34, my = 34;
+  return L.vert ? Math.min((reg.w - 2 * mx) / (2 * Rr * Math.max(k, 1)), (reg.h - 2 * my) / (2 * Rr * (k + 1)))
+                : Math.min((reg.h - 2 * my) / (2 * Rr * Math.max(k, 1)), (reg.w - 2 * mx) / (2 * Rr * (k + 1)));
+}
+var DIAG_MSG = { up: ['fSizeUp', 'gBigger'], down: ['fSizeDown', 'gSmaller'], flip: ['fFlip', 'gFlip'], rotate: ['fRotate', 'gRotate'], move: ['fMove', 'gMove'] };
+function checkMatch() {
+  var R = cur(), d = diagMatch(R);
+  if (d === 'ok') {
+    sayNow('gGreat', 'happy');
+    finishRound(true, st.act === 7 ? { k: 'fMatchOkC' } : { k: 'fMatchOk', p: { k: R.k } }, []);
+    react('ok');
+  } else {
+    var over = wrongAttempt(4);
+    if (over) {
+      st.me = { s: R.k, rot: R.tgt.rot, flip: R.tgt.flip, fx: R.tgt.fx, fy: R.tgt.fy };
+      sayNow('gHelp', 'think');
+      finishRound(false, { k: 'fReveal' }, [st.act === 7 ? { k: 'fMatchOkC' } : { k: 'fMatchOk', p: { k: R.k } }]);
+      react('no');
+    } else {
+      var m = DIAG_MSG[d];
+      sayNow(m[1], 'think');
+      st.fb = { kind: 'no', icon: '🤔', head: { k: m[0] }, scroll: true };
+      react('no');
+    }
+  }
+  renderQ(); renderFb(); renderStage();
+}
+function diagChal(R) {
+  var me = st.me;
+  if (isChiral(R.A) && me.flip) return 'flip';
+  if (!sameOrient(R.A, me, { rot: 0, flip: false })) return 'rotate';
+  if (Math.abs(me.s - R.k) > 0.01) return me.s < R.k ? 'up' : 'down';
+  return 'ok';
+}
+function checkChal() {
+  var R = cur(), d = diagChal(R), v = parseNum(st.answer);
+  if (d === 'ok' && isNaN(v)) { sayNow('gNeed', 'think'); st.fb = { kind: 'hint', icon: '✏️', head: { k: 'fNeedAns' }, scroll: true }; renderFb(); return; }
+  if (d === 'ok' && Math.abs(v - R.ans) < 0.011) {
+    sayNow('gGreat', 'happy');
+    finishRound(true, { k: 'fFinalOk' }, [{ k: 'fFinalSide', p: { a: R.A.sides[R.miss], k: R.k, r: R.ans }, eq: true }]);
+    react('ok');
+  } else {
+    var over = wrongAttempt(4);
+    if (over) {
+      st.me = Object.assign({}, st.me, { s: R.k, rot: 0, flip: false });
+      sayNow('gHelp', 'think');
+      finishRound(false, { k: 'fReveal' }, [{ k: 'fFinalSide', p: { a: R.A.sides[R.miss], k: R.k, r: R.ans }, eq: true }]);
+      react('no');
+    } else if (d !== 'ok') {
+      var m = DIAG_MSG[d];
+      sayNow(m[1], 'think');
+      st.fb = { kind: 'no', icon: '🤔', head: { k: m[0] }, scroll: true };
+      react('no');
+    } else {
+      sayNow('gTry', 'think');
+      st.fb = { kind: 'no', icon: '🤔', head: { k: 'fAnsNo' }, scroll: true };
+      react('no');
+    }
+  }
+  renderQ(); renderFb(); renderStage();
+}
+function doCheck() {
+  if (st.solved || st.revealed) return;
+  if (isMatch(st.act)) checkMatch(); else if (st.act === 5) checkChal(); else if (st.act === 8) checkPick(); else checkNumeric();
+}
+
+/* ---------- hints (free, never cost stars) ---------- */
+function doHint() {
+  if (st.solved || st.revealed) return;
+  var R = cur(), lines = [], head = { k: 'gHint' };
+  st.hint++;
+  if (st.act === 6) {
+    for (var i6 = 0; i6 < Math.min(st.hint, R.A.sides.length); i6++) lines.push({ k: 'hCongCompare', p: { a: R.A.sides[i6], b: R.B.sides[i6] }, eq: true });
+    sayNow('gCheckSize', 'think');
+  } else if (st.act === 10) {
+    lines.push({ k: 'hRel1' });
+    if (st.hint >= 2) lines.push({ k: 'hRel2' });
+    for (var i10 = 0; i10 < Math.min(st.hint, R.A.sides.length); i10++) lines.push({ k: 'hRatio', p: { a: R.A.sides[i10], b: R.B.sides[i10], r: r2(R.B.sides[i10] / R.A.sides[i10]) }, eq: true });
+    sayNow('gCheckProp', 'think');
+  } else if (st.act === 8) {
+    lines.push({ k: 'hPairTip' });
+    if (st.hint >= 2) lines.push({ k: 'hPairSides', p: { s: R.items[R.pair[0]].sh.sides.map(fmtNum).join(' · ') }, eq: true });
+    sayNow('gCheckSize', 'think');
+  } else if (st.act === 9) {
+    if (st.step === 0) lines.push({ k: 'hSide', p: { s: sideName(R.LA, R.q), n: R.A.sides[R.q] } });
+    else lines.push({ k: 'hAngle', p: { s: R.LA[R.qv], n: niceAt(R.A, R.qv) } });
+    sayNow(st.step === 0 ? 'gStart9' : 'gStart9b', 'think');
+  } else if (st.act === 11) {
+    lines.push({ k: 'hAng11a', p: { s: R.LB[R.q] } });
+    if (st.hint >= 2) lines.push({ k: 'hAng11b', p: { s: R.LA.map(function (l, i) { return '∠' + l + ' = ' + niceAt(R.A, i) + '°'; }).filter(function (x, i) { return i !== R.q; }).join(', '), e: R.LB[R.q] }, eq: true });
+    sayNow('gAngle', 'think');
+  } else if (st.act === 1) {
+    var n = Math.min(st.hint, R.A.sides.length);
+    for (var i = 0; i < n; i++) lines.push({ k: 'hRatio', p: { a: R.A.sides[i], b: R.B.sides[i], r: r2(R.B.sides[i] / R.A.sides[i]) }, eq: true });
+    sayNow('gStart3', 'think');
+  } else if (st.act === 3 || (st.act === 4 && R.kind === 'miss') || (st.act === 4 && R.kind === 'factor')) {
+    var js = [];
+    for (var s = 0; s < R.A.sides.length; s++) if (s !== R.miss || R.kind === 'factor') js.push(s);
+    var j = js[0];
+    if (st.act === 4) {
+      var both = js.filter(function (x) { return st.measured['A' + x] && st.measured['B' + x]; });
+      if (!both.length) { lines.push({ k: Object.keys(st.measured).length ? 'hTap' : 'hTapMore' }); j = null; } else j = both[0];
+    }
+    if (j != null) {
+      var kk = r2(R.B.sides[j] / R.A.sides[j]);
+      lines.push({ k: 'hCompare', p: { a: R.A.sides[j], b: R.B.sides[j] } });
+      if (st.hint >= 2) lines.push({ k: 'hFactor', p: { b: R.B.sides[j], a: R.A.sides[j], k: kk }, eq: true });
+      if (st.hint >= 3 && R.kind === 'miss') lines.push({ k: 'hApply', p: { a: R.A.sides[R.miss], k: kk }, eq: true });
+    }
+    sayNow('gStart3', 'think');
+  } else if (st.act === 4) {
+    var pairs = [];
+    for (var q = 0; q < R.A.sides.length; q++) if (st.measured['A' + q] && st.measured['B' + q]) pairs.push(q);
+    if (!pairs.length) lines.push({ k: 'hTap' });
+    pairs.slice(0, st.hint).forEach(function (q) { lines.push({ k: 'hRatio', p: { a: R.A.sides[q], b: R.B.sides[q], r: r2(R.B.sides[q] / R.A.sides[q]) }, eq: true }); });
+    sayNow('gStart3', 'think');
+  } else if (isMatch(st.act)) {
+    var d = diagMatch(R);
+    if (d === 'ok') lines.push({ k: 'gGreat' }); else lines.push({ k: DIAG_MSG[d][0] });
+    if (st.hint >= 2) lines.push(st.act === 7 ? { k: 'hSameSize' } : { k: 'hTarget', p: { k: R.k } });
+    sayNow(d === 'ok' ? 'gGreat' : DIAG_MSG[d][1], 'think');
+  } else {
+    var dc = diagChal(R);
+    if (dc !== 'ok') { lines.push({ k: DIAG_MSG[dc][0] }); sayNow(DIAG_MSG[dc][1], 'think'); }
+    else { lines.push({ k: 'hRule5', p: { k: R.k } }); lines.push({ k: 'hApply', p: { a: R.A.sides[R.miss], k: R.k }, eq: true }); sayNow('gStart3', 'think'); }
+  }
+  st.fb = { kind: 'hint', icon: '💡', head: head, lines: lines, scroll: true };
+  renderFb();
+}
+
+/* ---------- controls (rotate / flip / scale / move) ---------- */
+function stageLimits() {
+  var R = cur();
+  if (st.act === 5) return { min: 1, max: R.k + 1, step: 1 };      /* Shape Challenge: whole numbers only */
+  var maxS = Math.min(4, Math.max(R.k, 1) * 1.5);
+  return { min: 0.25, max: Math.ceil(maxS * 4) / 4, step: 0.25 };
+}
+function ctrl(c) {
+  if (!st.me || st.solved || st.revealed) return;
+  if (st.act === 7 && (c === 'up' || c === 'down')) {      /* congruence: shapes cannot be resized */
+    sayNow('gCheckSize', 'think');
+    st.fb = { kind: 'hint', icon: '⚖️', head: { k: 'fSameSize' }, scroll: true };
+    renderFb(); flash($('#dock'), 'shake', 450);
+    return;
+  }
+  var me = st.me, lim = stageLimits();
+  if (c === 'rotate') me.rot = (me.rot + 45) % 360;
+  else if (c === 'flip') me.flip = !me.flip;
+  else if (c === 'up') me.s = clamp(r2(me.s + lim.step), lim.min, lim.max);
+  else if (c === 'down') me.s = clamp(r2(me.s - lim.step), lim.min, lim.max);
+  else if (c === 'reset') { var R = cur(); st.me = JSON.parse(JSON.stringify(R.me0)); }
+  else if (c === 'move') { st.padOpen = !st.padOpen; }
+  renderStage();
+}
+function nudge(dir) {
+  if (!st.me || st.solved || st.revealed) return;
+  var L = layout(), reg = playRegion(L), ppc = currentPpc(L), step = (0.5 * ppc);
+  var dx = dir === 'l' ? -step : (dir === 'r' ? step : 0), dy = dir === 'u' ? -step : (dir === 'd' ? step : 0);
+  var p = fpx(L, reg, st.me.fx, st.me.fy), f = pxf(L, reg, p[0] + dx, p[1] + dy);
+  st.me.fx = clamp(f.fx, 0.06, 0.94); st.me.fy = clamp(f.fy, 0.06, 0.94);
+  snapMe(L);
+  renderStage();
+}
+function playRegion(L) {
+  if (isMatch(st.act)) return { x: 12, y: 54, w: L.W - 24, h: L.H - 66 };
+  return panelRegions(L)[1];
+}
+function currentPpc(L) { var R = cur(); return isMatch(st.act) ? ppcMatch(L, R) : geo5(L, R).ppc; }
+function snapMe(L) {
+  if (!isMatch(st.act)) return;
+  var R = cur(), reg = playRegion(L), ppc = ppcMatch(L, R), tg = R.tgt;
+  var a = fpx(L, reg, st.me.fx, st.me.fy), b = fpx(L, reg, tg.fx, tg.fy);
+  var dist = Math.hypot(a[0] - b[0], a[1] - b[1]) / ppc;
+  if (dist < 0.7) { st.me.fx = tg.fx; st.me.fy = tg.fy; }
+}
+
+/* dragging on the stage */
+var drag = null;
+function svgPt(e) {
+  var svg = $('#stage'), rc = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+  return { x: (e.clientX - rc.left) * vb.width / rc.width, y: (e.clientY - rc.top) * vb.height / rc.height };
+}
+function initStageEvents() {
+  var svg = $('#stage');
+  svg.addEventListener('pointerdown', function (e) {
+    if (isInter(st.act) && !st.solved && !st.revealed && e.target.closest && e.target.closest('[data-drag]')) {
+      var L = layout(), reg = playRegion(L), p = svgPt(e);
+      var mp = fpx(L, reg, st.me.fx, st.me.fy);
+      drag = { dx: p.x - mp[0], dy: p.y - mp[1] };
+      try { svg.setPointerCapture(e.pointerId); } catch (er) {}
+      e.preventDefault();
+    }
+  });
+  svg.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var L = layout(), reg = playRegion(L), p = svgPt(e);
+    var f = pxf(L, reg, p.x - drag.dx, p.y - drag.dy);
+    st.me.fx = clamp(f.fx, 0.06, 0.94); st.me.fy = clamp(f.fy, 0.06, 0.94);
+    renderStage();
+  });
+  function end(e) {
+    if (!drag) return;
+    drag = null;
+    try { svg.releasePointerCapture(e.pointerId); } catch (er) {}
+    snapMe(layout()); renderStage();
+  }
+  svg.addEventListener('pointerup', end);
+  svg.addEventListener('pointercancel', end);
+  svg.addEventListener('click', function (e) {
+    if (st.solved || st.revealed) return;
+    if (st.act === 9) {
+      var bs = e.target.closest && e.target.closest('[data-bside]'), bv = e.target.closest && e.target.closest('[data-bvtx]');
+      if (bs && st.step === 0) { sfx('click'); checkSide(parseInt(bs.getAttribute('data-bside'), 10)); return; }
+      if (bv && st.step === 1) { sfx('click'); checkAngle(parseInt(bv.getAttribute('data-bvtx'), 10)); return; }
+    }
+    var pk = e.target.closest && e.target.closest('[data-pick]');
+    if (pk && st.act === 8) {
+      var idx = parseInt(pk.getAttribute('data-pick'), 10), at = st.sel.indexOf(idx);
+      if (at >= 0) st.sel.splice(at, 1); else { if (st.sel.length >= 2) st.sel.shift(); st.sel.push(idx); }
+      sfx('click'); renderStage(); renderQ();
+      return;
+    }
+    var el = e.target.closest && e.target.closest('[data-side]');
+    if (!el || st.act !== 4) return;
+    var key = el.getAttribute('data-side');
+    st.measured[key] = true; st.lastTap = key; sfx('click');
+    renderStage();
+  });
+  svg.addEventListener('keydown', function (e) {
+    if (!isInter(st.act) || st.solved || st.revealed) return;
+    var map = { ArrowLeft: 'l', ArrowRight: 'r', ArrowUp: 'u', ArrowDown: 'd' };
+    if (map[e.key]) { nudge(map[e.key]); e.preventDefault(); }
+    else if (e.key === 'r' || e.key === 'R') ctrl('rotate');
+    else if (e.key === 'f' || e.key === 'F') ctrl('flip');
+    else if (e.key === '+' || e.key === '=') ctrl('up');
+    else if (e.key === '-' || e.key === '_') ctrl('down');
+  });
+}
+
+/* ---------- working area (pen / eraser / undo / clear) ---------- */
+var wa = { strokes: [], cur: null, tool: 'pen', dpr: 1, w: 0, h: 0 };
+function waCtx() { return $('#wa-cv').getContext('2d'); }
+function waSize() {
+  var cv = $('#wa-cv'), r = cv.getBoundingClientRect();
+  if (!r.width) return false;
+  wa.dpr = window.devicePixelRatio || 1; wa.w = r.width; wa.h = r.height;
+  cv.width = Math.round(r.width * wa.dpr); cv.height = Math.round(r.height * wa.dpr);
+  return true;
+}
+function strokeStyle(ctx, s) {
+  ctx.globalCompositeOperation = s.tool === 'eraser' ? 'destination-out' : 'source-over';
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.lineWidth = s.tool === 'eraser' ? 26 : 3.4; ctx.strokeStyle = '#052574'; ctx.fillStyle = '#052574';
+}
+function waRedraw() {
+  var ctx = waCtx(); ctx.setTransform(wa.dpr, 0, 0, wa.dpr, 0, 0); ctx.clearRect(0, 0, wa.w, wa.h);
+  wa.strokes.forEach(function (s) {
+    strokeStyle(ctx, s); ctx.beginPath();
+    s.pts.forEach(function (p, i) { var x = p[0] * wa.w, y = p[1] * wa.h; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+    if (s.pts.length === 1) ctx.lineTo(s.pts[0][0] * wa.w + 0.01, s.pts[0][1] * wa.h);
+    ctx.stroke();
+  });
+  ctx.globalCompositeOperation = 'source-over';
+}
+function waClear() { wa.strokes = []; wa.cur = null; if ($('#wa-cv') && wa.w) waRedraw(); waButtons(); }
+function waButtons() {
+  $('[data-w="undo"]').disabled = !wa.strokes.length;
+  $('[data-w="clear"]').disabled = !wa.strokes.length;
+  $$('.wt[data-w="pen"], .wt[data-w="eraser"]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-w') === wa.tool); });
+}
+function initWorkingArea() {
+  var cv = $('#wa-cv');
+  function pt(e) { var r = cv.getBoundingClientRect(); return [clamp((e.clientX - r.left) / r.width, 0, 1), clamp((e.clientY - r.top) / r.height, 0, 1)]; }
+  cv.addEventListener('pointerdown', function (e) {
+    if (!wa.w) waSize();
+    e.preventDefault();
+    try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+    wa.cur = { tool: wa.tool, pts: [pt(e)] };
+    var ctx = waCtx(); ctx.setTransform(wa.dpr, 0, 0, wa.dpr, 0, 0); strokeStyle(ctx, wa.cur);
+    var p = wa.cur.pts[0]; ctx.beginPath(); ctx.moveTo(p[0] * wa.w, p[1] * wa.h); ctx.lineTo(p[0] * wa.w + 0.01, p[1] * wa.h); ctx.stroke();
+  });
+  cv.addEventListener('pointermove', function (e) {
+    if (!wa.cur) return;
+    var p = pt(e), last = wa.cur.pts[wa.cur.pts.length - 1];
+    wa.cur.pts.push(p);
+    var ctx = waCtx(); ctx.setTransform(wa.dpr, 0, 0, wa.dpr, 0, 0); strokeStyle(ctx, wa.cur);
+    ctx.beginPath(); ctx.moveTo(last[0] * wa.w, last[1] * wa.h); ctx.lineTo(p[0] * wa.w, p[1] * wa.h); ctx.stroke();
+  });
+  function up() { if (!wa.cur) return; wa.strokes.push(wa.cur); wa.cur = null; waButtons(); }
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', function () { /* keep drawing while captured */ });
+  $$('.wt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var w = b.getAttribute('data-w');
+      if (w === 'pen' || w === 'eraser') wa.tool = w;
+      else if (w === 'undo') { wa.strokes.pop(); waRedraw(); }
+      else if (w === 'clear') { wa.strokes = []; waRedraw(); }
+      waButtons();
+    });
+  });
+  var head = $('#waHead');
+  head.addEventListener('click', function () {
+    var open = head.getAttribute('aria-expanded') === 'true';
+    head.setAttribute('aria-expanded', open ? 'false' : 'true');
+    $('#waBody').hidden = open;
+    if (!open) setTimeout(function () { if (waSize()) waRedraw(); }, 0);
+  });
+  if (window.innerWidth < 900) { head.setAttribute('aria-expanded', 'false'); $('#waBody').hidden = true; }
+  if (window.ResizeObserver) new ResizeObserver(function () { if (waSize()) waRedraw(); }).observe($('#waCanvas'));
+  waButtons();
+}
+
+/* ---------- home ---------- */
+var ICONS = {
+  1: '<svg viewBox="0 0 120 76"><polygon points="8,64 34,64 8,30" fill="#bfe3ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><polygon points="52,66 114,66 52,14" fill="#ffc2d6" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/></svg>',
+  2: '<svg viewBox="0 0 120 76"><polygon points="22,62 62,62 22,24" fill="#ffc2d6" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><path d="M70 22a28 28 0 0 1 30 30" fill="none" stroke="#ff3e79" stroke-width="6" stroke-linecap="round"/><polygon points="100,62 90,48 108,48" fill="#ff3e79"/></svg>',
+  3: '<svg viewBox="0 0 120 76"><rect x="8" y="34" width="30" height="30" rx="4" fill="#fff1c2" stroke="#052574" stroke-width="3.5"/><rect x="52" y="10" width="60" height="56" rx="6" fill="#ffda26" stroke="#052574" stroke-width="3.5"/><text x="82" y="48" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="32" fill="#052574">?</text></svg>',
+  4: '<svg viewBox="0 0 120 76"><polygon points="12,60 66,60 12,16" fill="#ddf6e4" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><rect x="40" y="46" width="72" height="22" rx="5" fill="#ffda26" stroke="#052574" stroke-width="3.5" transform="rotate(-18 76 57)"/><g stroke="#052574" stroke-width="3" transform="rotate(-18 76 57)"><line x1="52" y1="46" x2="52" y2="54"/><line x1="66" y1="46" x2="66" y2="56"/><line x1="80" y1="46" x2="80" y2="54"/><line x1="94" y1="46" x2="94" y2="56"/></g></svg>',
+  5: '<svg viewBox="0 0 120 76"><polygon points="30,8 36,26 56,26 40,38 46,58 30,46 14,58 20,38 4,26 24,26" fill="#ffda26" stroke="#052574" stroke-width="3" stroke-linejoin="round"/><polygon points="72,66 112,66 112,26" fill="#d8c7ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><text x="96" y="58" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="20" fill="#052574">×2</text></svg>'
+};
+ICONS[6] = '<svg viewBox="0 0 120 76"><polygon points="8,62 44,62 8,22" fill="#bfe3ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><text x="60" y="48" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="30" fill="#052574">=</text><polygon points="112,62 76,62 112,22" fill="#bfe3ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/></svg>';
+ICONS[7] = '<svg viewBox="0 0 120 76"><polygon points="70,58 108,58 70,20" fill="rgba(255,218,38,.45)" stroke="#052574" stroke-width="3.5" stroke-dasharray="6 5" stroke-linejoin="round"/><polygon points="12,60 50,60 12,22" fill="#ffc2d6" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><path d="M52 18q16-10 30 0" fill="none" stroke="#ff3e79" stroke-width="5" stroke-linecap="round"/><polygon points="86,22 76,24 82,12" fill="#ff3e79"/></svg>';
+ICONS[8] = '<svg viewBox="0 0 120 76"><g stroke="#052574" stroke-width="3" stroke-linejoin="round"><polygon points="8,34 34,34 8,8" fill="#ffda26"/><rect x="44" y="8" width="30" height="26" rx="3" fill="#bfe3ff"/><polygon points="84,34 114,34 84,6" fill="#c8f0d8"/><polygon points="8,70 34,70 34,44" fill="#ffda26"/><rect x="46" y="44" width="40" height="26" rx="3" fill="#ffc2d6"/><polygon points="96,70 114,70 96,44" fill="#d8c7ff"/></g></svg>';
+ICONS[9] = '<svg viewBox="0 0 120 76"><polygon points="8,62 48,62 8,22" fill="#bfe3ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><polygon points="112,62 72,62 112,22" fill="#ffc2d6" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><path d="M8 22L112 22M8 62L72 62" stroke="#ff3e79" stroke-width="3" stroke-dasharray="4 5"/></svg>';
+ICONS[11] = '<svg viewBox="0 0 120 76"><polygon points="10,64 60,64 10,22" fill="#bfe3ff" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><path d="M34 64A24 24 0 0 0 28 49L10 64Z" fill="rgba(255,62,121,.3)" stroke="#d6246a" stroke-width="2.5"/><polygon points="110,64 60,64 110,22" fill="#ffc2d6" stroke="#052574" stroke-width="3.5" stroke-linejoin="round"/><text x="96" y="58" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="20" fill="#ff3e79">?</text></svg>';
+ICONS[10] = '<svg viewBox="0 0 120 76"><g font-family="Baloo 2" font-weight="800" font-size="40" text-anchor="middle" fill="#052574"><text x="22" y="52">≅</text><text x="60" y="52" fill="#ff3e79">~</text><text x="98" y="52" fill="#2f8fd6">?</text></g></svg>';
+
+function conceptBox(kind, title, now) {
+  var lines = kind === 'cong' ? ['cs1', 'cc2', 'cc3', 'cc4'] : ['cs1', 'cs2', 'cs3'];
+  return '<div class="concept c-' + kind + (now ? ' now' : '') + '"><h3>' + title + '</h3><ul>' + lines.map(function (k) { return '<li>' + t(k) + '</li>'; }).join('') + '</ul></div>';
+}
+function renderHome() {
+  var best = loadBest(), other = I18N[st.lang === 'en' ? 'id' : 'en'], ico = { sim: '🔷', cong: '🟰', mixed: '🎲' };
+  $('#topics').innerHTML = ['sim', 'cong', 'mixed'].map(function (k) {
+    return '<button class="topic t-' + k + (st.topic === k ? ' on' : '') + '" type="button" data-topic="' + k + '" aria-pressed="' + (st.topic === k) + '"><span class="ti" aria-hidden="true">' + ico[k] + '</span>' +
+      '<span class="tt">' + t(TOPIC_KEY[k]) + '</span><span class="ts">' + other[TOPIC_KEY[k]] + '</span></button>';
+  }).join('');
+  $('#conceptRow').innerHTML = st.topic === 'sim' ? conceptBox('sim', t('simShapes'))
+    : (st.topic === 'cong' ? conceptBox('cong', t('congShapes')) : conceptBox('cong', t('cCong')) + conceptBox('sim', t('cSim')));
+  $('#cards').innerHTML = TOPIC_ACTS[st.topic].map(function (a, i) {
+    return '<button class="act-card c' + ((a - 1) % 5 + 1) + '" type="button" data-act="' + a + '"><span class="num">' + (i + 1) + '</span><span class="art">' + ICONS[a] + '</span>' +
+      '<span class="ttl">' + t('a' + a) + '</span><span class="dsc">' + t('a' + a + 'd') + '</span>' +
+      '<span class="bst">' + (best[a] != null ? '⭐ ' + best[a] + ' / ' + (ROUNDS * MAXSTARS) : t('isNew')) + '</span>' +
+      '<span class="go">' + t('play') + ' ▶</span></button>';
+  }).join('');
+}
+
+/* small formula + concept boxes (kept short; the topic decides what they say) */
+function renderFormula() {
+  var top = st.screen === 'play' ? topicOf(st.act) : st.topic, rows;
+  if (top === 'sim') rows = [['f1'], ['f2'], ['f3', 1]];
+  else if (top === 'cong') rows = [['fc1'], ['fc4'], ['fc2'], ['fc3', 1]];
+  else rows = [['f1'], ['fm1'], ['fm2'], ['fm3', 1]];
+  $('#fLines').innerHTML = rows.map(function (r) { return '<div class="fl' + (r[1] ? ' note' : '') + '">' + t(r[0]) + '</div>'; }).join('');
+}
+function renderConcept() {
+  var top = st.screen === 'play' ? topicOf(st.act) : st.topic;
+  $('#cBody').innerHTML = conceptBox('cong', t('cCong'), top !== 'sim') + conceptBox('sim', t('cSim'), top !== 'cong');
+}
+
+/* ---------- language, modal, formula ---------- */
+function setLang(l) {
+  st.lang = l; store.set('shapeshift.lang', l);
+  applyStatic(); renderAll();
+  if (st.screen === 'done') { $('#doneSum').textContent = t('outOf', { n: totalStars(), m: ROUNDS * MAXSTARS }); $('#doneMsg').textContent = t('done' + st.doneN); }
+}
+var lastFocus = null;
+function openHow() {
+  lastFocus = document.activeElement;
+  $('#howModal').hidden = false;
+  $('#letsBtn').focus();
+}
+function closeHow() {
+  $('#howModal').hidden = true;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+function toggleConcept(force) {
+  var pop = $('#cPop'), open = force != null ? force : pop.hidden;
+  if (open) toggleFormula(false);
+  pop.hidden = !open;
+  $('#cBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function toggleFormula(force) {
+  var pop = $('#fPop'), open = force != null ? force : pop.hidden;
+  if (open && !$('#cPop').hidden) toggleConcept(false);
+  pop.hidden = !open;
+  $('#fBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+/* ---------- wiring ---------- */
+function init() {
+  applyStatic();
+  initStageEvents();
+  initWorkingArea();
+
+  $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); }); });
+  $('#soundBtn').addEventListener('click', function () {
+    snd.on = !snd.on; store.set('shapeshift.sound', snd.on ? 'on' : 'off');
+    if (!snd.on) cancelVoice(); else sfx('click');
+    updateSoundBtn();
+  });
+  /* soft click sound on every button (the sound toggle handles its own) */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('button, a.tb-btn');
+    if (b && b.id !== 'soundBtn') sfx('click');
+  }, true);
+  window.addEventListener('pagehide', cancelVoice);
+  if (window.speechSynthesis) { try { window.speechSynthesis.onvoiceschanged = function () { snd.voice = null; }; } catch (e) {} }
+  document.body.classList.add('mode-home');
+  $('#howBtn').addEventListener('click', openHow);
+  $('#howX').addEventListener('click', closeHow);
+  $('#letsBtn').addEventListener('click', closeHow);
+  $('#howModal').addEventListener('click', function (e) { if (e.target === this) closeHow(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { if (!$('#howModal').hidden) closeHow(); else if (!$('#fPop').hidden) toggleFormula(false); else if (!$('#cPop').hidden) toggleConcept(false); }
+  });
+  $('#fBtn').addEventListener('click', function () { toggleFormula(); });
+  $('#cBtn').addEventListener('click', function () { toggleConcept(); });
+  $('#cClose').addEventListener('click', function () { toggleConcept(false); $('#cBtn').focus(); });
+  $('#topics').addEventListener('click', function (e) { var b = e.target.closest('[data-topic]'); if (b) { st.topic = b.getAttribute('data-topic'); renderHome(); renderFormula(); renderConcept(); } });
+  $('#fClose').addEventListener('click', function () { toggleFormula(false); $('#fBtn').focus(); });
+
+  $('#startBtn').addEventListener('click', function () { startAct(TOPIC_ACTS[st.topic][0]); });
+  $('#cards').addEventListener('click', function (e) { var c = e.target.closest('[data-act]'); if (c) startAct(parseInt(c.getAttribute('data-act'), 10)); });
+  $('#menuBtn').addEventListener('click', function () { show('home'); renderAll(); });
+  $('#doneMenu').addEventListener('click', function () { show('home'); renderAll(); });
+  $('#againBtn').addEventListener('click', function () { startAct(st.act); });
+  $('#nextChBtn').addEventListener('click', function () { startAct(ORDER[(ORDER.indexOf(st.act) + 1) % ORDER.length]); });
+
+  $('#guideBtn').addEventListener('click', function () {
+    var i = 0; MASCOTS.forEach(function (m, n) { if (m[0] === st.guide) i = n; });
+    st.guide = MASCOTS[(i + 1) % MASCOTS.length][0]; store.set('shapeshift.guide', st.guide);
+    renderGuide();
+    var b = $('#guideBtn'); b.classList.remove('wig'); void b.offsetWidth; b.classList.add('wig');
+  });
+
+  $('#dock').addEventListener('click', function (e) { var b = e.target.closest('[data-c]'); if (b) ctrl(b.getAttribute('data-c')); });
+  $('#pad').addEventListener('click', function (e) { var b = e.target.closest('[data-p]'); if (b) nudge(b.getAttribute('data-p')); });
+
+  $('#qBox').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-a]'); if (!b || b.disabled) return;
+    var a = b.getAttribute('data-a');
+    if (a === 'bin') checkBinary(b.getAttribute('data-v'));
+    else if (a === 'rel') checkRel(b.getAttribute('data-v'));
+    else if (a === 'side') checkSide(parseInt(b.getAttribute('data-v'), 10));
+    else if (a === 'angle') checkAngle(parseInt(b.getAttribute('data-v'), 10));
+    else if (a === 'check') doCheck();
+    else if (a === 'hint') doHint();
+    else if (a === 'pick') {
+      var v = parseFloat(b.getAttribute('data-v'));
+      st.picked = v; st.answer = fmtNum(v);
+      var inp = $('#ans'); if (inp) inp.value = st.answer;
+      $$('#qBox .cans').forEach(function (c) { c.classList.toggle('sel', c === b); });
+    }
+  });
+  $('#qBox').addEventListener('input', function (e) {
+    if (e.target.id === 'ans') {
+      if (st.act === 5 || st.act === 11) { var cl = e.target.value.replace(/[^0-9]/g, ''); if (cl !== e.target.value) e.target.value = cl; }   /* whole numbers only */
+      st.answer = e.target.value; st.picked = null;
+      $$('#qBox .cans').forEach(function (c) { c.classList.remove('sel'); });
+    }
+  });
+  $('#qBox').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.id === 'ans') { e.preventDefault(); doCheck(); } });
+  $('#fb').addEventListener('click', function (e) { var b = e.target.closest('[data-a="next"]'); if (b) nextRound(); });
+
+  var rt = null;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { renderStage(); }, 120); });
+
+  renderHome(); renderGuide(); renderFormula(); renderConcept();
+}
+init();
+})();
+</script>
+</body>
+</html>
