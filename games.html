@@ -452,9 +452,9 @@
           </div>
           <label class="games-sort" for="game-sort">Sort:
             <select id="game-sort">
-              <option value="featured">Featured</option>
+              <option value="featured">Newest / Featured</option>
+              <option value="plays">Most Played</option>
               <option value="az">A–Z</option>
-              <option value="za">Z–A</option>
             </select>
           </label>
         </div>
@@ -821,7 +821,13 @@
           var mode = sortSel ? sortSel.value : 'featured';
           cards.slice().sort(function (a, b) {
             if (mode === 'az') return a.getAttribute('data-title').localeCompare(b.getAttribute('data-title'));
-            if (mode === 'za') return b.getAttribute('data-title').localeCompare(a.getAttribute('data-title'));
+            if (mode === 'plays') {
+              // Reads the count the play-counter script already stored on each card
+              // (data-play-count). No count yet = 0. Ties fall back to data-order.
+              var pa = parseInt(a.getAttribute('data-play-count') || '0', 10) || 0;
+              var pb = parseInt(b.getAttribute('data-play-count') || '0', 10) || 0;
+              if (pb !== pa) return pb - pa;
+            }
             return parseInt(a.getAttribute('data-order'), 10) - parseInt(b.getAttribute('data-order'), 10);
           }).forEach(function (card) { grid.appendChild(card); });
         }
@@ -846,6 +852,11 @@
           if (sortSel) sortSel.value = 'featured';
           applySort(); applyFilters();
           if (search) search.focus();
+        });
+
+        // The play-counter script loads counts asynchronously; re-sort when they arrive.
+        document.addEventListener('playcounts:updated', function () {
+          if (sortSel && sortSel.value === 'plays') applySort();
         });
 
         applySort();
@@ -892,6 +903,7 @@
               var id = card.getAttribute('data-game-id');
               showCount(card, counts[id] || 0);
             });
+            document.dispatchEvent(new CustomEvent('playcounts:updated'));
           })
           .catch(function () {
             // Network/config issue -- fail silently, keep the stat hidden.
