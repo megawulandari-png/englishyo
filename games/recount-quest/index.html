@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Recount Quest — Past Moments. Powerful Stories. An ENGLISH YO! reading adventure with personal, factual and imaginative recount texts." />
+  <title>Recount Quest — ENGLISH YO!</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/recount.css" />
+</head>
+<body data-world="home">
+  <a class="skip-link" href="#app">Skip to content</a>
+  <div class="shell">
+    <header class="topbar">
+      <a class="wordmark" href="../../index.html#home">ENGLISH <span>YO!</span><small>LEARN · PLAY · SPEAK</small></a>
+      <span class="spacer"></span>
+      <a class="chip-btn" href="#/learn"><img class="chip-ic" src="img/icons/book.png" alt="" aria-hidden="true"> <span>Learn</span></a>
+      <a class="chip-btn" href="#/passport"><img class="chip-ic" src="img/icons/passport.png" alt="" aria-hidden="true"> <span>Passport</span></a>
+      <button class="chip-btn" id="btn-sound" type="button" aria-pressed="true"><span id="sound-ico" aria-hidden="true">🔊</span> <span id="sound-label">Sound on</span></button>
+      <a class="chip-btn" href="../../games.html"><span aria-hidden="true">🏠</span> <span>Back to Games</span></a>
+    </header>
+
+    <main id="app" tabindex="-1"><noscript><p class="lead">Recount Quest needs JavaScript. Please turn it on in your browser.</p></noscript></main>
+
+    <footer class="foot">
+      <p class="dev-credit">Developed by Mega Ayu Wulandari</p>
+    </footer>
+  </div>
+  <div id="sr-live" class="sr-only" aria-live="polite"></div>
+  <div id="modal-root"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/story-personal.js"></script>
+  <script src="js/story-factual.js"></script>
+  <script src="js/story-imaginative.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -231,6 +231,10 @@
       .game-card--classclash .game-card__tag {
         color: #c2265a;
       }
+      /* Recount Quest artwork carries its own title, so the category tag would only cover it */
+      .game-card--recount .game-card__tag {
+        display: none;
+      }
       .game-card--time .game-card__image {
         display: grid;
         place-items: center;
@@ -455,7 +459,21 @@
           </label>
         </div>
         <div class="wide-shell games-grid">
-          <article class="game-card game-card--shapeshift" data-title="SHAPE SHIFT" data-devices="mobile desktop interactive" data-category="Math Geometry Similarity Congruence Kesebangunan Kongruen Shapes Scale Angles Critical Thinking Bilingual" data-order="0" data-game-id="shape-shift">
+          <article class="game-card game-card--recount" data-title="RECOUNT QUEST" data-devices="mobile desktop interactive" data-category="Reading Viewing Recount Personal Factual Imaginative Inference Evidence Sequence Text Structure" data-order="1" data-game-id="recount-quest">
+            <a class="game-card__image" href="games/recount-quest/index.html" aria-label="Play Recount Quest">
+              <img src="assets/games/recount-quest-card.png" alt="Recount Quest — a boy and a girl explorer with an open book, surrounded by story scenes: a race, a phone message, a stage, B.J. Habibie, a future city and Mars" loading="lazy" />
+              <span class="game-card__tag">Reading–Viewing • Recount</span>
+            </a>
+            <div class="game-card__body">
+              <h2>RECOUNT QUEST 📖</h2>
+              <p>Explore personal, factual, and imaginative recounts through interactive reading missions.</p>
+              <p>Reading–Viewing · A2–B1 Level</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
+              <a class="game-card__play" href="games/recount-quest/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article class="game-card game-card--shapeshift" data-title="SHAPE SHIFT" data-devices="mobile desktop interactive" data-category="Math Geometry Similarity Congruence Kesebangunan Kongruen Shapes Scale Angles Critical Thinking Bilingual" data-order="2" data-game-id="shape-shift">
             <a class="game-card__image" href="games/shape-shift/index.html" aria-label="Play SHAPE SHIFT: Similarity Lab">
               <img src="assets/games/shape-shift-card.png" alt="SHAPE SHIFT Geometry Quest — a tiger, a fox, an owl and a rabbit guide three missions: Similarity, Congruence and Mixed Challenge" loading="lazy" />
               <span class="game-card__tag">Math • Similarity &amp; Congruence</span>
@@ -469,7 +487,7 @@
               <a class="game-card__play" href="games/shape-shift/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--classclash" data-title="CLASS CLASH" data-devices="mobile desktop interactive" data-category="Multiplayer Team Battle Classroom Grammar Vocabulary Reading Critical Thinking" data-order="1" data-game-id="class-clash">
+          <article class="game-card game-card--classclash" data-title="CLASS CLASH" data-devices="mobile desktop interactive" data-category="Multiplayer Team Battle Classroom Grammar Vocabulary Reading Critical Thinking" data-order="3" data-game-id="class-clash">
             <a class="game-card__image" href="games/multiplayer/index.html" aria-label="Play Class Clash">
               <img src="assets/class-clash-card.png" alt="Class Clash — Fire, Bolt, Wave and Leaf team mascots cheering under their team banners and a golden trophy in a classroom" loading="lazy" />
               <span class="game-card__tag">Multiplayer • English Battle</span>
@@ -483,7 +501,7 @@
               <a class="game-card__play" href="games/multiplayer/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--thrive" data-title="THRIVE" data-devices="mobile desktop interactive" data-category="Procedure Text Life Skills Health Digital Safety Indonesian Food Respect Environment Safety Vocabulary Listening Speaking Writing Critical Thinking" data-order="2" data-game-id="thrive">
+          <article class="game-card game-card--thrive" data-title="THRIVE" data-devices="mobile desktop interactive" data-category="Procedure Text Life Skills Health Digital Safety Indonesian Food Respect Environment Safety Vocabulary Listening Speaking Writing Critical Thinking" data-order="4" data-game-id="thrive">
             <a class="game-card__image" href="games/thrive/index.html" aria-label="Play THRIVE">
               <img src="assets/games/thrive-card.png" alt="THRIVE — The Life Skills Procedure Quest: a school rabbit mascot cheers beside the game title on an island map with health, food, digital safety, friendship, environment and safety icons" loading="lazy" />
               <span class="game-card__tag">Procedure Text • Life Skills Quest</span>
@@ -497,7 +515,7 @@
               <a class="game-card__play" href="games/thrive/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--narrative" data-title="NARRATIVE QUEST" data-devices="mobile desktop interactive" data-category="Reading Narrative Text Vocabulary Grammar Simple Past Critical Thinking" data-order="3" data-game-id="narrative-quest">
+          <article class="game-card game-card--narrative" data-title="NARRATIVE QUEST" data-devices="mobile desktop interactive" data-category="Reading Narrative Text Vocabulary Grammar Simple Past Critical Thinking" data-order="5" data-game-id="narrative-quest">
             <a class="game-card__image" href="games/narrative-quest/index.html" aria-label="Play Narrative Quest">
               <img src="assets/games/narrative-quest-card.png" alt="Narrative Quest — Putri Serindang Bulan by a moonlit river with the soldier and his small boat" loading="lazy" />
               <span class="game-card__tag">Reading • Narrative Text • Simple Past</span>
@@ -511,7 +529,7 @@
               <a class="game-card__play" href="games/narrative-quest/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--wordtug" data-title="WORD TUG OF WAR" data-devices="mobile desktop interactive" data-category="Grammar Sentence Building" data-order="4" data-game-id="word-tug">
+          <article class="game-card game-card--wordtug" data-title="WORD TUG OF WAR" data-devices="mobile desktop interactive" data-category="Grammar Sentence Building" data-order="6" data-game-id="word-tug">
             <a class="game-card__image" href="games/word-tug/word-tug.html" aria-label="Play Word Tug of War">
               <img src="assets/games/word-tug-card.png" alt="Word Tug of War — Kobo the fox and Rex the panda pulling the rope in the ENGLISH YO! arena" loading="lazy" />
               <span class="game-card__tag">Grammar • Sentence Building</span>
@@ -525,7 +543,7 @@
               <a class="game-card__play" href="games/word-tug/word-tug.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--emberfall" data-title="EMBERFALL" data-devices="mobile desktop" data-category="Adventure English Learning" data-order="5" data-game-id="emberfall">
+          <article class="game-card game-card--emberfall" data-title="EMBERFALL" data-devices="mobile desktop" data-category="Adventure English Learning" data-order="7" data-game-id="emberfall">
             <a class="game-card__image" href="games/emberfall/emberfall.html" aria-label="Play Emberfall">
               <img src="assets/games/emberfall-card.png" alt="Emberfall — Kip the lantern sprite stands beside a glowing beacon in the Mosswood Trail" loading="lazy" />
               <span class="game-card__tag">Adventure • English Learning</span>
@@ -539,7 +557,7 @@
               <a class="game-card__play" href="games/emberfall/emberfall.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--detective" data-title="DETECTIVE EYES" data-devices="desktop interactive" data-category="Critical Thinking Investigation Reading" data-order="6" data-game-id="detective-eyes">
+          <article class="game-card game-card--detective" data-title="DETECTIVE EYES" data-devices="desktop interactive" data-category="Critical Thinking Investigation Reading" data-order="8" data-game-id="detective-eyes">
     <a class="game-card__image"
        href="games/detective-eyes/detective-eyes.html"
        aria-label="Play Detective Eyes">
@@ -575,7 +593,7 @@
         </a>
     </div>
 </article>
-          <article class="game-card game-card--scrabble" data-title="SCRABBLE YO!" data-devices="mobile desktop interactive" data-category="Vocabulary Word Building" data-order="7" data-game-id="scrabble-yo">
+          <article class="game-card game-card--scrabble" data-title="SCRABBLE YO!" data-devices="mobile desktop interactive" data-category="Vocabulary Word Building" data-order="9" data-game-id="scrabble-yo">
             <a class="game-card__image" href="games/scrabble-yo/index.html" aria-label="Play Scrabble YO!">
               <img src="assets/games/scrabble-yo-card.png" alt="Scrabble YO! — Kobo the fox and Rex the panda beside the SCRABBLE YO! logo" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Word Building</span>
@@ -589,7 +607,7 @@
               <a class="game-card__play" href="games/scrabble-yo/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--crossword" data-title="CROSSWORD ADVENTURE" data-devices="mobile desktop interactive" data-category="Vocabulary Crossword" data-order="8" data-game-id="crossword">
+          <article class="game-card game-card--crossword" data-title="CROSSWORD ADVENTURE" data-devices="mobile desktop interactive" data-category="Vocabulary Crossword" data-order="10" data-game-id="crossword">
             <a class="game-card__image" href="games/crossword.html" aria-label="Play Crossword Adventure">
               <img src="assets/games/crossword-card.png" alt="Crossword Adventure — Kobo the fox and Rex the panda beside a crossword grid spelling ENGLISH, LEARN and PLAY" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Crossword</span>
@@ -604,7 +622,7 @@
               <a class="game-card__play" href="games/crossword.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--sortit" data-title="SORT IT OUT!" data-devices="mobile desktop interactive" data-category="Vocabulary Listening Game" data-order="9" data-game-id="sort-it-out">
+          <article class="game-card game-card--sortit" data-title="SORT IT OUT!" data-devices="mobile desktop interactive" data-category="Vocabulary Listening Game" data-order="11" data-game-id="sort-it-out">
             <a class="game-card__image" href="games/sort-it-out/index.html" aria-label="Play Sort It Out">
               <img src="assets/games/sort-it-out-card.png" alt="Sort It Out! — two ENGLISH YO! students beside the five waste bins: organic, non-organic, paper, hazardous and residual" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Listening • Game</span>
@@ -618,7 +636,7 @@
               <a class="game-card__play" href="games/sort-it-out/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--time" data-title="TELLING THE TIME!" data-devices="mobile desktop interactive" data-category="Speaking Listening Numbers Time" data-order="10" data-game-id="telling-time">
+          <article class="game-card game-card--time" data-title="TELLING THE TIME!" data-devices="mobile desktop interactive" data-category="Speaking Listening Numbers Time" data-order="12" data-game-id="telling-time">
             <a class="game-card__image" href="games/telling-time/index.html" aria-label="Play Telling the Time">
   <img
   src="assets/games/telling-time-card.png"
@@ -636,7 +654,7 @@
               <a class="game-card__play" href="games/telling-time/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--pattern" data-title="PATTERN QUEST" data-devices="mobile desktop interactive" data-category="Vocabulary Patterns Logic Listening" data-order="11" data-game-id="pattern-quest">
+          <article class="game-card game-card--pattern" data-title="PATTERN QUEST" data-devices="mobile desktop interactive" data-category="Vocabulary Patterns Logic Listening" data-order="13" data-game-id="pattern-quest">
             <a class="game-card__image" href="games/pattern-quest/index.html" aria-label="Play Pattern Quest">
               <img src="assets/games/pattern-quest-card.png" alt="Pattern Quest — Nova, Luna, Zee and Mira beside a picture pattern of apple, banana, apple, banana and a question mark" loading="lazy" />
               <span class="game-card__tag">Vocabulary • Patterns • Logic</span>
@@ -650,7 +668,7 @@
               <a class="game-card__play" href="games/pattern-quest/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--family" data-title="WHO'S IN MY FAMILY?" data-devices="mobile desktop interactive" data-category="Grammar Family Vocabulary Possessives Logic Critical Thinking" data-order="12" data-game-id="whos-in-my-family">
+          <article class="game-card game-card--family" data-title="WHO'S IN MY FAMILY?" data-devices="mobile desktop interactive" data-category="Grammar Family Vocabulary Possessives Logic Critical Thinking" data-order="14" data-game-id="whos-in-my-family">
             <a class="game-card__image" href="games/whos-in-my-family/index.html" aria-label="Play Who's In My Family?">
               <img src="assets/games/whos-in-my-family-card.png" alt="Who's In My Family? — George, Helen and their family tree" loading="lazy" />
               <span class="game-card__tag">Family Vocabulary • Possessives • Logic &amp; Critical Thinking</span>
@@ -664,7 +682,7 @@
               <a class="game-card__play" href="games/whos-in-my-family/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
-          <article class="game-card game-card--animal" data-title="ANIMAL KINGDOM" data-devices="mobile desktop interactive" data-category="Science Vocabulary Listening Classification Critical Thinking" data-order="13" data-game-id="animal-kingdom">
+          <article class="game-card game-card--animal" data-title="ANIMAL KINGDOM" data-devices="mobile desktop interactive" data-category="Science Vocabulary Listening Classification Critical Thinking" data-order="15" data-game-id="animal-kingdom">
             <a class="game-card__image" href="games/animal-kingdom/index.html" aria-label="Play Animal Kingdom">
               <img src="assets/games/animal-kingdom-card.png" alt="Animal Kingdom — Kobo the fox beside tigers, frogs, butterflies, spiders and starfish: vertebrates vs invertebrates" loading="lazy" />
               <span class="game-card__tag">Science Vocabulary • Listening • Classify</span>
