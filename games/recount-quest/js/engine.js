@@ -483,24 +483,29 @@
   };
 
   R.match = function (body, it, end) {
-    var tries = 0, left = it.pairs.map(function (p) { return p[0]; }), right = U.shuffle(it.pairs.map(function (p) { return p[1]; })), done = {}, cur = -1, n = it.pairs.length, matched = 0;
+    /* done[i] = index (in the shuffled right column) of the card matched to left card i. 0 is a valid index, so test with `in`, never by truthiness. */
+    var tries = 0, left = it.pairs.map(function (p) { return p[0]; }), right = U.shuffle(it.pairs.map(function (p) { return p[1]; })), done = {}, order = {}, cur = -1, n = it.pairs.length, matched = 0, bad = null;
+    function tag(no) { return '<span class="mt-no" aria-hidden="true">' + no + '</span><span class="sr-only">Matched pair ' + no + ". </span>"; }
     function render(msg) {
-      body.innerHTML = '<p class="g-sub">Tap one card on the left, then tap its match on the right.</p><div class="mt-grid"><div class="mt-col" role="group" aria-label="Items">' +
-        left.map(function (l, i) { return '<button type="button" class="mt-b mt-l' + (done[i] ? " right" : cur === i ? " picked" : "") + '" data-l="' + i + '" aria-pressed="' + (cur === i) + '"' + (done[i] ? " disabled" : "") + ">" + U.esc(l) + "</button>"; }).join("") +
+      var ok = {}; Object.keys(done).forEach(function (i) { ok[done[i]] = +i; });
+      body.innerHTML = '<p class="g-sub">Tap one card on the left, then tap its match on the right. Matched pairs turn green and share a number.</p><div class="mt-grid"><div class="mt-col" role="group" aria-label="Items">' +
+        left.map(function (l, i) { var d = i in done; return '<button type="button" class="mt-b mt-l' + (d ? " right pr-" + order[i] : cur === i ? " picked" : "") + (bad && bad.l === i ? " wrong" : "") + '" data-l="' + i + '" aria-pressed="' + (cur === i) + '"' + (d ? " disabled" : "") + ">" + (d ? tag(order[i]) : "") + U.esc(l) + "</button>"; }).join("") +
         '</div><div class="mt-col" role="group" aria-label="Matches">' +
-        right.map(function (r, j) { var d = Object.keys(done).some(function (i) { return done[i] === j; }); return '<button type="button" class="mt-b mt-r' + (d ? " right" : "") + '" data-r="' + j + '"' + (d ? " disabled" : "") + ">" + U.esc(r) + "</button>"; }).join("") +
+        right.map(function (r, j) { var d = j in ok; return '<button type="button" class="mt-b mt-r' + (d ? " right pr-" + order[ok[j]] : "") + (bad && bad.r === j ? " wrong" : "") + '" data-r="' + j + '"' + (d ? " disabled" : "") + ">" + (d ? tag(order[ok[j]]) : "") + U.esc(r) + "</button>"; }).join("") +
         '</div></div><div class="fb-slot" role="status">' + (msg || "") + "</div>";
     }
     body.onclick = function (e) {
       var l = e.target.closest("[data-l]"), r = e.target.closest("[data-r]");
+      bad = null;
       if (l && !l.disabled) { cur = cur === +l.dataset.l ? -1 : +l.dataset.l; RQ.sfx.tap(); render(); return; }
       if (r && !r.disabled) {
         if (cur < 0) { render(fb("try", "Tap a card on the left first.")); return; }
-        if (it.pairs[cur][1] === right[+r.dataset.r]) {
-          done[cur] = +r.dataset.r; cur = -1; matched++; RQ.sfx.ok();
+        var j = +r.dataset.r;
+        if (it.pairs[cur][1] === right[j]) {
+          done[cur] = j; matched++; order[cur] = matched; cur = -1; RQ.sfx.ok();
           if (matched === n) { render(fb("ok", "<b>" + (tries === 0 ? "✓ All matched!" : "✓ All matched in the end!") + "</b> " + U.esc(it.why))); U.say("All matched"); end(tries === 0); }
           else render(fb("ok", "<b>✓ A match!</b> " + (n - matched) + " to go."));
-        } else { tries++; RQ.sfx.bad(); cur = -1; render(fb("try", "<b>Not a match.</b> Read both cards again and think about the text.")); }
+        } else { tries++; RQ.sfx.bad(); bad = { l: cur, r: j }; var said = left[cur]; cur = -1; render(fb("try", "<b>Not a match.</b> “" + U.esc(said) + "” does not go with that card. Both cards are free again: try another pair.")); }
         U.view(body.querySelector(".fb-slot"));
       }
     };

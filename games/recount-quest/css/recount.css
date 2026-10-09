@@ -486,6 +486,16 @@ body[data-world] .panel .complete h1, body[data-world] .panel .complete h2 { col
 .mt-b:hover:not(:disabled) { border-color: var(--navy); }
 .mt-b.picked { border-color: var(--pink); background: #fff0f5; }
 .mt-b.right { border-color: var(--green); background: var(--greenbg); color: #1d6b31; }
+.mt-b { position: relative; }
+.mt-b.right { display: flex; align-items: center; gap: 8px; opacity: 1; }
+.mt-b.right:disabled { opacity: 1; }
+.mt-no { flex: 0 0 auto; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--green); color: #fff; font-size: .8rem; font-weight: 900; }
+.mt-b.pr-2 .mt-no { background: #2b6cb0; } .mt-b.pr-3 .mt-no { background: #b7791f; } .mt-b.pr-4 .mt-no { background: #805ad5; }
+.mt-b.pr-2 { border-color: #2b6cb0; background: #e8f1fb; color: #1d4f85; }
+.mt-b.pr-3 { border-color: #b7791f; background: #fff4de; color: #7b4f10; }
+.mt-b.pr-4 { border-color: #805ad5; background: #f1ebfd; color: #55359a; }
+.mt-b.wrong { border-color: var(--red); background: var(--redbg); color: #8f2621; animation: mt-shake .35s; }
+@keyframes mt-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 .next-btn { margin-top: 12px; }
 
 /* ---- learn page */
