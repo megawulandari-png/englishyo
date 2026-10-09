@@ -51,7 +51,7 @@
     purpose: "Ask: why did the writer write this? To tell, to explain, to persuade or to entertain?",
     message: "What lesson does the writer want the reader to remember?",
     visual: "Look carefully at the picture and match it with the text.",
-    type: "Is it the writer’s own real experience, a real event about real people, or an imaginary adventure?"
+    type: "Is it the writer’s own experience (Personal), one real event (Factual), or the life of one real person (Biographical)?"
   };
 
   /* ---------------------------------------------------------- sound (tiny WebAudio tones, only after a tap) */
@@ -78,18 +78,59 @@
     tap: function () { RQ.sfx._t([520]); }
   };
 
-  /* ---------------------------------------------------------- storage (localStorage, safe fallback to memory) */
-  var KEY = "ey_recount_quest_v2";
+  /* ---------------------------------------------------------- storage (localStorage, safe fallback to memory)
+     Same key and "v: 2" as before, so an older cached script can still read the data. New fields only:
+       cv        content version (3 = V2 content: three worlds, per-story revisions)
+       eps[id].rev  the story revision the live scores belong to; eps[id].legacy = archived scores of an older revision
+       retired   scores of stories that no longer exist (never counted)
+       master.rev / master.legacy  same idea for the Master Quest
+     Scores from an older revision are archived, never merged into the new revision, never counted as mastery. */
+  var KEY = "ey_recount_quest_v2", BACKUP = KEY + "__backup", CV = 3, MASTER_REV = 2;
   var mem = null;
-  function fresh() { return { v: 2, sound: true, eps: {}, master: { best: 0, done: false, runs: 0 } }; }
+  function fresh() { return { v: 2, cv: CV, sound: true, eps: {}, retired: {}, master: { best: 0, done: false, runs: 0, rev: MASTER_REV } }; }
+  function epDef(id) { var l = (RQ.data && RQ.data.episodes) || []; for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
+  function blankEp(rev) { return { completed: false, stars: 0, steps: {}, acc: {}, rev: rev }; }
+  function archive(E, def) {
+    var had = E.completed || (E.stars || 0) > 0 || Object.keys(E.steps || {}).length > 0;
+    if (had) E.legacy = { rev: E.rev || 1, completed: !!E.completed, stars: E.stars || 0, lastStars: E.lastStars || 0, acc: E.acc || {}, steps: E.steps || {}, at: Date.now() };
+    E.completed = false; E.stars = 0; E.lastStars = 0; E.steps = {}; E.acc = {}; E.rev = def.rev;
+    return E;
+  }
+  function migrate(d) {
+    if (!d.eps || typeof d.eps !== "object" || d.eps instanceof Array) d.eps = {};
+    d.retired = (d.retired && typeof d.retired === "object") ? d.retired : {};
+    Object.keys(d.eps).forEach(function (id) {
+      var E = d.eps[id], def = epDef(id);
+      if (!E || typeof E !== "object") { delete d.eps[id]; return; }
+      if (!def) { d.retired[id] = { completed: !!E.completed, stars: E.stars || 0, rev: E.rev || 1, at: Date.now() }; delete d.eps[id]; return; }
+      if ((E.rev || 1) !== def.rev) archive(E, def); else E.rev = def.rev;
+    });
+    var M = d.master = (d.master && typeof d.master === "object") ? d.master : { best: 0, done: false, runs: 0 };
+    if ((M.rev || 1) !== MASTER_REV) {
+      if (M.runs || M.done || M.best) M.legacy = { rev: M.rev || 1, best: M.best || 0, done: !!M.done, runs: M.runs || 0, at: Date.now() };
+      M.best = 0; M.done = false; M.runs = 0; M.rev = MASTER_REV;
+    }
+    d.cv = CV;
+    return d;
+  }
   RQ.store = {
     data: null,
     load: function () {
-      var d = null;
-      try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { d = mem; }
-      if (!d || d.v !== 2) d = fresh();
-      d.eps = d.eps || {}; d.master = d.master || { best: 0, done: false, runs: 0 };
+      var d = null, raw = null, changed = false;
+      try { raw = localStorage.getItem(KEY); } catch (e) { raw = null; }
+      try { d = JSON.parse(raw); } catch (e) { d = mem; }
+      if (!d || typeof d !== "object" || d instanceof Array || d.v !== 2) {
+        try { if (raw && !localStorage.getItem(BACKUP)) localStorage.setItem(BACKUP, raw); } catch (e) { /* no storage: skip the backup */ }
+        d = fresh();
+      }
+      else if (d.cv !== CV) {
+        try { if (raw && !localStorage.getItem(BACKUP)) localStorage.setItem(BACKUP, raw); } catch (e) { /* no storage: skip the backup */ }
+        d = migrate(d); changed = true;
+      }
+      function plain(o) { return o && typeof o === "object" && !(o instanceof Array); }
+      if (!plain(d.eps)) d.eps = {}; if (!plain(d.retired)) d.retired = {}; if (!plain(d.master)) d.master = { best: 0, done: false, runs: 0, rev: MASTER_REV };
       RQ.store.data = d; RQ.sfx.on = d.sound !== false;
+      if (changed) RQ.store.save();
       return d;
     },
     save: function () {
@@ -98,9 +139,11 @@
     },
     reset: function () { RQ.store.data = fresh(); RQ.sfx.on = true; RQ.store.save(); },
     ep: function (id) {
-      var d = RQ.store.data;
-      if (!d.eps[id]) d.eps[id] = { completed: false, stars: 0, steps: {}, acc: {} };
-      return d.eps[id];
+      var d = RQ.store.data, def = epDef(id), E = d.eps[id];
+      if (!E) E = d.eps[id] = blankEp(def ? def.rev : 1);
+      else if (def && (E.rev || 1) !== def.rev) archive(E, def);
+      else if (def && !E.rev) E.rev = def.rev;
+      return E;
     }
   };
 
@@ -145,7 +188,8 @@
 
   function spoken(t) {
     return t.replace(/R\.A\./g, "Raden Ajeng").replace(/B\.J\./g, "B J").replace(/Mr\./g, "Mister").replace(/Mrs\./g, "Missus").replace(/Ms\./g, "Ms")
-      .replace(/a\.m\./g, "a m").replace(/p\.m\./g, "p m").replace(/→/g, " to ");
+      .replace(/a\.m\./g, "a m").replace(/p\.m\./g, "p m").replace(/→/g, " to ")
+      .replace(/\bIPTN\b/g, "I P T N").replace(/\bSTOVIA\b/g, "Stovia");
   }
   function sentences(t) {
     var out = [], last = 0, re = /[.!?]+["”’']*(?:\s+|$)/g, m;
@@ -155,7 +199,7 @@
     return out.filter(function (s) { return s; });
   }
   T.build = function (ep) {
-    var q = [{ p: -1, text: ep.title }];
+    var q = [{ p: -1, text: spoken(ep.title) }];
     ep.paras.forEach(function (p, i) { sentences(p).forEach(function (s) { q.push({ p: i, text: s }); }); });
     return q;
   };
@@ -264,7 +308,7 @@
         '<span class="speed" role="group" aria-label="Reading speed"><button type="button" class="sbtn2" data-rate="0.8" aria-pressed="false">0.8×</button><button type="button" class="sbtn2" data-rate="1" aria-pressed="true">1×</button><button type="button" class="sbtn2" data-rate="1.2" aria-pressed="false">1.2×</button></span></div><p class="tts-status" role="status"></p>'
       : '<p class="tts-status">🔇 Audio is not available in this browser. You can still read the story.</p>';
     box.innerHTML = '<div class="reader">' +
-      '<div class="rd-main"><article class="rd-text"><div class="rd-headrow">' + scene + '<div><h2 class="rd-title">' + U.esc(ep.title) + '</h2><p class="rd-meta">' + U.esc(RQ.data.worlds.filter(function (w) { return w.id === ep.world; })[0].kind) + " · " + U.esc(ep.theme) + " · " + words + " words · about " + mins + " min</p></div></div>" + ttsHtml +
+      '<div class="rd-main"><article class="rd-text"><div class="rd-headrow">' + scene + '<div><h2 class="rd-title">' + U.esc(ep.title) + '</h2><p class="rd-meta">' + U.esc(RQ.data.worlds.filter(function (w) { return w.id === ep.world; })[0].kind) + " · " + U.esc(ep.theme) + (ep.model ? " · Model Story" : "") + " · " + words + " words · about " + mins + " min</p></div></div>" + ttsHtml +
       '<div class="paras">' + ep.paras.map(function (p, i) { return '<p class="para" data-p="' + i + '"><span class="pn" aria-hidden="true">' + (i + 1) + '</span><span class="pt">' + mark(p) + "</span></p>"; }).join("") + '</div><div class="rd-end" aria-hidden="true"></div></article><div class="rd-foot"><p class="rd-hint" id="rd-hint" role="status">Read to the end of the story. The button unlocks when you reach it.</p><button type="button" class="btn btn-pink" data-fin disabled>✓ I have finished reading</button></div></div>' +
       '<aside class="rd-side"><div class="rd-vis">' + RQ.visual(ep) + '</div><div class="rd-words"><h3>Word help</h3><p class="g-sub">Tap a <span class="vw demo">highlighted word</span> in the story to see its meaning.</p><dl>' +
       ep.vocab.map(function (v) { return "<dt>" + U.esc(v.w) + "</dt><dd>" + U.esc(v.m) + "</dd>"; }).join("") + "</dl></div></aside></div>";
@@ -306,7 +350,7 @@
 
     /* unlock: end of story reached AND at least 10 seconds on the page */
     var seenEnd = false, timeOk = false;
-    function unlock() { if (seenEnd && timeOk && fin.disabled) { fin.disabled = false; document.getElementById("rd-hint").textContent = "Well done! You can move on to the next mission."; U.say("You can now finish reading."); } }
+    function unlock() { if (seenEnd && timeOk && fin.disabled) { var hint = document.getElementById("rd-hint"); if (!hint) return; fin.disabled = false; hint.textContent = "Well done! You can move on to the next mission."; U.say("You can now finish reading."); } }
     setTimeout(function () { timeOk = true; unlock(); }, 10000);
     var sentinel = root.querySelector(".rd-end");
     if ("IntersectionObserver" in window) {
@@ -422,13 +466,14 @@
       if (e.target.closest("[data-check]") && !e.target.closest("[data-check]").disabled) {
         var picked = Object.keys(sel).filter(function (x) { return sel[x]; }).map(Number);
         var right = picked.filter(function (k) { return it.a.indexOf(k) >= 0; });
-        if (right.length === need && picked.length === need) {
+        var kept = Object.keys(lock).length;
+        if (right.length + kept === need && picked.length === right.length) {
           U.$$(".opt", body).forEach(function () { /* noop */ });
           picked.forEach(function (k) { lock[k] = 1; }); sel = {}; render(fb("ok", "<b>" + (tries === 0 ? "✓ Correct!" : "✓ That’s it!") + "</b> " + U.esc(it.why)));
           U.$$(".opt", body).forEach(function (x) { x.disabled = true; }); U.$$(".actions", body).forEach(function (x) { x.remove(); });
           RQ.sfx.ok(); U.say("Correct"); end(tries === 0);
         } else {
-          tries++; RQ.sfx.bad(); right.forEach(function (k) { lock[k] = 1; }); sel = {};
+          tries++; RQ.sfx.bad(); right.forEach(function (k) { lock[k] = 1; }); sel = {}; right = Object.keys(lock);
           var msg = right.length ? "<b>You found " + right.length + " correct answer" + (right.length > 1 ? "s" : "") + ".</b> Those stay. Choose " + (need - right.length) + " more." : "<b>Not quite.</b> None of those is correct. " + (HINTS[it.tag] || "Look at the text again.");
           render(fb("try", msg)); U.view(body.querySelector(".fb-slot"));
         }

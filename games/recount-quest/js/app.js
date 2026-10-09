@@ -39,6 +39,20 @@
   function appbar(crumbs) {
     return '<nav class="appbar" aria-label="Breadcrumb">' + crumbs.map(function (c, i) { return c.h ? '<a href="' + c.h + '">' + (i === 0 ? "← " : "") + esc(c.t) + "</a>" : "<span>" + esc(c.t) + "</span>"; }).join('<i aria-hidden="true">/</i>') + "</nav>";
   }
+  /* a note when the learner played an earlier version of a story that has since been revised */
+  function legacyNote(E) {
+    var L = E && E.legacy;
+    if (!L || !(L.completed || L.stars)) return "";
+    return '<p class="legacy-note">You played an earlier version of this story' + (L.stars ? " (" + starStr(L.stars) + ")" : "") + ". This version is new, so your progress here starts again. Your old result is kept in your Passport.</p>";
+  }
+  /* quiet “Sources and learn more” box (closed by default) for factual and biographical stories */
+  function sourcesBox(e) {
+    var list = RQ.sources && RQ.sources[e.id];
+    if (!list || !list.length) return "";
+    return '<details class="sources"><summary>Sources and learn more</summary><p class="src-lead">This recount is based on the sources below. You can read them to learn more. The links open in a new tab and leave the game.</p><ul class="src-list">' +
+      list.map(function (x) { return '<li><a href="' + esc(x.u) + '" target="_blank" rel="noopener noreferrer">' + esc(x.t) + '</a><span class="src-meta"> — ' + esc(x.p) + ' <span class="src-lang" title="' + (x.l === "ID" ? "Written in Indonesian" : "Written in English") + '">' + esc(x.l) + "</span></span></li>"; }).join("") +
+      '</ul><p class="src-note">Pictures in this game are drawings, not photographs. Where sources disagree, the story says only what they all support.</p></details>';
+  }
   function setWorld(w) { document.body.setAttribute("data-world", w || "home"); }
   function show(html, focusSel) {
     RQ.stopAudio(); app.innerHTML = html; window.scrollTo(0, 0);
@@ -73,12 +87,12 @@
     setWorld(id);
     show(
       appbar([{ t: "All worlds", h: "#/" }, { t: w.name }]) +
-      '<header class="whead">' + U.img("bg-" + id, "whead-bg") + '<p class="eyebrow">' + esc(w.kind) + '</p><h1>' + U.worldIc(w, "ic-h1") + " " + esc(w.name) + '</h1><div class="wdef"><p>' + esc(w.what) + '</p><ul class="cluechips">' + w.clues.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul></div></header>" +
+      '<header class="whead">' + U.img("bg-" + id, "whead-bg") + '<p class="eyebrow">' + esc(w.kind) + '</p><h1>' + U.worldIc(w, "ic-h1") + " " + esc(w.name) + '</h1><div class="wdef"><p>' + esc(w.what) + '</p>' + (w.note ? '<p class="wnote">' + esc(w.note) + '</p>' : '') + '<ul class="cluechips">' + w.clues.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul></div></header>" +
       '<h2 class="sec">Choose a story</h2><div class="eps">' +
       eps(id).map(function (e, i) {
         var E = S.ep(e.id), n = doneCount(e.id);
         var state = E.completed ? '<span class="state done">✓ Completed</span>' : n ? '<span class="state prog">' + n + " / 6 missions</span>" : '<span class="state new">New</span>';
-        return '<a class="ecard" href="#/ep/' + e.id + '"><div class="eart">' + art("ep", e.id, e.icon) + '</div><div class="ebody"><span class="enum">Episode ' + (i + 1) + "</span><h3>" + esc(e.title) + '</h3><p class="etheme">' + esc(e.theme) + '</p><div class="efoot">' + state + '<span class="stars" aria-label="' + (E.stars || 0) + ' of 3 stars">' + starStr(E.stars || 0) + '</span></div><span class="btn btn-pink">' + (E.completed ? "Play again ▶" : n ? "Continue ▶" : "Play ▶") + "</span></div></a>";
+        return '<a class="ecard" href="#/ep/' + e.id + '"><div class="eart">' + art("ep", e.id, e.icon) + '</div><div class="ebody"><span class="enum">Episode ' + (i + 1) + (e.model ? " · Model Story" : "") + "</span><h3>" + esc(e.title) + '</h3><p class="etheme">' + esc(e.theme) + '</p><div class="efoot">' + state + '<span class="stars" aria-label="' + (E.stars || 0) + ' of 3 stars">' + starStr(E.stars || 0) + '</span></div><span class="btn btn-pink">' + (E.completed ? "Play again ▶" : n ? "Continue ▶" : "Play ▶") + "</span></div></a>";
       }).join("") + "</div>"
     );
   }
@@ -90,7 +104,7 @@
     setWorld(e.world);
     show(
       appbar([{ t: w.name, h: "#/world/" + w.id }, { t: e.title }]) +
-      '<header class="ehead">' + '<p class="eyebrow">' + esc(w.kind) + " · " + esc(e.theme) + '</p><h1>' + esc(e.title) + '</h1><ul class="cluechips">' + e.focus.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></header>" +
+      '<header class="ehead">' + '<p class="eyebrow">' + esc(w.kind) + " · " + esc(e.theme) + (e.model ? " · Model Story" : "") + '</p><h1>' + esc(e.title) + '</h1><ul class="cluechips">' + e.focus.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>" + legacyNote(E) + "</header>" +
       '<div class="mapwrap"><ol class="map">' + D.steps.map(function (s, i) {
         var isLast = s.id === "complete", dn = isLast ? E.completed : !!E.steps[s.id], cur = !isLast && s.id === nx;
         var open = !isLast || E.completed;
@@ -101,7 +115,7 @@
       }).join("") + "</ol>" +
       '<aside class="vocab info-card"><div class="info-card-content"><div class="info-vocab"><h2>Words you may meet</h2><ul class="vocab-list">' + e.vocab.map(function (v) { return "<li>" + esc(v.w) + "</li>"; }).join("") + '</ul></div>' + (RQ.assets[e.id + "-card"] ? '<img class="info-scene" src="img/' + RQ.assets[e.id + "-card"] + '" alt="" decoding="async">' : "") + '</div><div class="mapcta">' +
       (nx ? '<a class="btn btn-pink" href="#/ep/' + id + "/" + nx + '">' + (doneCount(id) ? "Continue: " : "Start: ") + esc(stepInfo(nx).name) + "</a>" : '<a class="btn btn-pink" href="#/ep/' + id + '/complete">See my result</a><button type="button" class="btn btn-ghost" data-replay="' + id + '">↺ Play again</button>') +
-      "</div></aside></div>"
+      "</div></aside></div>" + sourcesBox(e)
     );
   }
 
@@ -164,6 +178,7 @@
       L.tp.map(function (t, i) { return '<div class="tp-card"><span class="tp-i" aria-hidden="true">' + (U.img(t.im, "ic-tp") || t.i) + '</span><div><b><span class="tp-n">' + (i + 1) + ".</span> " + esc(t.t) + "</b><p>" + esc(t.d) + "</p></div></div>"; }).join("") + "</div>" +
       '<h2 class="sec">What is a Recount?</h2><div class="what"><p><b>A recount tells past events or experiences in the order they happened.</b></p></div>' +
       '<div class="types">' + D.worlds.map(function (w) { return '<div class="type-card t-' + w.id + '"><span class="ty-i" aria-hidden="true">' + U.worldIc(w, "ic-w") + "</span><h3>" + esc(w.kind) + "</h3><p>" + esc(w.what) + '</p><ul class="cluechips">' + w.clues.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul></div>"; }).join("") + "</div>" +
+      '<p class="what compare-line"><b>How to tell them apart:</b> a <b>Personal</b> recount is about the writer’s own experience, a <b>Factual</b> recount reports one real event, and a <b>Biographical</b> recount tells the life of one real person.</p>' +
       '<h2 class="sec">How a recount is built</h2><ol class="oer"><li class="o1"><span class="oer-n">1</span><b>Orientation</b><p>Sets the scene: who, when, where.</p></li><li class="arrow" aria-hidden="true">→</li><li class="o2"><span class="oer-n">2</span><b>Events</b><p>What happened, in time order.</p></li><li class="arrow" aria-hidden="true">→</li><li class="o3"><span class="oer-n">3</span><b>Reorientation</b><p>Looks back: a feeling, lesson or ending.</p></li></ol>' +
       '<div class="actions"><a class="btn btn-pink" href="#/">Choose a world →</a></div></section>'
     );
@@ -175,6 +190,7 @@
     var tot = totalDone(), M = S.data.master;
     var badges = D.episodes.map(function (e) { return { icon: e.badge.icon, name: e.badge.name, got: S.ep(e.id).completed, hint: "Finish “" + e.title + "”" }; });
     badges.push({ icon: "T", name0: 1, name: "Recount Master", got: !!M.done, hint: "Score " + MASTER_PASS + "/" + MASTER_LEN + " in the Master Quest" });
+    if (M.legacy && M.legacy.done) badges.push({ icon: "T", name0: 1, name: "Recount Master (original)", got: true, hint: "Earned in the first version" });
     show(
       appbar([{ t: "Home", h: "#/" }, { t: "Passport" }]) +
       '<section class="passport"><header class="pphead"><div class="pp-title">' + U.img("passport", "pp-art") + '<div><p class="eyebrow">ENGLISH YO!</p><h1>RECOUNT PASSPORT</h1></div></div><div class="ppcount"><b>' + tot + " / 9</b><span>Stories</span></div></header>" +
@@ -183,10 +199,25 @@
         var d = worldDone(w.id);
         return '<div class="pprow"><div class="pphd"><span>' + U.worldIc(w, "ic-sm") + " " + esc(w.name) + "<small>" + esc(w.kind) + '</small></span><span class="stars big" aria-label="' + d + ' of 3 stories">' + starStr(d) + "</span></div><ul>" +
           eps(w.id).map(function (e) { var E = S.ep(e.id); return "<li><span>" + esc(e.title) + "</span><em>" + (E.completed ? "✓ " + starStr(E.stars) : doneCount(e.id) ? doneCount(e.id) + "/6 missions" : "Not started") + "</em></li>"; }).join("") + "</ul></div>";
-      }).join("") +
+      }).join("") + earlierRows() +
       '<h2 class="sec">Badges</h2><div class="badges">' + badges.map(function (b) { return '<div class="bdg' + (b.got ? " got" : "") + '"><span class="bi" aria-hidden="true">' + (b.got ? U.img(b.name0 ? "trophy" : "medal", "ic-badge") : U.img("lock", "ic-badge dim")) + "</span><b>" + esc(b.name) + "</b><small>" + (b.got ? "Earned" : esc(b.hint)) + "</small></div>"; }).join("") + "</div>" +
       '<div class="actions"><a class="btn btn-pink" href="#/">Back to worlds</a>' + (masterUnlocked() ? '<a class="btn btn-yellow" href="#/master">Master Quest</a>' : "") + "</div></section>"
     );
+  }
+
+  /* “Earlier versions”: scores from stories that were revised or retired. They are kept for the learner but never counted. */
+  function earlierRows() {
+    var rows = [];
+    D.episodes.forEach(function (e) {
+      var L = S.ep(e.id).legacy;
+      if (L && (L.completed || L.stars)) rows.push("<li><span>" + esc(e.title) + "</span><em>" + (L.completed ? starStr(L.stars || L.lastStars || 1) : "started") + " · earlier version</em></li>");
+    });
+    var R = S.data.retired || {}, names = D.retired || {};
+    Object.keys(R).forEach(function (id) {
+      if (R[id] && (R[id].completed || R[id].stars)) rows.push("<li><span>" + esc(names[id] || "Earlier story") + "</span><em>" + starStr(R[id].stars || 1) + " · retired</em></li>");
+    });
+    if (!rows.length) return "";
+    return '<div class="pprow earlier"><div class="pphd"><span>Earlier versions<small>Kept for you, but not counted in the new Passport</small></span></div><ul>' + rows.join("") + "</ul></div>";
   }
 
   /* ------------------------------------------------------------ MASTER QUEST */
@@ -196,7 +227,8 @@
     show(
       appbar([{ t: "Home", h: "#/" }, { t: "Master Quest" }]) +
       '<section class="master"><p class="eyebrow">The final challenge</p><h1>' + U.img("trophy", "ic-h1") + ' RECOUNT MASTER QUEST</h1>' +
-      '<p class="lead">' + MASTER_LEN + " reading questions from all three worlds. You will tell the recount types apart, compare short texts, find evidence, make inferences, find the writer’s purpose, identify structure, arrange events and read a picture with its text.</p>" +
+      '<p class="lead">' + MASTER_LEN + " reading questions from all three worlds. You will tell Personal, Factual and Biographical recounts apart, compare short texts, find evidence, make inferences, find the writer’s purpose, identify structure, arrange events and read a picture with its text.</p>" +
+      (M.legacy && (M.legacy.runs || M.legacy.done) ? '<p class="legacy-note">Your result from the first version (best ' + M.legacy.best + " / " + MASTER_LEN + ") is kept in your Passport. The questions are new, so this quest starts again.</p>" : "") +
       '<ul class="req">' + D.worlds.map(function (w) { var d = worldDone(w.id) >= 1; return "<li class=\"" + (d ? "ok" : "") + "\"><span>" + (d ? "✓" : "○") + "</span> " + U.worldIc(w, "ic-sm") + " Finish one story in <b>" + esc(w.name) + "</b>" + (d ? "" : ' — <a href="#/world/' + w.id + '">go</a>') + "</li>"; }).join("") + "</ul>" +
       (unl ? '<p class="muted">' + (M.runs ? "Best score: <b>" + M.best + " / " + MASTER_LEN + "</b>. " : "") + "Score " + MASTER_PASS + " or more to earn the Recount Master badge. You can try as many times as you like.</p><div class=\"actions\"><a class=\"btn btn-pink\" href=\"#/master/play\">" + (M.runs ? "Try again" : "Start the quest") + " →</a></div>" : '<div class="unlock soft">🔒 Locked. Complete the three missions above to unlock.</div>') + "</section>"
     );

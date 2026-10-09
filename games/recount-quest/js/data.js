@@ -1,19 +1,21 @@
 /* RECOUNT QUEST — core content data (ENGLISH YO!)
-   Stories live in story-personal.js, story-factual.js and story-imaginative.js.
-   Assets: add a file name to RQ.assets ONLY after the PNG exists in /img.
+   Stories live in story-personal.js, story-factual.js and story-biographical.js.
+   Three kinds of recount: Personal (MY STORIES), Factual (REAL EVENTS), Biographical (INSPIRING LIVES).
+   Every story has a content revision (rev). When a story is revised, bump its rev: saved progress for the old
+   revision is archived (see engine.js) and never counted as mastery of the new text.
+   Assets: add a file name to RQ.assets ONLY after the image exists in /img.
    Audio: Recount Quest uses the browser's built-in text-to-speech. No audio files are needed. */
 window.RQ = window.RQ || {};
 
-/* key -> file inside /img (empty on purpose; CSS illustrations are used until a PNG is listed)
-   keys: 'world-personal', 'world-factual', 'world-imaginative', '<episodeId>-card', 'visual-<episodeId>' */
+/* key -> file inside /img: 'world-<id>' and '<episodeId>-card' (CSS illustrations are used when a key is missing) */
 RQ.assets = {
-  "world-personal": "worlds/personal.png", "world-factual": "worlds/factual.png", "world-imaginative": "worlds/imaginative.png",
+  "world-personal": "worlds/personal.webp", "world-factual": "worlds/factual.webp", "world-biographical": "worlds/biographical.webp",
   "race-card": "scenes/race.png", "message-card": "scenes/message.png", "stage-card": "scenes/stage.png",
-  "habibie-card": "scenes/habibie.png", "kartini-card": "scenes/kartini.png", "drill-card": "scenes/drill.png",
-  "y2050-card": "scenes/y2050.png", "mars-card": "scenes/mars.png", "invisible-card": "scenes/invisible.png"
+  "smong-card": "scenes/smong.webp", "cleanup-card": "scenes/cleanup.webp", "rescue-card": "scenes/rescue.webp",
+  "habibie-card": "scenes/habibie.webp", "kartini-card": "scenes/kartini.png", "kihajar-card": "scenes/kihajar.webp"
 };
 RQ.audio = {};
-/* interface artwork (cropped from the Recount Quest asset sheet); paths are relative to /img */
+/* interface artwork; paths are relative to /img */
 RQ.ui = {
   logo: "logo/recount-quest-logo.png",
   boy: "avatars/boy.png", girl: "avatars/girl.png", investigator: "avatars/investigator.png", explorer: "avatars/explorer.png",
@@ -21,8 +23,17 @@ RQ.ui = {
   book: "icons/book.png", clock: "icons/clock.png", magnifier: "icons/magnifier.png", binoculars: "icons/binoculars.png", bulb: "icons/bulb.png", pencil: "icons/pencil.png",
   chat: "icons/chat.png", chat2: "icons/chat2.png", signpost: "icons/signpost.png", pin: "icons/pin.png", marker: "icons/marker.png", photo: "icons/photo.png", globe: "icons/globe.png",
   play: "icons/play.png", pause: "icons/pause.png", stop: "icons/stop.png", checklist: "icons/checklist.png", star: "icons/star.png", warning: "icons/warning.png",
-  "w-personal": "worlds/personal.png", "w-factual": "worlds/factual.png", "w-imaginative": "worlds/imaginative.png",
-  "bg-personal": "backgrounds/stage.png", "bg-factual": "backgrounds/school.png", "bg-imaginative": "backgrounds/mars-city.png"
+  "w-personal": "worlds/personal.webp", "w-factual": "worlds/factual.webp", "w-biographical": "worlds/biographical.webp",
+  "bg-personal": "backgrounds/stage.png", "bg-factual": "backgrounds/school.png", "bg-biographical": "backgrounds/biographical.webp"
+};
+
+RQ.sources = {
+  smong: [{"t":"UN ISDR — Sasakawa Award 2005 and Simeulue’s Certificate of Merit","p":"United Nations (UNISDR)","u":"https://www.unisdr.org/2006/highlights/2005/October2005-eng.htm","l":"EN"},{"t":"20 years after the tsunami disaster","p":"GFZ Helmholtz Centre, Potsdam","u":"https://www.gfz.de/en/press/news/details/20-jahre-nach-der-tsunami-katastrophe","l":"EN"},{"t":"On Simeulue island, folk knowledge helped people escape the 2004 tsunami","p":"The World / PRX","u":"https://theworld.org/segments/2024/12/27/on-simeulue-island-in-indonesia-folk-knowledge-helped-people-escape-2004-tsunami","l":"EN"},{"t":"From pop songs to baby names: how Simeulue’s “smong” narrative evolves","p":"Phys.org","u":"https://phys.org/news/2024-12-songs-baby-simeulue-island-smong.html","l":"EN"}],
+  cleanup: [{"t":"Indonesia jadi partisipan terbanyak aksi World Clean Up Day","p":"Mongabay Indonesia","u":"https://www.mongabay.co.id/2018/09/19/indonesia-jadi-partisipan-terbanyak-aksi-world-clean-up-day-kok-bisa/","l":"ID"},{"t":"Estonian-inspired World Cleanup Day brings together 20 million people","p":"Estonian World","u":"https://estonianworld.com/life/estonian-inspired-world-cleanup-day-brings-together-20-million-people-cleaning-their-countries/","l":"EN"},{"t":"Government of Indonesia and Ocean Conservancy partner on cleanup, 15 September 2018","p":"Ocean Conservancy","u":"https://oceanconservancy.org/newsroom/press-release/2018/09/14/government-indonesia-ocean-conservancy-partner-international-coastal-cleanup-september-15/","l":"EN"},{"t":"World Cleanup Day — Indonesia","p":"World Cleanup Day","u":"https://www.worldcleanupday.org/country/indonesia","l":"EN"}],
+  rescue: [{"t":"Thai cave rescue: a timeline","p":"The Jakarta Post","u":"https://www.thejakartapost.com/seasia/2018/07/08/thai-cave-rescue-a-timeline.html","l":"EN"},{"t":"Farmers affected by flood waters from Tham Luang to get compensation","p":"Thai PBS World","u":"https://www.thaipbsworld.com/news/farmers-affected-flood-waters-tham-luang-get-compensation","l":"EN"},{"t":"Tham Luang cave rescue","p":"Wikipedia (overview)","u":"https://en.wikipedia.org/wiki/Tham_Luang_cave_rescue","l":"EN"}],
+  habibie: [{"t":"Bacharuddin Jusuf Habibie","p":"ITB Alumni Association","u":"https://alumni.itb.ac.id/bacharuddin-jusuf-habibie/","l":"ID"},{"t":"Biografi BJ Habibie","p":"Gramedia","u":"https://www.gramedia.com/literasi/biografi-bj-habibie/","l":"ID"},{"t":"IPTN N250","p":"Wikipedia","u":"https://en.wikipedia.org/wiki/IPTN_N250","l":"EN"},{"t":"B. J. Habibie","p":"Wikipedia","u":"https://en.wikipedia.org/wiki/B._J._Habibie","l":"EN"}],
+  kartini: [{"t":"Keputusan Presiden No. 108 Tahun 1964 (R.A. Kartini, Pahlawan Kemerdekaan Nasional)","p":"JDIH, Government of Indonesia","u":"https://jdih.kemenkoinfra.go.id/keppres-no-108-tahun-1964","l":"ID"},{"t":"Raden Ajeng Kartini (1879–1904)","p":"Leiden University Libraries","u":"https://leidenspecialcollectionsblog.nl/articles/raden-ajeng-kartini-1879-1904-a-pioneer-for-womens-rights-in-the-dutch-east-indies-indonesia","l":"EN"},{"t":"Remembering R.A. Kartini","p":"RRI (Radio Republik Indonesia)","u":"https://rri.co.id/en/whos-who/2349765/remembering-ra-kartini-the-heroine-of-indonesian-womens-emancipation","l":"EN"},{"t":"Raden Adjeng Kartini","p":"Biography.com","u":"https://www.biography.com/activist/raden-adjeng-kartini","l":"EN"},{"t":"Sejarah Sekolah Kartini","p":"Kompas","u":"https://www.kompas.com/stori/read/2024/04/22/220000879/sejarah-sekolah-kartini-lahir-dari-semangat-emansipasi-ra-kartini?page=all","l":"ID"}],
+  kihajar: [{"t":"The Life Journey of the “Father of Education” Ki Hajar Dewantara","p":"RRI","u":"https://rri.co.id/en/whos-who/2694563/the-life-journey-of-the-father-of-education-ki-hajar-dewantara","l":"EN"},{"t":"Mengenal Pendidikan Taman Siswa","p":"detikEdu","u":"https://www.detik.com/edu/detikpedia/d-5850716/mengenal-pendidikan-taman-siswa-warisan-perjuangan-ki-hajar-dewantara","l":"ID"},{"t":"Logo Tut Wuri Handayani: makna, arti dan sejarahnya","p":"detik","u":"https://www.detik.com/sumbagsel/berita/d-7318081/logo-tut-wuri-handayani-makna-arti-dan-sejarahnya","l":"ID"},{"t":"Ki Hajar Dewantara","p":"Wikipedia","u":"https://en.wikipedia.org/wiki/Ki_Hajar_Dewantara","l":"EN"}]
 };
 
 /* question builders (keep the story files short and consistent) */
@@ -41,17 +52,18 @@ RQ.q = {
 RQ.data = {
   worlds: [
     { id: "personal", icon: "👤", name: "MY STORIES", kind: "Personal Recount",
-      blurb: "Real moments from a writer’s own life.",
+      blurb: "Stories about the writer’s own experiences.",
       what: "A personal recount tells about something that happened to the writer.",
-      clues: ["Uses I, my, we", "Real experience", "Feelings and reflection"] },
-    { id: "factual", icon: "🌍", name: "REAL STORIES", kind: "Factual Recount",
-      blurb: "Real people and real events, told in order.",
-      what: "A factual recount reports events that really happened. The writer does not have to be in the story.",
-      clues: ["Real people, dates and places", "Often uses he, she, they", "Events in time order"] },
-    { id: "imaginative", icon: "✨", name: "IMAGINE IT!", kind: "Imaginative Recount",
-      blurb: "Impossible adventures, told as if they happened.",
-      what: "An imaginative recount tells an imaginary experience as if it really happened to the writer.",
-      clues: ["Impossible or dream-like events", "Still told in the past, in order", "Orientation, Events, Reorientation"] }
+      note: "These are model stories, written for practice.",
+      clues: ["Uses I, my, we", "The writer’s own experience", "Feelings and reflection"] },
+    { id: "factual", icon: "🌍", name: "REAL EVENTS", kind: "Factual Recount",
+      blurb: "Real events, told in the order they happened.",
+      what: "A factual recount reports one real event: what happened, when, where and who took part. It is about the event, not about one person’s life.",
+      clues: ["One real event with a date and a place", "Often uses he, she, they and group names", "Events in time order"] },
+    { id: "biographical", icon: "🌟", name: "INSPIRING LIVES", kind: "Biographical Recount",
+      blurb: "The life of a real person, told in order.",
+      what: "A biographical recount tells the important events in one real person’s life, in the order they happened. It often ends with why the person is remembered.",
+      clues: ["About one real person", "Dates and milestones from birth onwards", "Ends with why the person is remembered"] }
   ],
 
   steps: [
@@ -77,88 +89,44 @@ RQ.data = {
       { im: "signpost", i: "🔗", t: "Cause and effect", d: "Identify cause-and-effect relationships." },
       { im: "binoculars", i: "🧠", t: "Inference", d: "Make reasonable inferences from information in the text." },
       { im: "marker", i: "🎯", t: "Communicative purpose", d: "Identify the communicative purpose of a recount text." },
-      { im: "globe", i: "🗂️", t: "Three kinds of recount", d: "Distinguish Personal, Factual and Imaginative Recount." }
+      { im: "globe", i: "🗂️", t: "Three kinds of recount", d: "Distinguish Personal, Factual and Biographical Recount." }
     ]
   },
 
+  /* stories from the first version that no longer exist (names are used only in the Passport) */
+  retired: { drill: "When the Ground Started to Shake (school-drill version)", y2050: "The Day I Woke Up in 2050", mars: "My Night on Mars", invisible: "I Became Invisible for a Day" },
+
   episodes: [],  /* filled by the story files */
 
-  /* =============================================================== MASTER QUEST (Reading–Viewing) */
+  /* =============================================================== MASTER QUEST (Reading–Viewing)
+     27 items; each run uses 10 (one per category, then random). First option is correct unless fix:true. */
   master: [
-    /* ---- Identify the type */
-    { cat: "Identify the type", tag: "type", k: "mcq", q: "What type of recount is this text?",
-      quote: "On Saturday, my cousin and I cooked fried rice for the first time. I burnt the first batch, and my cousin laughed at me. In the end, we ate the second batch happily.",
-      o: ["Personal recount", "Factual recount", "Imaginative recount"], a: 0, fix: true, why: "The writer (I) tells a real experience from his or her own life." },
-    { cat: "Identify the type", tag: "type", k: "mcq", q: "What type of recount is this text?",
-      quote: "Mount Merapi erupted on 26 October 2010. Thousands of people left their villages, and rescue teams helped them move to safe places. The eruption continued for several weeks.",
-      o: ["Personal recount", "Factual recount", "Imaginative recount"], a: 1, fix: true, why: "It reports a real event with a date, a place and real actions. The writer is not part of the story." },
-    { cat: "Identify the type", tag: "type", k: "mcq", q: "What type of recount is this text?",
-      quote: "Last night, my school bag started to talk. It said that it was tired of carrying heavy books, so we walked to the beach together and watched the sunrise.",
-      o: ["Personal recount", "Factual recount", "Imaginative recount"], a: 2, fix: true, why: "A talking bag is impossible, but the events are told as a past experience in order. That is an imaginative recount." },
-
-    /* ---- Compare texts */
-    { cat: "Compare texts", tag: "compare", k: "mcq", q: "How are Text A and Text B different?",
-      ext: [{ h: "Text A", t: "When I was ten, I got lost in a market in Yogyakarta. I cried until a kind seller helped me find my father." }, { h: "Text B", t: "In 1928, young people from many parts of Indonesia met in Jakarta. They promised to support one homeland, one nation and one language of unity." }],
-      o: ["Text A tells a personal experience, but Text B tells a real historical event.", "Text A tells a real historical event, but Text B tells a personal experience.", "Text A is imaginative, but Text B is personal.", "Both texts tell imaginary experiences."], a: 0, why: "Text A uses “I” for the writer’s own experience. Text B reports a real event with a date and real people." },
-    { cat: "Compare texts", tag: "compare", k: "mcq", q: "Which statement about the two texts is correct?",
-      ext: [{ h: "Text A", t: "Yesterday, I flew above the clouds on a giant kite and met a friendly star." }, { h: "Text B", t: "Last week, I flew to Bali with my family. I felt nervous when the plane took off." }],
-      o: ["Both texts tell about the past, but only Text A is imaginary.", "Both texts are factual recounts.", "Text B is imaginary, and Text A is personal.", "Neither text tells about the past."], a: 0, why: "Both use past events. A giant kite and a friendly star are impossible, so Text A is imaginative. Text B is a personal recount." },
-
-    /* ---- Find evidence */
-    { cat: "Find evidence", tag: "evidence", k: "mcq", q: "Which detail shows that Tina felt happy about her result?",
-      quote: "Tina studied every evening for the English test. When she saw the result, she smiled and hugged her friend.",
-      o: ["She smiled and hugged her friend.", "She studied every evening.", "She saw the result.", "She took the English test."], a: 0, why: "Smiling and hugging show happiness. The other details tell what she did, not how she felt." },
-    { cat: "Find evidence", tag: "evidence", k: "mcq", q: "Which sentence best shows that the driver acted responsibly?",
-      quote: "The bus stopped suddenly. Many passengers fell forward, and a baby began to cry. The driver quickly turned on the lights and checked everyone.",
-      o: ["The driver quickly turned on the lights and checked everyone.", "The bus stopped suddenly.", "Many passengers fell forward.", "A baby began to cry."], a: 0, why: "Checking everyone is a responsible action. The other sentences describe the problem." },
-
-    /* ---- Make inferences */
-    { cat: "Make inferences", tag: "inference", k: "mcq", q: "What can we infer from the text?",
-      quote: "A chocolate cake was on the table when Rina left for school. When she came home, the plate was empty, and her little sister was wiping chocolate from her mouth.",
-      o: ["Her little sister probably ate the cake.", "Nobody baked a cake that day.", "Rina ate the cake at school.", "The cake was too small to see."], a: 0, why: "The empty plate and the chocolate on the sister’s mouth are clues. The text does not say it directly." },
-    { cat: "Make inferences", tag: "inference", k: "mcq", q: "How was Leo probably feeling before the match?",
-      quote: "Before the match, Leo checked his shoes three times and could not sit still. His coach put a hand on his shoulder and said, “Just play like you practise.”",
-      o: ["Nervous", "Bored", "Angry", "Sleepy"], a: 0, fix: true, why: "Checking his shoes again and again, not sitting still, and the coach’s calm words are clues that he was nervous." },
-    { cat: "Make inferences", tag: "inference", k: "mcq", q: "What can we infer about how Mr Anto felt?",
-      quote: "Mr Anto closed his old shop on the last day. He stood at the door for a long time before he turned off the light.",
-      o: ["He felt sad to say goodbye to the shop.", "He wanted to open the shop earlier.", "He was angry with the customers.", "He was waiting for a friend."], a: 0, why: "Standing at the door for a long time suggests that it was hard for him to leave." },
-
-    /* ---- Writer's purpose */
-    { cat: "Writer’s purpose", tag: "purpose", k: "mcq", q: "What is the writer’s main purpose?",
-      quote: "Last Sunday, I planted a mango tree with my grandfather. Although my hands were dirty and tired, I felt proud. Now I know that small actions can help the Earth.",
-      o: ["To share a personal experience and what the writer learned from it", "To explain how to plant a mango tree step by step", "To persuade readers to buy a tree", "To describe what a mango tree looks like"], a: 0, why: "The writer tells what happened and ends with a reflection. It is a personal recount, not instructions or an advertisement." },
-    { cat: "Writer’s purpose", tag: "purpose", k: "mcq", q: "Why was this text written?",
-      quote: "In 1955, the Asian-African Conference was held in Bandung. Leaders from 29 countries met to discuss peace and cooperation.",
-      o: ["To inform readers about a real event in the past", "To entertain readers with an imaginary adventure", "To describe the writer’s feelings", "To persuade readers to visit Bandung"], a: 0, why: "It reports a real event with a year, a place and facts." },
-
-    /* ---- Text structure */
-    { cat: "Text structure", tag: "structure", k: "mcq", q: "Which sentence is the Reorientation?",
-      quote: "(1) Last holiday, my family visited Lake Toba. (2) We took a boat to Samosir Island and ate grilled fish. (3) I will never forget how beautiful the lake was.",
-      o: ["Sentence 1", "Sentence 2", "Sentence 3"], a: 2, fix: true, why: "The Reorientation looks back at the experience. Sentence 3 gives the writer’s final thought." },
-    { cat: "Text structure", tag: "structure", k: "mcq", q: "Which sentence is the Orientation?",
-      quote: "(1) Last Friday, our class went to the museum with Mr Dedi. (2) We watched a short film and tried an old traditional game. (3) After the trip, I understood our history better.",
-      o: ["Sentence 1", "Sentence 2", "Sentence 3"], a: 0, fix: true, why: "The Orientation sets the scene: when, who and where. Sentence 1 does this." },
-    { cat: "Text structure", tag: "structure", k: "mcq", q: "What is the job of the Events part of a recount?",
-      o: ["To tell what happened, usually in time order", "To say who, when and where at the beginning only", "To give the writer’s final opinion", "To give instructions to the reader"], a: 0, why: "The Events are the main body. They tell what happened step by step." },
-
-    /* ---- Arrange events */
-    { cat: "Arrange events", tag: "sequence", k: "order", q: "Put the events in the order they happened.",
-      events: [{ t: "Rani woke up late.", clue: "This happened first, in the morning." }, { t: "She missed the school bus.", clue: "Because she woke up late." }, { t: "She ran to school.", clue: "After she missed the bus." }, { t: "The teacher smiled and let her enter.", clue: "This happened when she arrived." }],
-      why: "Each event is the result of the one before it." },
-    { cat: "Arrange events", tag: "sequence", k: "order", q: "Put the events of this flood report in order.",
-      events: [{ t: "Heavy rain fell all night.", clue: "This is the cause, so it came first." }, { t: "The river overflowed into the village.", clue: "It happened because of the rain." }, { t: "People moved to the community hall.", clue: "They left because the water rose." }, { t: "Volunteers brought food and blankets.", clue: "They helped after people were safe." }],
-      why: "The events follow cause and effect." },
-
-    /* ---- Read the picture (visual + text) */
-    { cat: "Read the picture", tag: "visual", k: "mcq", q: "Look at the message. Which detail shows that it may be a scam?",
-      vis: { type: "phone", from: "Unknown number", time: "Today 4.15 p.m.", text: "Congratulations! You won a new phone. Send your bank PIN today to get your prize!", link: "" },
-      o: ["It asks for a bank PIN.", "It uses an exclamation mark.", "It was sent in the afternoon.", "It is a short message."], a: 0, why: "A real prize never needs your PIN. Asking for private information is a warning sign." },
-    { cat: "Read the picture", tag: "visual", k: "mcq", q: "Read the text and look at the timeline. What happened after Dina won the school prize?",
-      quote: "Dina loved writing. She joined the English club at the beginning of the year, and her stories became better and better.",
-      vis: { type: "timeline", title: "Dina’s year", items: [{ e: "✏️", y: "January", l: "Joins the English club" }, { e: "📖", y: "March", l: "Writes her first story" }, { e: "🏅", y: "June", l: "Wins the school prize" }, { e: "📰", y: "December", l: "Stories appear in the school magazine" }] },
-      o: ["Her stories appeared in the school magazine.", "She joined the English club.", "She wrote her first story.", "She stopped writing."], a: 0, why: "On the timeline, the school magazine comes after June, when she won the prize." },
-    { cat: "Read the picture", tag: "visual", k: "mcq", q: "Look at the timeline of the class trip. What happened after the heavy rain?",
-      vis: { type: "timeline", title: "Our class trip", items: [{ e: "☀️", y: "8 a.m.", l: "Sunny at the bus stop" }, { e: "☁️", y: "11 a.m.", l: "Clouds over the park" }, { e: "🌧️", y: "1 p.m.", l: "Heavy rain" }, { e: "🌈", y: "4 p.m.", l: "A rainbow in the sky" }] },
-      o: ["A rainbow appeared in the sky.", "The sun was shining at the bus stop.", "Clouds covered the park.", "The class went home early."], a: 0, why: "The picture shows the rainbow at 4 p.m., after the rain at 1 p.m." }
+    {"cat":"Identify the type","tag":"type","k":"mcq","q":"What type of recount is this text?","quote":"On Saturday, my cousin and I cooked fried rice for the first time. I burnt the first batch, and my cousin laughed at me. In the end, we ate the second batch happily.","o":["Personal recount","Factual recount","Biographical recount"],"a":0,"fix":true,"why":"The writer (I) tells a real experience from his or her own life. This is a personal recount."},
+    {"cat":"Identify the type","tag":"type","k":"mcq","q":"What type of recount is this text?","quote":"Mount Merapi began to erupt on 26 October 2010. Thousands of people left their villages, and rescue workers helped many of them. The eruption continued for several weeks.","o":["Personal recount","Factual recount","Biographical recount"],"a":1,"fix":true,"why":"It reports one real event with a date and place. It is about the event, not about one person’s life. This is a factual recount."},
+    {"cat":"Identify the type","tag":"type","k":"mcq","q":"What type of recount is this text?","quote":"Kartini was born on 21 April 1879 in Jepara. As a child, she went to a Dutch-language primary school. When she was about 12 years old, she had to leave school.","o":["Personal recount","Factual recount","Biographical recount"],"a":2,"fix":true,"why":"It tells events from one real person’s life, in order, starting with birth. This is a biographical recount."},
+    {"cat":"Identify the type","tag":"type","k":"mcq","q":"What type of recount is this text?","quote":"B.J. Habibie was born on 25 June 1936 in Parepare. In 1955, he went to Germany to study aircraft engineering. In 1974, he returned to Indonesia.","o":["Personal recount","Factual recount","Biographical recount"],"a":2,"fix":true,"why":"It follows one person’s life over many years. This is a biographical recount."},
+    {"cat":"Compare texts","tag":"compare","k":"mcq","q":"How are Text A and Text B different?","ext":[{"h":"Text A","t":"When I was ten, I got lost in a market in Yogyakarta. I cried until a kind seller helped me find my father."},{"h":"Text B","t":"In 1928, young people from many parts of Indonesia met in Batavia, now Jakarta. They promised one homeland, one nation and one language of unity."}],"o":["Text A tells a personal experience, but Text B tells a real historical event.","Text A tells a real historical event, but Text B tells a personal experience.","Text A tells one person’s life, but Text B tells a personal experience.","Both texts tell the writer’s own experiences."],"a":0,"why":"Text A uses “I” for the writer’s own experience. Text B reports a real event with a date and real people."},
+    {"cat":"Compare texts","tag":"compare","k":"mcq","q":"How are Text A and Text B different?","ext":[{"h":"Text A","t":"Mount Merapi began to erupt on 26 October 2010. Thousands of people left their villages."},{"h":"Text B","t":"Ki Hajar Dewantara was born on 2 May 1889 in Yogyakarta. In 1922, he founded the Taman Siswa school."}],"o":["Text A reports one event, but Text B tells events in one person’s life.","Text A tells events in one person’s life, but Text B reports one event.","Text A tells a personal experience, but Text B reports one event.","Both texts tell events in one person’s life."],"a":0,"why":"Text A is about a single event. Text B follows one real person through different years."},
+    {"cat":"Compare texts","tag":"compare","k":"mcq","q":"Which statement about the two texts is correct?","ext":[{"h":"Text A","t":"Last year, I visited my grandmother in Solo. I helped her cook, and I felt happy."},{"h":"Text B","t":"Raden Ajeng Kartini was born in 1879. She wrote letters about education for girls."}],"o":["Text A is about the writer, and Text B is about another person.","Text A is about another person, and Text B is about the writer.","Both texts are about the writers themselves and their own lives.","Text A is a news report, and Text B is a personal diary."],"a":0,"why":"Text A uses “I”. Text B tells about a real person in the third person."},
+    {"cat":"Find evidence","tag":"evidence","k":"mcq","q":"Which detail shows that Tina felt happy about her result?","quote":"Tina studied every evening for the English test. When she saw the result, she smiled and hugged her friend.","o":["She smiled and hugged her friend.","She studied every evening for the test.","She saw the result of the test.","She took the English test at school."],"a":0,"why":"Smiling and hugging show happiness. The other details tell what she did, not how she felt."},
+    {"cat":"Find evidence","tag":"evidence","k":"mcq","q":"Which sentence best shows that the driver acted responsibly?","quote":"The bus stopped suddenly. Many passengers fell forward, and a baby began to cry. The driver quickly turned on the lights and checked everyone.","o":["The driver quickly turned on the lights and checked everyone.","Many passengers fell forward, and a baby began to cry.","The bus stopped suddenly, and many people were very afraid.","A baby began to cry when the bus stopped."],"a":0,"why":"Checking everyone is a responsible action. The other sentences describe the problem."},
+    {"cat":"Find evidence","tag":"evidence","k":"mcq","q":"Which detail shows that people from other countries helped?","quote":"Thai Navy SEALs, divers and other rescue workers came from Thailand and other countries. People pumped water out of the cave. Local people cooked meals for the rescue teams.","o":["Rescue workers came from Thailand and other countries.","People pumped a lot of water out of the cave.","Local people cooked meals for the rescue teams.","Thai Navy SEALs were part of the large rescue team."],"a":0,"why":"The words “other countries” show that helpers came from outside Thailand."},
+    {"cat":"Make inferences","tag":"inference","k":"mcq","q":"What can we infer from the text?","quote":"A chocolate cake was on the table when Rina left for school. When she came home, the plate was empty, and her little sister was wiping chocolate from her mouth.","o":["Her little sister probably ate the cake.","Nobody baked a cake at home that day.","Rina ate the cake after she came home.","Rina’s mother took the cake to a neighbour."],"a":0,"why":"The empty plate and the chocolate on the sister’s mouth are clues. The text does not say it directly."},
+    {"cat":"Make inferences","tag":"inference","k":"mcq","q":"How was Leo probably feeling before the match?","quote":"Before the match, Leo checked his shoes three times and could not sit still. His coach put a hand on his shoulder and said, “Just play like you practise.”","o":["Nervous","Bored","Angry","Sleepy"],"a":0,"fix":true,"why":"Checking his shoes again and again, not sitting still, and the coach’s calm words are clues that he was nervous."},
+    {"cat":"Make inferences","tag":"inference","k":"mcq","q":"What can we infer about how Mr Anto felt?","quote":"Mr Anto closed his old shop on the last day. He stood at the door for a long time before he turned off the light.","o":["He felt sad to say goodbye to the shop.","He wanted to open the shop earlier that day.","He was happy to close the old shop.","He was waiting for a friend to come to the shop."],"a":0,"why":"Standing at the door for a long time suggests that it was hard for him to leave."},
+    {"cat":"Make inferences","tag":"inference","k":"mcq","q":"What can we infer from the text?","quote":"A tsunami hit Simeulue in 1907. The survivors told their children and grandchildren what happened. In 2004, many people on the island moved to higher ground after a strong earthquake.","o":["The story from 1907 helped people in 2004.","The 1907 tsunami was smaller than the 2004 tsunami.","Nobody on the island believed the old story.","The strong earthquake took place in 1907 as well."],"a":0,"why":"The old story was passed on, and later people moved to higher ground. The text does not compare the size of the two tsunamis."},
+    {"cat":"Writer’s purpose","tag":"purpose","k":"mcq","q":"What is the writer’s main purpose?","quote":"Last Sunday, I planted a mango tree with my grandfather. Although my hands were dirty and tired, I felt proud. Now I know that small actions can help the Earth.","o":["To share a personal experience and a lesson","To explain how to plant a mango tree step by step","To persuade readers to buy a young mango tree","To describe what a mango tree looks like when grown"],"a":0,"why":"The writer tells what happened and ends with a reflection. It is a personal recount, not instructions or an advertisement."},
+    {"cat":"Writer’s purpose","tag":"purpose","k":"mcq","q":"Why was this text written?","quote":"In April 1955, the Asian-African Conference was held in Bandung. Representatives of 29 countries met to discuss peace and cooperation.","o":["To inform readers about a real event in the past","To describe a holiday in the city of Bandung","To describe the writer’s feelings about a trip","To persuade readers to visit the city of Bandung"],"a":0,"why":"It reports a real event with a month, a year, a place and facts."},
+    {"cat":"Writer’s purpose","tag":"purpose","k":"mcq","q":"Why was this text written?","quote":"Ki Hajar Dewantara founded the Taman Siswa school in 1922. Indonesians celebrate National Education Day on his birthday, 2 May.","o":["To tell about a real person and how he is remembered","To tell readers about a personal experience at school","To report one school news event from last week","To explain how to start a new school in a city"],"a":0,"why":"The text is about a real person’s life and how he is remembered today."},
+    {"cat":"Text structure","tag":"structure","k":"mcq","q":"Which sentence is the Reorientation?","quote":"(1) Last holiday, my family visited Lake Toba. (2) We took a boat to Samosir Island and ate grilled fish. (3) I will never forget how beautiful the lake was.","o":["Sentence 1","Sentence 2","Sentence 3"],"a":2,"fix":true,"why":"The Reorientation looks back at the experience. Sentence 3 gives the writer’s final thought."},
+    {"cat":"Text structure","tag":"structure","k":"mcq","q":"Which sentence is the Orientation?","quote":"(1) Last Friday, our class went to the museum with Mr Dedi. (2) We watched a short film and tried an old traditional game. (3) After the trip, I understood our history better.","o":["Sentence 1","Sentence 2","Sentence 3"],"a":0,"fix":true,"why":"The Orientation sets the scene: when, who and where. Sentence 1 does this."},
+    {"cat":"Text structure","tag":"structure","k":"mcq","q":"Which sentence is the Orientation?","quote":"(1) Raden Ajeng Kartini was an Indonesian woman who wrote about education for girls. (2) She was born in Jepara in 1879 and went to a Dutch-language primary school. (3) Today, Indonesians celebrate Kartini Day on 21 April to remember her.","o":["Sentence 1","Sentence 2","Sentence 3"],"a":0,"fix":true,"why":"In a biographical recount, the Orientation says who the person is. Sentence 1 does this. Sentence 3 looks back at how she is remembered."},
+    {"cat":"Text structure","tag":"structure","k":"mcq","q":"What is the job of the Events part of a recount?","o":["To tell what happened, usually in time order","To say who, when and where at the beginning only","To give the writer’s final opinion","To give instructions to the reader"],"a":0,"why":"The Events are the main body. They tell what happened step by step."},
+    {"cat":"Arrange events","tag":"sequence","k":"order","q":"Put the events in the order they happened.","events":[{"t":"Rani woke up late.","clue":"This happened first, in the morning."},{"t":"She missed the school bus.","clue":"Because she woke up late."},{"t":"She ran to school.","clue":"After she missed the bus."},{"t":"The teacher smiled and let her enter.","clue":"This happened when she arrived."}],"why":"Each event is the result of the one before it."},
+    {"cat":"Arrange events","tag":"sequence","k":"order","q":"Put the events of the Tham Luang rescue in order.","events":[{"t":"On 23 June 2018, the boys and their coach went into the cave.","clue":"This is the earliest date."},{"t":"On 2 July, divers found all 13 people alive.","clue":"This came nine days later."},{"t":"On 8 July, divers brought out the first four boys.","clue":"The rescue began on this day."},{"t":"On 10 July, the last four boys and their coach came out.","clue":"This is the latest date."}],"why":"The dates 23 June, 2 July, 8 July and 10 July give the order."},
+    {"cat":"Arrange events","tag":"sequence","k":"order","q":"Put these events from B.J. Habibie’s life in order.","events":[{"t":"In 1955, Habibie went to Germany to study.","clue":"This is the earliest year."},{"t":"In 1965, Habibie received his doctorate.","clue":"This came ten years after he went to Germany."},{"t":"In 1974, Habibie returned to Indonesia.","clue":"This came after his studies."},{"t":"In 1998, Habibie became President of Indonesia.","clue":"This is the latest year."}],"why":"A biographical recount follows the person’s life from earlier to later years."},
+    {"cat":"Read the picture","tag":"visual","k":"mcq","q":"Look at the message. Which detail shows that it may be a scam?","vis":{"type":"phone","from":"Unknown number","time":"Today 4.15 p.m.","text":"Congratulations! You won a new phone. Send your bank PIN today to get your prize!","link":""},"o":["It asks for a bank PIN.","It uses an exclamation mark.","It was sent in the afternoon.","It is a short message."],"a":0,"why":"A real prize never needs your PIN. Asking for private information is a warning sign."},
+    {"cat":"Read the picture","tag":"visual","k":"mcq","q":"Read the text and look at the timeline. What happened after Dina won the school prize?","quote":"Dina loved writing. She joined the English club at the beginning of the year, and her stories became better and better.","vis":{"type":"timeline","title":"Dina’s year","items":[{"e":"✏️","y":"January","l":"Joins the English club"},{"e":"📖","y":"March","l":"Writes her first story"},{"e":"🏅","y":"June","l":"Wins the school prize"},{"e":"📰","y":"December","l":"Stories appear in the school magazine"}]},"o":["Her stories appeared in the school magazine.","She joined the English club in January.","She wrote her first story in March.","She stopped writing after she won the prize."],"a":0,"why":"On the timeline, the school magazine comes after June, when she won the prize."},
+    {"cat":"Read the picture","tag":"visual","k":"mcq","q":"Look at the timeline. Which event came right after Ki Hajar Dewantara founded Taman Siswa?","vis":{"type":"timeline","title":"Ki Hajar Dewantara’s life","items":[{"e":"👶","y":"1889","l":"Born in Yogyakarta"},{"e":"📰","y":"1912","l":"Helps start the Indische Partij"},{"e":"🏫","y":"1922","l":"Founds Taman Siswa"},{"e":"🇮🇩","y":"1945","l":"First Minister of Education"},{"e":"🕊️","y":"1959","l":"Dies in Yogyakarta"}]},"o":["He became the first Minister of Education.","He helped to start the Indische Partij.","He was born in the city of Yogyakarta.","He died in the city of Yogyakarta in 1959."],"a":0,"why":"On the timeline, 1945 comes right after 1922."}
   ]
 };
