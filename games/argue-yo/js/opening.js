@@ -91,6 +91,7 @@
       $('.op-brand', el).hidden = true; $('.op-game', el).hidden = false;
       $skip.textContent = 'CONTINUE ›'; status('');
       if (!AU.isOn()) { status('🔇 Sound is OFF'); later(finish, 3400); return; }
+      if (!cfg.game.file) { gameSpeech(); return; }   /* no recording configured: speak the game welcome (intentional, no request) */
       var a = AU.playFile(cfg.game.file, { onEnd: function () { later(finish, 900); }, onError: gameSpeech });
       var p; try { p = a.play(); } catch (e) { p = null; }
       if (p && p.then) {

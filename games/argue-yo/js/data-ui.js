@@ -150,13 +150,13 @@
 
   /* ---------- ENGLISH YO! welcome audio (reusable pattern for other games) ----------
      brand.file  = the shared ENGLISH YO! welcome recording (path is relative to this page). Replace the file or change the path freely.
-     game.file   = OPTIONAL recording for the game introduction. If the file is not there, the browser's English voice reads game.text instead.
+     game.file   = OPTIONAL recording for the game introduction (null = the browser's English voice reads game.text).
      If brand.file is ever missing, brand.fallbackText is read by the browser voice. */
   A.AUDIO = {
     brand: { file: '../../assets/audio/english-yo-welcome.mp3',
              logo: '../../assets/logo-approved.png',
              fallbackText: 'Welcome to ENGLISH YO! Learn English, play, and grow. Are you ready? Let’s go!' },
-    game:  { file: 'assets/audio/argue-yo-welcome.mp3',
+    game:  { file: null,   /* no recording: the browser's English voice reads `text`. Set a path here only if a file really exists. */
              text: 'Welcome to ARGUE YO! Build your case, make your point, and become a great persuader!' },
     sessionFlag: 'argueyo.welcomeSeen'      /* sessionStorage: the welcome plays once per visit, not every time Home opens */
   };
