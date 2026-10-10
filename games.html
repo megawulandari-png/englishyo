@@ -701,7 +701,7 @@
           </article>
           <article class="game-card game-card--brave" data-title="THE BRAVE WAY" data-devices="mobile desktop interactive" data-category="Life Skills Character Safety Bilingual" data-order="16" data-game-id="ananda-bersinar">
             <a class="game-card__image" href="games/ananda-bersinar/index.html" aria-label="Play THE BRAVE WAY — Every Choice Matters.">
-              <img src="assets/games/the-brave-way-card.png" alt="THE BRAVE WAY — Every Choice Matters. Raka, Salsa, Maya and Dimas in a maze with challengers, a golden key, stars and an EXIT gate" loading="lazy" />
+              <img src="assets/games/the-brave-way-card.png?v=2" alt="THE BRAVE WAY — Every Choice Matters. Raka, Salsa, Maya and Dimas in a maze with challengers, a golden key, stars and an EXIT gate" loading="lazy" />
               <span class="game-card__tag">Life Skills • Maze • Bilingual</span>
             </a>
             <div class="game-card__body">
@@ -974,5 +974,44 @@
       })();
     </script>
 
+    <script>
+      /* Welcome audio: plays your own MP3 once, only when a student arrives here by clicking "Back to Games"
+         in a game (that click is the user interaction). It never plays on a normal page load, never repeats,
+         never blocks navigation, and any missing file or blocked playback is ignored silently. */
+      (function () {
+        var FLAG = "eyWelcomePending", FILE = "assets/audio/english-yo-welcome.mp3";
+        var pending = false;
+        try { pending = sessionStorage.getItem(FLAG) === "1"; sessionStorage.removeItem(FLAG); } catch (e) {}
+        if (!pending) return;
+        var audio, done = false, armed = false;
+        var events = ["pointerdown", "keydown", "touchstart"];
+        function finish() {
+          done = true;
+          if (armed) { events.forEach(function (ev) { document.removeEventListener(ev, onFirstInteraction, true); }); armed = false; }
+        }
+        function attempt() {
+          if (done) return;
+          try {
+            var p = audio.play();
+            if (p && typeof p.then === "function") {
+              p.then(finish).catch(function (err) {
+                if (err && err.name === "NotAllowedError") arm();   // autoplay blocked: wait for the first tap or key press
+                else finish();                                       // missing/unsupported file: give up quietly
+              });
+            } else { finish(); }
+          } catch (e) { finish(); }
+        }
+        function onFirstInteraction() { attempt(); }
+        function arm() {
+          if (armed || done) return; armed = true;
+          events.forEach(function (ev) { document.addEventListener(ev, onFirstInteraction, { capture: true, passive: true }); });
+        }
+        try {
+          audio = new Audio(FILE); audio.preload = "auto"; audio.volume = 1;
+          audio.addEventListener("error", finish);
+          attempt();
+        } catch (e) { /* audio not available: nothing to do */ }
+      })();
+    </script>
   </body>
 </html>

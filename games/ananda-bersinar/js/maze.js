@@ -310,6 +310,7 @@ function hud(){
 /* ═══════════ input ═══════════ */
 function press(d){ const i=pressed.indexOf(d); if(i>=0) pressed.splice(i,1); pressed.push(d); }
 function release(d){ const i=pressed.indexOf(d); if(i>=0) pressed.splice(i,1); }
+MZ.snapshot=()=>{ try{ snap(); }catch(e){} };
 MZ.clearKeys=()=>{ pressed.length=0; }; MZ.press=press; MZ.release=release; MZ.held=()=>pressed.slice();
 const KEYMAP={ArrowUp:'up',w:'up',W:'up',ArrowDown:'down',s:'down',S:'down',ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right'};
 document.addEventListener('keydown',e=>{

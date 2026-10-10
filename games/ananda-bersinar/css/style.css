@@ -340,4 +340,3 @@ textarea.field{min-height:80px;resize:vertical}
 
 /* Back to Games link (styled like the other small buttons) */
 a.btn.backgames,.bar a.btn.backgames{text-decoration:none;background:linear-gradient(#ffa24a,#ff7f10);color:#fff}
-a.btn.backgames.busy{opacity:.6;pointer-events:none;cursor:wait}

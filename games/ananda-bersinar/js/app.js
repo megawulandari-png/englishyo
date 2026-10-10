@@ -311,52 +311,14 @@ function langSwitch(){
   const on=l=>S.lang===l;
   return `<div class="langsw" role="group" aria-label="${esc(u('langLabel'))}"><button class="btn sm ${on('id')?'on':''}" type="button" data-act="lang" data-l="id" aria-pressed="${on('id')}">🇮🇩 Indonesia</button><button class="btn sm ${on('en')?'on':''}" type="button" data-act="lang" data-l="en" aria-pressed="${on('en')}">🇬🇧 English</button></div>`;
 }
-/* ───── Back to Games (ENGLISH YO! gallery) with a short spoken welcome ───── */
+/* ───── Back to Games (ENGLISH YO! gallery) ─────
+   A plain link: it navigates immediately. It leaves a one-time flag so games.html can play the welcome audio
+   (assets/audio/english-yo-welcome.mp3) as the student arrives. Nothing here plays sound or delays navigation. */
 const GAMES_URL = 'https://englishyo.my.id/games.html';
-const WELCOME = "Welcome to English Yo! Let's Learn, Play, and Grow!";
-let leaving = false, voiceCache = [];
-function loadVoices(){ try{ if(window.speechSynthesis) voiceCache = speechSynthesis.getVoices() || []; }catch(e){} }
-loadVoices(); try{ if(window.speechSynthesis) speechSynthesis.addEventListener('voiceschanged',loadVoices); }catch(e){}
-/* prefer a cheerful female en-GB voice, then any English female voice, then any English voice */
-D.pickVoice = voices => {
-  const FEMALE=/female|woman|libby|sonia|maisie|hazel|kate|serena|susan|martha|fiona|moira|karen|samantha|zira|aria|jenny|emma|amy|joanna|salli|tessa|victoria|allison|ava|nicky|shelley|flo\b|sandy|kathy/i;
-  const MALE=/\b(male|man)\b|daniel|george|ryan|arthur|oliver|alex|david|mark|fred|rishi|thomas|james|eddy|reed|rocko|ralph|albert|junior/i;
-  const NOVELTY=/grandma|grandpa|bad news|good news|bahh|bells|boing|bubbles|cellos|jester|organ|superstar|trinoids|whisper|wobble|zarvox|hysterical|deranged|bruce|princess|agnes/i;
-  let best=null, bestScore=-1e9;
-  (voices||[]).forEach(v=>{
-    const lang=(v.lang||'').replace('_','-'); if(!/^en/i.test(lang)) return;
-    let sc=0; if(/^en-GB$/i.test(lang)) sc+=10; else if(/^en-(AU|IE|ZA|NZ|IN)/i.test(lang)) sc+=4; else sc+=3;
-    if(FEMALE.test(v.name||'')) sc+=6; if(MALE.test(v.name||'')&&!/female/i.test(v.name||'')) sc-=8; if(NOVELTY.test(v.name||'')) sc-=30; if(v.localService) sc+=1;
-    if(sc>bestScore){ bestScore=sc; best=v; }
-  });
-  return bestScore<0 ? null : best;   // only novelty/male voices available: let the browser pick its default English voice
-};
-D.navigate = url => { window.location.href = url; };
+const WELCOME_FLAG = 'eyWelcomePending';
 function backGamesBtn(){
-  return `<a class="btn sm backgames${leaving?' busy':''}" href="${GAMES_URL}" data-act="backGames" ${leaving?'aria-disabled="true"':''}>🎮 ${u('backGames')}</a>`;
+  return `<a class="btn sm backgames" href="${GAMES_URL}" data-act="backGames">🎮 ${u('backGames')}</a>`;
 }
-function setBusy(on){ document.querySelectorAll('.backgames').forEach(a=>{ a.classList.toggle('busy',on); if(on) a.setAttribute('aria-disabled','true'); else a.removeAttribute('aria-disabled'); }); }
-function backToGames(){
-  if(leaving) return; leaving=true; setBusy(true);
-  let done=false;
-  const go=()=>{ if(done) return; done=true; clearTimeout(hard); clearTimeout(noStart); D.navigate(GAMES_URL); };
-  let hard=setTimeout(go,6500);                  // safety net: the student is never trapped on this page
-  let started=false; const noStart=setTimeout(()=>{ if(!started) go(); },2000);   // speech never began (silent browser): just go
-  try{
-    const syn=window.speechSynthesis;
-    if(!S.sound || !syn || typeof SpeechSynthesisUtterance==='undefined'){ go(); return; }
-    syn.cancel();                                // never overlap with earlier speech
-    loadVoices();
-    const ut=new SpeechSynthesisUtterance(WELCOME);
-    ut.lang='en-GB'; ut.rate=0.97; ut.pitch=1.1; ut.volume=1;
-    const v=D.pickVoice(voiceCache); if(v){ ut.voice=v; ut.lang=v.lang||'en-GB'; }
-    ut.onstart=()=>{ started=true; clearTimeout(noStart); clearTimeout(hard); hard=setTimeout(go,4500); };   // the message lasts ~3 s; if no end event arrives, still move on
-    ut.onend=()=>{ setTimeout(go,200); };
-    ut.onerror=()=>{ go(); };
-    syn.speak(ut);
-  }catch(e){ go(); }
-}
-window.addEventListener('pageshow',e=>{ if(e.persisted&&leaving){ leaving=false; try{ speechSynthesis.cancel(); }catch(x){} setBusy(false); } });
 
 function bar(){
   return `<div class="bar">${S.view!=='home'?`<button class="btn sm" data-act="go" data-v="home">🏠 ${u('home')}</button>${backGamesBtn()}<span class="brandmini">${u('gameTitle')}</span>`:''}<span class="grow"></span>
@@ -729,7 +691,7 @@ function startMissionScene(id,fresh){
 }
 const ACT = {
   go:d=>{ sfx.click(); go(d.v); },
-  backGames:(d,el,e)=>{ if(e) e.preventDefault(); backToGames(); },
+  backGames:()=>{ try{ if(S.sound) sessionStorage.setItem(WELCOME_FLAG,'1'); }catch(x){} MZ.snapshot(); },
   about:()=>{ sfx.click(); openAbout(); },
   aboutClose:()=>{ sfx.click(); closeAbout(); },
   lang:d=>{ const l=d&&d.l; if(l!=='id'&&l!=='en') return; if(S.lang!==l){ S.lang=l; sfx.click(); render(); } },
