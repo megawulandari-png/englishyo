@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ENGLISH YO! — Learn. Play. Speak." />
+    <meta name="description" content="ENGLISH YO! — Play games, learn English, and grow your skills." />
     <title>ENGLISH YO! — Learn. Play. Speak.</title>
 <link rel="icon" type="image/png" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="preload" as="image" href="assets/home/hero-new-1983.webp" imagesrcset="assets/home/hero-new-1280.webp 1280w, assets/home/hero-new-1983.webp 1983w" imagesizes="100vw" media="(min-width: 1024px)" />
+    <link rel="preload" as="image" href="assets/home/hero-new-mobile.webp" media="(max-width: 1023px)" />
     <link rel="stylesheet" href="styles.css" />
     <style>
       /* Developer Modal */
@@ -18,6 +20,7 @@
       @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
       .modal-close { position: absolute; top: clamp(16px, 1.6vw, 20px); right: clamp(16px, 1.6vw, 20px); border: 0; background: transparent; color: var(--navy); font-size: 1.5rem; cursor: pointer; padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
       .modal-close:hover { color: var(--pink); }
+      .modal-close:focus-visible { outline: 3px solid #1674ef; outline-offset: 2px; border-radius: 8px; }
       .modal-title { margin: 0 0 8px; color: var(--navy); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 800; }
       .modal-name { margin: 0 0 4px; color: var(--navy); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.3rem); font-weight: 800; }
       .modal-role { margin: 0 0 16px; color: #3a4d78; font-size: clamp(0.85rem, 1vw, 0.95rem); font-weight: 700; }
@@ -25,28 +28,7 @@
       @media (max-width: 480px) {
         .modal-card { padding: 28px 24px; }
       }
-
-
-      /* Featured Activities: 5 labelled cards */
-      .activity-grid.activity-grid--five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-      .featured-card { display: flex; flex-direction: column; background: #fff; text-decoration: none; }
-      .featured-card img { display: block; width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; }
-      .featured-card__body { display: flex; flex-direction: column; gap: 3px; padding: 7px 9px 9px; }
-      .featured-card__tag { align-self: flex-start; padding: 2px 8px; border-radius: 999px; background: #fff1b8; color: var(--navy); font-size: clamp(.56rem, .62vw, .66rem); font-weight: 900; letter-spacing: .04em; text-transform: uppercase; line-height: 1.35; }
-      .featured-card--game .featured-card__tag { background: #fff1b8; }
-      .featured-card--reading .featured-card__tag { background: #ffdcea; }
-      .featured-card--listening .featured-card__tag { background: #d9f5e3; }
-      .featured-card--learning .featured-card__tag { background: #dcecff; }
-      .featured-card__title { color: var(--navy); font-family: var(--display); font-size: clamp(.8rem, .92vw, .98rem); font-weight: 800; line-height: 1.12; }
-      @media (max-width: 1110px) and (min-width: 801px) {
-        .activity-grid.activity-grid--five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      }
-      @media (max-width: 480px) {
-        .activity-grid.activity-grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .activity-grid--five .featured-card:first-child { grid-column: span 2; }
-        .featured-card__title { font-size: .92rem; }
-        .featured-card__tag { font-size: .6rem; }
-      }
+      @media (prefers-reduced-motion: reduce) { .modal-card { animation: none; } }
 
       /* Developer modal: avatar + contact */
       .modal-profile { display: flex; align-items: center; gap: 14px; margin: 0 0 12px; }
@@ -79,50 +61,6 @@
         .welcome-toast__text { margin-bottom: 10px; font-size: .82rem; }
       }
       @media (prefers-reduced-motion: reduce) { .welcome-toast { transition: none; } }
-
-      /* KNOW YOUR LEVEL! banner */
-      .level-banner { position: relative; isolation: isolate; container-type: inline-size; display: flex; min-height: clamp(170px, 15vw, 250px); background: linear-gradient(135deg, #1674ef 0%, #0b3ea8 55%, #062568 100%); color: #fff; box-shadow: 0 12px 28px rgba(0,53,110,.2); }
-      .level-banner__inner { display: grid; flex: 1; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: clamp(10px, 2cqi, 22px); padding: clamp(16px, 4cqi, 30px) clamp(16px, 4.5cqi, 34px); }
-      .level-banner__blob { position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
-      .level-banner__blob--1 { width: 60%; aspect-ratio: 1; right: -18%; top: -45%; background: radial-gradient(circle, rgba(255,218,38,.35), rgba(255,218,38,0) 70%); }
-      .level-banner__blob--2 { width: 45%; aspect-ratio: 1; left: -14%; bottom: -55%; background: radial-gradient(circle, rgba(255,62,121,.45), rgba(255,62,121,0) 70%); }
-      .level-banner__spark { position: absolute; z-index: -1; color: var(--yellow); line-height: 1; pointer-events: none; animation: lbTwinkle 2.6s ease-in-out infinite; }
-      .level-banner__spark--1 { top: 12%; left: 48%; font-size: clamp(.9rem, 3cqi, 1.3rem); }
-      .level-banner__spark--2 { bottom: 12%; left: 4%; font-size: clamp(.7rem, 2.4cqi, 1rem); color: #9fe3ff; animation-delay: 1.2s; }
-      @keyframes lbTwinkle { 0%, 100% { opacity: .45; transform: scale(.85) rotate(0); } 50% { opacity: 1; transform: scale(1.15) rotate(15deg); } }
-      .level-banner__text { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
-      .level-banner__tag { margin-bottom: 6px; padding: 3px 10px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-size: clamp(.58rem, 1.9cqi, .7rem); font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-      .level-banner__title { margin: 0; font-family: var(--display); font-size: clamp(1.5rem, 8cqi, 2.6rem); font-weight: 800; line-height: .95; letter-spacing: -.01em; text-shadow: 0 3px 0 rgba(0,20,70,.35); }
-      .level-banner__title span { color: var(--yellow); }
-      .level-banner__question { margin: 8px 0 0; font-family: var(--display); font-size: clamp(.98rem, 4cqi, 1.3rem); font-weight: 800; line-height: 1.1; }
-      .level-banner__sub { margin: 2px 0 clamp(10px, 3cqi, 16px); color: #d6ebff; font-size: clamp(.78rem, 2.8cqi, .95rem); font-weight: 700; line-height: 1.3; }
-      .level-banner__cta { display: inline-flex; align-items: center; gap: 8px; padding: clamp(8px, 2.2cqi, 11px) clamp(14px, 4cqi, 22px); border-radius: 999px; background: var(--pink); color: #fff; font-size: clamp(.78rem, 2.8cqi, .95rem); font-weight: 900; letter-spacing: .03em; white-space: nowrap; box-shadow: 0 5px 0 #c4144c, 0 10px 18px rgba(0,0,0,.2); transition: transform .15s ease, box-shadow .15s ease; }
-      .level-banner__cta span { transition: transform .15s ease; }
-      .level-banner__cta:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #c4144c, 0 14px 22px rgba(0,0,0,.24); }
-      .level-banner__cta:hover span { transform: translateX(3px); }
-      .level-banner__cta:active { transform: translateY(3px); box-shadow: 0 2px 0 #c4144c, 0 6px 10px rgba(0,0,0,.2); }
-      .level-banner__cta:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
-      .level-banner__path { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); align-items: end; gap: clamp(3px, 1.1cqi, 7px); height: 100%; min-height: clamp(120px, 34cqi, 190px); margin: 0; padding: 0; list-style: none; }
-      .level-banner__path::before { position: absolute; left: 12%; right: 12%; bottom: 18%; height: 3px; border-top: 3px dashed rgba(255,255,255,.35); transform: rotate(-24deg); transform-origin: left; content: ""; }
-      .level-step { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding: 6px 2px 8px; border-radius: 14px 14px 8px 8px; color: var(--navy); box-shadow: inset 0 -5px 0 rgba(0,0,0,.12), 0 6px 12px rgba(0,0,0,.18); animation: lbRise .7s cubic-bezier(.2,1.4,.4,1) both; }
-      .level-step b { font-family: var(--display); font-size: clamp(.8rem, 3.2cqi, 1.2rem); font-weight: 800; line-height: 1; }
-      .level-step__icon { font-size: clamp(.85rem, 3.4cqi, 1.3rem); line-height: 1.1; animation: lbBob 2.4s ease-in-out infinite; }
-      .level-step--a1 { height: 36%; background: #ddf6e4; animation-delay: .05s; }
-      .level-step--a2 { height: 48%; background: #fff1c2; animation-delay: .12s; }
-      .level-step--b1 { height: 60%; background: #dceeff; animation-delay: .19s; }
-      .level-step--b2 { height: 72%; background: #ffe1ec; animation-delay: .26s; }
-      .level-step--c1 { height: 84%; background: #eadfff; animation-delay: .33s; }
-      .level-step--c2 { height: 97%; background: linear-gradient(180deg, #ffe46b, #ffc21f); animation-delay: .4s; }
-      .level-step--a2 .level-step__icon { animation-delay: .25s; } .level-step--b1 .level-step__icon { animation-delay: .5s; } .level-step--b2 .level-step__icon { animation-delay: .75s; } .level-step--c1 .level-step__icon { animation-delay: 1s; } .level-step--c2 .level-step__icon { animation-delay: 1.25s; }
-      @keyframes lbRise { from { opacity: 0; transform: translateY(30%) scaleY(.6); } to { opacity: 1; transform: none; } }
-      @keyframes lbBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-      @container (max-width: 400px) {
-        .level-banner__inner { grid-template-columns: 1fr; }
-        .level-banner__path { min-height: 118px; height: 118px; }
-        .level-step { padding: 5px 1px 6px; }
-        .level-banner__spark--1 { left: auto; right: 8%; }
-      }
-      @media (prefers-reduced-motion: reduce) { .level-banner__spark, .level-step, .level-step__icon { animation: none; } }
 
       /* Search Input Styling */
       .search-input-wrapper {
@@ -218,119 +156,410 @@
         letter-spacing: 0.5px;
       }
 
+      /* =========================================================
+         HOMEPAGE (game-first layout). Homepage-only rules live here so
+         the shared styles.css used by the other pages stays untouched.
+         ========================================================= */
+      :root {
+        --home-max: 1240px;
+        --home-gutter: 16px;
+        --section-gap: clamp(40px, 5vw, 64px);
+        --ink-soft: #3a4d78;
+        --focus: #1674ef;
+        --learn-bg: #dceeff;
+        --read-bg: #ffe2ee;
+        --listen-bg: #ddf4e5;
+        --card-shadow: 0 6px 18px rgba(5, 37, 116, .09);
+        --card-shadow-hover: 0 14px 30px rgba(5, 37, 116, .16);
+      }
+      body.home { background: #f6fbff; }
+      .home-shell { width: min(100% - 2 * var(--home-gutter), var(--home-max)); margin-inline: auto; }
+      .home a:focus-visible, .home button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+      /* ---- Header ---- */
+      .home .site-header { position: sticky; top: 0; z-index: 50; height: 72px; border-radius: 0; background: #fff; box-shadow: 0 2px 12px rgba(5, 37, 116, .08); }
+      .home .header-inner { width: min(100% - 2 * var(--home-gutter), var(--home-max)); gap: 20px; }
+      .home .brand { flex: 0 0 auto; }
+      .home .brand img { width: 176px; height: auto; }
+      .home .main-nav { justify-content: flex-end; gap: clamp(4px, .9vw, 14px); }
+      .home .main-nav a { gap: 7px; padding: 0 8px; font-size: clamp(.86rem, .92vw, .98rem); font-weight: 800; }
+      .home .main-nav a span { display: inline-grid; width: 1.3em; place-items: center; font-size: 1.05em; }
+      .home .main-nav a::after { right: 8px; left: 8px; bottom: 14px; }
+      .home .main-nav .nav-games { align-self: center; height: 40px; border-radius: 12px; background: #fff4c9; color: var(--navy); }
+      .home .main-nav .nav-games::after { display: none; }
+      .home .main-nav .nav-games:hover { background: #ffeaa0; }
+      .home .search-button { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; font-size: 0; transform: none; transition: background .15s ease; }
+      .home .search-button:hover { background: #eef5ff; }
+      .home .search-button svg { width: 22px; height: 22px; }
+      @media (max-width: 1099px) {
+        .home .site-header { height: 64px; }
+        .home .header-inner { gap: 10px; }
+        .home .brand img { width: 150px; }
+        .home .menu-toggle { display: grid; flex: 0 0 44px; width: 44px; height: 44px; margin-left: auto; place-content: center; gap: 5px; padding: 0; border: 0; border-radius: 50%; background: var(--navy); }
+        .home .menu-toggle i { width: 18px; height: 2px; border-radius: 4px; background: #fff; transition: transform .2s ease, opacity .2s ease; }
+        .home .menu-toggle[aria-expanded="true"] i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .home .menu-toggle[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+        .home .menu-toggle[aria-expanded="true"] i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .home .search-button { order: 3; margin-left: 0; }
+        .home .main-nav { position: absolute; top: calc(100% + 8px); right: var(--home-gutter); left: var(--home-gutter); display: none; height: auto; padding: 8px; gap: 2px; border-radius: 18px; background: #fff; box-shadow: 0 14px 34px rgba(0, 31, 93, .2); }
+        .home .main-nav.open { display: grid; }
+        .home .main-nav a { min-height: 46px; padding: 0 12px; border-radius: 12px; font-size: 1rem; }
+        .home .main-nav a::after { display: none; }
+        .home .main-nav a:hover { background: #f1f7ff; }
+        .home .main-nav .active { background: #eef5ff; }
+        .home .main-nav .nav-games { height: auto; align-self: stretch; }
+      }
+
+      /* ---- Hero ---- */
+      .home-hero { position: relative; overflow: hidden; background: linear-gradient(180deg, #bfe6ff 0%, #e4f5ff 100%); }
+      .home-hero__media img { display: block; width: 100%; }
+      .home-hero__content { position: relative; z-index: 1; }
+      .home-hero h1 { margin: 0 0 clamp(8px, 1vw, 14px); color: var(--navy); font-family: var(--display); font-size: clamp(2.3rem, 3.7vw, 4.1rem); font-weight: 800; letter-spacing: -.015em; line-height: 1.02; }
+      .home-hero h1 .accent { color: var(--yellow); -webkit-text-stroke: 4px var(--navy); paint-order: stroke fill; }
+      .home-hero__sub { margin: 0 0 clamp(18px, 2vw, 28px); color: #24386a; font-size: clamp(1.1rem, 1.45vw, 1.4rem); font-weight: 800; letter-spacing: .01em; }
+      .home-cta { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 clamp(24px, 2.2vw, 32px); border-radius: 999px; background: var(--pink); color: #fff; font-family: var(--display); font-size: clamp(1.05rem, 1.25vw, 1.25rem); font-weight: 800; letter-spacing: .02em; box-shadow: 0 6px 0 #c4144c, 0 14px 26px rgba(255, 62, 121, .3); transition: transform .15s ease, box-shadow .15s ease; }
+      .home-cta span { transition: transform .15s ease; }
+      .home-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #c4144c, 0 18px 30px rgba(255, 62, 121, .34); }
+      .home-cta:hover span { transform: translateX(3px); }
+      .home-cta:active { transform: translateY(4px); box-shadow: 0 2px 0 #c4144c, 0 8px 14px rgba(255, 62, 121, .28); }
+      /* Desktop: copy on the left over open sky, the five students on the right. */
+      @media (min-width: 1024px) {
+        .home-hero { display: flex; align-items: center; height: clamp(410px, 40vw, 640px); }
+        .home-hero__media img { position: absolute; inset: 0; height: 100%; object-fit: cover; object-position: 100% 62%; }
+        .home-hero::before { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(246, 251, 255, .9) 0%, rgba(246, 251, 255, .72) 20%, rgba(246, 251, 255, 0) 36%); content: ""; pointer-events: none; }
+        .home-hero__content { z-index: 2; max-width: 27vw; margin-left: clamp(24px, 5vw, 110px); }
+      }
+      @media (min-width: 1024px) and (max-width: 1279px) {
+        .home-hero__content { max-width: 29vw; }
+        .home-hero h1 { font-size: clamp(2.2rem, 3.5vw, 2.8rem); }
+      }
+      /* Tablet & mobile: copy first, then a crop that keeps all five students. */
+      @media (max-width: 1023px) {
+        .home-hero { display: flex; flex-direction: column; }
+        .home-hero { background: #c4e7fb; }
+        .home-hero__content { order: -1; padding: clamp(18px, 4vw, 32px) var(--home-gutter) clamp(4px, 1vw, 10px); text-align: center; }
+        .home-hero h1 { font-size: clamp(1.5rem, 5.4vw, 2.6rem); }
+        .home-hero__media { position: relative; display: block; }
+        .home-hero__media::before { position: absolute; top: 0; right: 0; left: 0; z-index: 1; height: 28%; background: linear-gradient(180deg, #c4e7fb 0%, rgba(196, 231, 251, 0) 100%); content: ""; pointer-events: none; }
+        /* Trim only sky from the top on tablets; students and wheelchair stay in frame. */
+        .home-hero__media img { aspect-ratio: 1000 / 573; height: auto; max-height: 380px; object-fit: cover; object-position: 50% 100%; }
+      }
+
+      /* ---- Section headings ---- */
+      .home-section { padding-block: var(--section-gap) 0; }
+      .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 20px; margin-bottom: clamp(18px, 2vw, 28px); }
+      .section-head h2 { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.7rem, 2.6vw, 2.4rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
+      .section-head p { margin: 4px 0 0; color: var(--ink-soft); font-size: clamp(1rem, 1.1vw, 1.1rem); font-weight: 700; }
+      .section-head--small h2 { font-size: clamp(1.4rem, 2vw, 1.85rem); }
+      .view-all { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 2px solid #cfe2ff; border-radius: 999px; background: #fff; color: var(--navy); font-size: .98rem; font-weight: 900; white-space: nowrap; transition: border-color .15s ease, background .15s ease; }
+      .view-all span { color: var(--pink); transition: transform .15s ease; }
+      .view-all:hover { border-color: var(--navy); }
+      .view-all:hover span { transform: translateX(3px); }
+
+      /* ---- Featured games ---- */
+      .game-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
+      .game-tile { display: flex; height: 100%; flex-direction: column; overflow: hidden; border-radius: 20px; background: #fff; box-shadow: var(--card-shadow); color: var(--navy); transition: transform .2s ease, box-shadow .2s ease; }
+      .game-tile__media { display: block; overflow: hidden; aspect-ratio: 16 / 9; background: #e4f1ff; }
+      .game-tile__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+      .game-tile__body { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px 16px; }
+      .game-tile__title { margin: 0; font-family: var(--display); font-size: clamp(1.15rem, 1.35vw, 1.35rem); font-weight: 800; line-height: 1.15; }
+      .game-tile__tag { display: block; margin-top: 3px; color: var(--ink-soft); font-size: .9rem; font-weight: 700; line-height: 1.35; }
+      .game-tile__go { display: grid; flex: 0 0 auto; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: #fff4c9; color: var(--navy); font-weight: 900; transition: background .2s ease, color .2s ease; }
+      .game-tile:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+      .game-tile:hover .game-tile__media img { transform: scale(1.04); }
+      .game-tile:hover .game-tile__go, .game-tile:focus-visible .game-tile__go { background: var(--pink); color: #fff; }
+      .game-tile:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+      @media (max-width: 899px) { .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 519px) { .game-grid { grid-template-columns: 1fr; } }
+
+      /* ---- More ways to learn ---- */
+      .learn-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px); margin: 0; padding: 0; list-style: none; }
+      .learn-card { display: flex; height: 100%; align-items: center; gap: 16px; padding: 20px 20px 20px 22px; border-radius: 20px; color: var(--navy); scroll-margin-top: 90px; transition: transform .2s ease, box-shadow .2s ease; }
+      .learn-card--learning { background: var(--learn-bg); }
+      .learn-card--reading { background: var(--read-bg); }
+      .learn-card--listening { background: var(--listen-bg); }
+      .learn-card__icon { display: grid; flex: 0 0 56px; width: 56px; height: 56px; place-items: center; border-radius: 16px; background: #fff; box-shadow: 0 4px 10px rgba(5, 37, 116, .08); }
+      .learn-card__icon svg { width: 28px; height: 28px; }
+      .learn-card--learning .learn-card__icon { color: #1663d6; }
+      .learn-card--reading .learn-card__icon { color: #d81b63; }
+      .learn-card--listening .learn-card__icon { color: #17803f; }
+      .learn-card__text { flex: 1; min-width: 0; }
+      .learn-card h3 { margin: 0; font-family: var(--display); font-size: clamp(1.15rem, 1.35vw, 1.3rem); font-weight: 800; line-height: 1.15; }
+      .learn-card p { margin: 3px 0 0; color: #2a3d68; font-size: .95rem; font-weight: 700; line-height: 1.35; }
+      .learn-card__go { flex: 0 0 auto; color: var(--navy); font-weight: 900; transition: transform .2s ease; }
+      .learn-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(5, 37, 116, .1); }
+      .learn-card:hover .learn-card__go { transform: translateX(3px); }
+      @media (max-width: 899px) { .learn-grid { grid-template-columns: 1fr; } }
+
+      /* ---- Know Your Level ---- */
+      .level-banner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); align-items: center; gap: clamp(20px, 3vw, 48px); overflow: hidden; padding: clamp(24px, 3.2vw, 40px) clamp(22px, 3.6vw, 48px); border-radius: 24px; background: radial-gradient(circle at 92% 0%, rgba(255, 218, 38, .22), rgba(255, 218, 38, 0) 42%), linear-gradient(135deg, #12459f 0%, #0b3a92 50%, #062568 100%); color: #fff; box-shadow: 0 12px 28px rgba(5, 37, 116, .18); }
+      .level-banner__title { margin: 0; font-family: var(--display); font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; line-height: 1; letter-spacing: -.01em; }
+      .level-banner__title span { color: var(--yellow); }
+      .level-banner__sub { margin: 10px 0 20px; color: #dcebff; font-size: clamp(1rem, 1.2vw, 1.15rem); font-weight: 700; line-height: 1.4; }
+      .level-banner__cta { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 24px; border-radius: 999px; background: var(--pink); color: #fff; font-size: 1rem; font-weight: 900; letter-spacing: .03em; box-shadow: 0 5px 0 #c4144c, 0 10px 18px rgba(0, 0, 0, .2); transition: transform .15s ease, box-shadow .15s ease; }
+      .level-banner__cta span { transition: transform .15s ease; }
+      .level-banner__cta:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #c4144c, 0 14px 22px rgba(0, 0, 0, .24); }
+      .level-banner__cta:hover span { transform: translateX(3px); }
+      .level-banner__cta:focus-visible { outline-color: var(--yellow); }
+      .level-path { display: grid; grid-template-columns: repeat(6, 1fr); align-items: end; gap: clamp(5px, .8vw, 10px); height: clamp(130px, 13vw, 170px); margin: 0; padding: 0; list-style: none; }
+      .level-step { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding-top: 8px; border-radius: 12px 12px 6px 6px; color: var(--navy); box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .1); }
+      .level-step b { font-family: var(--display); font-size: clamp(.95rem, 1.3vw, 1.2rem); font-weight: 800; line-height: 1; }
+      .level-step__icon { font-size: clamp(.95rem, 1.3vw, 1.2rem); line-height: 1.2; }
+      .level-step--a1 { height: 38%; background: #ddf6e4; }
+      .level-step--a2 { height: 50%; background: #fff1c2; }
+      .level-step--b1 { height: 62%; background: #dceeff; }
+      .level-step--b2 { height: 74%; background: #ffe1ec; }
+      .level-step--c1 { height: 87%; background: #eadfff; }
+      .level-step--c2 { height: 100%; background: linear-gradient(180deg, #ffe46b, #ffc21f); }
+      @media (max-width: 767px) {
+        .level-banner { grid-template-columns: 1fr; }
+        .level-path { height: 120px; }
+      }
+
+      /* ---- Footer ---- */
+      .home main { padding-bottom: var(--section-gap); }
+      .home .site-footer { min-height: 0; margin-top: 0; padding: clamp(36px, 4vw, 48px) 0 clamp(28px, 3vw, 36px); }
+      .home .site-footer::before { display: none; }
+      .home .footer-inner { width: min(100% - 2 * var(--home-gutter), var(--home-max)); grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 24px clamp(24px, 3vw, 48px); }
+      .home .footer-logo img { width: 176px; height: auto; }
+      .home .footer-nav { display: flex; justify-content: center; gap: 4px 20px; }
+      .home .footer-nav a { display: inline-flex; align-items: center; min-height: 36px; padding: 0; border: 0; font-size: .92rem; font-weight: 800; }
+      .home .footer-nav a:focus-visible { outline-color: var(--yellow); }
+      .home .credit { grid-template-columns: 26px auto; font-size: .9rem; line-height: 1.3; scroll-margin-top: 90px; }
+      .home .credit small { font-size: .85em; color: #d6e4ff; font-weight: 700; }
+      .home .world-note { display: block; font-size: .88rem; line-height: 1.25; }
+      @media (max-width: 1099px) {
+        .home .footer-inner { grid-template-columns: auto auto; justify-content: space-between; }
+        .home .footer-nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; }
+        .home .credit { justify-self: start; }
+        .home .world-note { justify-self: end; }
+      }
+      @media (max-width: 640px) {
+        .home .footer-inner { grid-template-columns: 1fr; justify-items: center; gap: 20px; text-align: center; }
+        .home .footer-nav { grid-row: auto; justify-content: center; gap: 0 18px; }
+        .home .credit, .home .world-note { justify-self: center; }
+        .home .credit { text-align: left; }
+      }
+
+      /* =========================================================
+         COMPACT MOBILE (< 600px): phone-first sizing, not a squeezed desktop.
+         ========================================================= */
+      @media (max-width: 599px) {
+        :root { --home-gutter: 14px; --section-gap: 28px; }
+
+        /* Nav */
+        .home .site-header { height: 60px; }
+        .home .header-inner { gap: 6px; }
+        .home .brand img { width: 136px; }
+        .home .menu-toggle { flex-basis: 44px; width: 44px; height: 44px; }
+        .home .menu-toggle i { width: 17px; }
+        .home .search-button svg { width: 21px; height: 21px; }
+        .home .main-nav { top: calc(100% + 6px); }
+        .home .main-nav a { min-height: 44px; font-size: .95rem; }
+
+        /* Hero: copy and illustration read as one sky-coloured block */
+        .home-hero__content { padding: 18px var(--home-gutter) 4px; }
+        .home-hero h1 { margin-bottom: 4px; font-size: clamp(1.5rem, 7.2vw, 1.75rem); line-height: 1.08; }
+        .home-hero h1 .accent { -webkit-text-stroke-width: 3px; }
+        .home-hero__sub { margin-bottom: 12px; font-size: .875rem; }
+        .home-cta { min-height: 44px; gap: 8px; padding: 0 22px; font-size: 1rem; box-shadow: 0 4px 0 #c4144c, 0 8px 16px rgba(255, 62, 121, .26); }
+        .home-cta:hover { box-shadow: 0 6px 0 #c4144c, 0 10px 18px rgba(255, 62, 121, .3); }
+        .home-hero__media img { max-height: none; }
+
+        /* Section headings: "Play Games YO! — View All →" on one row */
+        .section-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; margin-bottom: 14px; }
+        .section-head > div { display: contents; }
+        .section-head h2 { gap: 6px; font-size: 1.25rem; }
+        .section-head p { grid-column: 1 / -1; margin: 0; font-size: .875rem; line-height: 1.35; }
+        .section-head--small h2 { font-size: 1.2rem; }
+        .view-all { grid-column: 2; grid-row: 1; min-height: 44px; gap: 4px; padding: 0 2px 0 10px; border: 0; background: none; font-size: .875rem; }
+
+        /* Featured games: compact 2-up grid */
+        .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .game-tile { border-radius: 14px; box-shadow: 0 3px 10px rgba(5, 37, 116, .09); }
+        .game-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(5, 37, 116, .14); }
+        .game-tile__body { align-items: flex-start; padding: 9px 10px 11px; }
+        .game-tile__body > div { min-width: 0; }
+        .game-tile__title { font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
+        .game-tile__tag { display: -webkit-box; margin-top: 2px; overflow: hidden; font-size: .72rem; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+        .game-tile__go { display: none; }
+
+        /* More ways to learn: compact rows */
+        .learn-grid { gap: 10px; }
+        .learn-card { gap: 12px; padding: 12px 14px; border-radius: 14px; }
+        .learn-card__icon { flex-basis: 40px; width: 40px; height: 40px; border-radius: 12px; }
+        .learn-card__icon svg { width: 21px; height: 21px; }
+        .learn-card h3 { font-size: 1rem; }
+        .learn-card p { margin-top: 1px; font-size: .82rem; }
+
+        /* Know your level: centred stack — title, line, A1–C2 steps, button */
+        .level-banner { gap: 0; padding: 18px 16px 16px; border-radius: 18px; text-align: center; }
+        .level-banner__text { display: contents; }
+        .level-banner__title { order: 1; font-size: 1.35rem; }
+        .level-banner__sub { order: 2; margin: 4px auto 12px; max-width: 30ch; font-size: .85rem; font-weight: 600; line-height: 1.35; }
+        .level-path { order: 3; height: 58px; gap: 5px; }
+        .level-banner__cta { order: 4; justify-self: center; min-height: 40px; margin-top: 14px; padding: 0 18px; font-size: .85rem; box-shadow: 0 4px 0 #c4144c, 0 8px 14px rgba(0, 0, 0, .18); }
+        .level-banner__cta:hover { box-shadow: 0 5px 0 #c4144c, 0 10px 16px rgba(0, 0, 0, .2); }
+        .level-step { justify-content: center; padding-top: 0; border-radius: 8px 8px 4px 4px; }
+        .level-step b { font-size: .78rem; }
+        .level-step__icon { display: none; }
+
+        /* Footer: logo → 2-column links → divider → credit → Yogyakarta */
+        .home .site-footer { padding: 22px 0 18px; }
+        .home .footer-inner { grid-template-columns: 1fr; justify-items: center; gap: 0; text-align: center; }
+        .home .footer-logo img { width: 136px; }
+        .home .footer-nav { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); grid-template-rows: repeat(3, auto); grid-auto-flow: column; justify-content: center; gap: 0 36px; margin-top: 10px; text-align: left; }
+        .home .footer-nav a { min-height: 38px; font-size: .875rem; font-weight: 700; }
+        .home .credit { display: block; width: 100%; margin-top: 10px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .18); text-align: center; font-size: .875rem; line-height: 1.4; }
+        .home .credit > span[aria-hidden] { display: none; }
+        .home .credit b { font-weight: 800; }
+        .home .credit__label { color: #c9d8f5; font-size: .8rem; font-weight: 600; }
+        .home .credit small { display: block; margin-top: 2px; color: #c9d8f5; font-size: .78rem; font-weight: 600; }
+        .home .world-note { margin-top: 10px; color: #c9d8f5; font-size: .8rem; font-weight: 600; line-height: 1.45; }
+        .home .world-note br:first-of-type { display: none; }
+        .home .world-note strong { font-family: var(--body); font-size: 1em; font-weight: 800; }
+        .home .world-note__heart { margin: 0 1px; }
+      }
+      /* Narrow phones (iPhone SE 1st gen and similar) */
+      @media (max-width: 359px) {
+        :root { --home-gutter: 12px; }
+        .home .brand img { width: 124px; }
+        .game-grid { gap: 10px; }
+        .section-head h2 { font-size: 1.15rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .game-tile, .game-tile__media img, .learn-card, .learn-card__go, .home-cta, .home-cta span, .view-all span, .level-banner__cta, .level-banner__cta span { transition: none; }
+        .game-tile:hover, .learn-card:hover, .home-cta:hover, .level-banner__cta:hover { transform: none; }
+        .game-tile:hover .game-tile__media img { transform: none; }
+      }
     </style>
   </head>
-  <body>
+  <body class="home">
     <a class="skip-link" href="#main-content">Skip to content</a>
 
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
+        <a class="brand" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." width="2139" height="735" /></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu"><span class="sr-only">Open menu</span><i></i><i></i><i></i></button>
         <nav class="main-nav" id="main-menu" aria-label="Primary navigation">
-          <a class="active" href="#home"><span aria-hidden="true">⌂</span> Home</a>
-          <a href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
+          <a class="active" href="#home" aria-current="page"><span aria-hidden="true">⌂</span> Home</a>
+          <a class="nav-games" href="games.html"><span aria-hidden="true">🎮</span> Play Games YO!</a>
           <a href="learning.html"><span aria-hidden="true">💡</span> Learning YO!</a>
-          <a href="reading.html"><span aria-hidden="true">▤</span> Reading YO!</a>
+          <a href="reading.html"><span aria-hidden="true">📖</span> Reading YO!</a>
           <a href="listening.html"><span aria-hidden="true">🎧</span> Listening YO!</a>
-          <a href="#developers"><span aria-hidden="true">♟</span> Developers</a>
+          <a href="#developers" data-developer-open><span aria-hidden="true">♟</span> Developers</a>
         </nav>
-        <span class="progress-note" aria-label="Small steps, big progress">Small Steps<br />Big Progress!</span>
-        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger>⌕</button>
+        <button class="search-button" type="button" aria-label="Search ENGLISH YO!" data-search-trigger><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.6-4.6" /></svg></button>
       </div>
     </header>
 
     <main id="main-content">
-      <section class="hero" id="home" aria-labelledby="hero-title">
-        <img class="hero-bg" src="assets/hero-background-approved.png" alt="" aria-hidden="true" />
-        <div class="wide-shell hero-inner">
-          <div class="hero-content">
-            <h1 id="hero-title">A Brighter <span class="accent">You</span> with English</h1>
-            <p class="hero-subhead">Explore. Learn. Play. Grow.</p>
-            <a class="hero-cta" href="#featured-activities">Let's Go! <span aria-hidden="true">→</span></a>
-          </div>
+      <!-- HERO -->
+      <section class="home-hero" id="home" aria-labelledby="hero-title">
+        <picture class="home-hero__media">
+          <source media="(max-width: 1023px)" srcset="assets/home/hero-new-mobile.webp" type="image/webp" />
+          <source srcset="assets/home/hero-new-1280.webp 1280w, assets/home/hero-new-1983.webp 1983w" sizes="100vw" type="image/webp" />
+          <img src="assets/hero-background-new.png" width="1983" height="793" fetchpriority="high" decoding="async" alt="Five smiling English YO! students in school uniforms, one using a wheelchair and one wearing a hijab, waving in front of a colourful game world with floating islands, a castle, a clock and ABC letters." />
+        </picture>
+        <div class="home-hero__content">
+          <h1 id="hero-title">A Brighter <span class="accent">You</span> with English</h1>
+          <p class="home-hero__sub">Play. Learn. Grow.</p>
+          <a class="home-cta" href="games.html">PLAY GAMES YO! <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
-      <section class="quick-menu" id="play-games" aria-labelledby="quick-menu-title">
-        <h2 id="quick-menu-title" class="sr-only">Choose an English YO! activity</h2>
-        <div class="wide-shell quick-grid">
-          <a class="feature-card feature-card--games" href="games.html">
-            <span class="feature-icon" aria-hidden="true">🎮</span>
-            <h3>Play Games YO!</h3>
-            <p>Play, learn, and have fun!</p>
-            <span class="feature-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="feature-card feature-card--learning" href="learning.html">
-            <span class="feature-icon" aria-hidden="true">💡</span>
-            <h3>Learning YO!</h3>
-            <p>Simple lessons for real life.</p>
-            <span class="feature-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="feature-card feature-card--reading" href="reading.html">
-            <span class="feature-icon" aria-hidden="true">📖</span>
-            <h3>Reading YO!</h3>
-            <p>Great stories, bigger ideas.</p>
-            <span class="feature-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="feature-card feature-card--listening" href="listening.html">
-            <span class="feature-icon" aria-hidden="true">🎧</span>
-            <h3>Listening YO!</h3>
-            <p>Real English, real voices.</p>
-            <span class="feature-arrow" aria-hidden="true">→</span>
-          </a>
+      <!-- FEATURED GAMES (edit links/titles here; titles & tags match games.html) -->
+      <section class="home-section" id="play-games" aria-labelledby="games-title">
+        <div class="home-shell">
+          <div class="section-head">
+            <div>
+              <h2 id="games-title"><span aria-hidden="true">🎮</span> Play Games YO!</h2>
+              <p>Choose a game and start your English adventure!</p>
+            </div>
+            <a class="view-all" href="games.html">View All Games <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="game-grid">
+            <li><a class="game-tile" href="games/telling-time/index.html">
+              <span class="game-tile__media"><img src="assets/home/game-telling-time-960.webp" srcset="assets/home/game-telling-time-640.webp 640w, assets/home/game-telling-time-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">Telling the Time</h3><span class="game-tile__tag">Speaking • Listening • Numbers</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+            <li><a class="game-tile" href="games/narrative-quest/index.html">
+              <span class="game-tile__media"><img src="assets/home/game-narrative-quest-960.webp" srcset="assets/home/game-narrative-quest-640.webp 640w, assets/home/game-narrative-quest-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">Narrative Quest</h3><span class="game-tile__tag">Reading • Narrative Text • Simple Past</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+            <li><a class="game-tile" href="games/word-tug/word-tug.html">
+              <span class="game-tile__media"><img src="assets/home/game-word-tug-960.webp" srcset="assets/home/game-word-tug-640.webp 640w, assets/home/game-word-tug-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">Word Tug of War</h3><span class="game-tile__tag">Grammar • Sentence Building</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+            <li><a class="game-tile" href="games/multiplayer/index.html">
+              <span class="game-tile__media"><img src="assets/home/game-class-clash-960.webp" srcset="assets/home/game-class-clash-640.webp 640w, assets/home/game-class-clash-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">Class Clash</h3><span class="game-tile__tag">Multiplayer • English Battle</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+            <li><a class="game-tile" href="games/thrive/index.html">
+              <span class="game-tile__media"><img src="assets/home/game-thrive-960.webp" srcset="assets/home/game-thrive-640.webp 640w, assets/home/game-thrive-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">THRIVE</h3><span class="game-tile__tag">Procedure Text • Life Skills Quest</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+            <li><a class="game-tile" href="games/ananda-bersinar/index.html">
+              <span class="game-tile__media"><img src="assets/home/game-the-brave-way-960.webp" srcset="assets/home/game-the-brave-way-640.webp 640w, assets/home/game-the-brave-way-960.webp 960w" sizes="(min-width: 1240px) 395px, (min-width: 900px) 31vw, (min-width: 520px) 47vw, 94vw" width="960" height="540" loading="lazy" decoding="async" alt="" /></span>
+              <div class="game-tile__body"><div><h3 class="game-tile__title">The Brave Way</h3><span class="game-tile__tag">Life Skills • Maze • Bilingual</span></div><span class="game-tile__go" aria-hidden="true">→</span></div>
+            </a></li>
+          </ul>
         </div>
       </section>
 
-      <div class="wide-shell dashboard">
-        <section class="featured-panel" id="featured-activities" aria-labelledby="featured-title">
-          <div class="panel-heading">
-            <div><span class="heading-star" aria-hidden="true">★</span><h2 id="featured-title">Featured Activities</h2><p>Try these popular activities today!</p></div>
-            <a class="all-activities" href="#play-games">See All Activities <span aria-hidden="true">→</span></a>
+      <!-- MORE WAYS TO LEARN -->
+      <section class="home-section" aria-labelledby="learn-title">
+        <div class="home-shell">
+          <div class="section-head section-head--small"><h2 id="learn-title">More Ways to Learn</h2></div>
+          <ul class="learn-grid">
+            <li><a class="learn-card learn-card--learning" id="learning" href="learning.html">
+              <span class="learn-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></svg></span>
+              <div class="learn-card__text"><h3>Learning YO!</h3><p>Simple lessons for real life.</p></div>
+              <span class="learn-card__go" aria-hidden="true">→</span>
+            </a></li>
+            <li><a class="learn-card learn-card--reading" id="reading" href="reading.html">
+              <span class="learn-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" /><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" /></svg></span>
+              <div class="learn-card__text"><h3>Reading YO!</h3><p>Great stories, bigger ideas.</p></div>
+              <span class="learn-card__go" aria-hidden="true">→</span>
+            </a></li>
+            <li><a class="learn-card learn-card--listening" id="listening" href="listening.html">
+              <span class="learn-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" /></svg></span>
+              <div class="learn-card__text"><h3>Listening YO!</h3><p>Real English, real voices.</p></div>
+              <span class="learn-card__go" aria-hidden="true">→</span>
+            </a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- KNOW YOUR LEVEL! -->
+      <section class="home-section" id="know-your-level" aria-labelledby="level-banner-title">
+        <div class="home-shell">
+          <div class="level-banner">
+            <div class="level-banner__text">
+              <h2 class="level-banner__title" id="level-banner-title">KNOW YOUR <span>LEVEL!</span></h2>
+              <p class="level-banner__sub">What’s your English level? Take the challenge and find out!</p>
+              <a class="level-banner__cta" href="level-test.html">START THE TEST <span aria-hidden="true">→</span></a>
+            </div>
+            <ol class="level-path" aria-label="Levels from A1 to C2">
+              <li class="level-step level-step--a1"><span class="level-step__icon" aria-hidden="true">🌱</span><b>A1</b></li>
+              <li class="level-step level-step--a2"><span class="level-step__icon" aria-hidden="true">🚀</span><b>A2</b></li>
+              <li class="level-step level-step--b1"><span class="level-step__icon" aria-hidden="true">🧭</span><b>B1</b></li>
+              <li class="level-step level-step--b2"><span class="level-step__icon" aria-hidden="true">🏆</span><b>B2</b></li>
+              <li class="level-step level-step--c1"><span class="level-step__icon" aria-hidden="true">🌟</span><b>C1</b></li>
+              <li class="level-step level-step--c2"><span class="level-step__icon" aria-hidden="true">👑</span><b>C2</b></li>
+            </ol>
           </div>
-          <div class="activity-grid activity-grid--five">
-            <!-- FEATURED ACTIVITIES - EDIT LINKS HERE -->
-            <a class="activity-card featured-card featured-card--game" href="games/narrative-quest/index.html" aria-label="Game: Narrative Quest — Explore story worlds and master narratives"><img src="assets/featured/narrative-quest.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Game</span><span class="featured-card__title">Narrative Quest</span></span></a>
-            <a class="activity-card featured-card featured-card--game" href="games/telling-time/index.html" aria-label="Game: Telling the Time — Move, listen, choose and match"><img src="assets/featured/telling-time.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Game</span><span class="featured-card__title">Telling the Time</span></span></a>
-            <a class="activity-card featured-card featured-card--reading" href="reading.html?open=bj-habibie" aria-label="Reading: B.J. Habibie — A short biography · A2"><img src="assets/featured/bj-habibie.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Reading</span><span class="featured-card__title">B.J. Habibie</span></span></a>
-            <a class="activity-card featured-card featured-card--listening" href="listening.html?open=screen-03" aria-label="Listening: Who Are You Talking To? — Online friends and staying safe · B1"><img src="assets/featured/who-are-you-talking-to.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Listening</span><span class="featured-card__title">Who Are You Talking To?</span></span></a>
-            <a class="activity-card featured-card featured-card--learning" href="learning.html?open=prepositions" aria-label="Learning: Prepositions — in, on, under, behind, next to"><img src="assets/featured/prepositions.jpg" alt="" loading="lazy" width="480" height="300" /><span class="featured-card__body"><span class="featured-card__tag">Learning</span><span class="featured-card__title">Prepositions</span></span></a>
-            <!-- END FEATURED ACTIVITIES -->
-          </div>
-        </section>
-        <!-- KNOW YOUR LEVEL! promotional banner (replaces the former "A Global Community of Learners" image) -->
-        <section class="community-panel level-banner" id="developers" aria-labelledby="level-banner-title">
-          <span class="level-banner__blob level-banner__blob--1" aria-hidden="true"></span>
-          <span class="level-banner__blob level-banner__blob--2" aria-hidden="true"></span>
-          <span class="level-banner__spark level-banner__spark--1" aria-hidden="true">★</span>
-          <span class="level-banner__spark level-banner__spark--2" aria-hidden="true">✦</span>
-          <div class="level-banner__inner">
-          <div class="level-banner__text">
-            <span class="level-banner__tag">New challenge</span>
-            <h2 class="level-banner__title" id="level-banner-title">KNOW YOUR <span>LEVEL!</span></h2>
-            <p class="level-banner__question">What’s your English level?</p>
-            <p class="level-banner__sub">Take the challenge and find out!</p>
-            <a class="level-banner__cta" href="level-test.html">START THE TEST <span aria-hidden="true">→</span></a>
-          </div>
-          <ol class="level-banner__path" aria-label="Levels from A1 to C2">
-            <li class="level-step level-step--a1"><span class="level-step__icon" aria-hidden="true">🌱</span><b>A1</b></li>
-            <li class="level-step level-step--a2"><span class="level-step__icon" aria-hidden="true">🚀</span><b>A2</b></li>
-            <li class="level-step level-step--b1"><span class="level-step__icon" aria-hidden="true">🧭</span><b>B1</b></li>
-            <li class="level-step level-step--b2"><span class="level-step__icon" aria-hidden="true">🏆</span><b>B2</b></li>
-            <li class="level-step level-step--c1"><span class="level-step__icon" aria-hidden="true">🌟</span><b>C1</b></li>
-            <li class="level-step level-step--c2"><span class="level-step__icon" aria-hidden="true">👑</span><b>C2</b></li>
-          </ol>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
       <div class="footer-inner">
-        <a class="footer-logo" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." /></a>
-        <nav class="footer-nav" aria-label="Footer navigation"><a href="#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="reading.html">Reading YO!</a><a href="listening.html">Listening YO!</a><a href="#developers">Developers</a></nav>
-        <p class="credit"><span aria-hidden="true">♥</span> <b>Developed by<br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English Yo!</small></p>
-        <p class="world-note">From<br /><strong>Yogyakarta</strong><br />To a Brighter World <span>♥</span></p>
+        <a class="footer-logo" href="#home" aria-label="ENGLISH YO! home"><img src="assets/logo-approved.png" alt="ENGLISH YO! Learn. Play. Speak." width="2139" height="735" loading="lazy" /></a>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="#home">Home</a><a href="games.html">Play Games YO!</a><a href="learning.html">Learning YO!</a><a href="reading.html">Reading YO!</a><a href="listening.html">Listening YO!</a><a href="#developers" data-developer-open>Developers</a></nav>
+        <p class="credit" id="developers"><span aria-hidden="true">♥</span> <b><span class="credit__label">Developed by</span><br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English YO!</small></p>
+        <p class="world-note">Made with <span class="world-note__heart" role="img" aria-label="love">♥</span> in <br /><strong>Yogyakarta</strong><br />To a Brighter World</p>
       </div>
     </footer>
 
@@ -341,7 +570,7 @@
         <form onsubmit="return false;">
           <div class="search-input-wrapper">
             <span class="search-icon" aria-hidden="true">⌕</span>
-            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." />
+            <input id="site-search" type="search" placeholder="Try 'narrative', 'vocabulary', 'game'..." aria-label="Search lessons and games" />
           </div>
         </form>
         <div id="search-results" class="search-results"></div>
@@ -349,11 +578,11 @@
     </div>
     <!-- DEVELOPER MODAL -->
     <div class="developer-modal" id="developerModal">
-      <div class="modal-card">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="developerModalTitle">
         <button class="modal-close" type="button" aria-label="Close modal" id="modalCloseBtn">×</button>
-        <h2 class="modal-title">About the Developer</h2>
+        <h2 class="modal-title" id="developerModalTitle">About the Developer</h2>
         <div class="modal-profile">
-          <img class="modal-avatar" src="assets/developer-mega.png" alt="Mega Ayu Wulandari" width="84" height="84" />
+          <img class="modal-avatar" src="assets/developer-mega.png" alt="Mega Ayu Wulandari" width="84" height="84" loading="lazy" />
           <div>
             <h3 class="modal-name">Mega Ayu Wulandari</h3>
             <p class="modal-role">English Teacher · Educator · Creator of English Yo!</p>
@@ -401,43 +630,54 @@
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toast.classList.contains('is-visible')) hide(); });
       })();
 
-      // Developer Modal Handler
+      // Developer Modal Handler (header + footer "Developers" links, and index.html#developers from other pages)
       (function() {
         const modal = document.getElementById('developerModal');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
-        const devLink = document.querySelector('a[href="#developers"]');
-        
-        if (!modal || !devLink) return;
-        
-        // Open modal when Developers link is clicked
-        devLink.addEventListener('click', function(e) {
-          e.preventDefault();
+        const devLinks = document.querySelectorAll('[data-developer-open]');
+        let lastFocus = null;
+
+        if (!modal || !devLinks.length) return;
+
+        function openModal() {
+          lastFocus = document.activeElement;
           modal.classList.add('is-open');
           document.body.style.overflow = 'hidden';
-        });
-        
-        // Close modal functions
+          modalCloseBtn.focus();
+        }
+
         function closeModal() {
           modal.classList.remove('is-open');
           document.body.style.overflow = '';
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
         }
-        
+
+        devLinks.forEach(function (link) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModal();
+          });
+        });
+
         // Close on X button
         modalCloseBtn.addEventListener('click', closeModal);
-        
+
         // Close on clicking outside modal
         modal.addEventListener('click', function(e) {
           if (e.target === modal) {
             closeModal();
           }
         });
-        
+
         // Close on Escape key
         document.addEventListener('keydown', function(e) {
           if (e.key === 'Escape' && modal.classList.contains('is-open')) {
             closeModal();
           }
         });
+
+        // Other pages link to index.html#developers: open the popup on arrival
+        if (location.hash === '#developers') openModal();
       })();
     </script>
 
