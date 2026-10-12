@@ -218,6 +218,17 @@
       .game-card--argue .game-card__tag {
         display: none;
       }
+      /* ALPHABET ANIMAL RESCUE! artwork is 3:2 and carries its own title and info row:
+         show the whole image inside the 16:9 frame instead of cropping it */
+      .game-card--alphabet .game-card__image {
+        background: #ffffff;
+      }
+      .game-card--alphabet .game-card__image img {
+        object-fit: contain;
+      }
+      .game-card--alphabet .game-card__tag {
+        display: none;
+      }
       .game-card--narrative .game-card__tag {
         color: #5b3a8f;
       }
@@ -729,6 +740,21 @@
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/argue-yo/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card game-card--alphabet" data-title="ALPHABET ANIMAL RESCUE!" data-devices="mobile desktop interactive" data-category="Alphabet Animals Letters Phonics Vocabulary Listening Spelling Phase B Phase C Primary" data-order="18" data-game-id="alphabet-animal-rescue">
+            <a class="game-card__image" href="games/alphabet-animal-rescue/index.html" aria-label="Play Alphabet Animal Rescue! — A–Z Wildlife Adventure">
+              <img src="assets/games/alphabet-animal-rescue-card.webp" alt="Alphabet Animal Rescue! A–Z Wildlife Adventure — a junior ranger with an elephant, a fox, a giraffe, a lion, a penguin and ABC letter blocks" width="1536" height="1024" loading="lazy" />
+              <span class="game-card__tag">Alphabet &amp; Animals | Phase B–C</span>
+            </a>
+            <div class="game-card__body">
+              <h2>Alphabet Animal Rescue! 🦁</h2>
+              <p>Explore, listen, spell, and rescue animals from A to Z!</p>
+              <p>Alphabet &amp; Animals | Phase B–C</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · Tablet &amp; 🖥️ IFP</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
+              <a class="game-card__play" href="games/alphabet-animal-rescue/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
 

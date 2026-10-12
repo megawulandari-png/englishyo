@@ -1,0 +1,4 @@
+# Full-resolution ranger originals (about 6 MB each). The game loads the trimmed
+# web copies in assets/rangers/web/, so the originals stay local only.
+assets/rangers/*.png
+.DS_Store
