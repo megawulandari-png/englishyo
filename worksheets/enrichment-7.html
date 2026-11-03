@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>English Enrichment Challenge Grade 7 | ENGLISH YO!</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Single-file practice worksheet. Local answer checks are inspectable in browser developer tools. */
+:root {
+  --bg: #ffffff; --fg: #111111; --muted: #555555; --line: #111111;
+  --soft: #f3f3f3; --accent: #1f4e79; --good: #1b6e2c; --bad: #a11d1d;
+  --font: "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#ffffff; --fg:#111111; --muted:#555555; --line:#111111; --soft:#f3f3f3; --accent:#1f4e79; --good:#1b6e2c; --bad:#a11d1d; color-scheme: light; } }
+:root[data-theme="dark"] { --bg:#ffffff; --fg:#111111; --muted:#555555; --line:#111111; --soft:#f3f3f3; --accent:#1f4e79; --good:#1b6e2c; --bad:#a11d1d; color-scheme: light; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 16px; line-height: 1.55; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 24px 48px; }
+h1 { font-size: 28px; text-align: center; letter-spacing: .03em; margin: 0 0 6px; text-wrap: balance; }
+.sub { text-align: center; color: var(--muted); margin: 0 0 18px; }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px 20px; border: 2px solid var(--line); padding: 12px 14px; margin-bottom: 14px; }
+.meta label { display: flex; gap: 8px; align-items: baseline; font-size: 15px; }
+.meta input { flex: 1; min-width: 0; font: inherit; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--fg); padding: 4px 2px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin: 10px 0 14px; }
+.note { color: var(--muted); font-size: 14px; margin: 0; }
+button { font: inherit; font-weight: 700; color: var(--fg); background: var(--bg); border: 2px solid var(--line); padding: 8px 14px; cursor: pointer; border-radius: 6px; }
+button:hover { background: var(--soft); }
+button:disabled { opacity: .6; cursor: wait; }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--fg); color: var(--bg); }
+button.primary:hover { background: var(--accent); color: #fff; }
+.card { border: 2px solid var(--line); border-radius: 8px; padding: 16px 18px; margin: 0 0 24px; background: var(--bg); }
+.card > header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--line); padding-bottom: 8px; margin-bottom: 12px; }
+.card h2 { font-size: 20px; margin: 0; text-wrap: balance; }
+.score { font-weight: 700; color: var(--accent); min-width: 110px; text-align: right; }
+.stim { background: var(--soft); border: 2px dashed var(--line); border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; }
+.stim h3 { margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.grid2 > * { min-width: 0; }
+@media (max-width: 640px) { .grid2, .meta { grid-template-columns: 1fr; } h1 { font-size: 23px; } }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: middle; }
+th { background: var(--soft); }
+.table-wrap { overflow-x: auto; }
+select, input[type="text"], textarea { font: inherit; color: var(--fg); background: var(--bg); border: 2px solid var(--line); border-radius: 4px; padding: 5px 8px; max-width: 100%; }
+textarea { width: 100%; min-height: 110px; box-sizing: border-box; }
+input[type="text"].ans { width: 220px; }
+.good { border-color: var(--good) !important; background: #e7f5ea !important; }
+.bad { border-color: var(--bad) !important; background: #fbe9e9 !important; }
+.q { margin: 0 0 14px; }
+.qn { font-weight: 700; }
+.fbx { display: block; margin-top: 4px; font-size: 14px; font-weight: 700; padding: 4px 8px; border-left: 4px solid var(--line); }
+.fbx.ok { color: var(--good); border-left-color: var(--good); }
+.fbx.no { color: var(--bad); border-left-color: var(--bad); }
+.lblpair { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+.lblpair .fbx { grid-column: 1 / -1; margin-top: 0; }
+.clock-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.clock-wrap svg { width: 200px; height: 200px; max-width: 100%; }
+.slider-row { display: flex; gap: 10px; align-items: center; width: 100%; justify-content: center; flex-wrap: wrap; }
+.slider-row input[type="range"] { width: 180px; }
+.time-readout { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 4px; }
+.cal .dow { font-weight: 700; text-align: center; font-size: 13px; padding: 4px 0; }
+.cal button.day { font-size: 15px; padding: 8px 0; min-height: 44px; border-width: 1px; border-radius: 4px; position: relative; }
+.cal button.day.ev::after { content: ""; position: absolute; left: 50%; bottom: 5px; transform: translateX(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
+.cal button.day.sel { background: var(--fg); color: var(--bg); }
+.calinfo { min-height: 60px; border: 1px solid var(--line); padding: 8px 10px; margin-top: 10px; font-size: 15px; }
+.tree svg { width: 100%; height: auto; max-width: 560px; display: block; margin: 0 auto; }
+.tree .person { cursor: pointer; }
+.tree .person:hover rect { fill: var(--soft); }
+.tree .person.sel rect { fill: var(--accent); }
+.tree .person.sel text { fill: #fff; }
+.tree text { fill: var(--fg); }
+.passage p { margin: 0 0 10px; }
+.wc { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.status { font-size: 14px; color: var(--muted); min-height: 1.4em; margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>ENGLISH ENRICHMENT CHALLENGE</h1>
+<p class="sub">Grade VII &middot; English &middot; SMP Negeri 15 Yogyakarta &middot; Teacher: Mega Ayu Wulandari</p>
+
+<div class="meta">
+  <label>Name: <input type="text" placeholder="Your name"></label>
+  <label>Class: <input type="text" placeholder="e.g. VII-B"></label>
+  <label>Date: <input type="text" placeholder="dd/mm/yyyy"></label>
+  <label>Score total: <input type="text" id="total" readonly value="-"></label>
+</div>
+
+<p class="note">Type or choose your answers. Press <b>Check answers</b> in each activity. Your answers are checked on this device. Writing tasks are reviewed by your teacher. This page does not submit or save your work.</p>
+
+<!-- ================= ACTIVITY A ================= -->
+<section class="card" id="actA" data-activity="actA">
+  <header><h2>Activity A &middot; Telling the Time</h2><span class="score"></span></header>
+  <div class="grid2">
+    <div>
+      <div class="stim"><h3>Stimulus: Class VII-B timetable</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Activity</th><th>Start</th><th>End</th></tr>
+          <tr><td>Morning Assembly</td><td>06:45</td><td>07:00</td></tr>
+          <tr><td>Mathematics</td><td>07:00</td><td>08:30</td></tr>
+          <tr><td>English</td><td>08:45</td><td>10:15</td></tr>
+          <tr><td>Science</td><td>10:30</td><td>12:00</td></tr>
+          <tr><td>Indonesian Language</td><td>12:15</td><td>13:30</td></tr>
+          <tr><td>Art Club</td><td>14:00</td><td>15:30</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div>
+      <div class="stim"><h3>Clock setter</h3>
+        <div class="clock-wrap">
+          <svg viewBox="0 0 160 160" role="img" aria-label="Interactive clock">
+            <circle cx="80" cy="80" r="72" fill="#fff" stroke="#111" stroke-width="4"/>
+            <g stroke="#111" stroke-width="3">
+              <line x1="80" y1="14" x2="80" y2="24"/><line x1="146" y1="80" x2="136" y2="80"/>
+              <line x1="80" y1="146" x2="80" y2="136"/><line x1="14" y1="80" x2="24" y2="80"/>
+            </g>
+            <line id="hHand" x1="80" y1="80" x2="80" y2="48" stroke="#111" stroke-width="7" stroke-linecap="round"/>
+            <line id="mHand" x1="80" y1="80" x2="80" y2="28" stroke="#1f4e79" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="80" cy="80" r="5" fill="#111"/>
+          </svg>
+          <div class="time-readout" id="readout" data-q="A1">12:00</div>
+          <div class="slider-row">
+            <label>Hour <input type="range" id="hSl" min="1" max="12" value="12"></label>
+            <label>Minute <input type="range" id="mSl" min="0" max="55" step="5" value="0"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q"><span class="qn">1.</span> Use the clock. Set it to the time that <b>Science starts</b>.
+    <span class="fbx" data-fbfor="A1"></span></div>
+
+  <div class="q"><span class="qn">2.</span> Write the time <b>07:45</b> in words:
+    <input type="text" class="ans" data-q="A2"> <span class="fbx" data-fbfor="A2"></span></div>
+
+  <div class="q"><span class="qn">3.</span> Match each activity with its length (duration).
+    <div class="lblpair"><span>Mathematics</span>
+      <select data-q="A3a"><option value="">-- choose --</option><option>15 minutes</option><option>75 minutes</option><option>90 minutes</option></select>
+      <span class="fbx" data-fbfor="A3a"></span></div>
+    <div class="lblpair"><span>Indonesian Language</span>
+      <select data-q="A3b"><option value="">-- choose --</option><option>15 minutes</option><option>75 minutes</option><option>90 minutes</option></select>
+      <span class="fbx" data-fbfor="A3b"></span></div>
+    <div class="lblpair"><span>Morning Assembly</span>
+      <select data-q="A3c"><option value="">-- choose --</option><option>15 minutes</option><option>75 minutes</option><option>90 minutes</option></select>
+      <span class="fbx" data-fbfor="A3c"></span></div>
+  </div>
+
+  <div class="q"><span class="qn">4.</span> Which activity happens <b>right after</b> English?
+    <select data-q="A4"><option value="">-- choose --</option><option value="mathematics">Mathematics</option><option value="science">Science</option><option value="art">Art Club</option></select>
+    <span class="fbx" data-fbfor="A4"></span></div>
+
+  <div class="q"><span class="qn">5.</span> How many minutes are there between the end of English and the start of Science? Type a number.
+    <input type="text" class="ans" data-q="A5" style="width:120px"> <span class="fbx" data-fbfor="A5"></span></div>
+
+  <div class="q"><span class="qn">6.</span> Write one complete sentence comparing Science and Indonesian Language. Use <i>longer</i> or <i>shorter</i> and a time expression.
+    <input type="text" data-q="A6" style="width:100%;max-width:100%;margin-top:6px">
+    <span class="fbx" data-fbfor="A6"></span></div>
+
+  <div class="toolbar"><button type="button" class="primary" data-check="actA">Check answers</button><span class="status" data-status="actA"></span></div>
+</section>
+
+<!-- ================= ACTIVITY B ================= -->
+<section class="card" id="actB" data-activity="actB">
+  <header><h2>Activity B &middot; Days, Dates, and Months</h2><span class="score"></span></header>
+
+  <div class="stim"><h3>Stimulus: Example school calendar, November 2026 (tap a date)</h3>
+    <div class="cal" id="cal"></div>
+    <div class="calinfo" id="calInfo">Tap a date to see the events.</div>
+  </div>
+
+  <div class="q"><span class="qn">1.</span> Match each event with its weekday.
+    <div class="lblpair"><span>Parent&ndash;Teacher Meeting</span>
+      <select data-q="B1a"><option value="">-- choose --</option><option value="monday">Monday</option><option value="wednesday">Wednesday</option><option value="friday">Friday</option></select>
+      <span class="fbx" data-fbfor="B1a"></span></div>
+    <div class="lblpair"><span>Dimas&rsquo;s birthday</span>
+      <select data-q="B1b"><option value="">-- choose --</option><option value="monday">Monday</option><option value="thursday">Thursday</option><option value="saturday">Saturday</option></select>
+      <span class="fbx" data-fbfor="B1b"></span></div>
+    <div class="lblpair"><span>Science Fair opens</span>
+      <select data-q="B1c"><option value="">-- choose --</option><option value="monday">Monday</option><option value="tuesday">Tuesday</option><option value="sunday">Sunday</option></select>
+      <span class="fbx" data-fbfor="B1c"></span></div>
+    <div class="lblpair"><span>Class trip to the museum</span>
+      <select data-q="B1d"><option value="">-- choose --</option><option value="wednesday">Wednesday</option><option value="thursday">Thursday</option><option value="friday">Friday</option></select>
+      <span class="fbx" data-fbfor="B1d"></span></div>
+  </div>
+
+  <div class="q"><span class="qn">2.</span> Write the date of <b>Heroes&rsquo; Day</b> in full words with an ordinal number (weekday, day, and month).
+    <input type="text" data-q="B2" style="width:100%;max-width:100%;margin-top:6px">
+    <span class="fbx" data-fbfor="B2"></span></div>
+
+  <div class="q"><span class="qn">3.</span> Why are there no classes on 10 November in this school calendar? Choose the best answer.
+    <select data-q="B3"><option value="">-- choose --</option><option value="exam">There is an exam.</option><option value="holiday">The school holds a Heroes’ Day commemoration.</option><option value="trip">There is a class trip.</option></select>
+    <span class="fbx" data-fbfor="B3"></span></div>
+
+  <div class="q"><span class="qn">4.</span> How many days are there from <b>3 November</b> to <b>16 November</b>? Type a number.
+    <input type="text" class="ans" data-q="B4" style="width:120px"> <span class="fbx" data-fbfor="B4"></span></div>
+
+  <div class="q"><span class="qn">5.</span> How many school events are on a <b>Saturday</b>?
+    <select data-q="B5"><option value="">-- choose --</option><option>2</option><option>3</option><option>4</option></select>
+    <span class="fbx" data-fbfor="B5"></span></div>
+
+  <div class="q"><span class="qn">6.</span> Write the date of <b>Rina&rsquo;s birthday</b> in ordinal words.
+    <input type="text" data-q="B6" style="width:100%;max-width:100%;margin-top:6px">
+    <span class="fbx" data-fbfor="B6"></span></div>
+
+  <div class="q"><span class="qn">7.</span> <b>Plan an extra event.</b> Choose a free day after 20 November (no event on the calendar). Write the day, the date, the event, and why you chose that day.
+    <textarea id="planB" placeholder="Example: On Friday, the twenty-seventh of November, our class will hold a book club. I chose this day because..."></textarea>
+    <div class="wc" data-wc="planB"></div>
+    <span class="fbx" style="border-left-color:var(--muted)">Your teacher will read this answer.</span></div>
+
+  <div class="toolbar"><button type="button" class="primary" data-check="actB">Check answers</button><span class="status" data-status="actB"></span></div>
+</section>
+
+<!-- ================= ACTIVITY C ================= -->
+<section class="card" id="actC" data-activity="actC">
+  <header><h2>Activity C &middot; My Family</h2><span class="score"></span></header>
+  <div class="grid2">
+    <div class="stim tree"><h3>Stimulus: Rafi&rsquo;s family (tap a person)</h3>
+      <svg viewBox="0 0 560 250" role="img" aria-label="Family tree of Rafi">
+        <g stroke="#111" stroke-width="2" fill="none">
+          <line x1="180" y1="38" x2="230" y2="38"/><line x1="235" y1="58" x2="235" y2="78"/>
+          <line x1="100" y1="78" x2="390" y2="78"/><line x1="100" y1="78" x2="100" y2="104"/><line x1="390" y1="78" x2="390" y2="104"/>
+          <line x1="160" y1="124" x2="180" y2="124"/><line x1="440" y1="124" x2="460" y2="124"/>
+          <line x1="170" y1="144" x2="170" y2="170"/><line x1="100" y1="170" x2="240" y2="170"/>
+          <line x1="100" y1="170" x2="100" y2="196"/><line x1="240" y1="170" x2="240" y2="196"/>
+          <line x1="450" y1="144" x2="450" y2="170"/><line x1="380" y1="170" x2="450" y2="170"/><line x1="380" y1="170" x2="380" y2="196"/>
+        </g>
+        <g class="person" data-p="Hasan" tabindex="0"><rect x="40" y="18" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="100" y="35" text-anchor="middle" font-size="13" font-weight="700">Hasan</text><text x="100" y="50" text-anchor="middle" font-size="11">Grandfather</text></g>
+        <g class="person" data-p="Siti" tabindex="0"><rect x="230" y="18" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="290" y="35" text-anchor="middle" font-size="13" font-weight="700">Siti</text><text x="290" y="50" text-anchor="middle" font-size="11">Grandmother</text></g>
+        <g class="person" data-p="Budi" tabindex="0"><rect x="40" y="104" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="100" y="121" text-anchor="middle" font-size="13" font-weight="700">Budi</text><text x="100" y="136" text-anchor="middle" font-size="11">Father</text></g>
+        <g class="person" data-p="Dewi" tabindex="0"><rect x="180" y="104" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="240" y="121" text-anchor="middle" font-size="13" font-weight="700">Dewi</text><text x="240" y="136" text-anchor="middle" font-size="11">Mother</text></g>
+        <g class="person" data-p="Andi" tabindex="0"><rect x="330" y="104" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="390" y="121" text-anchor="middle" font-size="13" font-weight="700">Andi</text><text x="390" y="136" text-anchor="middle" font-size="11">Uncle</text></g>
+        <g class="person" data-p="Lina" tabindex="0"><rect x="460" y="104" width="90" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="505" y="121" text-anchor="middle" font-size="13" font-weight="700">Lina</text><text x="505" y="136" text-anchor="middle" font-size="11">Aunt</text></g>
+        <g class="person" data-p="Rafi" tabindex="0"><rect x="40" y="196" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="100" y="213" text-anchor="middle" font-size="13" font-weight="700">Rafi</text><text x="100" y="228" text-anchor="middle" font-size="11">Student</text></g>
+        <g class="person" data-p="Sari" tabindex="0"><rect x="180" y="196" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="240" y="213" text-anchor="middle" font-size="13" font-weight="700">Sari</text><text x="240" y="228" text-anchor="middle" font-size="11">Sister</text></g>
+        <g class="person" data-p="Yoga" tabindex="0"><rect x="320" y="196" width="120" height="40" rx="6" stroke="#111" stroke-width="2" fill="#fff"/><text x="380" y="213" text-anchor="middle" font-size="13" font-weight="700">Yoga</text><text x="380" y="228" text-anchor="middle" font-size="11">Cousin</text></g>
+      </svg>
+      <div class="calinfo" id="treeInfo">Tap a person to read about them.</div>
+    </div>
+    <div>
+      <div class="stim"><h3>About the family</h3>
+        <p style="margin:0">Rafi lives with his parents, Budi and Dewi, and his younger sister, Sari. Rafi&rsquo;s uncle, Andi, is Budi&rsquo;s younger brother. Andi is married to Lina, and their son, Yoga, is Rafi&rsquo;s cousin. Lina is Dewi&rsquo;s younger sister. Every Sunday, the family visits the grandparents, Hasan and Siti.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="q"><span class="qn">1.</span> Match each person with the correct relationship to <b>Rafi</b>.
+    <div class="lblpair"><span>Sari</span>
+      <select data-q="C1a"><option value="">-- choose --</option><option>sister</option><option>cousin</option><option>aunt</option></select>
+      <span class="fbx" data-fbfor="C1a"></span></div>
+    <div class="lblpair"><span>Yoga</span>
+      <select data-q="C1b"><option value="">-- choose --</option><option>sister</option><option>cousin</option><option>aunt</option></select>
+      <span class="fbx" data-fbfor="C1b"></span></div>
+    <div class="lblpair"><span>Lina</span>
+      <select data-q="C1c"><option value="">-- choose --</option><option>sister</option><option>cousin</option><option>aunt</option></select>
+      <span class="fbx" data-fbfor="C1c"></span></div>
+  </div>
+
+  <div class="q"><span class="qn">2.</span> From <b>Yoga&rsquo;s</b> point of view, who is <b>Dewi</b>?
+    <select data-q="C2"><option value="">-- choose --</option><option>mother</option><option>aunt</option><option>grandmother</option></select>
+    <span class="fbx" data-fbfor="C2"></span></div>
+
+  <div class="q"><span class="qn">3.</span> Who is <b>Hasan</b> to <b>Andi</b>?
+    <select data-q="C3"><option value="">-- choose --</option><option>father</option><option>brother</option><option>uncle</option></select>
+    <span class="fbx" data-fbfor="C3"></span></div>
+
+  <div class="q"><span class="qn">4.</span> Complete with a possessive adjective or possessive form.<br>
+    a) Sari and Rafi love <select data-q="C4a"><option value="">-- choose --</option><option>their</option><option>his</option><option>our</option></select> grandparents.
+    <span class="fbx" data-fbfor="C4a"></span>
+    b) The red bicycle is <input type="text" class="ans" data-q="C4b" style="width:140px"> (Sari).
+    <span class="fbx" data-fbfor="C4b"></span>
+    c) <select data-q="C4c"><option value="">-- choose --</option><option>Yoga</option><option>Yoga&rsquo;s</option><option>Yogas</option></select> father is Andi.
+    <span class="fbx" data-fbfor="C4c"></span></div>
+
+  <div class="q"><span class="qn">5.</span> Write the name of the person: &ldquo;She is the wife of Andi, and her sister is Dewi.&rdquo;
+    <input type="text" class="ans" data-q="C5" style="width:160px"> <span class="fbx" data-fbfor="C5"></span></div>
+
+  <div class="q"><span class="qn">6.</span> Write <b>three</b> complete sentences about Aunt Lina. Use <i>is</i> or <i>has</i>, and include a possessive form (for example, <i>Lina&rsquo;s son</i>).
+    <textarea id="linaTxt" placeholder="1. Lina is ...&#10;2. She has ...&#10;3. Lina&rsquo;s son is ..."></textarea>
+    <div class="wc" data-wc="linaTxt"></div>
+    <span class="fbx" style="border-left-color:var(--muted)">Your teacher will read this answer.</span></div>
+
+  <div class="toolbar"><button type="button" class="primary" data-check="actC">Check answers</button><span class="status" data-status="actC"></span></div>
+</section>
+
+<!-- ================= ACTIVITY D ================= -->
+<section class="card" id="actD" data-activity="actD">
+  <header><h2>Activity D &middot; Simple Present: Daily Routines</h2><span class="score"></span></header>
+
+  <div class="stim passage"><h3>Stimulus: Reading passage &ndash; &ldquo;Two Schedules&rdquo;</h3>
+    <p>Rafi and Maya are both Grade 7 students, but their daily routines are quite different. Rafi <select data-q="Dp1"><option value="">-- choose --</option><option>wake</option><option>wakes</option></select> up at half past five every morning. <span class="fbx" data-fbfor="Dp1" style="display:inline;margin:0 6px"></span>He takes a quick shower, eats bread, and drinks warm milk. Then he walks to school with his friends. He <select data-q="Dp2"><option value="">-- choose --</option><option>does not</option><option>do not</option><option>doesn't</option></select> play video games on school days because he has tutoring at seven in the evening. <span class="fbx" data-fbfor="Dp2" style="display:inline;margin:0 6px"></span>Rafi studies English for thirty minutes every night.</p>
+    <p>Maya wakes up later, at a quarter past six. She usually goes to school by bicycle, and she never eats breakfast at home. Instead, she buys rice porridge near the school gate. Maya practices the piano every afternoon for one hour. After dinner, she does her homework. Does she like sports? Yes, she does. She plays volleyball on Wednesdays.</p>
+    <p style="margin:0">Both students go to bed before ten o&rsquo;clock because they have to wake up early the next day.</p>
+  </div>
+
+  <div class="q"><span class="qn">1.</span> <b>True or False?</b>
+    <div class="lblpair"><span>a) Rafi eats breakfast at home.</span>
+      <select data-q="D1a"><option value="">-- choose --</option><option>true</option><option>false</option></select>
+      <span class="fbx" data-fbfor="D1a"></span></div>
+    <div class="lblpair"><span>b) Maya buys rice porridge near the school.</span>
+      <select data-q="D1b"><option value="">-- choose --</option><option>true</option><option>false</option></select>
+      <span class="fbx" data-fbfor="D1b"></span></div>
+    <div class="lblpair"><span>c) Both students go to bed before ten o&rsquo;clock.</span>
+      <select data-q="D1c"><option value="">-- choose --</option><option>true</option><option>false</option></select>
+      <span class="fbx" data-fbfor="D1c"></span></div>
+  </div>
+
+  <div class="q"><span class="qn">2.</span> Choose the correct verb form.<br>
+    a) Maya <select data-q="D2a"><option value="">-- choose --</option><option>go</option><option>goes</option></select> to school by bicycle. <span class="fbx" data-fbfor="D2a" style="display:inline;margin:0 6px"></span><br>
+    b) Rafi and Maya <select data-q="D2b"><option value="">-- choose --</option><option>study</option><option>studies</option></select> in Grade 7. <span class="fbx" data-fbfor="D2b" style="display:inline;margin:0 6px"></span><br>
+    c) Rafi <select data-q="D2c"><option value="">-- choose --</option><option>do</option><option>does</option></select> not play video games on school days. <span class="fbx" data-fbfor="D2c" style="display:inline;margin:0 6px"></span><br>
+    d) Maya <select data-q="D2d"><option value="">-- choose --</option><option>practice</option><option>practices</option></select> the piano every afternoon. <span class="fbx" data-fbfor="D2d" style="display:inline;margin:0 6px"></span></div>
+
+  <div class="q"><span class="qn">3.</span> Correct the mistakes. Write the correct sentence.<br>
+    a) She don&rsquo;t like sports.<br>
+    <input type="text" data-q="D3a" style="width:100%;max-width:100%;margin:4px 0 4px">
+    <span class="fbx" data-fbfor="D3a"></span>
+    b) Rafi go to bed before ten o&rsquo;clock.<br>
+    <input type="text" data-q="D3b" style="width:100%;max-width:100%;margin:4px 0 4px">
+    <span class="fbx" data-fbfor="D3b"></span></div>
+
+  <div class="q"><span class="qn">4.</span> <b>Question:</b> Does Maya ever eat breakfast at home? Choose the best answer.
+    <select data-q="D4"><option value="">-- choose --</option><option value="yes, she does">Yes, she does.</option><option value="no, she never does">No, she never does.</option><option value="no, she never eats breakfast at home">No, she never eats breakfast at home.</option></select>
+    <span class="fbx" data-fbfor="D4"></span></div>
+
+  <div class="q"><span class="qn">5.</span> Why does Rafi <b>not</b> play video games on school days? Type your answer in one sentence.
+    <input type="text" data-q="D5" style="width:100%;max-width:100%;margin-top:6px">
+    <span class="fbx" data-fbfor="D5"></span></div>
+
+  <div class="q"><span class="qn">6.</span> <b>Write about your own routine.</b> Write 5&ndash;7 sentences in the Simple Present Tense. Include one affirmative, one negative, and one question.
+    <textarea id="routineTxt" placeholder="I wake up at ... I go to school by ..."></textarea>
+    <div class="wc" data-sent="routineTxt"></div>
+    <span class="fbx" style="border-left-color:var(--muted)">Your teacher will read this answer.</span></div>
+
+  <div class="toolbar"><button type="button" class="primary" data-check="actD">Check answers</button><span class="status" data-status="actD"></span></div>
+</section>
+
+<!-- ================= FINAL CHALLENGE ================= -->
+<section class="card" id="actE">
+  <header><h2>Final Challenge &middot; My Weekly Life</h2><span class="score"></span></header>
+  <div class="stim"><h3>Scenario</h3>
+    <p style="margin:0">Your new international friend <b>Lucas</b> visits your school from <b>Monday, 16 November</b> to <b>Friday, 20 November</b>. Create a weekly plan for him. Include at least <b>two family activities</b>.</p></div>
+
+  <div class="table-wrap"><table>
+    <tr><th>Day</th><th>Date</th><th>Activity</th><th>Time</th></tr>
+    <tr><td>Monday</td><td><input type="text" style="width:110px" placeholder="16 Nov"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100px"></td></tr>
+    <tr><td>Tuesday</td><td><input type="text" style="width:110px" placeholder="17 Nov"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100px"></td></tr>
+    <tr><td>Wednesday</td><td><input type="text" style="width:110px" placeholder="18 Nov"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100px"></td></tr>
+    <tr><td>Thursday</td><td><input type="text" style="width:110px" placeholder="19 Nov"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100px"></td></tr>
+    <tr><td>Friday</td><td><input type="text" style="width:110px" placeholder="20 Nov"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100px"></td></tr>
+  </table></div>
+
+  <div class="q" style="margin-top:14px"><span class="qn">Explanation:</span> Write <b>6&ndash;8 sentences</b> explaining your plan to Lucas. Use the Simple Present for your routines, one ordinal date, and at least two family activities.
+    <textarea id="finalTxt" style="min-height:160px"></textarea>
+    <div class="wc" data-sent="finalTxt"></div>
+    <span class="fbx" style="border-left-color:var(--muted)">Your teacher will read this answer. The sentence count is only a guide.</span></div>
+
+  <div class="toolbar"><button type="button" data-finalcount>Count sentences</button><span class="status" id="finalFb"></span></div>
+</section>
+</div>
+
+<script>
+// ---- Helpers ----
+function sentenceCount(t) { return t.split(/[.!?]+/).filter(s => s.trim().length > 0).length; }
+
+document.querySelectorAll('[data-wc]').forEach(el => {
+  const ta = document.getElementById(el.dataset.wc);
+  const f = () => { const w = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0; el.textContent = `Words: ${w}`; };
+  ta.addEventListener('input', f); f();
+});
+document.querySelectorAll('[data-sent]').forEach(el => {
+  const ta = document.getElementById(el.dataset.sent);
+  const f = () => { el.textContent = `Sentences: ${sentenceCount(ta.value)}`; };
+  ta.addEventListener('input', f); f();
+});
+document.querySelector('[data-finalcount]').addEventListener('click', () => {
+  const n = sentenceCount(document.getElementById('finalTxt').value);
+  document.getElementById('finalFb').textContent = (n >= 6 && n <= 8)
+    ? `You wrote ${n} sentences. This is within the target range. Your teacher will check the content.`
+    : `You wrote ${n} sentences. Try to write 6 to 8 sentences.`;
+});
+
+// ---- Clock (value is sent to the server as "h:mm") ----
+const hSl = document.getElementById('hSl'), mSl = document.getElementById('mSl');
+const hHand = document.getElementById('hHand'), mHand = document.getElementById('mHand');
+function drawClock() {
+  const h = +hSl.value, m = +mSl.value;
+  hHand.setAttribute('transform', `rotate(${(h % 12) * 30 + m * 0.5} 80 80)`);
+  mHand.setAttribute('transform', `rotate(${m * 6} 80 80)`);
+  document.getElementById('readout').textContent = `${h}:${String(m).padStart(2, '0')}`;
+}
+hSl.addEventListener('input', drawClock); mSl.addEventListener('input', drawClock); drawClock();
+
+// ---- Calendar (November 2026, Monday first; 1 November is a Sunday) ----
+const events = {
+  3: 'English Club (after school).',
+  6: 'Parent–Teacher Meeting.',
+  7: 'Football Tournament (Saturday).',
+  10: 'Heroes&rsquo; Day: school commemoration day. No classes on this school calendar.',
+  12: 'Dimas&rsquo;s birthday.',
+  16: 'Science Fair opens.',
+  21: 'Art Exhibition (Saturday).',
+  25: 'Class trip to the museum.',
+  28: 'Rina&rsquo;s birthday (Saturday).'
+};
+const dow = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const cal = document.getElementById('cal');
+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d => { const s = document.createElement('div'); s.className = 'dow'; s.textContent = d; cal.appendChild(s); });
+for (let i = 0; i < 6; i++) cal.appendChild(document.createElement('div'));
+for (let d = 1; d <= 30; d++) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'day' + (events[d] ? ' ev' : '');
+  b.textContent = d;
+  b.setAttribute('aria-label', `${dow[(d - 1 + 6) % 7]}, ${d} November`);
+  b.addEventListener('click', () => {
+    cal.querySelectorAll('.sel').forEach(x => x.classList.remove('sel'));
+    b.classList.add('sel');
+    document.getElementById('calInfo').innerHTML = `<b>${dow[(d - 1 + 6) % 7]}, ${d} November</b>: ` + (events[d] ? events[d] : 'No event. Good day for a plan!');
+  });
+  cal.appendChild(b);
+}
+
+// ---- Family tree ----
+const people = {
+  Hasan: 'Hasan is Rafi&rsquo;s grandfather. He is the father of Budi and Andi.',
+  Siti: 'Siti is Rafi&rsquo;s grandmother. She is the mother of Budi and Andi.',
+  Budi: 'Budi is Rafi&rsquo;s father. He is Andi&rsquo;s older brother.',
+  Dewi: 'Dewi is Rafi&rsquo;s mother. She is Lina&rsquo;s older sister.',
+  Andi: 'Andi is Rafi&rsquo;s uncle. He is married to Lina.',
+  Lina: 'Lina is Rafi&rsquo;s aunt. She is Dewi&rsquo;s younger sister.',
+  Rafi: 'Rafi is a Grade 7 student. He is Sari&rsquo;s brother.',
+  Sari: 'Sari is Rafi&rsquo;s younger sister.',
+  Yoga: 'Yoga is Andi and Lina&rsquo;s son. He is Rafi&rsquo;s cousin.'
+};
+document.querySelectorAll('.person').forEach(g => {
+  const pick = () => {
+    document.querySelectorAll('.person.sel').forEach(x => x.classList.remove('sel'));
+    g.classList.add('sel');
+    document.getElementById('treeInfo').innerHTML = people[g.dataset.p];
+  };
+  g.addEventListener('click', pick);
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+});
+
+// ---- Local checking for standalone HTML ----
+// NOTE: The local checks are visible to someone inspecting the browser source.
+function collectAnswers(section) {
+  const answers = {};
+  section.querySelectorAll('[data-q]').forEach(el => {
+    const v = el.tagName === 'DIV' ? el.textContent : el.value;
+    answers[el.dataset.q] = String(v || '');
+  });
+  return answers;
+}
+const accepted = {
+ A1:['10:30'], A2:['a quarter to eight','quarter to eight','seven forty-five','seven forty five','7:45'],
+ A3a:['90 minutes'], A3b:['75 minutes'], A3c:['15 minutes'], A4:['science'], A5:['15'],
+ B1a:['friday'], B1b:['thursday'], B1c:['monday'], B1d:['wednesday'],
+ B2:['tuesday the tenth of november','tuesday, the tenth of november','tuesday tenth november','tuesday 10th november','tuesday, 10th november','tuesday the 10th of november'],
+ B3:['holiday'], B4:['13'], B5:['3'],
+ B6:['twenty-eighth of november','the twenty-eighth of november','november twenty-eighth','28th november','28th of november','november 28th','twenty eighth of november'],
+ C1a:['sister'], C1b:['cousin'], C1c:['aunt'], C2:['aunt'], C3:['father'],
+ C4a:['their'], C4b:["sari's",'saris'], C4c:["yoga's"], C5:['lina'],
+ Dp1:['wakes'], Dp2:['does not',"doesn't"],
+ D1a:['true'], D1b:['true'], D1c:['true'], D2a:['goes'], D2b:['study'], D2c:['does'], D2d:['practices'],
+ D3a:["she doesn't like sports","she does not like sports"],
+ D3b:['rafi goes to bed before ten oclock','rafi goes to bed before ten o’clock','rafi goes to bed before ten o clock'],
+ D4:['no, she never eats breakfast at home']
+};
+const hints = {
+ A1:'Look at the Science start time in the timetable.', A2:'Use quarter to for fifteen minutes before the next hour.',
+ A3a:'Subtract 07:00 from 08:30.',A3b:'Subtract 12:15 from 13:30.',A3c:'Subtract 06:45 from 07:00.',
+ A4:'Read the timetable row immediately below English.',A5:'Compare 10:15 and 10:30.',
+ B2:'Use the weekday and the ordinal form of the day.', B3:'Read the event shown when you tap 10 November.',
+ B4:'Count the elapsed days between the two dates.',B5:'Look for events marked on Saturdays.',B6:'Check Rina’s birthday on the calendar.',
+ C4b:'Use the possessive form with an apostrophe.', C4c:'Use the possessive form for Yoga.',
+ Dp1:'Rafi is he; check the third-person singular.', Dp2:'Use does not or its contraction with he.',
+ D3a:'Use does not with she.',D3b:'A singular subject needs a verb ending in -s or -es.',
+ D4:'Look for the sentence about Maya and breakfast at home.'
+};
+function norm(v) { return String(v||'').toLowerCase().replace(/[‘’′]/g,"'").replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim(); }
+function evaluate(id,answers) {
+ const results = {};
+ for (const [qid,val] of Object.entries(answers)) {
+  if(qid==='A6' || qid==='D5') continue; // free responses: teacher review
+  const choices = accepted[qid];
+  if(!choices) continue;
+  const correct=choices.some(x=>norm(x)===norm(val));
+  results[qid]={correct,hint:correct?'':(hints[qid]||'Read the stimulus again and try once more.')};
+ }
+ return results;
+}
+function showResults(section,results) {
+ let ok=0,total=0;
+ Object.entries(results).forEach(([qid,r])=>{
+  total++; if(r.correct) ok++;
+  const el=section.querySelector(`[data-q="${qid}"]`);
+  if(el){el.classList.toggle('good',r.correct);el.classList.toggle('bad',!r.correct);}
+  const fb=section.querySelector(`[data-fbfor="${qid}"]`);
+  if(fb){fb.textContent=r.correct?'Correct!':'Not yet. '+r.hint;fb.classList.toggle('ok',r.correct);fb.classList.toggle('no',!r.correct);}
+ });
+ section.querySelector('.score').textContent=`Auto-check: ${ok} / ${total}`;
+ return {ok,total};
+}
+const scores={};
+function updateTotal(){let ok=0,total=0;Object.values(scores).forEach(s=>{ok+=s.ok;total+=s.total;});document.getElementById('total').value=total?`${ok} / ${total}`:'-';}
+document.querySelectorAll('[data-check]').forEach(btn=>btn.addEventListener('click',()=>{
+ const id=btn.dataset.check,section=document.getElementById(id),status=section.querySelector(`[data-status="${id}"]`);
+ scores[id]=showResults(section,evaluate(id,collectAnswers(section)));
+ status.textContent='Open-ended writing is checked by your teacher.';
+ updateTotal();
+}));
+</script>
+</body>
+</html>
