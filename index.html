@@ -44,6 +44,45 @@
         .modal-profile { gap: 12px; }
       }
 
+      /* AI Transparency: modal section + footer link */
+      .modal-card { display: flex; flex-direction: column; max-width: 560px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; }
+      .modal-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin-top: 58px; padding: 0 clamp(32px, 4vw, 48px) clamp(32px, 4vw, 48px); }
+      .modal-card .modal-title { padding-right: 36px; }
+      .ai-transparency { margin: 20px 0 0; padding: clamp(16px, 2.2vw, 22px); border-radius: 20px; background: #fff; border: 2px solid #cfe7ff; scroll-margin-top: 4px; }
+      .ai-transparency:focus { outline: none; }
+      .ai-transparency__icons { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; color: var(--navy); }
+      .ai-transparency__icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #eef7ff; }
+      .ai-transparency__icon svg { width: 20px; height: 20px; }
+      .ai-transparency__icon--human { color: var(--pink); }
+      .ai-transparency__icon--ai { color: #1674ef; }
+      .ai-transparency__x { font-family: var(--display); font-size: 1.3rem; font-weight: 800; line-height: 1; }
+      .ai-transparency__title, .ai-transparency .ai-transparency__closing { text-wrap: balance; }
+      .ai-transparency__title { margin: 0; color: var(--navy); font-family: var(--display); font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 800; line-height: 1.15; }
+      .ai-transparency__subtitle { margin: 3px 0 10px; color: #c4204f; font-size: .7rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+      .ai-transparency p { color: #2a3d68; font-size: clamp(.88rem, 1.05vw, .96rem); font-weight: 600; line-height: 1.6; }
+      .ai-transparency__lead { margin: 0 0 10px; color: var(--navy) !important; font-weight: 800 !important; }
+      .ai-transparency__text { margin: 0 0 10px; }
+      .ai-transparency__belief { margin: 0 0 14px; color: var(--navy) !important; font-weight: 800 !important; }
+      .ai-transparency .ai-transparency__closing { margin: 0; padding: 11px 16px; border-radius: 16px; background: var(--yellow); color: var(--navy); font-family: var(--display); font-size: clamp(.98rem, 1.5vw, 1.12rem); font-weight: 800; line-height: 1.3; text-align: center; box-shadow: 0 5px 12px rgba(255,201,40,.35); }
+      .footer-ai { position: relative; z-index: 1; width: min(94%, 1455px); margin: 14px auto 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.22); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 14px; font-size: clamp(.64rem, .76vw, .78rem); font-weight: 700; text-align: center; }
+      .footer-ai a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+      .footer-ai a:hover { color: var(--yellow); }
+      .footer-ai a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; border-radius: 4px; }
+      .footer-ai p { margin: 0; color: #e6edff; }
+      @media (max-width: 480px) {
+        .modal-card { width: calc(100% - 24px); }
+        .modal-close { top: 10px; right: 12px; }
+        .modal-scroll { margin-top: 50px; padding: 0 22px 22px; }
+        .ai-transparency { margin-top: 16px; padding: 14px; border-radius: 16px; }
+        .ai-transparency__icons { margin-bottom: 8px; }
+        .ai-transparency__title { font-size: 1.12rem; }
+        .ai-transparency p { font-size: .86rem; line-height: 1.5; }
+        .ai-transparency__lead, .ai-transparency__text { margin-bottom: 8px; }
+        .ai-transparency__belief { margin-bottom: 12px; }
+        .ai-transparency .ai-transparency__closing { padding: 10px 12px; font-size: .95rem; }
+        .footer-ai { margin-top: 10px; padding-top: 8px; gap: 2px 10px; font-size: .64rem; line-height: 1.35; }
+      }
+
       /* Welcome greeting toast */
       .welcome-toast { position: fixed; z-index: 900; right: clamp(14px, 2vw, 28px); bottom: clamp(14px, 2vw, 28px); width: min(320px, calc(100vw - 28px)); padding: 16px 18px 16px; border-radius: 22px; background: linear-gradient(160deg, #ffffff 0%, #f1f8ff 100%); border: 2px solid #ffda26; box-shadow: 0 16px 40px rgba(0,53,110,.22); color: var(--navy); opacity: 0; transform: translateY(18px) scale(.97); transition: opacity .35s ease, transform .35s cubic-bezier(.2,1.2,.4,1); pointer-events: none; }
       .welcome-toast.is-visible { opacity: 1; transform: none; pointer-events: auto; }
@@ -561,6 +600,10 @@
         <p class="credit" id="developers"><span aria-hidden="true">♥</span> <b><span class="credit__label">Developed by</span><br />Mega Ayu Wulandari</b><small>English Teacher · Educator · Creator of English YO!</small></p>
         <p class="world-note">Made with <span class="world-note__heart" role="img" aria-label="love">♥</span> in <br /><strong>Yogyakarta</strong><br />To a Brighter World</p>
       </div>
+      <div class="footer-ai">
+        <a href="#ai-transparency" data-developer-open data-modal-target="ai-transparency">AI Transparency</a>
+        <p>Human Ideas • AI-Assisted Development • Made for Learning</p>
+      </div>
     </footer>
 
     <div class="search-panel" data-search-panel hidden>
@@ -580,6 +623,7 @@
     <div class="developer-modal" id="developerModal">
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="developerModalTitle">
         <button class="modal-close" type="button" aria-label="Close modal" id="modalCloseBtn">×</button>
+        <div class="modal-scroll">
         <h2 class="modal-title" id="developerModalTitle">About the Developer</h2>
         <div class="modal-profile">
           <img class="modal-avatar" src="assets/developer-mega.png" alt="Mega Ayu Wulandari" width="84" height="84" loading="lazy" />
@@ -592,6 +636,21 @@
         <div class="modal-contact">
           <p>Interested in collaborating with ENGLISH YO!? Feel free to get in touch.</p>
           <a href="mailto:mega.wulandari@smpn15yk.sch.id">✉ mega.wulandari@smpn15yk.sch.id</a>
+        </div>
+        <section class="ai-transparency" id="ai-transparency" aria-labelledby="aiTransparencyTitle" tabindex="-1">
+          <div class="ai-transparency__icons" aria-hidden="true">
+            <span class="ai-transparency__icon ai-transparency__icon--human"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg></span>
+            <span class="ai-transparency__x">×</span>
+            <span class="ai-transparency__icon ai-transparency__icon--ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l1.8 4.7L16.5 10.5l-4.7 1.8L10 17l-1.8-4.7L3.5 10.5l4.7-1.8z"/><path d="M18 3v4M16 5h4M18 15v4M16 17h4"/></svg></span>
+          </div>
+          <h3 class="ai-transparency__title" id="aiTransparencyTitle">Human Creativity × AI Collaboration</h3>
+          <p class="ai-transparency__subtitle">Behind ENGLISH YO!</p>
+          <p class="ai-transparency__lead">Every learning activity on ENGLISH YO! begins with a human idea.</p>
+          <p class="ai-transparency__text">ENGLISH YO! was created from the original ideas, creativity, and teaching experiences of Mega Ayu Wulandari, an English teacher from Yogyakarta, Indonesia.</p>
+          <p class="ai-transparency__text">Artificial intelligence (AI) tools assist with coding, visual design, content development, and interactive learning activities. However, the educational vision, learning objectives, teaching strategies, creative direction, and final decisions remain human-led.</p>
+          <p class="ai-transparency__belief">We believe AI should empower human creativity, not replace it.</p>
+          <p class="ai-transparency__closing">Human Ideas. AI-Assisted Creation. Made for Learning.</p>
+        </section>
         </div>
       </div>
     </div>
@@ -639,11 +698,20 @@
 
         if (!modal || !devLinks.length) return;
 
-        function openModal() {
+        function openModal(targetId) {
           lastFocus = document.activeElement;
           modal.classList.add('is-open');
           document.body.style.overflow = 'hidden';
           modalCloseBtn.focus();
+          var scroller = modal.querySelector('.modal-scroll');
+          var target = targetId ? document.getElementById(targetId) : null;
+          if (scroller) scroller.scrollTop = 0;
+          if (target && scroller && scroller.contains(target)) {
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            setTimeout(function () {
+              if (modal.classList.contains('is-open')) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+            }, reduce ? 0 : 300);
+          }
         }
 
         function closeModal() {
@@ -655,7 +723,7 @@
         devLinks.forEach(function (link) {
           link.addEventListener('click', function (e) {
             e.preventDefault();
-            openModal();
+            openModal(link.getAttribute('data-modal-target'));
           });
         });
 
@@ -678,6 +746,8 @@
 
         // Other pages link to index.html#developers: open the popup on arrival
         if (location.hash === '#developers') openModal();
+        // index.html#ai-transparency: open the popup and jump to the AI Transparency section
+        else if (location.hash === '#ai-transparency') openModal('ai-transparency');
       })();
     </script>
 
