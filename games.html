@@ -229,6 +229,17 @@
       .game-card--alphabet .game-card__tag {
         display: none;
       }
+      /* ART TIME TRAVELER artwork is 3:2 and carries its own title and button:
+         show the whole image inside the 16:9 frame instead of cropping it */
+      .game-card--arttime .game-card__image {
+        background: #c0d1fc;
+      }
+      .game-card--arttime .game-card__image img {
+        object-fit: contain;
+      }
+      .game-card--arttime .game-card__tag {
+        display: none;
+      }
       .game-card--narrative .game-card__tag {
         color: #5b3a8f;
       }
@@ -755,6 +766,21 @@
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · Tablet &amp; 🖥️ IFP</p>
               <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/alphabet-animal-rescue/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card game-card--arttime" data-title="ART TIME TRAVELER" data-devices="mobile desktop interactive" data-category="Art Culture Indonesian Art Maestros Paintings History Reading Vocabulary Bilingual Maze Adventure" data-order="19" data-game-id="art-time-traveler">
+            <a class="game-card__image" href="games/art-time-traveler/" aria-label="Play Art Time Traveler — Maestro Chase">
+              <img src="assets/games/art-time-traveler-card.webp" alt="Art Time Traveler: Maestro Chase — a young explorer with a magnifying glass, a map and an art passport beside framed masterpieces" width="1536" height="1024" loading="lazy" />
+              <span class="game-card__tag">Art &amp; Culture • Maestro Chase</span>
+            </a>
+            <div class="game-card__body">
+              <h2>Art Time Traveler 🎨</h2>
+              <p>Maestro Chase — Travel through the world of art, discover famous masterpieces, and complete exciting challenges!</p>
+              <p>Indonesian Art Maestros · Learn &amp; Play · English / Bahasa Indonesia.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
+              <a class="game-card__play" href="games/art-time-traveler/">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
 
