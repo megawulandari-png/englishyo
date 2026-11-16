@@ -240,6 +240,17 @@
       .game-card--arttime .game-card__tag {
         display: none;
       }
+      /* JOGJA UNLOCKED artwork is 3:2 and carries its own title and Play Now button:
+         show the whole image inside the 16:9 frame instead of cropping it */
+      .game-card--jogja .game-card__image {
+        background: #fff;
+      }
+      .game-card--jogja .game-card__image img {
+        object-fit: contain;
+      }
+      .game-card--jogja .game-card__tag {
+        display: none;
+      }
       .game-card--narrative .game-card__tag {
         color: #5b3a8f;
       }
@@ -781,6 +792,21 @@
               <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
               <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
               <a class="game-card__play" href="games/art-time-traveler/">PLAY NOW <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card game-card--jogja" data-title="JOGJA UNLOCKED" data-devices="mobile desktop interactive" data-category="Reading Adventure Tourism Simulation Descriptive Text Reading Comprehension Making Inferences Yogyakarta Travel Agent A2 B1 SMP Missions" data-order="20" data-game-id="jogja-unlocked">
+            <a class="game-card__image" href="games/jogja-unlocked/index.html" aria-label="Play JOGJA UNLOCKED — The Travel Agent Challenge">
+              <img src="assets/games/jogja-unlocked-card.webp" alt="JOGJA UNLOCKED: The Travel Agent Challenge — three young travel agents with a map and camera in front of Prambanan, the Keraton and the Parangtritis coast, beside a Travel Agent Passport" width="1536" height="1024" loading="lazy" />
+              <span class="game-card__tag">Reading Adventure • Tourism Simulation</span>
+            </a>
+            <div class="game-card__body">
+              <h2>JOGJA UNLOCKED 🧳</h2>
+              <p>Become a travel agent in Yogyakarta! Read descriptive texts, understand tourists' needs, recommend destinations, and complete five exciting missions.</p>
+              <p>Reading Comprehension · Descriptive Text · Making Inferences · Level A2–B1 · 5 Missions.</p>
+              <p class="game-card__devices">Works on: 📱 Mobile · 💻 Desktop · 🖥️ Interactive Display</p>
+              <p class="game-card__plays"><span class="game-card__plays-flag" aria-hidden="true">▶</span><span class="game-card__plays-count">0</span>× played</p>
+              <a class="game-card__play" href="games/jogja-unlocked/index.html">PLAY NOW <span aria-hidden="true">→</span></a>
             </div>
           </article>
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JOGJA UNLOCKED – The Travel Agent Challenge | ENGLISH YO!</title>
+<meta name="description" content="JOGJA UNLOCKED: a reading game where you become a travel agent in Yogyakarta. Presented by ENGLISH YO!">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/learn.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<a class="skip" href="#screen">Skip to game</a>
+
+<header class="hud" id="hud" hidden>
+  <div class="hud-rank"><img id="hudAvatar" class="avatar" alt="" width="40" height="40" hidden> <span class="hud-label">Rank</span> <strong id="hudRank">Travel Intern</strong></div>
+  <div class="hud-stats">
+    <span class="chip" title="Coins"><img id="hudCoinImg" alt="" width="26" height="26"> <b id="hudCoins">0</b><span class="sr"> coins</span></span>
+    <span class="chip" title="Stars"><img id="hudStarImg" alt="" width="24" height="24"> <b id="hudStars">0</b><span class="sr"> stars</span></span>
+    <button class="chip chip-btn" id="btnPassport" type="button">Passport</button>
+    <button class="chip chip-btn" id="btnMenu" type="button">Menu</button>
+  </div>
+</header>
+
+<main id="screen" tabindex="-1" aria-label="Game"></main>
+
+<footer class="brand-foot">
+  <a class="foot-logo" id="brandLogo" href="../../games.html" aria-label="ENGLISH YO! – back to the Games menu"><img src="../../assets/logo-approved.png" alt="ENGLISH YO!" width="2139" height="735"></a>
+  <nav class="foot-links" aria-label="Footer">
+    <span>Presented by <strong>ENGLISH YO!</strong></span>
+    <span class="dot" aria-hidden="true">·</span>
+    <button type="button" class="linklike" id="btnAbout">About</button>
+    <span class="dot" aria-hidden="true">·</span>
+    <button type="button" class="linklike" id="btnSources">Sources</button>
+    <span class="dot" aria-hidden="true">·</span>
+    <button type="button" class="linklike" id="btnDeveloper">Developer</button>
+  </nav>
+</footer>
+
+<div id="modalRoot"></div>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+
+<noscript><p style="padding:2rem;text-align:center">JOGJA UNLOCKED needs JavaScript. Please turn it on and reload.</p></noscript>
+
+<script src="js/content.js"></script>
+<script src="js/missions-content.js"></script>
+<script src="js/learn-content.js"></script>
+<script src="js/info-content.js"></script>
+<script src="js/state.js"></script>
+<script src="js/learn.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
