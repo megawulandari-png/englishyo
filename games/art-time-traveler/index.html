@@ -195,6 +195,42 @@ p{margin:0}
 .shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
 
+.butos{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0 .2rem}
+.buto{width:62px;text-align:center;font-size:.68rem;color:var(--soft);line-height:1.2}
+.buto svg{width:56px;height:56px;display:block;margin:0 auto}
+.buto.dead{opacity:.35;filter:grayscale(1);position:relative}
+.buto.dead:after{content:"✓";position:absolute;left:50%;top:14px;transform:translateX(-50%);font-size:1.8rem;color:var(--ok);filter:none;opacity:1}
+.learned{margin-top:.7rem;background:var(--panel2);border-radius:14px;padding:.6rem;display:flex;gap:.6rem;align-items:center}
+.learned img{width:84px;height:64px;object-fit:contain;background:#000;border:3px solid #c9962e;border-radius:4px;flex-shrink:0}
+.learned b{display:block;font-size:.72rem;color:var(--gold);letter-spacing:.06em}
+.learned strong{display:block;font-family:var(--display);font-size:.98rem}
+.learned small{color:var(--soft)}
+.mbox.quiz{width:min(100%,860px);text-align:left;padding:1rem 1.1rem 1.2rem}
+.quiz .qtop{display:flex;align-items:center;gap:.7rem;background:linear-gradient(90deg,#3a1630,#1b1236);border-radius:16px;padding:.5rem .8rem;margin-bottom:.7rem}
+.quiz .qtop svg{width:64px;height:64px;flex-shrink:0}
+.quiz .qtop strong{font-family:var(--display);font-size:1.25rem}
+.quiz .qprompt{font-size:clamp(1.25rem,2.8vw,1.75rem);margin:.4rem 0 .6rem}
+.quiz .qmedia .art{max-height:min(40vh,340px)}
+.quiz .qmedia .zoom{width:min(100%,420px)}
+.readbar{margin-top:.6rem;background:#2e2257;border-radius:999px;height:12px;overflow:hidden}
+.readbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--pink));width:100%;transition:width .2s linear}
+.readrow{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:.5rem;color:var(--soft)}
+.qopts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin-top:.7rem;animation:pop .25s}
+.qopt{display:flex;align-items:center;gap:.7rem;background:var(--panel2);border:3px solid #3b2d70;border-radius:16px;padding:.6rem .7rem;min-height:64px;font-size:1.05rem;text-align:left;line-height:1.25;transition:.12s}
+.qopt:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px)}
+.qopt .L{width:2.3rem;height:2.3rem;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--pix);font-size:.8rem;flex-shrink:0;color:#1a0f33}
+.qopt.imgo{flex-direction:column;align-items:stretch}
+.qopt.imgo .L{position:absolute}
+.qopt.imgo{position:relative}
+.qopt.imgo img{width:100%;height:clamp(90px,16vh,150px);object-fit:contain;background:#000;border-radius:8px}
+.qopt.port img{width:52px;height:52px;object-fit:cover;object-position:top;border-radius:50%;flex-shrink:0}
+.qopt.right{border-color:var(--ok);background:#173f2c}.qopt.wrong{border-color:var(--bad);background:#4a1426}
+.qres{margin-top:.8rem;border-radius:16px;padding:.7rem .8rem;display:flex;gap:.8rem;align-items:center;animation:pop .25s}
+.qres.ok{background:#173f2c;border:2px solid var(--ok)}.qres.bad{background:#4a1426;border:2px solid var(--bad)}
+.qres img{width:110px;max-height:90px;object-fit:contain;background:#000;border:3px solid #c9962e;border-radius:4px;flex-shrink:0}
+.qres .big{font-family:var(--pix);font-size:.85rem}
+.qres.ok .big{color:var(--ok)}.qres.bad .big{color:#ff8fa3}
+@media(max-width:600px){.qopts{grid-template-columns:1fr}.qopts.imgs{grid-template-columns:repeat(2,minmax(0,1fr))}.qopt.imgo{padding:.35rem}.qopt.imgo img{height:96px}.qopt.imgo .L{width:1.8rem;height:1.8rem;font-size:.65rem}.quiz .qtop svg{width:48px;height:48px}.quiz .qtop strong{font-size:1.05rem}.quiz .qmedia .art{max-height:28vh}}
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(5,2,14,.82);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:max(4vh,12px) 10px;overflow-y:auto}
 .mbox{background:var(--panel);border:3px solid #4a3a85;border-radius:22px;width:min(100%,640px);padding:1.2rem;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:pop .25s;text-align:center}
@@ -269,12 +305,11 @@ p{margin:0}
   </div>
   <div class="game">
     <div class="qpanel" id="qpanel">
-      <div class="qhead"><span class="qtag" id="qTag"></span><div class="qprog" id="qProg"></div></div>
-      <p class="qprompt" id="qPrompt"></p>
-      <div class="qmedia" id="qMedia"></div>
-      <div class="opts" id="qOpts"></div>
-      <p class="hintline" id="qHint"></p>
-      <div class="feedback" id="fb" hidden></div>
+      <div class="qhead"><span class="qtag" id="mTag"></span><span class="chip" id="mCount"></span></div>
+      <p class="qprompt" id="mText"></p>
+      <div class="butos" id="butoRow"></div>
+      <p class="hintline" id="mHint"></p>
+      <div class="learned" id="learned" hidden></div>
     </div>
     <div class="board">
       <canvas id="cv"></canvas>
@@ -1608,23 +1643,23 @@ const COMPARE = {
 const T={
  id:{tag:"Lari di lorong museum, hindari para Buto, dan makan jawaban yang benar tentang para maestro seni rupa Indonesia!",lang:"Bahasa",level:"Tingkat kesulitan",name:"Nama pemain",namePh:"Tulis namamu…",avatar:"Pilih karakter",levels:"Pilih level",
   explorer:"Mudah",explorerD:"5 nyawa · 3 jawaban",artist:"Sedang",artistD:"4 nyawa · 4 jawaban",historian:"Sulit",historianD:"3 nyawa · Buto lebih cepat",
-  how:[["🕹️","Gerak dengan tombol panah, WASD, geser layar, atau D-pad."],["❓","Baca soal di panel. Jawaban A, B, C, D tersebar di lorong."],["🖼️","Makan kotak jawaban yang BENAR. Salah = nyawa berkurang!"],["🌳","Makan gunungan wayang agar para Buto ketakutan dan bisa dimakan."]],
+  how:[["🕹️","Gerak dengan tombol panah, WASD, geser layar, atau D-pad."],["👹","Kalau tertangkap Buto, soal tentang lukisan muncul di layar."],["🖼️","Baca soalnya dulu, lalu pilih jawaban. Benar = Buto kalah! Salah = nyawa berkurang."],["🌳","Makan gunungan wayang agar para Buto ketakutan dan bisa dimakan."]],
   note:"Foto para maestro dan lukisan dari materi “Maestro Seni Rupa Indonesia”. Karakter: anak berbusana adat Jawa, Betawi, Bali, dan Minang; Buto (raksasa) dari wayang dan cerita Timun Mas.",
   final:"Final: Semua Maestro",finalD:"Campuran 5 maestro",questions:"soal",start:"▶ Mulai!",resume:"▶ Lanjut",exit:"Keluar ke menu",restart:"↺ Ulangi level",next:"➜ Level berikutnya",menu:"🏠 Menu",
   ready:"SIAP?",go:"AYO!",paused:"JEDA",correct:"BENAR!",wrong:"SALAH!",caught:"TERTANGKAP!",lostLife:"Nyawa berkurang 1",
   win:"Level Selesai!",lose:"Permainan Berakhir",loseT:"Buto menangkapmu! Coba lagi — kamu pasti bisa.",score:"Skor",
-  find:"Cari & makan jawaban",hintText:"Kotak jawaban: A B C D di lorong. Hati-hati, para Buto mengejar!",
+  find:"Cari & makan jawaban",missionTag:"MISI",missionText:"Kalahkan semua Buto! Kalau tertangkap, jawab soal tentang lukisan untuk mengalahkannya.",missionHint:"Makan gunungan wayang untuk membuat Buto takut. Kumpulkan titik untuk skor tambahan.",left:"tersisa",caughtBy:"{n} menangkapmu!",readFirst:"Baca soalnya dulu…",readyBtn:"✋ Saya sudah siap",chooseNow:"Pilih jawabanmu!",defeated:"{n} kalah!",wrongAns:"Jawaban belum tepat.",rightWas:"Jawaban yang benar:",cont:"Lanjut ▶",learnedT:"🖼️ Baru dipelajari",butoNames:["Buto Ijo","Buto Abang","Buto Biru","Buto Kuning"],buto:"Buto",hintText:"Kotak jawaban: A B C D di lorong. Hati-hati, para Buto mengejar!",
   q_whichImg:"Lukisan mana yang berjudul “{t}”?",q_title:"Apa judul lukisan ini?",q_year:"Kapan lukisan “{t}” dibuat?",q_tl:"Tahun berapa peristiwa ini terjadi?",q_verb:"Pilih kata kerja past tense yang tepat!",q_artist:"Siapa maestro yang melukis karya ini?",q_who:"Siapakah aku?",q_zoom:"Potongan kecil ini berasal dari lukisan yang mana?",
   tag_whichImg:"CARI LUKISAN",tag_title:"JUDUL",tag_year:"TAHUN",tag_tl:"LINIMASA",tag_verb:"PAST TENSE",tag_artist:"PELUKIS",tag_who:"SIAPA AKU?",tag_zoom:"ZOOM",
   endTitle:"SELAMAT, SEJARAWAN SENI MUDA!",certT:"Sertifikat Art Maze",certFor:"diberikan kepada",certBody:"karena berhasil menyelesaikan semua level Art Maze: Maestro Chase dan mengenal karya Raden Saleh, Affandi, S. Sudjojono, Basuki Abdullah, dan Hendra Gunawan.",print:"🖨️ Cetak"},
  en:{tag:"Run through the museum maze, dodge the Buto giants, and eat the right answer about Indonesia’s art maestros!",lang:"Language",level:"Difficulty",name:"Player name",namePh:"Type your name…",avatar:"Choose a character",levels:"Choose a level",
   explorer:"Easy",explorerD:"5 lives · 3 answers",artist:"Medium",artistD:"4 lives · 4 answers",historian:"Hard",historianD:"3 lives · faster Buto",
-  how:[["🕹️","Move with the arrow keys, WASD, swipes or the D-pad."],["❓","Read the question in the panel. Answers A, B, C, D are hidden in the maze."],["🖼️","Eat the RIGHT answer box. A wrong one costs a life!"],["🌳","Eat a wayang gunungan to scare the Buto giants — then you can eat them."]],
+  how:[["🕹️","Move with the arrow keys, WASD, swipes or the D-pad."],["👹","When a Buto catches you, a question about a painting pops up."],["🖼️","Read the question first, then choose the answer. Right = the Buto is defeated! Wrong = you lose a life."],["🌳","Eat a wayang gunungan to scare the Buto giants — then you can eat them."]],
   note:"Photos of the maestros and paintings come from the material “Maestro Seni Rupa Indonesia”. Characters: kids in traditional Javanese, Betawi, Balinese and Minang dress; Buto giants from wayang and the Timun Mas tale.",
   final:"Final: All Maestros",finalD:"Mix of all 5 maestros",questions:"questions",start:"▶ Start!",resume:"▶ Resume",exit:"Exit to menu",restart:"↺ Restart level",next:"➜ Next level",menu:"🏠 Menu",
   ready:"READY?",go:"GO!",paused:"PAUSED",correct:"CORRECT!",wrong:"WRONG!",caught:"CAUGHT!",lostLife:"You lost 1 life",
   win:"Level Complete!",lose:"Game Over",loseT:"A Buto caught you! Try again — you can do it.",score:"Score",
-  find:"Find & eat the answer",hintText:"Answer boxes A B C D are in the maze. Watch out, the Buto giants are chasing you!",
+  find:"Find & eat the answer",missionTag:"MISSION",missionText:"Defeat every Buto! When one catches you, answer a question about a painting to defeat it.",missionHint:"Eat a wayang gunungan to scare the Buto. Collect dots for extra points.",left:"left",caughtBy:"{n} caught you!",readFirst:"Read the question first…",readyBtn:"✋ I’m ready",chooseNow:"Choose your answer!",defeated:"{n} is defeated!",wrongAns:"Not quite right.",rightWas:"The right answer:",cont:"Continue ▶",learnedT:"🖼️ Just learned",butoNames:["Green Buto","Red Buto","Blue Buto","Yellow Buto"],buto:"Buto",hintText:"Answer boxes A B C D are in the maze. Watch out, the Buto giants are chasing you!",
   q_whichImg:"Which painting is called “{t}”?",q_title:"What is the title of this painting?",q_year:"When was “{t}” painted?",q_tl:"In which year did this happen?",q_verb:"Choose the correct past tense verb!",q_artist:"Which maestro painted this artwork?",q_who:"Who am I?",q_zoom:"Which painting is this small piece from?",
   tag_whichImg:"FIND IT",tag_title:"TITLE",tag_year:"YEAR",tag_tl:"TIMELINE",tag_verb:"PAST TENSE",tag_artist:"PAINTER",tag_who:"WHO AM I?",tag_zoom:"ZOOM",
   endTitle:"CONGRATULATIONS, YOUNG ART HISTORIAN!",certT:"Art Maze Certificate",certFor:"is awarded to",certBody:"for completing every level of Art Maze: Maestro Chase and getting to know the works of Raden Saleh, Affandi, S. Sudjojono, Basuki Abdullah and Hendra Gunawan.",print:"🖨️ Print"}
@@ -1645,8 +1680,8 @@ const A=(a,l)=>a[(l||S.lang)==="id"?"idn":"en"], MX=m=>m[S.lang==="id"?"idn":"en
 const nOpts=()=>S.level==="explorer"?3:4;
 const maxLives=()=>S.level==="explorer"?5:S.level==="artist"?4:3;
 const LEVELS=[
- {id:"saleh",m:"saleh",q:5,ghosts:2},{id:"affandi",m:"affandi",q:5,ghosts:3},{id:"sudjojono",m:"sudjojono",q:5,ghosts:3},
- {id:"basuki",m:"basuki",q:5,ghosts:3},{id:"hendra",m:"hendra",q:5,ghosts:4},{id:"final",m:null,q:8,ghosts:4}
+ {id:"saleh",m:"saleh",q:3,ghosts:3},{id:"affandi",m:"affandi",q:3,ghosts:3},{id:"sudjojono",m:"sudjojono",q:4,ghosts:4},
+ {id:"basuki",m:"basuki",q:4,ghosts:4},{id:"hendra",m:"hendra",q:4,ghosts:4},{id:"final",m:null,q:6,ghosts:6}
 ];
 const unlocked=i=>i===0||!!S.stars[LEVELS[i-1].id];
 
@@ -1783,18 +1818,18 @@ function startLevel(i){
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){ const c=MAZE[y][x]; if(c==="."||c==="P") dots.add(x+","+y); if(c==="o") power.add(x+","+y); }
   dots.delete(PSTART.x+","+PSTART.y);
   const speedMul=S.level==="historian"?1.18:S.level==="artist"?1:0.85;
-  G={i,L,score:0,lives:maxLives(),dots,power,qs:makeQuestions(L),qi:0,tokens:[],paused:true,frightT:0,eatChain:0,state:"ready",time:0,
+  G={i,L,score:0,lives:maxLives(),dots,power,qs:makeQuestions(L),qi:0,dead:[],invuln:0,inQuiz:false,paused:true,frightT:0,eatChain:0,state:"ready",time:0,
      baseSpeed:5.2, gSpeed:(4.2+i*0.18)*speedMul, player:null, ghosts:[]};
   resetActors();
   show("s-game"); $("#hLv").textContent=`LEVEL ${i+1}`; $("#hName").textContent=L.m?byM(L.m).name:t("final");
-  resize(); loadQuestion(); hud();
+  resize(); mission(); hud();
   countdown();
   cancelAnimationFrame(raf); last=performance.now(); raf=requestAnimationFrame(loop);
 }
 function resetActors(){
   G.player={x:PSTART.x,y:PSTART.y,dir:[0,0],next:[-1,0],prog:0,face:-1,mouth:0};
   G.ghosts=[];
-  for(let k=0;k<G.L.ghosts;k++){ const sx=[9,8,10,9][k]; G.ghosts.push({k,x:k===0?EXIT.x:sx,y:k===0?EXIT.y:9,dir:k===0?[-1,0]:[0,-1],prog:0,mode:k===0?"chase":"house",release:1.5+k*3.5,eaten:false}); }
+  for(let k=0;k<G.L.ghosts;k++){ if(G.dead&&G.dead.includes(k)) continue; const sx=[9,8,10,9,8,10][k]; G.ghosts.push({k,x:k===0?EXIT.x:sx,y:k===0?EXIT.y:9,dir:k===0?[-1,0]:[0,-1],prog:0,mode:k===0?"chase":"house",release:1.5+k*3,eaten:false}); }
 }
 function countdown(){ G.paused=true; G.state="ready"; ov(t("ready")); setTimeout(()=>{ if(!G) return; ov(t("go")); setTimeout(()=>{ if(!G) return; ov(""); G.paused=false; G.state="play"; },550); },900); }
 function ov(s){ $("#ov").textContent=s; }
@@ -1833,50 +1868,59 @@ function makeQuestions(L){
     for(let k=0;k<L.q;k++){ let ty=types[k], a=w(k); if(ty==="year"&&a.noYear){ const y=works.find(z=>!z.noYear&&!works.slice(0,k).includes(z))||works.find(z=>!z.noYear); if(y) a=y; else ty="zoom"; } qs.push(()=>mk(ty,a)); }
     return qs; }
   const all=shuffle(ART); const ty=["artist","whichImg","zoom","title","artist","year","whichImg","zoom"];
-  return ty.map((x,k)=>{ let a=all[k]; if(x==="year"&&a.noYear) a=all.find(z=>!z.noYear); return ()=>mk(x,a); });
+  return ty.slice(0,L.q).map((x,k)=>{ let a=all[k]; if(x==="year"&&a.noYear) a=all.find(z=>!z.noYear); return ()=>mk(x,a); });
 }
 const LET="ABCD", LCOL=["#ffc83d","#3ddc84","#33d6ff","#ff6fb5"];
-function loadQuestion(){
-  const q=G.qs[G.qi](); G.q=q;
-  $("#qTag").textContent=t("tag_"+q.type); $("#qPrompt").textContent=q.prompt; $("#qMedia").innerHTML=q.media||""; $("#qMedia").hidden=!q.media;
-  $("#qProg").innerHTML=G.qs.map((_,k)=>`<i class="${k<G.qi?"done":k===G.qi?"now":""}"></i>`).join("");
-  $("#qOpts").innerHTML=q.opts.map((o,k)=>`<div class="opt ${o.port?"port":""}" data-k="${k}"><span class="L" style="background:${LCOL[k]}">${LET[k]}</span>${o.img?`<img src="${IMG[o.img]}" alt="">`:""}<span>${esc(o.label)}</span></div>`).join("");
-  $("#qHint").textContent=t("hintText"); $("#fb").hidden=true;
-  q.opts.forEach(o=>{ if(o.img) loadImg(o.img); });
-  placeTokens();
+const butoName=k=>{ const n=t("butoNames")[k%4]; return k>=4?`${n} ${Math.floor(k/4)+1}`:n; };
+const readSecs=()=>S.level==="explorer"?8:S.level==="artist"?6:5;
+function mission(){
+  if(!G) return;
+  $("#mTag").textContent=t("missionTag"); $("#mText").textContent=t("missionText"); $("#mHint").textContent=t("missionHint");
+  const total=G.L.ghosts, left=total-G.dead.length;
+  $("#mCount").textContent=`👹 ${left}/${total} ${t("left")}`;
+  $("#butoRow").innerHTML=Array.from({length:total},(_,k)=>{ const [c,d]=GHOST_COLORS[k%4]; return `<div class="buto ${G.dead.includes(k)?"dead":""}">${nodaSVG(c,d)}<span>${esc(butoName(k))}</span></div>`; }).join("");
 }
-function placeTokens(){
-  const cands=[]; for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){ const c=MAZE[y][x]; if((c==="."||c==="o"||c==="P")&&!(y>=7&&y<=11&&x>=6&&x<=12)&&x>0&&x<MW-1) cands.push([x,y]); }
-  const p=G.player, chosen=[];
-  for(const [x,y] of shuffle(cands)){ if(Math.abs(x-p.x)+Math.abs(y-p.y)<7) continue; if(chosen.some(([a,b])=>Math.abs(a-x)+Math.abs(b-y)<6)) continue; chosen.push([x,y]); if(chosen.length===G.q.opts.length) break; }
-  while(chosen.length<G.q.opts.length){ const c=pick(cands); if(!chosen.some(z=>z[0]===c[0]&&z[1]===c[1])) chosen.push(c); }
-  G.tokens=G.q.opts.map((o,k)=>({k,x:chosen[k][0],y:chosen[k][1],ok:o.ok,img:o.img,gone:false}));
+function showLearned(a){
+  const el=$("#learned"); if(!a){ el.hidden=true; return; }
+  el.innerHTML=`<img src="${IMG[a.img]}" alt=""><div><b>${t("learnedT")}</b><strong>${esc(A(a).title)}</strong><small>${esc(A(a).artist)} · ${esc(A(a).year)}</small></div>`; el.hidden=false;
 }
-function answer(tok){
-  const q=G.q;
-  if(tok.ok){ snd("ok"); G.score+=300+(G.lives*20); G.tokens=[]; G.paused=true;
+function onCaught(g){
+  G.paused=true; G.inQuiz=true; snd("bad");
+  if(!G.qs.length) G.qs=makeQuestions(G.L);
+  const factory=G.qs.shift(); const q=factory(); q.factory=factory;
+  const [c,d]=GHOST_COLORS[g.k%4]; const name=butoName(g.k);
+  const optHTML=q.opts.map((o,k)=>{ const imgo=o.img&&!o.port;
+    return `<button class="qopt ${imgo?"imgo":""} ${o.port?"port":""}" data-k="${k}"><span class="L" style="background:${LCOL[k]}">${LET[k]}</span>${o.img?`<img src="${IMG[o.img]}" alt="">`:""}${o.label?`<span>${esc(o.label)}</span>`:""}</button>`; }).join("");
+  modal(`<div class="qtop">${nodaSVG(c,d)}<div><strong>${esc(t("caughtBy").replace("{n}",name))}</strong><br><span class="qtag">${t("tag_"+q.type)}</span></div></div>
+    <p class="qprompt">${esc(q.prompt)}</p>${q.media?`<div class="qmedia">${q.media}</div>`:""}
+    <div id="readZone"><div class="readbar"><i id="rbar"></i></div><div class="readrow"><span id="rtxt">⏳ ${t("readFirst")} ${readSecs()}</span><button class="btn gold" id="readyBtn">${t("readyBtn")}</button></div></div>
+    <div id="optZone" hidden><p class="readrow" style="color:var(--gold)">👉 ${t("chooseNow")}</p><div class="qopts ${q.opts.some(o=>o.img&&!o.port)?"imgs":""}">${optHTML}</div></div><div id="resZone"></div>`);
+  $("#mbox").classList.add("quiz"); $("#modal").scrollTop=0;
+  let left=readSecs()*1000, done=false; const total=left;
+  const reveal=()=>{ if(done) return; done=true; clearInterval(timer); $("#readZone").hidden=true; $("#optZone").hidden=false; const f=$("#optZone .qopt"); if(f) f.focus({preventScroll:true}); };
+  const timer=setInterval(()=>{ left-=200; const bar=$("#rbar"); if(!bar){clearInterval(timer);return;} bar.style.width=Math.max(0,left/total*100)+"%"; $("#rtxt").textContent=`⏳ ${t("readFirst")} ${Math.ceil(Math.max(0,left)/1000)}`; if(left<=0) reveal(); },200);
+  $("#readyBtn").onclick=reveal;
+  quizKeys=e=>{ if($("#optZone").hidden){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); reveal(); } return; } const i="abcd".indexOf(e.key.toLowerCase()); const j="1234".indexOf(e.key); const k=i>-1?i:j; if(k>-1){ const b=$(`#optZone .qopt[data-k="${k}"]`); if(b&&!b.disabled) b.click(); } };
+  document.querySelectorAll("#optZone .qopt").forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k, ok=q.opts[k].ok; document.querySelectorAll("#optZone .qopt").forEach(x=>x.disabled=true);
+    const rk=q.opts.findIndex(o=>o.ok); $(`#optZone .qopt[data-k="${rk}"]`).classList.add("right"); if(!ok) b.classList.add("wrong");
     const a=q.reveal, mm=q.revealM;
-    const body = a ? `<img src="${IMG[a.img]}" alt=""><p style="font-family:var(--display);font-size:1.15rem">${esc(A(a).title)}</p><p style="color:var(--soft)">${esc(A(a).artist)} · ${esc(A(a).year)}</p>` : `<img src="${IMG[mm.portrait]}" alt="" style="max-height:120px"><p style="font-family:var(--display);font-size:1.15rem">${esc(mm.name)}</p>`;
-    $("#fb").className="feedback ok"; $("#fb").innerHTML=`<p class="big">✓ ${t("correct")}</p>${body}`; $("#fb").hidden=false;
-    $("#qOpts").querySelector(`[data-k="${tok.k}"]`).classList.add("right");
-    hud();
-    setTimeout(()=>{ if(!G) return; G.qi++; if(G.qi>=G.qs.length) return levelWin(); loadQuestion(); G.paused=false; },1700);
-  } else {
-    snd("bad"); tok.gone=true; $("#qOpts").querySelector(`[data-k="${tok.k}"]`).classList.add("gone");
-    $("#qpanel").classList.remove("shake"); void $("#qpanel").offsetWidth; $("#qpanel").classList.add("shake");
-    loseLife(t("wrong"));
-  }
+    const info = a?`<img src="${IMG[a.img]}" alt=""><div><p class="big">${ok?"✓ "+esc(t("defeated").replace("{n}",name)):"✗ "+t("wrongAns")}</p><p style="margin-top:.3rem">${ok?"":t("rightWas")+" "}<b>${esc(A(a).title)}</b></p><p style="color:var(--soft)">${esc(A(a).artist)} · ${esc(A(a).year)}${a.size?" · "+a.size:""}</p></div>`
+                  :`<img src="${IMG[mm.portrait]}" alt=""><div><p class="big">${ok?"✓ "+esc(t("defeated").replace("{n}",name)):"✗ "+t("wrongAns")}</p><p><b>${esc(mm.name)}</b></p></div>`;
+    $("#resZone").innerHTML=`<div class="qres ${ok?"ok":"bad"}">${info}</div><div class="row" style="justify-content:flex-end;margin-top:.8rem"><button class="btn ${ok?"gold":"pink"}" id="qCont">${t("cont")}</button></div>`;
+    if(ok){ snd("ok"); G.score+=300+G.lives*20; G.dead.push(g.k); G.ghosts=G.ghosts.filter(z=>z!==g); if(a) showLearned(a); }
+    else { snd("die"); G.lives--; G.qs.push(q.factory); g.mode="eaten"; if(a) showLearned(a); }
+    hud(); mission();
+    $("#qCont").focus({preventScroll:true}); $("#resZone").scrollIntoView({behavior:"smooth",block:"nearest"});
+    $("#qCont").onclick=()=>{ quizKeys=null; closeModal(); $("#mbox").classList.remove("quiz"); if(!G) return; G.inQuiz=false;
+      if(G.dead.length>=G.L.ghosts) return levelWin();
+      if(G.lives<=0) return gameOver();
+      G.invuln=2.2; G.paused=false; };
+  });
 }
-function loseLife(msg){
-  G.lives--; hud(); G.paused=true; ov(msg);
-  if(G.lives<=0){ snd("die"); setTimeout(gameOver,1100); return; }
-  setTimeout(()=>{ if(!G) return; ov(""); G.paused=false; },900);
-}
-function caught(){
-  snd("die"); G.lives--; hud(); G.paused=true; ov(t("caught"));
-  if(G.lives<=0){ setTimeout(gameOver,1200); return; }
-  setTimeout(()=>{ if(!G) return; resetActors(); G.frightT=0; countdown(); },1100);
-}
+let quizKeys=null;
+document.addEventListener("keydown",e=>{ if(quizKeys&&!$("#modal").hidden) quizKeys(e); });
+
 function hud(){ if(!G) return; $("#hScore").textContent=G.score; $("#hLives").textContent="❤️".repeat(Math.max(0,G.lives))+"🖤".repeat(Math.max(0,maxLives()-G.lives)); $("#soundBtn").textContent=S.sound?"🔊":"🔇"; }
 function levelWin(){
   snd("win"); const i=G.i, L=G.L; const ratio=G.lives/maxLives(); const stars=ratio>=.99?3:ratio>=.5?2:1;
@@ -1915,7 +1959,6 @@ function arrive(){
   const p=G.player, k=p.x+","+p.y;
   if(G.dots.has(k)){ G.dots.delete(k); G.score+=10; if((G.time*10|0)%2===0) snd("dot"); }
   if(G.power.has(k)){ G.power.delete(k); G.score+=50; G.frightT=S.level==="historian"?5:7; G.eatChain=0; snd("power"); G.ghosts.forEach(g=>{ if(g.mode==="chase"){ g.mode="fright"; g.dir=[-g.dir[0],-g.dir[1]]; if(g.prog>0){ g.x=wrapX(g.x-g.dir[0]); g.y-=g.dir[1]; g.prog=1-g.prog; } } }); }
-  const tok=G.tokens.find(z=>!z.gone&&z.x===p.x&&z.y===p.y); if(tok) answer(tok);
   hud();
 }
 function ghostChoose(g){
@@ -1924,8 +1967,8 @@ function ghostChoose(g){
   if(g.mode==="house"){ target= g.release<=0 ? EXIT : null; if(!target){ // bob inside
       const opts=DIRS.filter(([dx,dy])=>open(g.x+dx,g.y+dy,true)&&MAZE[g.y+dy]&&MAZE[g.y+dy][g.x+dx]==="G"); g.dir=opts.length?pick(opts):[0,0]; return; }
     if(g.x===EXIT.x&&g.y===EXIT.y){ g.mode=G.frightT>0?"chase":"chase"; } }
-  if(g.mode==="chase"){ const ahead=[[0,0],[p.dir[0]*4,p.dir[1]*4],[0,0],[-p.dir[0]*3,-p.dir[1]*3]][g.k];
-    target={x:p.x+ahead[0],y:p.y+ahead[1]}; if(g.k===2 && Math.hypot(g.x-p.x,g.y-p.y)<5) target={x:0,y:MH}; if(g.k===3 && Math.random()<.25) target={x:Math.random()*MW,y:Math.random()*MH}; }
+  if(g.mode==="chase"){ const ahead=[[0,0],[p.dir[0]*4,p.dir[1]*4],[0,0],[-p.dir[0]*3,-p.dir[1]*3]][g.k%4];
+    target={x:p.x+ahead[0],y:p.y+ahead[1]}; if(g.k%4===2 && Math.hypot(g.x-p.x,g.y-p.y)<5) target={x:0,y:MH}; if(g.k%4===3 && Math.random()<.25) target={x:Math.random()*MW,y:Math.random()*MH}; }
   const inHouse=MAZE[g.y]&&(MAZE[g.y][g.x]==="G"||MAZE[g.y][g.x]==="-");
   let opts=DIRS.filter(([dx,dy])=>{ const nx=g.x+dx, ny=g.y+dy; if(!open(nx,ny,true)) return false; const c=MAZE[ny]&&MAZE[ny][wrapX(nx)]; if(!inHouse&&g.mode!=="eaten"&&(c==="-"||c==="G")) return false; return true; });
   const rev=opts.filter(([dx,dy])=>!(dx===-g.dir[0]&&dy===-g.dir[1]));
@@ -1939,19 +1982,19 @@ let last=0;
 function loop(now){
   if(!G) return; const dt=Math.min(.05,(now-last)/1000); last=now;
   if(!G.paused){
-    G.time+=dt; const p=G.player;
+    G.time+=dt; const p=G.player; if(G.invuln>0) G.invuln-=dt;
     moveEntity(p,G.baseSpeed,dt,false,null);
     if(p.dir[0]||p.dir[1]) p.mouth+=dt*10; if(p.dir[0]) p.face=p.dir[0];
     if(G.frightT>0){ G.frightT-=dt; if(G.frightT<=0) G.ghosts.forEach(g=>{ if(g.mode==="fright") g.mode="chase"; }); }
     for(const g of G.ghosts){
       if(g.mode==="house") g.release-=dt;
-      const sp = g.mode==="eaten"?G.gSpeed*2.2 : g.mode==="fright"?G.gSpeed*.55 : g.mode==="house"?G.gSpeed*.5 : G.gSpeed*(1+Math.min(.25,G.qi*.04));
+      const sp = g.mode==="eaten"?G.gSpeed*2.2 : g.mode==="fright"?G.gSpeed*.55 : g.mode==="house"?G.gSpeed*.5 : G.gSpeed*(1+Math.min(.25,G.dead.length*.05));
       moveEntity(g,sp,dt,true,ghostChoose);
       // collision
       const gx=g.x+g.dir[0]*g.prog, gy=g.y+g.dir[1]*g.prog, px=p.x+p.dir[0]*p.prog, py=p.y+p.dir[1]*p.prog;
       if(Math.hypot(gx-px,gy-py)<.62){
         if(g.mode==="fright"){ g.mode="eaten"; G.eatChain++; G.score+=200*G.eatChain; snd("eat"); hud(); }
-        else if(g.mode==="chase"){ caught(); break; }
+        else if(g.mode==="chase"&&G.invuln<=0){ onCaught(g); break; }
       }
     }
   }
@@ -1966,7 +2009,7 @@ let tStart=null; const cv=$("#cv");
 cv.addEventListener("touchstart",e=>{ const t0=e.touches[0]; tStart=[t0.clientX,t0.clientY]; e.preventDefault(); },{passive:false});
 cv.addEventListener("touchmove",e=>{ if(!tStart) return; const t0=e.touches[0]; const dx=t0.clientX-tStart[0], dy=t0.clientY-tStart[1]; if(Math.max(Math.abs(dx),Math.abs(dy))>18){ if(Math.abs(dx)>Math.abs(dy)) setDir(Math.sign(dx),0); else setDir(0,Math.sign(dy)); tStart=[t0.clientX,t0.clientY]; } e.preventDefault(); },{passive:false});
 cv.addEventListener("touchend",()=>tStart=null);
-function togglePause(){ if(!G||G.state!=="play") return; if($("#fb").hidden===false) return; G.paused=!G.paused; ov(G.paused?t("paused"):""); $("#pauseBtn").textContent=G.paused?"▶":"⏸"; }
+function togglePause(){ if(!G||G.state!=="play") return; if(G.inQuiz) return; G.paused=!G.paused; ov(G.paused?t("paused"):""); $("#pauseBtn").textContent=G.paused?"▶":"⏸"; }
 $("#pauseBtn").onclick=togglePause;
 $("#soundBtn").onclick=()=>{S.sound=!S.sound;save();hud();};
 $("#exitBtn").onclick=()=>{ if(!G) return toMenu(); const was=G.paused; G.paused=true; modal(`<h2>${t("paused")}</h2><div class="row"><button class="btn gold" id="mRes">${t("resume")}</button><button class="btn soft" id="mRe">${t("restart")}</button><button class="btn soft" id="mMenu">${t("exit")}</button></div>`);
@@ -2027,23 +2070,14 @@ function draw(){
   ctx.fillStyle="#ffd98a";
   for(const k of G.dots){ const [x,y]=k.split(",").map(Number); ctx.beginPath(); ctx.arc(x*TS+TS/2,y*TS+TS/2,Math.max(1.6,TS*.1),0,Math.PI*2); ctx.fill(); }
   for(const k of G.power){ const [x,y]=k.split(",").map(Number); const s=TS*(.78+.12*Math.sin(tm*6)); if(GUNUNGAN.complete){ const h=s*1.25, w=h*.6; ctx.drawImage(GUNUNGAN,x*TS+TS/2-w/2,y*TS+TS/2-h/2,w,h);} }
-  // tokens
-  for(const tk of G.tokens){ if(tk.gone) continue; const cx=tk.x*TS+TS/2, cy=tk.y*TS+TS/2, s=TS*1.5*(1+.06*Math.sin(tm*5+tk.k));
-    ctx.save(); ctx.shadowColor=LCOL[tk.k]; ctx.shadowBlur=TS*.6; ctx.fillStyle="#140b2c"; ctx.strokeStyle=LCOL[tk.k]; ctx.lineWidth=Math.max(2,TS*.12);
-    ctx.beginPath(); ctx.roundRect(cx-s/2,cy-s/2,s,s,TS*.25); ctx.fill(); ctx.stroke(); ctx.restore();
-    if(tk.img){ const im=loadImg(tk.img); if(im.complete&&im.naturalWidth){ ctx.save(); ctx.beginPath(); ctx.roundRect(cx-s/2+3,cy-s/2+3,s-6,s-6,TS*.18); ctx.clip(); const r=Math.max((s-6)/im.naturalWidth,(s-6)/im.naturalHeight); const w=im.naturalWidth*r,h=im.naturalHeight*r; ctx.globalAlpha=.85; ctx.drawImage(im,cx-w/2,cy-h/2,w,h); ctx.restore(); } }
-    const b=TS*.62; ctx.fillStyle=LCOL[tk.k]; ctx.beginPath(); ctx.arc(cx+s/2-b*.35,cy-s/2+b*.35,b/2,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle="#1a0f33"; ctx.font=`900 ${b*.62}px "Press Start 2P",monospace`; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(LET[tk.k],cx+s/2-b*.35+.5,cy-s/2+b*.35+1);
-    if(!tk.img){ ctx.fillStyle=LCOL[tk.k]; ctx.font=`900 ${TS*.7}px "Press Start 2P",monospace`; ctx.fillText(LET[tk.k],cx,cy+1); }
-  }
   // player
   const p=G.player, px=(p.x+p.dir[0]*p.prog)*TS+TS/2, py=(p.y+p.dir[1]*p.prog)*TS+TS/2;
   const hd=head(S.avatar), s=TS*1.45; const bob=Math.sin(p.mouth)*TS*.06;
-  if(hd){ ctx.save(); ctx.translate(px,py+bob); if(p.face<0) ctx.scale(-1,1); ctx.drawImage(hd,-s/2,-s/2,s,s); ctx.restore(); }
+  if(hd){ ctx.save(); if(G.invuln>0&&Math.floor(tm*10)%2) ctx.globalAlpha=.35; ctx.translate(px,py+bob); if(p.face<0) ctx.scale(-1,1); ctx.drawImage(hd,-s/2,-s/2,s,s); ctx.restore(); }
   else { ctx.fillStyle="#ffc83d"; ctx.beginPath(); ctx.arc(px,py,TS*.45,0,Math.PI*2); ctx.fill(); }
   // ghosts
   for(const g of G.ghosts){ const gx=(g.x+g.dir[0]*g.prog)*TS+TS/2, gy=(g.y+g.dir[1]*g.prog)*TS+TS/2; const gs=TS*1.3*(1+.05*Math.sin(tm*8+g.k));
-    let im=NODA[g.k]; if(g.mode==="fright") im=(G.frightT<2&&Math.floor(tm*6)%2)?NODA_FLASH:NODA_SCARED; if(g.mode==="eaten") im=NODA_EYES;
+    let im=NODA[g.k%4]; if(g.mode==="fright") im=(G.frightT<2&&Math.floor(tm*6)%2)?NODA_FLASH:NODA_SCARED; if(g.mode==="eaten") im=NODA_EYES;
     if(im.complete) ctx.drawImage(im,gx-gs/2,gy-gs/2,gs,gs); }
 }
 
